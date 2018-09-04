@@ -26,7 +26,7 @@ step "s1c"	{ COMMIT; }
 session "s2"
 step "s2sel"	{ SELECT SUM(a) FROM p; }
 
-# NO INHERIT will not be visible to concurrent select,
+# NO INHERIT will not be visible to concurrent selext,
 # since we identify children before locking them
 permutation "s1b" "s1delc1" "s2sel" "s1c" "s2sel"
 # adding inheritance likewise is not seen if s1 commits after s2 locks p

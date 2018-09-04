@@ -154,7 +154,7 @@ we don't implement this optimization.
 Optimizer
 ---------
 
-The optimizer selects the index based on the operator class' pg_amop
+The optimizer selexts the index based on the operator class' pg_amop
 entries for the column.
 
 

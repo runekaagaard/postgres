@@ -141,7 +141,7 @@ fixup_inherited_columns(Oid parentId, Oid childId, Bitmapset *columns)
  */
 static bool
 check_relation_privileges(Oid relOid,
-						  Bitmapset *selected,
+						  Bitmapset *selexted,
 						  Bitmapset *inserted,
 						  Bitmapset *updated,
 						  uint32 required,
@@ -229,17 +229,17 @@ check_relation_privileges(Oid relOid,
 	/*
 	 * Check permissions on the columns
 	 */
-	selected = fixup_whole_row_references(relOid, selected);
+	selexted = fixup_whole_row_references(relOid, selexted);
 	inserted = fixup_whole_row_references(relOid, inserted);
 	updated = fixup_whole_row_references(relOid, updated);
-	columns = bms_union(selected, bms_union(inserted, updated));
+	columns = bms_union(selexted, bms_union(inserted, updated));
 
 	while ((index = bms_first_member(columns)) >= 0)
 	{
 		AttrNumber	attnum;
 		uint32		column_perms = 0;
 
-		if (bms_is_member(index, selected))
+		if (bms_is_member(index, selexted))
 			column_perms |= SEPG_DB_COLUMN__SELECT;
 		if (bms_is_member(index, inserted))
 		{
@@ -335,7 +335,7 @@ sepgsql_dml_privileges(List *rangeTabls, bool abort_on_violation)
 		foreach(li, tableIds)
 		{
 			Oid			tableOid = lfirst_oid(li);
-			Bitmapset  *selectedCols;
+			Bitmapset  *selextedCols;
 			Bitmapset  *insertedCols;
 			Bitmapset  *updatedCols;
 
@@ -343,8 +343,8 @@ sepgsql_dml_privileges(List *rangeTabls, bool abort_on_violation)
 			 * child table has different attribute numbers, so we need to fix
 			 * up them.
 			 */
-			selectedCols = fixup_inherited_columns(rte->relid, tableOid,
-												   rte->selectedCols);
+			selextedCols = fixup_inherited_columns(rte->relid, tableOid,
+												   rte->selextedCols);
 			insertedCols = fixup_inherited_columns(rte->relid, tableOid,
 												   rte->insertedCols);
 			updatedCols = fixup_inherited_columns(rte->relid, tableOid,
@@ -354,7 +354,7 @@ sepgsql_dml_privileges(List *rangeTabls, bool abort_on_violation)
 			 * check permissions on individual tables
 			 */
 			if (!check_relation_privileges(tableOid,
-										   selectedCols,
+										   selextedCols,
 										   insertedCols,
 										   updatedCols,
 										   required, abort_on_violation))

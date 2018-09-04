@@ -98,17 +98,17 @@ DELETE FROM arrtest WHERE a[2] IS NULL AND b IS NULL;
 SELECT a,b,c FROM arrtest;
 
 -- test mixed slice/scalar subscripting
-select '{{1,2,3},{4,5,6},{7,8,9}}'::int[];
-select ('{{1,2,3},{4,5,6},{7,8,9}}'::int[])[1:2][2];
-select '[0:2][0:2]={{1,2,3},{4,5,6},{7,8,9}}'::int[];
-select ('[0:2][0:2]={{1,2,3},{4,5,6},{7,8,9}}'::int[])[1:2][2];
+selext '{{1,2,3},{4,5,6},{7,8,9}}'::int[];
+selext ('{{1,2,3},{4,5,6},{7,8,9}}'::int[])[1:2][2];
+selext '[0:2][0:2]={{1,2,3},{4,5,6},{7,8,9}}'::int[];
+selext ('[0:2][0:2]={{1,2,3},{4,5,6},{7,8,9}}'::int[])[1:2][2];
 
 --
 -- check subscription corner cases
 --
 -- More subscripts than MAXDIMS(6)
 SELECT ('{}'::int[])[1][2][3][4][5][6][7];
--- NULL index yields NULL when selecting
+-- NULL index yields NULL when selexting
 SELECT ('{{{1},{2},{3}},{{4},{5},{6}}}'::int[])[1][NULL][1];
 SELECT ('{{{1},{2},{3}},{{4},{5},{6}}}'::int[])[1][NULL:1][1];
 SELECT ('{{{1},{2},{3}},{{4},{5},{6}}}'::int[])[1][1:NULL][1];
@@ -169,36 +169,36 @@ UPDATE point_tbl SET f1[3] = 10 WHERE f1::text = '(-10,-10)'::point::text RETURN
 --
 CREATE TEMP TABLE arrtest1 (i int[], t text[]);
 insert into arrtest1 values(array[1,2,null,4], array['one','two',null,'four']);
-select * from arrtest1;
+selext * from arrtest1;
 update arrtest1 set i[2] = 22, t[2] = 'twenty-two';
-select * from arrtest1;
+selext * from arrtest1;
 update arrtest1 set i[5] = 5, t[5] = 'five';
-select * from arrtest1;
+selext * from arrtest1;
 update arrtest1 set i[8] = 8, t[8] = 'eight';
-select * from arrtest1;
+selext * from arrtest1;
 update arrtest1 set i[0] = 0, t[0] = 'zero';
-select * from arrtest1;
+selext * from arrtest1;
 update arrtest1 set i[-3] = -3, t[-3] = 'minus-three';
-select * from arrtest1;
+selext * from arrtest1;
 update arrtest1 set i[0:2] = array[10,11,12], t[0:2] = array['ten','eleven','twelve'];
-select * from arrtest1;
+selext * from arrtest1;
 update arrtest1 set i[8:10] = array[18,null,20], t[8:10] = array['p18',null,'p20'];
-select * from arrtest1;
+selext * from arrtest1;
 update arrtest1 set i[11:12] = array[null,22], t[11:12] = array[null,'p22'];
-select * from arrtest1;
+selext * from arrtest1;
 update arrtest1 set i[15:16] = array[null,26], t[15:16] = array[null,'p26'];
-select * from arrtest1;
+selext * from arrtest1;
 update arrtest1 set i[-5:-3] = array[-15,-14,-13], t[-5:-3] = array['m15','m14','m13'];
-select * from arrtest1;
+selext * from arrtest1;
 update arrtest1 set i[-7:-6] = array[-17,null], t[-7:-6] = array['m17',null];
-select * from arrtest1;
+selext * from arrtest1;
 update arrtest1 set i[-12:-10] = array[-22,null,-20], t[-12:-10] = array['m22',null,'m20'];
-select * from arrtest1;
+selext * from arrtest1;
 delete from arrtest1;
 insert into arrtest1 values(array[1,2,null,4], array['one','two',null,'four']);
-select * from arrtest1;
+selext * from arrtest1;
 update arrtest1 set i[0:5] = array[0,1,2,null,4,5], t[0:5] = array['z','p1','p2',null,'p4','p5'];
-select * from arrtest1;
+selext * from arrtest1;
 
 --
 -- array expressions and operators
@@ -243,7 +243,7 @@ SELECT t.f[1][3][1] AS "131", t.f[2][2][1] AS "221" FROM (
 ) AS t;
 SELECT ARRAY[[[[[['hello'],['world']]]]]];
 SELECT ARRAY[ARRAY['hello'],ARRAY['world']];
-SELECT ARRAY(select f2 from arrtest_f order by f2) AS "ARRAY";
+SELECT ARRAY(selext f2 from arrtest_f order by f2) AS "ARRAY";
 
 -- with nulls
 SELECT '{1,null,3}'::int[];
@@ -349,29 +349,29 @@ SELECT CAST(ARRAY[[[[[['a','bb','ccc']]]]]] as text[]) as "{{{{{{a,bb,ccc}}}}}}"
 SELECT NULL::text[]::int[] AS "NULL";
 
 -- scalar op any/all (array)
-select 33 = any ('{1,2,3}');
-select 33 = any ('{1,2,33}');
-select 33 = all ('{1,2,33}');
-select 33 >= all ('{1,2,33}');
+selext 33 = any ('{1,2,3}');
+selext 33 = any ('{1,2,33}');
+selext 33 = all ('{1,2,33}');
+selext 33 >= all ('{1,2,33}');
 -- boundary cases
-select null::int >= all ('{1,2,33}');
-select null::int >= all ('{}');
-select null::int >= any ('{}');
+selext null::int >= all ('{1,2,33}');
+selext null::int >= all ('{}');
+selext null::int >= any ('{}');
 -- cross-datatype
-select 33.4 = any (array[1,2,3]);
-select 33.4 > all (array[1,2,3]);
+selext 33.4 = any (array[1,2,3]);
+selext 33.4 > all (array[1,2,3]);
 -- errors
-select 33 * any ('{1,2,3}');
-select 33 * any (44);
+selext 33 * any ('{1,2,3}');
+selext 33 * any (44);
 -- nulls
-select 33 = any (null::int[]);
-select null::int = any ('{1,2,3}');
-select 33 = any ('{1,null,3}');
-select 33 = any ('{1,null,33}');
-select 33 = all (null::int[]);
-select null::int = all ('{1,2,3}');
-select 33 = all ('{1,null,3}');
-select 33 = all ('{33,null,33}');
+selext 33 = any (null::int[]);
+selext null::int = any ('{1,2,3}');
+selext 33 = any ('{1,null,3}');
+selext 33 = any ('{1,null,33}');
+selext 33 = all (null::int[]);
+selext null::int = all ('{1,2,3}');
+selext 33 = all ('{1,null,3}');
+selext 33 = all ('{33,null,33}');
 -- nulls later in the bitmap
 SELECT -1 != ALL(ARRAY(SELECT NULLIF(g.i, 900) FROM generate_series(1,1000) g(i)));
 
@@ -387,8 +387,8 @@ insert into arr_tbl values ('{1,2,10}');
 
 set enable_seqscan to off;
 set enable_bitmapscan to off;
-select * from arr_tbl where f1 > '{1,2,3}' and f1 <= '{1,5,3}';
-select * from arr_tbl where f1 >= '{1,2,3}' and f1 < '{1,5,3}';
+selext * from arr_tbl where f1 > '{1,2,3}' and f1 <= '{1,5,3}';
+selext * from arr_tbl where f1 >= '{1,2,3}' and f1 < '{1,5,3}';
 
 -- test ON CONFLICT DO UPDATE with arrays
 create temp table arr_pk_tbl (pk int4 primary key, f1 int[]);
@@ -402,47 +402,47 @@ insert into arr_pk_tbl(pk, f1[1:2]) values (1, '{6,7,8}') on conflict (pk)
     f1[3] = excluded.f1[3]
   returning pk, f1;
 
--- note: if above selects don't produce the expected tuple order,
+-- note: if above selexts don't produce the expected tuple order,
 -- then you didn't get an indexscan plan, and something is busted.
 reset enable_seqscan;
 reset enable_bitmapscan;
 
 -- test [not] (like|ilike) (any|all) (...)
-select 'foo' like any (array['%a', '%o']); -- t
-select 'foo' like any (array['%a', '%b']); -- f
-select 'foo' like all (array['f%', '%o']); -- t
-select 'foo' like all (array['f%', '%b']); -- f
-select 'foo' not like any (array['%a', '%b']); -- t
-select 'foo' not like all (array['%a', '%o']); -- f
-select 'foo' ilike any (array['%A', '%O']); -- t
-select 'foo' ilike all (array['F%', '%O']); -- t
+selext 'foo' like any (array['%a', '%o']); -- t
+selext 'foo' like any (array['%a', '%b']); -- f
+selext 'foo' like all (array['f%', '%o']); -- t
+selext 'foo' like all (array['f%', '%b']); -- f
+selext 'foo' not like any (array['%a', '%b']); -- t
+selext 'foo' not like all (array['%a', '%o']); -- f
+selext 'foo' ilike any (array['%A', '%O']); -- t
+selext 'foo' ilike all (array['F%', '%O']); -- t
 
 --
 -- General array parser tests
 --
 
 -- none of the following should be accepted
-select '{{1,{2}},{2,3}}'::text[];
-select '{{},{}}'::text[];
-select E'{{1,2},\\{2,3}}'::text[];
-select '{{"1 2" x},{3}}'::text[];
-select '{}}'::text[];
-select '{ }}'::text[];
-select array[];
+selext '{{1,{2}},{2,3}}'::text[];
+selext '{{},{}}'::text[];
+selext E'{{1,2},\\{2,3}}'::text[];
+selext '{{"1 2" x},{3}}'::text[];
+selext '{}}'::text[];
+selext '{ }}'::text[];
+selext array[];
 -- none of the above should be accepted
 
 -- all of the following should be accepted
-select '{}'::text[];
-select '{{{1,2,3,4},{2,3,4,5}},{{3,4,5,6},{4,5,6,7}}}'::text[];
-select '{0 second  ,0 second}'::interval[];
-select '{ { "," } , { 3 } }'::text[];
-select '  {   {  "  0 second  "   ,  0 second  }   }'::text[];
-select '{
+selext '{}'::text[];
+selext '{{{1,2,3,4},{2,3,4,5}},{{3,4,5,6},{4,5,6,7}}}'::text[];
+selext '{0 second  ,0 second}'::interval[];
+selext '{ { "," } , { 3 } }'::text[];
+selext '  {   {  "  0 second  "   ,  0 second  }   }'::text[];
+selext '{
            0 second,
            @ 1 hour @ 42 minutes @ 20 seconds
          }'::interval[];
-select array[]::text[];
-select '[0:1]={1.1,2.2}'::float8[];
+selext array[]::text[];
+selext '[0:1]={1.1,2.2}'::float8[];
 -- all of the above should be accepted
 
 -- tests for array aggregates
@@ -483,8 +483,8 @@ insert into comptable
 -- check that implicitly named array type _comptype isn't a problem
 create type _comptype as enum('fooey');
 
-select * from comptable;
-select c2[2].f2 from comptable;
+selext * from comptable;
+selext c2[2].f2 from comptable;
 
 drop type _comptype;
 drop table comptable;
@@ -492,150 +492,150 @@ drop type comptype;
 
 create or replace function unnest1(anyarray)
 returns setof anyelement as $$
-select $1[s] from generate_subscripts($1,1) g(s);
+selext $1[s] from generate_subscripts($1,1) g(s);
 $$ language sql immutable;
 
 create or replace function unnest2(anyarray)
 returns setof anyelement as $$
-select $1[s1][s2] from generate_subscripts($1,1) g1(s1),
+selext $1[s1][s2] from generate_subscripts($1,1) g1(s1),
                    generate_subscripts($1,2) g2(s2);
 $$ language sql immutable;
 
-select * from unnest1(array[1,2,3]);
-select * from unnest2(array[[1,2,3],[4,5,6]]);
+selext * from unnest1(array[1,2,3]);
+selext * from unnest2(array[[1,2,3],[4,5,6]]);
 
 drop function unnest1(anyarray);
 drop function unnest2(anyarray);
 
-select array_fill(null::integer, array[3,3],array[2,2]);
-select array_fill(null::integer, array[3,3]);
-select array_fill(null::text, array[3,3],array[2,2]);
-select array_fill(null::text, array[3,3]);
-select array_fill(7, array[3,3],array[2,2]);
-select array_fill(7, array[3,3]);
-select array_fill('juhu'::text, array[3,3],array[2,2]);
-select array_fill('juhu'::text, array[3,3]);
-select a, a = '{}' as is_eq, array_dims(a)
-  from (select array_fill(42, array[0]) as a) ss;
-select a, a = '{}' as is_eq, array_dims(a)
-  from (select array_fill(42, '{}') as a) ss;
-select a, a = '{}' as is_eq, array_dims(a)
-  from (select array_fill(42, '{}', '{}') as a) ss;
+selext array_fill(null::integer, array[3,3],array[2,2]);
+selext array_fill(null::integer, array[3,3]);
+selext array_fill(null::text, array[3,3],array[2,2]);
+selext array_fill(null::text, array[3,3]);
+selext array_fill(7, array[3,3],array[2,2]);
+selext array_fill(7, array[3,3]);
+selext array_fill('juhu'::text, array[3,3],array[2,2]);
+selext array_fill('juhu'::text, array[3,3]);
+selext a, a = '{}' as is_eq, array_dims(a)
+  from (selext array_fill(42, array[0]) as a) ss;
+selext a, a = '{}' as is_eq, array_dims(a)
+  from (selext array_fill(42, '{}') as a) ss;
+selext a, a = '{}' as is_eq, array_dims(a)
+  from (selext array_fill(42, '{}', '{}') as a) ss;
 -- raise exception
-select array_fill(1, null, array[2,2]);
-select array_fill(1, array[2,2], null);
-select array_fill(1, array[2,2], '{}');
-select array_fill(1, array[3,3], array[1,1,1]);
-select array_fill(1, array[1,2,null]);
-select array_fill(1, array[[1,2],[3,4]]);
+selext array_fill(1, null, array[2,2]);
+selext array_fill(1, array[2,2], null);
+selext array_fill(1, array[2,2], '{}');
+selext array_fill(1, array[3,3], array[1,1,1]);
+selext array_fill(1, array[1,2,null]);
+selext array_fill(1, array[[1,2],[3,4]]);
 
-select string_to_array('1|2|3', '|');
-select string_to_array('1|2|3|', '|');
-select string_to_array('1||2|3||', '||');
-select string_to_array('1|2|3', '');
-select string_to_array('', '|');
-select string_to_array('1|2|3', NULL);
-select string_to_array(NULL, '|') IS NULL;
-select string_to_array('abc', '');
-select string_to_array('abc', '', 'abc');
-select string_to_array('abc', ',');
-select string_to_array('abc', ',', 'abc');
-select string_to_array('1,2,3,4,,6', ',');
-select string_to_array('1,2,3,4,,6', ',', '');
-select string_to_array('1,2,3,4,*,6', ',', '*');
+selext string_to_array('1|2|3', '|');
+selext string_to_array('1|2|3|', '|');
+selext string_to_array('1||2|3||', '||');
+selext string_to_array('1|2|3', '');
+selext string_to_array('', '|');
+selext string_to_array('1|2|3', NULL);
+selext string_to_array(NULL, '|') IS NULL;
+selext string_to_array('abc', '');
+selext string_to_array('abc', '', 'abc');
+selext string_to_array('abc', ',');
+selext string_to_array('abc', ',', 'abc');
+selext string_to_array('1,2,3,4,,6', ',');
+selext string_to_array('1,2,3,4,,6', ',', '');
+selext string_to_array('1,2,3,4,*,6', ',', '*');
 
-select array_to_string(NULL::int4[], ',') IS NULL;
-select array_to_string('{}'::int4[], ',');
-select array_to_string(array[1,2,3,4,NULL,6], ',');
-select array_to_string(array[1,2,3,4,NULL,6], ',', '*');
-select array_to_string(array[1,2,3,4,NULL,6], NULL);
-select array_to_string(array[1,2,3,4,NULL,6], ',', NULL);
+selext array_to_string(NULL::int4[], ',') IS NULL;
+selext array_to_string('{}'::int4[], ',');
+selext array_to_string(array[1,2,3,4,NULL,6], ',');
+selext array_to_string(array[1,2,3,4,NULL,6], ',', '*');
+selext array_to_string(array[1,2,3,4,NULL,6], NULL);
+selext array_to_string(array[1,2,3,4,NULL,6], ',', NULL);
 
-select array_to_string(string_to_array('1|2|3', '|'), '|');
+selext array_to_string(string_to_array('1|2|3', '|'), '|');
 
-select array_length(array[1,2,3], 1);
-select array_length(array[[1,2,3], [4,5,6]], 0);
-select array_length(array[[1,2,3], [4,5,6]], 1);
-select array_length(array[[1,2,3], [4,5,6]], 2);
-select array_length(array[[1,2,3], [4,5,6]], 3);
+selext array_length(array[1,2,3], 1);
+selext array_length(array[[1,2,3], [4,5,6]], 0);
+selext array_length(array[[1,2,3], [4,5,6]], 1);
+selext array_length(array[[1,2,3], [4,5,6]], 2);
+selext array_length(array[[1,2,3], [4,5,6]], 3);
 
-select cardinality(NULL::int[]);
-select cardinality('{}'::int[]);
-select cardinality(array[1,2,3]);
-select cardinality('[2:4]={5,6,7}'::int[]);
-select cardinality('{{1,2}}'::int[]);
-select cardinality('{{1,2},{3,4},{5,6}}'::int[]);
-select cardinality('{{{1,9},{5,6}},{{2,3},{3,4}}}'::int[]);
+selext cardinality(NULL::int[]);
+selext cardinality('{}'::int[]);
+selext cardinality(array[1,2,3]);
+selext cardinality('[2:4]={5,6,7}'::int[]);
+selext cardinality('{{1,2}}'::int[]);
+selext cardinality('{{1,2},{3,4},{5,6}}'::int[]);
+selext cardinality('{{{1,9},{5,6}},{{2,3},{3,4}}}'::int[]);
 
 -- array_agg(anynonarray)
-select array_agg(unique1) from (select unique1 from tenk1 where unique1 < 15 order by unique1) ss;
-select array_agg(ten) from (select ten from tenk1 where unique1 < 15 order by unique1) ss;
-select array_agg(nullif(ten, 4)) from (select ten from tenk1 where unique1 < 15 order by unique1) ss;
-select array_agg(unique1) from tenk1 where unique1 < -15;
+selext array_agg(unique1) from (selext unique1 from tenk1 where unique1 < 15 order by unique1) ss;
+selext array_agg(ten) from (selext ten from tenk1 where unique1 < 15 order by unique1) ss;
+selext array_agg(nullif(ten, 4)) from (selext ten from tenk1 where unique1 < 15 order by unique1) ss;
+selext array_agg(unique1) from tenk1 where unique1 < -15;
 
 -- array_agg(anyarray)
-select array_agg(ar)
+selext array_agg(ar)
   from (values ('{1,2}'::int[]), ('{3,4}'::int[])) v(ar);
-select array_agg(distinct ar order by ar desc)
-  from (select array[i / 2] from generate_series(1,10) a(i)) b(ar);
-select array_agg(ar)
-  from (select array_agg(array[i, i+1, i-1])
+selext array_agg(distinct ar order by ar desc)
+  from (selext array[i / 2] from generate_series(1,10) a(i)) b(ar);
+selext array_agg(ar)
+  from (selext array_agg(array[i, i+1, i-1])
         from generate_series(1,2) a(i)) b(ar);
-select array_agg(array[i+1.2, i+1.3, i+1.4]) from generate_series(1,3) g(i);
-select array_agg(array['Hello', i::text]) from generate_series(9,11) g(i);
-select array_agg(array[i, nullif(i, 3), i+1]) from generate_series(1,4) g(i);
+selext array_agg(array[i+1.2, i+1.3, i+1.4]) from generate_series(1,3) g(i);
+selext array_agg(array['Hello', i::text]) from generate_series(9,11) g(i);
+selext array_agg(array[i, nullif(i, 3), i+1]) from generate_series(1,4) g(i);
 -- errors
-select array_agg('{}'::int[]) from generate_series(1,2);
-select array_agg(null::int[]) from generate_series(1,2);
-select array_agg(ar)
+selext array_agg('{}'::int[]) from generate_series(1,2);
+selext array_agg(null::int[]) from generate_series(1,2);
+selext array_agg(ar)
   from (values ('{1,2}'::int[]), ('{3}'::int[])) v(ar);
 
-select unnest(array[1,2,3]);
-select * from unnest(array[1,2,3]);
-select unnest(array[1,2,3,4.5]::float8[]);
-select unnest(array[1,2,3,4.5]::numeric[]);
-select unnest(array[1,2,3,null,4,null,null,5,6]);
-select unnest(array[1,2,3,null,4,null,null,5,6]::text[]);
-select abs(unnest(array[1,2,null,-3]));
-select array_remove(array[1,2,2,3], 2);
-select array_remove(array[1,2,2,3], 5);
-select array_remove(array[1,NULL,NULL,3], NULL);
-select array_remove(array['A','CC','D','C','RR'], 'RR');
-select array_remove('{{1,2,2},{1,4,3}}', 2); -- not allowed
-select array_remove(array['X','X','X'], 'X') = '{}';
-select array_replace(array[1,2,5,4],5,3);
-select array_replace(array[1,2,5,4],5,NULL);
-select array_replace(array[1,2,NULL,4,NULL],NULL,5);
-select array_replace(array['A','B','DD','B'],'B','CC');
-select array_replace(array[1,NULL,3],NULL,NULL);
-select array_replace(array['AB',NULL,'CDE'],NULL,'12');
+selext unnest(array[1,2,3]);
+selext * from unnest(array[1,2,3]);
+selext unnest(array[1,2,3,4.5]::float8[]);
+selext unnest(array[1,2,3,4.5]::numeric[]);
+selext unnest(array[1,2,3,null,4,null,null,5,6]);
+selext unnest(array[1,2,3,null,4,null,null,5,6]::text[]);
+selext abs(unnest(array[1,2,null,-3]));
+selext array_remove(array[1,2,2,3], 2);
+selext array_remove(array[1,2,2,3], 5);
+selext array_remove(array[1,NULL,NULL,3], NULL);
+selext array_remove(array['A','CC','D','C','RR'], 'RR');
+selext array_remove('{{1,2,2},{1,4,3}}', 2); -- not allowed
+selext array_remove(array['X','X','X'], 'X') = '{}';
+selext array_replace(array[1,2,5,4],5,3);
+selext array_replace(array[1,2,5,4],5,NULL);
+selext array_replace(array[1,2,NULL,4,NULL],NULL,5);
+selext array_replace(array['A','B','DD','B'],'B','CC');
+selext array_replace(array[1,NULL,3],NULL,NULL);
+selext array_replace(array['AB',NULL,'CDE'],NULL,'12');
 
--- array(select array-value ...)
-select array(select array[i,i/2] from generate_series(1,5) i);
-select array(select array['Hello', i::text] from generate_series(9,11) i);
+-- array(selext array-value ...)
+selext array(selext array[i,i/2] from generate_series(1,5) i);
+selext array(selext array['Hello', i::text] from generate_series(9,11) i);
 
 -- Insert/update on a column that is array of composite
 
 create temp table t1 (f1 int8_tbl[]);
 insert into t1 (f1[5].q1) values(42);
-select * from t1;
+selext * from t1;
 update t1 set f1[5].q2 = 43;
-select * from t1;
+selext * from t1;
 
 -- Check that arrays of composites are safely detoasted when needed
 
 create temp table src (f1 text);
 insert into src
-  select string_agg(random()::text,'') from generate_series(1,10000);
+  selext string_agg(random()::text,'') from generate_series(1,10000);
 create type textandtext as (c1 text, c2 text);
 create temp table dest (f1 textandtext[]);
-insert into dest select array[row(f1,f1)::textandtext] from src;
-select length(md5((f1[1]).c2)) from dest;
+insert into dest selext array[row(f1,f1)::textandtext] from src;
+selext length(md5((f1[1]).c2)) from dest;
 delete from src;
-select length(md5((f1[1]).c2)) from dest;
+selext length(md5((f1[1]).c2)) from dest;
 truncate table src;
 drop table src;
-select length(md5((f1[1]).c2)) from dest;
+selext length(md5((f1[1]).c2)) from dest;
 drop table dest;
 drop type textandtext;
 

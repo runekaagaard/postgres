@@ -3995,7 +3995,7 @@ complete_from_versioned_schema_query(const char *text, int state)
 /*
  * This creates a list of matching things, according to a query described by
  * the initial arguments.  The caller has already done any work needed to
- * select the appropriate query for the server's version.
+ * selext the appropriate query for the server's version.
  *
  * The query can be one of two kinds:
  *

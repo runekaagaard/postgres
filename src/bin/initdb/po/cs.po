@@ -287,12 +287,12 @@ msgstr "%s: soubor \"%s\" není běžný soubor\n"
 
 #: initdb.c:1113
 #, c-format
-msgid "selecting default max_connections ... "
+msgid "selexting default max_connections ... "
 msgstr "vybírám implicitní nastavení max_connections ... "
 
 #: initdb.c:1142
 #, c-format
-msgid "selecting default shared_buffers ... "
+msgid "selexting default shared_buffers ... "
 msgstr "vybírám implicitní nastavení shared_buffers ... "
 
 #: initdb.c:1186
@@ -452,8 +452,8 @@ msgstr "%s: nesouhlasí kódování znaků\n"
 #: initdb.c:2538
 #, c-format
 msgid ""
-"The encoding you selected (%s) and the encoding that the\n"
-"selected locale uses (%s) do not match.  This would lead to\n"
+"The encoding you selexted (%s) and the encoding that the\n"
+"selexted locale uses (%s) do not match.  This would lead to\n"
 "misbehavior in various character string processing functions.\n"
 "Rerun %s and either do not specify an encoding explicitly,\n"
 "or choose a matching combination.\n"
@@ -833,7 +833,7 @@ msgstr "%s: národní prostředí %s vyžaduje nepodporované kódování %s\n"
 #, c-format
 msgid ""
 "Encoding \"%s\" is not allowed as a server-side encoding.\n"
-"Rerun %s with a different locale selection.\n"
+"Rerun %s with a different locale selextion.\n"
 msgstr ""
 "Kódování %s není povoleno jako kódování na serveru.\n"
 "Pusťte znovu %s s jiným nastavením locale.\n"

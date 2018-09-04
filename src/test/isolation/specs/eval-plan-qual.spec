@@ -84,7 +84,7 @@ step "partiallock_ext"	{
 	  FOR UPDATE OF a1;
 }
 
-# these tests exercise EvalPlanQual with a SubLink sub-select (which should be
+# these tests exercise EvalPlanQual with a SubLink sub-selext (which should be
 # unaffected by any EPQ recheck behavior in the outer query); cf bug #14034
 
 step "updateforss"	{
@@ -94,13 +94,13 @@ step "updateforss"	{
 
 # these tests exercise mark/restore during EPQ recheck, cf bug #15032
 
-step "selectjoinforupdate"	{
+step "selextjoinforupdate"	{
 	set enable_nestloop to 0;
 	set enable_hashjoin to 0;
 	set enable_seqscan to 0;
 	explain (costs off)
-	select * from jointest a join jointest b on a.id=b.id for update;
-	select * from jointest a join jointest b on a.id=b.id for update;
+	selext * from jointest a join jointest b on a.id=b.id for update;
+	selext * from jointest a join jointest b on a.id=b.id for update;
 }
 
 
@@ -172,5 +172,5 @@ permutation "wx2" "lockwithvalues" "c2" "c1" "read"
 permutation "wx2_ext" "partiallock_ext" "c2" "c1" "read_ext"
 permutation "updateforss" "readforss" "c1" "c2"
 permutation "wrtwcte" "readwcte" "c1" "c2"
-permutation "wrjt" "selectjoinforupdate" "c2" "c1"
+permutation "wrjt" "selextjoinforupdate" "c2" "c1"
 permutation "wrtwcte" "multireadwcte" "c1" "c2"

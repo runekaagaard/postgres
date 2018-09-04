@@ -383,7 +383,7 @@ transformExprRecurse(ParseState *pstate, Node *expr)
  * helper routine for delivering "column does not exist" error message
  *
  * (Usually we don't have to work this hard, but the general case of field
- * selection from an arbitrary node needs it.)
+ * selextion from an arbitrary node needs it.)
  */
 static void
 unknown_attribute(ParseState *pstate, Node *relref, const char *attname,
@@ -441,7 +441,7 @@ transformIndirection(ParseState *pstate, A_Indirection *ind)
 	ListCell   *i;
 
 	/*
-	 * We have to split any field-selection operations apart from
+	 * We have to split any field-selextion operations apart from
 	 * subscripting.  Adjacent A_Indices nodes have to be treated as a single
 	 * multidimensional subscript operation.
 	 */
@@ -464,7 +464,7 @@ transformIndirection(ParseState *pstate, A_Indirection *ind)
 
 			Assert(IsA(n, String));
 
-			/* process subscripts before this field selection */
+			/* process subscripts before this field selextion */
 			if (subscripts)
 				result = (Node *) transformArraySubscripts(pstate,
 														   result,
@@ -901,7 +901,7 @@ transformAExprOp(ParseState *pstate, A_Expr *a)
 			 ((SubLink *) rexpr)->subLinkType == EXPR_SUBLINK)
 	{
 		/*
-		 * Convert "row op subselect" into a ROWCOMPARE sublink. Formerly the
+		 * Convert "row op subselext" into a ROWCOMPARE sublink. Formerly the
 		 * grammar did this, but now that a row construct is allowed anywhere
 		 * in expressions, it's easier to do it here.
 		 */
@@ -1195,14 +1195,14 @@ transformAExprIn(ParseState *pstate, A_Expr *a)
 		Oid			array_type;
 
 		/*
-		 * Try to select a common type for the array elements.  Note that
+		 * Try to selext a common type for the array elements.  Note that
 		 * since the LHS' type is first in the list, it will be preferred when
 		 * there is doubt (eg, when all the RHS items are unknown literals).
 		 *
 		 * Note: use list_concat here not lcons, to avoid damaging rnonvars.
 		 */
 		allexprs = list_concat(list_make1(lexpr), rnonvars);
-		scalar_type = select_common_type(pstate, allexprs, NULL, NULL);
+		scalar_type = selext_common_type(pstate, allexprs, NULL, NULL);
 
 		/*
 		 * Do we have an array type to use?  Aside from the case where there
@@ -1515,7 +1515,7 @@ transformMultiAssignRef(ParseState *pstate, MultiAssignRef *maref)
 			sublink = (SubLink *) transformExprRecurse(pstate,
 													   (Node *) sublink);
 
-			qtree = castNode(Query, sublink->subselect);
+			qtree = castNode(Query, sublink->subselext);
 
 			/* Check subquery returns required number of columns */
 			if (count_nonjunk_tlist_entries(qtree->targetList) != maref->ncolumns)
@@ -1528,7 +1528,7 @@ transformMultiAssignRef(ParseState *pstate, MultiAssignRef *maref)
 			 * Build a resjunk tlist item containing the MULTIEXPR SubLink,
 			 * and add it to pstate->p_multiassign_exprs, whence it will later
 			 * get appended to the completed targetlist.  We needn't worry
-			 * about selecting a resno for it; transformUpdateStmt will do
+			 * about selexting a resno for it; transformUpdateStmt will do
 			 * that.
 			 */
 			tle = makeTargetEntry((Expr *) sublink, 0, NULL, true);
@@ -1590,7 +1590,7 @@ transformMultiAssignRef(ParseState *pstate, MultiAssignRef *maref)
 
 		sublink = (SubLink *) tle->expr;
 		Assert(sublink->subLinkType == MULTIEXPR_SUBLINK);
-		qtree = castNode(Query, sublink->subselect);
+		qtree = castNode(Query, sublink->subselext);
 
 		/* Build a Param representing the current subquery output column */
 		tle = (TargetEntry *) list_nth(qtree->targetList, maref->colno - 1);
@@ -1732,7 +1732,7 @@ transformCaseExpr(ParseState *pstate, CaseExpr *c)
 	 */
 	resultexprs = lcons(newc->defresult, resultexprs);
 
-	ptype = select_common_type(pstate, resultexprs, "CASE", NULL);
+	ptype = selext_common_type(pstate, resultexprs, "CASE", NULL);
 	Assert(OidIsValid(ptype));
 	newc->casetype = ptype;
 	/* casecollid will be set by parse_collate.c */
@@ -1869,7 +1869,7 @@ transformSubLink(ParseState *pstate, SubLink *sublink)
 	/*
 	 * OK, let's transform the sub-SELECT.
 	 */
-	qtree = parse_sub_analyze(sublink->subselect, pstate, NULL, false, true);
+	qtree = parse_sub_analyze(sublink->subselext, pstate, NULL, false, true);
 
 	/*
 	 * Check that we got a SELECT.  Anything else should be impossible given
@@ -1879,7 +1879,7 @@ transformSubLink(ParseState *pstate, SubLink *sublink)
 		qtree->commandType != CMD_SELECT)
 		elog(ERROR, "unexpected non-SELECT command in SubLink");
 
-	sublink->subselect = (Node *) qtree;
+	sublink->subselext = (Node *) qtree;
 
 	if (sublink->subLinkType == EXISTS_SUBLINK)
 	{
@@ -1894,7 +1894,7 @@ transformSubLink(ParseState *pstate, SubLink *sublink)
 			 sublink->subLinkType == ARRAY_SUBLINK)
 	{
 		/*
-		 * Make sure the subselect delivers a single column (ignoring resjunk
+		 * Make sure the subselext delivers a single column (ignoring resjunk
 		 * targets).
 		 */
 		if (count_nonjunk_tlist_entries(qtree->targetList) != 1)
@@ -1938,7 +1938,7 @@ transformSubLink(ParseState *pstate, SubLink *sublink)
 		}
 
 		/*
-		 * If the source was "x IN (select)", convert to "x = ANY (select)".
+		 * If the source was "x IN (selext)", convert to "x = ANY (selext)".
 		 */
 		if (sublink->operName == NIL)
 			sublink->operName = list_make1(makeString("="));
@@ -2011,7 +2011,7 @@ transformSubLink(ParseState *pstate, SubLink *sublink)
  *
  * If the caller specifies the target type, the resulting array will
  * be of exactly that type.  Otherwise we try to infer a common type
- * for the elements using select_common_type().
+ * for the elements using selext_common_type().
  */
 static Node *
 transformArrayExpr(ParseState *pstate, A_ArrayExpr *a,
@@ -2096,7 +2096,7 @@ transformArrayExpr(ParseState *pstate, A_ArrayExpr *a,
 					 parser_errposition(pstate, a->location)));
 
 		/* Select a common type for the elements */
-		coerce_type = select_common_type(pstate, newelems, "ARRAY", NULL);
+		coerce_type = selext_common_type(pstate, newelems, "ARRAY", NULL);
 
 		if (newa->multidims)
 		{
@@ -2131,7 +2131,7 @@ transformArrayExpr(ParseState *pstate, A_ArrayExpr *a,
 	 *
 	 * If the array's type was merely derived from the common type of its
 	 * elements, then the elements are implicitly coerced to the common type.
-	 * This is consistent with other uses of select_common_type().
+	 * This is consistent with other uses of selext_common_type().
 	 */
 	foreach(element, newelems)
 	{
@@ -2221,7 +2221,7 @@ transformCoalesceExpr(ParseState *pstate, CoalesceExpr *c)
 		newargs = lappend(newargs, newe);
 	}
 
-	newc->coalescetype = select_common_type(pstate, newargs, "COALESCE", NULL);
+	newc->coalescetype = selext_common_type(pstate, newargs, "COALESCE", NULL);
 	/* coalescecollid will be set by parse_collate.c */
 
 	/* Convert arguments if necessary */
@@ -2271,7 +2271,7 @@ transformMinMaxExpr(ParseState *pstate, MinMaxExpr *m)
 		newargs = lappend(newargs, newe);
 	}
 
-	newm->minmaxtype = select_common_type(pstate, newargs, funcname, NULL);
+	newm->minmaxtype = selext_common_type(pstate, newargs, funcname, NULL);
 	/* minmaxcollid and inputcollid will be set by parse_collate.c */
 
 	/* Convert arguments if necessary */

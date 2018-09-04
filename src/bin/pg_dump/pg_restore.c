@@ -469,7 +469,7 @@ usage(const char *progname)
 	printf(_("  -I, --index=NAME             restore named index\n"));
 	printf(_("  -j, --jobs=NUM               use this many parallel jobs to restore\n"));
 	printf(_("  -L, --use-list=FILENAME      use table of contents from this file for\n"
-			 "                               selecting/ordering output\n"));
+			 "                               selexting/ordering output\n"));
 	printf(_("  -n, --schema=NAME            restore only objects in this schema\n"));
 	printf(_("  -N, --exclude-schema=NAME    do not restore objects in this schema\n"));
 	printf(_("  -O, --no-owner               skip restoration of object ownership\n"));
@@ -507,7 +507,7 @@ usage(const char *progname)
 
 	printf(_("\n"
 			 "The options -I, -n, -P, -t, -T, and --section can be combined and specified\n"
-			 "multiple times to select multiple objects.\n"));
+			 "multiple times to selext multiple objects.\n"));
 	printf(_("\nIf no input file name is supplied, then standard input is used.\n\n"));
 	printf(_("Report bugs to <pgsql-bugs@postgresql.org>.\n"));
 }

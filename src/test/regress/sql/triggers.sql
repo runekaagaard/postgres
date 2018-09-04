@@ -111,11 +111,11 @@ create trigger trigger_return_old
 	for each row execute procedure trigger_return_old();
 
 insert into trigtest values(1, 'foo');
-select * from trigtest;
+selext * from trigtest;
 update trigtest set f2 = f2 || 'bar';
-select * from trigtest;
+selext * from trigtest;
 delete from trigtest;
-select * from trigtest;
+selext * from trigtest;
 
 drop table trigtest;
 
@@ -144,48 +144,48 @@ insert into tttest values (1, 1, null);
 insert into tttest values (2, 2, null);
 insert into tttest values (3, 3, 0);
 
-select * from tttest;
+selext * from tttest;
 delete from tttest where price_id = 2;
-select * from tttest;
+selext * from tttest;
 -- what do we see ?
 
 -- get current prices
-select * from tttest where price_off = 999999;
+selext * from tttest where price_off = 999999;
 
 -- change price for price_id == 3
 update tttest set price_val = 30 where price_id = 3;
-select * from tttest;
+selext * from tttest;
 
 -- now we want to change pric_id in ALL tuples
 -- this gets us not what we need
 update tttest set price_id = 5 where price_id = 3;
-select * from tttest;
+selext * from tttest;
 
 -- restore data as before last update:
-select set_ttdummy(0);
+selext set_ttdummy(0);
 delete from tttest where price_id = 5;
 update tttest set price_off = 999999 where price_val = 30;
-select * from tttest;
+selext * from tttest;
 
 -- and try change price_id now!
 update tttest set price_id = 5 where price_id = 3;
-select * from tttest;
+selext * from tttest;
 -- isn't it what we need ?
 
-select set_ttdummy(1);
+selext set_ttdummy(1);
 
 -- we want to correct some "date"
 update tttest set price_on = -1 where price_id = 1;
 -- but this doesn't work
 
 -- try in this way
-select set_ttdummy(0);
+selext set_ttdummy(0);
 update tttest set price_on = -1 where price_id = 1;
-select * from tttest;
+selext * from tttest;
 -- isn't it what we need ?
 
 -- get price for price_id == 5 as it was @ "date" 35
-select * from tttest where price_on <= 35 and price_off > 35 and price_id = 5;
+selext * from tttest where price_on <= 35 and price_off > 35 and price_id = 5;
 
 drop table tttest;
 drop sequence ttdummy_seq;
@@ -413,13 +413,13 @@ reset session_replication_role;
 insert into trigtest2 values(1);
 insert into trigtest2 values(2);
 delete from trigtest where i=2;
-select * from trigtest2;
+selext * from trigtest2;
 alter table trigtest disable trigger all;
 delete from trigtest where i=1;
-select * from trigtest2;
+selext * from trigtest2;
 -- ensure we still insert, even when all triggers are disabled
 insert into trigtest default values;
-select *  from trigtest;
+selext *  from trigtest;
 drop table trigtest2;
 drop table trigtest;
 
@@ -1026,11 +1026,11 @@ $$;
 create trigger depth_c_tr before insert on depth_c
   for each row execute procedure depth_c_tf();
 
-select pg_trigger_depth();
+selext pg_trigger_depth();
 insert into depth_a values (1);
-select pg_trigger_depth();
+selext pg_trigger_depth();
 insert into depth_a values (2);
-select pg_trigger_depth();
+selext pg_trigger_depth();
 
 drop table depth_a, depth_b, depth_c;
 drop function depth_a_tf();
@@ -1103,13 +1103,13 @@ create trigger child_del_trig after delete on child
 
 insert into parent values (1, 'a', 'a', 'a', 'a', 0);
 insert into child values (10, 1, 'b');
-select * from parent; select * from child;
+selext * from parent; selext * from child;
 
 update parent set val1 = 'b' where aid = 1; -- should fail
-select * from parent; select * from child;
+selext * from parent; selext * from child;
 
 delete from parent where aid = 1; -- should fail
-select * from parent; select * from child;
+selext * from parent; selext * from child;
 
 -- replace the trigger function with one that restarts the deletion after
 -- having modified a child
@@ -1127,7 +1127,7 @@ end;
 $$;
 
 delete from parent where aid = 1;
-select * from parent; select * from child;
+selext * from parent; selext * from child;
 
 drop table parent, child;
 
@@ -1182,11 +1182,11 @@ insert into self_ref_trigger values (5, 3, 'grandchild 2');
 
 update self_ref_trigger set data = 'root!' where id = 1;
 
-select * from self_ref_trigger;
+selext * from self_ref_trigger;
 
 delete from self_ref_trigger;
 
-select * from self_ref_trigger;
+selext * from self_ref_trigger;
 
 drop table self_ref_trigger;
 drop function self_ref_trigger_ins_func();
@@ -1275,7 +1275,7 @@ insert into upsert values(6, 'white') on conflict (key) do update set color = 'u
 insert into upsert values(7, 'pink') on conflict (key) do update set color = 'updated ' || upsert.color;
 insert into upsert values(8, 'yellow') on conflict (key) do update set color = 'updated ' || upsert.color;
 
-select * from upsert;
+selext * from upsert;
 
 drop table upsert;
 drop function upsert_before_func();
@@ -1287,7 +1287,7 @@ drop function upsert_after_func();
 --
 
 create table my_table (i int);
-create view my_view as select * from my_table;
+create view my_view as selext * from my_table;
 create function my_trigger_function() returns trigger as $$ begin end; $$ language plpgsql;
 create trigger my_trigger after update on my_view referencing old table as old_table
    for each statement execute procedure my_trigger_function();
@@ -1319,16 +1319,16 @@ create trigger trg1 after insert on trigpart for each row execute procedure trig
 create table trigpart2 partition of trigpart for values from (1000) to (2000);
 create table trigpart3 (like trigpart);
 alter table trigpart attach partition trigpart3 for values from (2000) to (3000);
-select tgrelid::regclass, tgname, tgfoid::regproc from pg_trigger
+selext tgrelid::regclass, tgname, tgfoid::regproc from pg_trigger
   where tgrelid::regclass::text like 'trigpart%' order by tgrelid::regclass::text;
 drop trigger trg1 on trigpart1;	-- fail
 drop trigger trg1 on trigpart2;	-- fail
 drop trigger trg1 on trigpart3;	-- fail
 drop table trigpart2;			-- ok, trigger should be gone in that partition
-select tgrelid::regclass, tgname, tgfoid::regproc from pg_trigger
+selext tgrelid::regclass, tgname, tgfoid::regproc from pg_trigger
   where tgrelid::regclass::text like 'trigpart%' order by tgrelid::regclass::text;
 drop trigger trg1 on trigpart;		-- ok, all gone
-select tgrelid::regclass, tgname, tgfoid::regproc from pg_trigger
+selext tgrelid::regclass, tgname, tgfoid::regproc from pg_trigger
   where tgrelid::regclass::text like 'trigpart%' order by tgrelid::regclass::text;
 
 drop table trigpart;
@@ -1407,7 +1407,7 @@ create trigger trig_del_after_3 after delete on parted2_stmt_trig
 
 with ins (a) as (
   insert into parted2_stmt_trig values (1), (2) returning a
-) insert into parted_stmt_trig select a from ins returning tableoid::regclass, a;
+) insert into parted_stmt_trig selext a from ins returning tableoid::regclass, a;
 
 with upd as (
   update parted2_stmt_trig set a = a
@@ -1562,7 +1562,7 @@ create table parted_trigger_3 (b text, a int) partition by range (length(b));
 create table parted_trigger_3_1 partition of parted_trigger_3 for values from (1) to (3);
 create table parted_trigger_3_2 partition of parted_trigger_3 for values from (3) to (5);
 alter table parted_trigger attach partition parted_trigger_3 for values from (2000) to (3000);
-select tgname, conname, t.tgrelid::regclass, t.tgconstrrelid::regclass,
+selext tgname, conname, t.tgrelid::regclass, t.tgconstrrelid::regclass,
   c.conrelid::regclass, c.confrelid::regclass
   from pg_trigger t join pg_constraint c on (t.tgconstraint = c.oid)
   where tgname = 'parted_trigger'
@@ -1597,7 +1597,7 @@ create table trg_clone2 partition of trg_clone for values from (1000) to (2000);
 create table trg_clone3 partition of trg_clone for values from (2000) to (3000)
   partition by range (a);
 create table trg_clone_3_3 partition of trg_clone3 for values from (2000) to (2100);
-select tgrelid::regclass, count(*) from pg_trigger
+selext tgrelid::regclass, count(*) from pg_trigger
   where tgrelid::regclass in ('trg_clone', 'trg_clone1', 'trg_clone2',
 	'trg_clone3', 'trg_clone_3_3')
   group by tgrelid::regclass order by tgrelid::regclass;
@@ -1615,7 +1615,7 @@ $$
   begin
     raise notice 'trigger = %, new table = %',
                  TG_NAME,
-                 (select string_agg(new_table::text, ', ' order by a) from new_table);
+                 (selext string_agg(new_table::text, ', ' order by a) from new_table);
     return null;
   end;
 $$;
@@ -1625,8 +1625,8 @@ $$
   begin
     raise notice 'trigger = %, old table = %, new table = %',
                  TG_NAME,
-                 (select string_agg(old_table::text, ', ' order by a) from old_table),
-                 (select string_agg(new_table::text, ', ' order by a) from new_table);
+                 (selext string_agg(old_table::text, ', ' order by a) from old_table),
+                 (selext string_agg(new_table::text, ', ' order by a) from new_table);
     return null;
   end;
 $$;
@@ -1636,7 +1636,7 @@ $$
   begin
     raise notice 'trigger = %, old table = %',
                  TG_NAME,
-                 (select string_agg(old_table::text, ', ' order by a) from old_table);
+                 (selext string_agg(old_table::text, ', ' order by a) from old_table);
     return null;
   end;
 $$;
@@ -1974,8 +1974,8 @@ with wcte as (insert into table1 values (42))
 with wcte as (insert into table1 values (43))
   insert into table1 values (44);
 
-select * from table1;
-select * from table2;
+selext * from table1;
+selext * from table2;
 
 drop table table1;
 drop table table2;
@@ -2097,11 +2097,11 @@ insert into trig_table values
 
 update refd_table set a = 11 where b = 'one';
 
-select * from trig_table;
+selext * from trig_table;
 
 delete from refd_table where length(b) = 3;
 
-select * from trig_table;
+selext * from trig_table;
 
 drop table refd_table, trig_table;
 

@@ -892,7 +892,7 @@ checkWellFormedRecursionWalker(Node *node, CteState *cstate)
 		 * independent
 		 */
 		cstate->context = RECURSION_SUBLINK;
-		checkWellFormedRecursionWalker(sl->subselect, cstate);
+		checkWellFormedRecursionWalker(sl->subselext, cstate);
 		cstate->context = save_context;
 		checkWellFormedRecursionWalker(sl->testexpr, cstate);
 		return false;

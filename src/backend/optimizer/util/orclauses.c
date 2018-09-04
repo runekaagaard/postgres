@@ -51,12 +51,12 @@ static void consider_new_or_clause(PlannerInfo *root, RelOptInfo *rel,
  * The added quals are partially redundant with the original OR, and therefore
  * would cause the size of the joinrel to be underestimated when it is finally
  * formed.  (This would be true of a full transformation to CNF as well; the
- * fault is not really in the transformation, but in clauselist_selectivity's
+ * fault is not really in the transformation, but in clauselist_selextivity's
  * inability to recognize redundant conditions.)  We can compensate for this
- * redundancy by changing the cached selectivity of the original OR clause,
+ * redundancy by changing the cached selextivity of the original OR clause,
  * canceling out the (valid) reduction in the estimated sizes of the base
  * relations so that the estimated joinrel size remains the same.  This is
- * a MAJOR HACK: it depends on the fact that clause selectivities are cached
+ * a MAJOR HACK: it depends on the fact that clause selextivities are cached
  * and on the fact that the same RestrictInfo node will appear in every
  * joininfo list that might be used when the joinrel is formed.
  * And it doesn't work in cases where the size estimation is nonlinear
@@ -64,10 +64,10 @@ static void consider_new_or_clause(PlannerInfo *root, RelOptInfo *rel,
  *
  * We examine each base relation to see if join clauses associated with it
  * contain extractable restriction conditions.  If so, add those conditions
- * to the rel's baserestrictinfo and update the cached selectivities of the
+ * to the rel's baserestrictinfo and update the cached selextivities of the
  * join clauses.  Note that the same join clause will be examined afresh
  * from the point of view of each baserel that participates in it, so its
- * cached selectivity may get updated multiple times.
+ * cached selextivity may get updated multiple times.
  */
 void
 extract_restriction_or_clauses(PlannerInfo *root)
@@ -170,7 +170,7 @@ extract_or_clause(RestrictInfo *or_rinfo, RelOptInfo *rel)
 	 * meaning that fresh ones will be built if the clause is accepted as a
 	 * restriction clause.  This might seem wasteful --- couldn't we re-use
 	 * the existing RestrictInfos?	But that'd require assuming that
-	 * selectivity and other cached data is computed exactly the same way for
+	 * selextivity and other cached data is computed exactly the same way for
 	 * a restriction clause as for a join clause, which seems undesirable.
 	 */
 	Assert(or_clause((Node *) or_rinfo->orclause));
@@ -275,11 +275,11 @@ consider_new_or_clause(PlannerInfo *root, RelOptInfo *rel,
 								 NULL);
 
 	/*
-	 * Estimate its selectivity.  (We could have done this earlier, but doing
+	 * Estimate its selextivity.  (We could have done this earlier, but doing
 	 * it on the RestrictInfo representation allows the result to get cached,
 	 * saving work later.)
 	 */
-	or_selec = clause_selectivity(root, (Node *) or_rinfo,
+	or_selec = clause_selextivity(root, (Node *) or_rinfo,
 								  0, JOIN_INNER, NULL);
 
 	/*
@@ -287,7 +287,7 @@ consider_new_or_clause(PlannerInfo *root, RelOptInfo *rel,
 	 * fraction of the base relation's rows; otherwise, it's just going to
 	 * cause duplicate computation (since we will still have to check the
 	 * original OR clause when the join is formed).  Somewhat arbitrarily, we
-	 * set the selectivity threshold at 0.9.
+	 * set the selextivity threshold at 0.9.
 	 */
 	if (or_selec > 0.9)
 		return;					/* forget it */
@@ -300,16 +300,16 @@ consider_new_or_clause(PlannerInfo *root, RelOptInfo *rel,
 										 or_rinfo->security_level);
 
 	/*
-	 * Adjust the original join OR clause's cached selectivity to compensate
-	 * for the selectivity of the added (but redundant) lower-level qual. This
+	 * Adjust the original join OR clause's cached selextivity to compensate
+	 * for the selextivity of the added (but redundant) lower-level qual. This
 	 * should result in the join rel getting approximately the same rows
 	 * estimate as it would have gotten without all these shenanigans.
 	 *
 	 * XXX major hack alert: this depends on the assumption that the
-	 * selectivity will stay cached.
+	 * selextivity will stay cached.
 	 *
 	 * XXX another major hack: we adjust only norm_selec, the cached
-	 * selectivity for JOIN_INNER semantics, even though the join clause
+	 * selextivity for JOIN_INNER semantics, even though the join clause
 	 * might've been an outer-join clause.  This is partly because we can't
 	 * easily identify the relevant SpecialJoinInfo here, and partly because
 	 * the linearity assumption we're making would fail anyway.  (If it is an
@@ -343,10 +343,10 @@ consider_new_or_clause(PlannerInfo *root, RelOptInfo *rel,
 		sjinfo.semi_rhs_exprs = NIL;
 
 		/* Compute inner-join size */
-		orig_selec = clause_selectivity(root, (Node *) join_or_rinfo,
+		orig_selec = clause_selextivity(root, (Node *) join_or_rinfo,
 										0, JOIN_INNER, &sjinfo);
 
-		/* And hack cached selectivity so join size remains the same */
+		/* And hack cached selextivity so join size remains the same */
 		join_or_rinfo->norm_selec = orig_selec / or_selec;
 		/* ensure result stays in sane range, in particular not "redundant" */
 		if (join_or_rinfo->norm_selec > 1)

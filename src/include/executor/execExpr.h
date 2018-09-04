@@ -468,7 +468,7 @@ typedef struct ExprEvalStep
 			Oid			resulttype; /* field's type */
 			/* cached tupdesc pointer - filled at runtime */
 			TupleDesc	argdesc;
-		}			fieldselect;
+		}			fieldselext;
 
 		/* for EEOP_FIELDSTORE_DEFORM / FIELDSTORE_FORM */
 		struct

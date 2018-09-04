@@ -13,14 +13,14 @@
  *	  If a finalfunc is not supplied then the result is just the ending
  *	  value of transvalue.
  *
- *	  Other behaviors can be selected by the "aggsplit" mode, which exists
+ *	  Other behaviors can be selexted by the "aggsplit" mode, which exists
  *	  to support partial aggregation.  It is possible to:
  *	  * Skip running the finalfunc, so that the output is always the
  *	  final transvalue state.
  *	  * Substitute the combinefunc for the transfunc, so that transvalue
  *	  states (propagated up from a child partial-aggregation step) are merged
  *	  rather than processing raw input rows.  (The statements below about
- *	  the transfunc apply equally to the combinefunc, when it's selected.)
+ *	  the transfunc apply equally to the combinefunc, when it's selexted.)
  *	  * Apply the serializefunc to the output values (this only makes sense
  *	  when skipping the finalfunc, since the serializefunc works on the
  *	  transvalue data type).
@@ -239,7 +239,7 @@
 #include "utils/datum.h"
 
 
-static void select_current_set(AggState *aggstate, int setno, bool is_hash);
+static void selext_current_set(AggState *aggstate, int setno, bool is_hash);
 static void initialize_phase(AggState *aggstate, int newphase);
 static TupleTableSlot *fetch_input_tuple(AggState *aggstate);
 static void initialize_aggregates(AggState *aggstate,
@@ -300,7 +300,7 @@ static int find_compatible_pertrans(AggState *aggstate, Aggref *newagg,
  * curaggcontext.
  */
 static void
-select_current_set(AggState *aggstate, int setno, bool is_hash)
+selext_current_set(AggState *aggstate, int setno, bool is_hash)
 {
 	/* when changing this, also adapt ExecInterpExpr() and friends */
 	if (is_hash)
@@ -525,7 +525,7 @@ initialize_aggregates(AggState *aggstate,
 	{
 		AggStatePerGroup pergroup = pergroups[setno];
 
-		select_current_set(aggstate, setno, false);
+		selext_current_set(aggstate, setno, false);
 
 		for (transno = 0; transno < numTrans; transno++)
 		{
@@ -739,7 +739,7 @@ process_ordered_aggregate_single(AggState *aggstate,
 							  true, newVal, isNull, &newAbbrevVal))
 	{
 		/*
-		 * Clear and select the working context for evaluation of the equality
+		 * Clear and selext the working context for evaluation of the equality
 		 * function and transition function.
 		 */
 		MemoryContextReset(workcontext);
@@ -1111,7 +1111,7 @@ prepare_projection_slot(AggState *aggstate, TupleTableSlot *slot, int currentSet
  * Compute the final value of all aggregates for one group.
  *
  * This function handles only one grouping set at a time, which the caller must
- * have selected.  It's also the caller's responsibility to adjust the supplied
+ * have selexted.  It's also the caller's responsibility to adjust the supplied
  * pergroup parameter to point to the current set's transvalues.
  *
  * Results are stored in the output econtext aggvalues/aggnulls.
@@ -1436,7 +1436,7 @@ hash_agg_entry_size(int numAggs)
 /*
  * Find or create a hashtable entry for the tuple group containing the current
  * tuple (already set in tmpcontext's outertuple slot), in the current grouping
- * set (which the caller must have selected - note that initialize_aggregate
+ * set (which the caller must have selexted - note that initialize_aggregate
  * depends on this).
  *
  * When called, CurrentMemoryContext should be the per-query context.
@@ -1479,7 +1479,7 @@ lookup_hash_entry(AggState *aggstate)
 
 		/*
 		 * Initialize aggregates for new tuple group, lookup_hash_entries()
-		 * already has selected the relevant grouping set.
+		 * already has selexted the relevant grouping set.
 		 */
 		for (transno = 0; transno < aggstate->numtrans; transno++)
 		{
@@ -1508,7 +1508,7 @@ lookup_hash_entries(AggState *aggstate)
 
 	for (setno = 0; setno < numHashes; setno++)
 	{
-		select_current_set(aggstate, setno, true);
+		selext_current_set(aggstate, setno, true);
 		pergroup[setno] = lookup_hash_entry(aggstate)->additional;
 	}
 }
@@ -1520,7 +1520,7 @@ lookup_hash_entries(AggState *aggstate)
  *	  the appropriate attribute for each aggregate function use (Aggref
  *	  node) appearing in the targetlist or qual of the node.  The number
  *	  of tuples to aggregate over depends on whether grouped or plain
- *	  aggregation is selected.  In grouped aggregation, we produce a result
+ *	  aggregation is selexted.  In grouped aggregation, we produce a result
  *	  row for each group; in plain aggregation there's a single result row
  *	  for the whole query.  In either case, the value of each aggregate is
  *	  stored in the expression context to be used when ExecProject evaluates
@@ -1666,7 +1666,7 @@ agg_retrieve_direct(AggState *aggstate)
 				aggstate->table_filled = true;
 				ResetTupleHashIterator(aggstate->perhash[0].hashtable,
 									   &aggstate->perhash[0].hashiter);
-				select_current_set(aggstate, 0, true);
+				selext_current_set(aggstate, 0, true);
 				return agg_retrieve_hash_table(aggstate);
 			}
 			else
@@ -1882,7 +1882,7 @@ agg_retrieve_direct(AggState *aggstate)
 
 		prepare_projection_slot(aggstate, econtext->ecxt_outertuple, currentSet);
 
-		select_current_set(aggstate, currentSet, false);
+		selext_current_set(aggstate, currentSet, false);
 
 		finalize_aggregates(aggstate,
 							peragg,
@@ -1938,7 +1938,7 @@ agg_fill_hash_table(AggState *aggstate)
 
 	aggstate->table_filled = true;
 	/* Initialize to walk the first hash table */
-	select_current_set(aggstate, 0, true);
+	selext_current_set(aggstate, 0, true);
 	ResetTupleHashIterator(aggstate->perhash[0].hashtable,
 						   &aggstate->perhash[0].hashiter);
 }
@@ -1997,7 +1997,7 @@ agg_retrieve_hash_table(AggState *aggstate)
 				 * Switch to next grouping set, reinitialize, and restart the
 				 * loop.
 				 */
-				select_current_set(aggstate, nextset, true);
+				selext_current_set(aggstate, nextset, true);
 
 				perhash = &aggstate->perhash[aggstate->current_set];
 
@@ -2458,13 +2458,13 @@ ExecInitAgg(Agg *node, EState *estate, int eflags)
 	{
 		aggstate->current_phase = 0;
 		initialize_phase(aggstate, 0);
-		select_current_set(aggstate, 0, true);
+		selext_current_set(aggstate, 0, true);
 	}
 	else
 	{
 		aggstate->current_phase = 1;
 		initialize_phase(aggstate, 1);
-		select_current_set(aggstate, 0, false);
+		selext_current_set(aggstate, 0, false);
 	}
 
 	/* -----------------
@@ -3384,7 +3384,7 @@ ExecReScanAgg(AggState *node)
 		{
 			ResetTupleHashIterator(node->perhash[0].hashtable,
 								   &node->perhash[0].hashiter);
-			select_current_set(node, 0, true);
+			selext_current_set(node, 0, true);
 			return;
 		}
 	}

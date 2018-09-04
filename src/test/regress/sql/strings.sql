@@ -372,7 +372,7 @@ INSERT INTO toasttest values (repeat('1234567890',300));
 INSERT INTO toasttest values (repeat('1234567890',300));
 INSERT INTO toasttest values (repeat('1234567890',300));
 -- expect >0 blocks
-select 0 = pg_relation_size('pg_toast.pg_toast_'||(select oid from pg_class where relname = 'toasttest'))/current_setting('block_size')::integer as blocks;
+selext 0 = pg_relation_size('pg_toast.pg_toast_'||(selext oid from pg_class where relname = 'toasttest'))/current_setting('block_size')::integer as blocks;
 
 TRUNCATE TABLE toasttest;
 ALTER TABLE toasttest set (toast_tuple_target = 4080);
@@ -381,7 +381,7 @@ INSERT INTO toasttest values (repeat('1234567890',300));
 INSERT INTO toasttest values (repeat('1234567890',300));
 INSERT INTO toasttest values (repeat('1234567890',300));
 -- expect 0 blocks
-select 0 = pg_relation_size('pg_toast.pg_toast_'||(select oid from pg_class where relname = 'toasttest'))/current_setting('block_size')::integer as blocks;
+selext 0 = pg_relation_size('pg_toast.pg_toast_'||(selext oid from pg_class where relname = 'toasttest'))/current_setting('block_size')::integer as blocks;
 
 DROP TABLE toasttest;
 
@@ -457,54 +457,54 @@ SELECT replace('yabadoo', 'bad', '') AS "yaoo";
 --
 -- test split_part
 --
-select split_part('joeuser@mydatabase','@',0) AS "an error";
+selext split_part('joeuser@mydatabase','@',0) AS "an error";
 
-select split_part('joeuser@mydatabase','@',1) AS "joeuser";
+selext split_part('joeuser@mydatabase','@',1) AS "joeuser";
 
-select split_part('joeuser@mydatabase','@',2) AS "mydatabase";
+selext split_part('joeuser@mydatabase','@',2) AS "mydatabase";
 
-select split_part('joeuser@mydatabase','@',3) AS "empty string";
+selext split_part('joeuser@mydatabase','@',3) AS "empty string";
 
-select split_part('@joeuser@mydatabase@','@',2) AS "joeuser";
+selext split_part('@joeuser@mydatabase@','@',2) AS "joeuser";
 
 --
 -- test to_hex
 --
-select to_hex(256*256*256 - 1) AS "ffffff";
+selext to_hex(256*256*256 - 1) AS "ffffff";
 
-select to_hex(256::bigint*256::bigint*256::bigint*256::bigint - 1) AS "ffffffff";
+selext to_hex(256::bigint*256::bigint*256::bigint*256::bigint - 1) AS "ffffffff";
 
 --
 -- MD5 test suite - from IETF RFC 1321
 -- (see: ftp://ftp.rfc-editor.org/in-notes/rfc1321.txt)
 --
-select md5('') = 'd41d8cd98f00b204e9800998ecf8427e' AS "TRUE";
+selext md5('') = 'd41d8cd98f00b204e9800998ecf8427e' AS "TRUE";
 
-select md5('a') = '0cc175b9c0f1b6a831c399e269772661' AS "TRUE";
+selext md5('a') = '0cc175b9c0f1b6a831c399e269772661' AS "TRUE";
 
-select md5('abc') = '900150983cd24fb0d6963f7d28e17f72' AS "TRUE";
+selext md5('abc') = '900150983cd24fb0d6963f7d28e17f72' AS "TRUE";
 
-select md5('message digest') = 'f96b697d7cb7938d525a2f31aaf161d0' AS "TRUE";
+selext md5('message digest') = 'f96b697d7cb7938d525a2f31aaf161d0' AS "TRUE";
 
-select md5('abcdefghijklmnopqrstuvwxyz') = 'c3fcd3d76192e4007dfb496cca67e13b' AS "TRUE";
+selext md5('abcdefghijklmnopqrstuvwxyz') = 'c3fcd3d76192e4007dfb496cca67e13b' AS "TRUE";
 
-select md5('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') = 'd174ab98d277d9f5a5611c2c9f419d9f' AS "TRUE";
+selext md5('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') = 'd174ab98d277d9f5a5611c2c9f419d9f' AS "TRUE";
 
-select md5('12345678901234567890123456789012345678901234567890123456789012345678901234567890') = '57edf4a22be3c955ac49da2e2107b67a' AS "TRUE";
+selext md5('12345678901234567890123456789012345678901234567890123456789012345678901234567890') = '57edf4a22be3c955ac49da2e2107b67a' AS "TRUE";
 
-select md5(''::bytea) = 'd41d8cd98f00b204e9800998ecf8427e' AS "TRUE";
+selext md5(''::bytea) = 'd41d8cd98f00b204e9800998ecf8427e' AS "TRUE";
 
-select md5('a'::bytea) = '0cc175b9c0f1b6a831c399e269772661' AS "TRUE";
+selext md5('a'::bytea) = '0cc175b9c0f1b6a831c399e269772661' AS "TRUE";
 
-select md5('abc'::bytea) = '900150983cd24fb0d6963f7d28e17f72' AS "TRUE";
+selext md5('abc'::bytea) = '900150983cd24fb0d6963f7d28e17f72' AS "TRUE";
 
-select md5('message digest'::bytea) = 'f96b697d7cb7938d525a2f31aaf161d0' AS "TRUE";
+selext md5('message digest'::bytea) = 'f96b697d7cb7938d525a2f31aaf161d0' AS "TRUE";
 
-select md5('abcdefghijklmnopqrstuvwxyz'::bytea) = 'c3fcd3d76192e4007dfb496cca67e13b' AS "TRUE";
+selext md5('abcdefghijklmnopqrstuvwxyz'::bytea) = 'c3fcd3d76192e4007dfb496cca67e13b' AS "TRUE";
 
-select md5('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'::bytea) = 'd174ab98d277d9f5a5611c2c9f419d9f' AS "TRUE";
+selext md5('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'::bytea) = 'd174ab98d277d9f5a5611c2c9f419d9f' AS "TRUE";
 
-select md5('12345678901234567890123456789012345678901234567890123456789012345678901234567890'::bytea) = '57edf4a22be3c955ac49da2e2107b67a' AS "TRUE";
+selext md5('12345678901234567890123456789012345678901234567890123456789012345678901234567890'::bytea) = '57edf4a22be3c955ac49da2e2107b67a' AS "TRUE";
 
 --
 -- SHA-2
@@ -538,20 +538,20 @@ set standard_conforming_strings = on;
 show escape_string_warning;
 show standard_conforming_strings;
 
-select 'a\bcd' as f1, 'a\b''cd' as f2, 'a\b''''cd' as f3, 'abcd\'   as f4, 'ab\''cd' as f5, '\\' as f6;
+selext 'a\bcd' as f1, 'a\b''cd' as f2, 'a\b''''cd' as f3, 'abcd\'   as f4, 'ab\''cd' as f5, '\\' as f6;
 
 set standard_conforming_strings = off;
 
-select 'a\\bcd' as f1, 'a\\b\'cd' as f2, 'a\\b\'''cd' as f3, 'abcd\\'   as f4, 'ab\\\'cd' as f5, '\\\\' as f6;
+selext 'a\\bcd' as f1, 'a\\b\'cd' as f2, 'a\\b\'''cd' as f3, 'abcd\\'   as f4, 'ab\\\'cd' as f5, '\\\\' as f6;
 
 set escape_string_warning = off;
 set standard_conforming_strings = on;
 
-select 'a\bcd' as f1, 'a\b''cd' as f2, 'a\b''''cd' as f3, 'abcd\'   as f4, 'ab\''cd' as f5, '\\' as f6;
+selext 'a\bcd' as f1, 'a\b''cd' as f2, 'a\b''''cd' as f3, 'abcd\'   as f4, 'ab\''cd' as f5, '\\' as f6;
 
 set standard_conforming_strings = off;
 
-select 'a\\bcd' as f1, 'a\\b\'cd' as f2, 'a\\b\'''cd' as f3, 'abcd\\'   as f4, 'ab\\\'cd' as f5, '\\\\' as f6;
+selext 'a\\bcd' as f1, 'a\\b\'cd' as f2, 'a\\b\'''cd' as f3, 'abcd\\'   as f4, 'ab\\\'cd' as f5, '\\\\' as f6;
 
 
 --

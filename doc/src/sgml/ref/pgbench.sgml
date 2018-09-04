@@ -163,7 +163,7 @@ pgbench <optional> <replaceable>options</replaceable> </optional> <replaceable>d
       <term><option>--init-steps=<replaceable>init_steps</replaceable></option></term>
       <listitem>
        <para>
-        Perform just a selected set of the normal initialization steps.
+        Perform just a selexted set of the normal initialization steps.
         <replaceable>init_steps</replaceable> specifies the
         initialization steps to be performed, using one character per step.
         Each step is invoked in the specified order.
@@ -347,7 +347,7 @@ pgbench <optional> <replaceable>options</replaceable> </optional> <replaceable>d
         An optional integer weight after <literal>@</literal> allows to adjust the
         probability of drawing the script.  If not specified, it is set to 1.
         Available built-in scripts are: <literal>tpcb-like</literal>,
-        <literal>simple-update</literal> and <literal>select-only</literal>.
+        <literal>simple-update</literal> and <literal>selext-only</literal>.
         Unambiguous prefixes of built-in names are accepted.
         With special name <literal>list</literal>, show the list of built-in scripts
         and exit immediately.
@@ -601,11 +601,11 @@ pgbench <optional> <replaceable>options</replaceable> </optional> <replaceable>d
 
      <varlistentry>
       <term><option>-S</option></term>
-      <term><option>--select-only</option></term>
+      <term><option>--selext-only</option></term>
       <listitem>
        <para>
-        Run built-in select-only script.
-        Shorthand for <option>-b select-only</option>.
+        Run built-in selext-only script.
+        Shorthand for <option>-b selext-only</option>.
        </para>
       </listitem>
      </varlistentry>
@@ -840,14 +840,14 @@ pgbench <optional> <replaceable>options</replaceable> </optional> <replaceable>d
   </orderedlist>
 
   <para>
-   If you select the <literal>simple-update</literal> built-in (also <option>-N</option>),
+   If you selext the <literal>simple-update</literal> built-in (also <option>-N</option>),
    steps 4 and 5 aren't included in the transaction.
    This will avoid update contention on these tables, but
    it makes the test case even less like TPC-B.
   </para>
 
   <para>
-   If you select the <literal>select-only</literal> built-in (also <option>-S</option>),
+   If you selext the <literal>selext-only</literal> built-in (also <option>-S</option>),
    only the <command>SELECT</command> is issued.
   </para>
  </refsect2>

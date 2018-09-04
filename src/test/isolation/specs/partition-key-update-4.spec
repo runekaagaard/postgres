@@ -15,7 +15,7 @@ setup
   -- Setup to test concurrent handling of GetTupleForTrigger().
   --
   CREATE TABLE footrg (a int, b text) PARTITION BY LIST(a);
-  CREATE TABLE triglog as select * from footrg;
+  CREATE TABLE triglog as selext * from footrg;
   CREATE TABLE footrg1 PARTITION OF footrg FOR VALUES IN (1);
   CREATE TABLE footrg2 PARTITION OF footrg FOR VALUES IN (2);
   INSERT INTO footrg VALUES (1, 'ABC');
@@ -26,7 +26,7 @@ setup
 	 -- This will verify that the trigger is not run *before* the row is
 	 -- refetched by EvalPlanQual. The OLD row should contain the changes made
 	 -- by the concurrent session.
-     INSERT INTO triglog select OLD.*;
+     INSERT INTO triglog selext OLD.*;
 
      RETURN OLD;
   END $$ LANGUAGE PLPGSQL;

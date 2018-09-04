@@ -709,7 +709,7 @@
 
     <listitem>
      <para>
-      Fix possible crash due to invalid plan for nested sub-selects, such
+      Fix possible crash due to invalid plan for nested sub-selexts, such
       as <literal>WHERE (... x IN (SELECT ...) ...) IN (SELECT ...)</literal>
       (Tom Lane)
      </para>
@@ -1034,7 +1034,7 @@
      <para>
       In some cases, the system would use the simple GMT offset value when
       it should have used the regular timezone setting that had prevailed
-      before the simple offset was selected.  This change also causes
+      before the simple offset was selexted.  This change also causes
       the <function>timeofday</function> function to honor the simple GMT offset
       zone.
      </para>
@@ -1588,7 +1588,7 @@
 
     <listitem>
      <para>
-      Fix SQL grammar to allow subscripting or field selection from a
+      Fix SQL grammar to allow subscripting or field selextion from a
       sub-SELECT result (Tom Lane)
      </para>
     </listitem>
@@ -3503,7 +3503,7 @@
 
     <listitem>
      <para>
-      Fix join selectivity estimation for unique columns (Tom Lane)
+      Fix join selextivity estimation for unique columns (Tom Lane)
      </para>
 
      <para>
@@ -3514,7 +3514,7 @@
 
     <listitem>
      <para>
-      Fix nested PlaceHolderVar expressions that appear only in sub-select
+      Fix nested PlaceHolderVar expressions that appear only in sub-selext
       target lists (Tom Lane)
      </para>
 
@@ -4029,7 +4029,7 @@
 
     <listitem>
      <para>
-      Fix selectivity estimation for text search to account for NULLs
+      Fix selextivity estimation for text search to account for NULLs
       (Jesper Krogh)
      </para>
     </listitem>
@@ -4663,7 +4663,7 @@
      <para>
       This bug could result in query outputs being non-null when they
       should be null, in cases where the inner side of an outer join
-      is a sub-select with non-strict expressions in its output list.
+      is a sub-selext with non-strict expressions in its output list.
      </para>
     </listitem>
 
@@ -4676,19 +4676,19 @@
 
     <listitem>
      <para>
-      Fix <quote>cannot handle unplanned sub-select</quote> error (Tom Lane)
+      Fix <quote>cannot handle unplanned sub-selext</quote> error (Tom Lane)
      </para>
 
      <para>
-      This occurred when a sub-select contains a join alias reference that
-      expands into an expression containing another sub-select.
+      This occurred when a sub-selext contains a join alias reference that
+      expands into an expression containing another sub-selext.
      </para>
     </listitem>
 
     <listitem>
      <para>
-      Fix mishandling of whole-row Vars that reference a view or sub-select
-      and appear within a nested sub-select (Tom Lane)
+      Fix mishandling of whole-row Vars that reference a view or sub-selext
+      and appear within a nested sub-selext (Tom Lane)
      </para>
     </listitem>
 
@@ -4988,7 +4988,7 @@
 
     <listitem>
      <para>
-      Improve parallel pg_restore's ability to cope with selective restore
+      Improve parallel pg_restore's ability to cope with selextive restore
       (<literal>-L</literal> option) (Tom Lane)
      </para>
 
@@ -5294,7 +5294,7 @@
     <listitem>
      <para>
       Fix <application>psql</application>'s <literal>\copy</literal> to not add spaces around
-      a dot within <literal>\copy (select ...)</literal> (Tom)
+      a dot within <literal>\copy (selext ...)</literal> (Tom)
      </para>
 
      <para>
@@ -5791,7 +5791,7 @@
       This case was formerly rejected as an error, but it's more convenient to
       treat it the same as a zero-element array.  In particular this avoids
       unnecessary failures when an <type>ltree</type> operation is applied to the
-      result of <literal>ARRAY(SELECT ...)</literal> and the sub-select returns no
+      result of <literal>ARRAY(SELECT ...)</literal> and the sub-selext returns no
       rows.
      </para>
     </listitem>
@@ -6237,7 +6237,7 @@ WITH w AS (SELECT * FROM foo) SELECT * FROM w, bar ... FOR UPDATE
 
      <para>
       An error exit from the inner function could result in crashes due to
-      failure to re-select the correct Perl interpreter for the outer function.
+      failure to re-selext the correct Perl interpreter for the outer function.
      </para>
     </listitem>
 
@@ -6825,7 +6825,7 @@ WITH w AS (SELECT * FROM foo) SELECT * FROM w, bar ... FOR UPDATE
       </para>
 
       <para>
-       Previously this was selected by <application>configure</application>'s
+       Previously this was selexted by <application>configure</application>'s
        <option>--enable-integer-datetimes</option> option.  To retain
        the old behavior, build with <option>--disable-integer-datetimes</option>.
       </para>
@@ -7246,11 +7246,11 @@ WITH w AS (SELECT * FROM foo) SELECT * FROM w, bar ... FOR UPDATE
 
      <listitem>
       <para>
-       Improve optimization of sub-selects beneath outer joins (Tom)
+       Improve optimization of sub-selexts beneath outer joins (Tom)
       </para>
 
       <para>
-       Formerly, a sub-select or view could not be optimized very well if it
+       Formerly, a sub-selext or view could not be optimized very well if it
        appeared within the nullable side of an outer join and contained
        non-strict expressions (for instance, constants) in its result list.
       </para>
@@ -7950,7 +7950,7 @@ WITH w AS (SELECT * FROM foo) SELECT * FROM w, bar ... FOR UPDATE
 
       <listitem>
        <para>
-        Allow sub-selects in <literal>LIMIT</literal> and <literal>OFFSET</literal> (Tom)
+        Allow sub-selexts in <literal>LIMIT</literal> and <literal>OFFSET</literal> (Tom)
        </para>
       </listitem>
 
@@ -8288,7 +8288,7 @@ WITH w AS (SELECT * FROM foo) SELECT * FROM w, bar ... FOR UPDATE
 
       <listitem>
        <para>
-        Add an optimizer selectivity function for <literal>@@</literal> text
+        Add an optimizer selextivity function for <literal>@@</literal> text
         search operations (Jan Urbanski)
        </para>
       </listitem>
@@ -9197,7 +9197,7 @@ WITH w AS (SELECT * FROM foo) SELECT * FROM w, bar ... FOR UPDATE
       <listitem>
        <para>
         Make <command>\d</command> show foreign-key constraints that reference
-        the selected table (Kenneth D'Souza)
+        the selexted table (Kenneth D'Souza)
        </para>
       </listitem>
 
@@ -9240,7 +9240,7 @@ WITH w AS (SELECT * FROM foo) SELECT * FROM w, bar ... FOR UPDATE
       <listitem>
        <para>
         Add a function type column to <command>\df</command>'s output, and add
-        options to list only selected types of functions (David Fetter)
+        options to list only selexted types of functions (David Fetter)
        </para>
       </listitem>
 
@@ -9283,7 +9283,7 @@ WITH w AS (SELECT * FROM foo) SELECT * FROM w, bar ... FOR UPDATE
 
        <para>
         These options were too frequently confused with the option to
-        select a database name in other <productname>PostgreSQL</productname>
+        selext a database name in other <productname>PostgreSQL</productname>
         client applications.  The functionality is still available,
         but you must now spell out the long option name
         <option>--inserts</option> or <option>--column-inserts</option>.

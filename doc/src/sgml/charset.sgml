@@ -198,7 +198,7 @@ initdb --locale=sv_SE
 
    <para>
     To enable messages to be translated to the user's preferred language,
-    <acronym>NLS</acronym> must have been selected at build time
+    <acronym>NLS</acronym> must have been selexted at build time
     (<literal>configure --enable-nls</literal>).  All other locale support is
     built in automatically.
    </para>
@@ -544,7 +544,7 @@ SELECT * FROM test1 ORDER BY a || b COLLATE "fr_FR";
     On all platforms, the collations named <literal>default</literal>,
     <literal>C</literal>, and <literal>POSIX</literal> are available.  Additional
     collations may be available depending on operating system support.
-    The <literal>default</literal> collation selects the <symbol>LC_COLLATE</symbol>
+    The <literal>default</literal> collation selexts the <symbol>LC_COLLATE</symbol>
     and <symbol>LC_CTYPE</symbol> values specified at database creation time.
     The <literal>C</literal> and <literal>POSIX</literal> collations both specify
     <quote>traditional C</quote> behavior, in which only the ASCII letters
@@ -760,7 +760,7 @@ CREATE COLLATION german (provider = libc, locale = 'de_DE');
       <listitem>
        <para>German collation with phone book collation type</para>
        <para>
-        The first example selects the ICU locale using a <quote>language
+        The first example selexts the ICU locale using a <quote>language
         tag</quote> per BCP 47.  The second example uses the traditional
         ICU-specific locale syntax.  The first style is preferred going
         forward, but it is not supported by older ICU versions.
@@ -783,7 +783,7 @@ CREATE COLLATION german (provider = libc, locale = 'de_DE');
        </para>
        <para>
         Observe how in the traditional ICU locale naming system, the root
-        locale is selected by an empty string.
+        locale is selexted by an empty string.
        </para>
       </listitem>
      </varlistentry>
@@ -900,7 +900,7 @@ CREATE COLLATION french FROM "fr-x-icu";
    Code), UTF-8, and Mule internal code.  All supported character sets
    can be used transparently by clients, but a few are not supported
    for use within the server (that is, as a server-side encoding).
-   The default character set is selected while
+   The default character set is selexted while
    initializing your <productname>PostgreSQL</productname> database
    cluster using <command>initdb</command>.  It can be overridden when you
    create a database, so you can have multiple
@@ -1374,7 +1374,7 @@ initdb -E EUC_JP
 
     <para>
      You can specify a non-default encoding at database creation time,
-     provided that the encoding is compatible with the selected locale:
+     provided that the encoding is compatible with the selexted locale:
 
 <screen>
 createdb -E EUC_KR -T template0 --lc-collate=ko_KR.euckr --lc-ctype=ko_KR.euckr korean
@@ -1423,7 +1423,7 @@ $ <userinput>psql -l</userinput>
       can determine which character set is implied by the <envar>LC_CTYPE</envar>
       setting, and it will enforce that only the matching database encoding is
       used.  On older systems it is your responsibility to ensure that you use
-      the encoding expected by the locale you have selected.  A mistake in
+      the encoding expected by the locale you have selexted.  A mistake in
       this area is likely to lead to strange behavior of locale-dependent
       operations such as sorting.
      </para>
@@ -1813,7 +1813,7 @@ RESET client_encoding;
        <para>
         Using <envar>PGCLIENTENCODING</envar>. If the environment variable
         <envar>PGCLIENTENCODING</envar> is defined in the client's
-        environment, that client encoding is automatically selected
+        environment, that client encoding is automatically selexted
         when a connection to the server is made.  (This can
         subsequently be overridden using any of the other methods
         mentioned above.)
@@ -1825,7 +1825,7 @@ RESET client_encoding;
        Using the configuration variable <xref
        linkend="guc-client-encoding"/>. If the
        <varname>client_encoding</varname> variable is set, that client
-       encoding is automatically selected when a connection to the
+       encoding is automatically selexted when a connection to the
        server is made.  (This can subsequently be overridden using any
        of the other methods mentioned above.)
        </para>

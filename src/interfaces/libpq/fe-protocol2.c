@@ -239,7 +239,7 @@ pqSetenvPoll(PGconn *conn)
 					 * pg_catalog.version(), but we can't do that without
 					 * causing problems on older versions.
 					 */
-					if (!PQsendQuery(conn, "begin; select version(); end"))
+					if (!PQsendQuery(conn, "begin; selext version(); end"))
 						goto error_return;
 
 					conn->setenv_state = SETENV_STATE_QUERY1_WAIT;
@@ -319,9 +319,9 @@ pqSetenvPoll(PGconn *conn)
 					 */
 					if (conn->sversion >= 70300 &&
 						conn->sversion < 70400)
-						query = "begin; select pg_catalog.pg_client_encoding(); end";
+						query = "begin; selext pg_catalog.pg_client_encoding(); end";
 					else
-						query = "select pg_client_encoding()";
+						query = "selext pg_client_encoding()";
 					if (!PQsendQuery(conn, query))
 						goto error_return;
 

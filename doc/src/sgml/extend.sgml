@@ -449,7 +449,7 @@
      object that a malicious user has defined.  Beware of constructs that
      depend on <varname>search_path</varname> implicitly: <token>IN</token>
      and <literal>CASE <replaceable>expression</replaceable> WHEN</literal>
-     always select an operator using the search path.  In their place, use
+     always selext an operator using the search path.  In their place, use
      <literal>OPERATOR(<replaceable>schema</replaceable>.=) ANY</literal>
      and <literal>CASE WHEN <replaceable>expression</replaceable></literal>.
     </para>
@@ -796,7 +796,7 @@ SELECT pg_catalog.pg_extension_config_dump('my_config_seq', '');
      is initially empty as created by the extension script.  If there is
      a mixture of initial data and user-provided data in the table,
      the second argument of <function>pg_extension_config_dump</function> provides
-     a <literal>WHERE</literal> condition that selects the data to be dumped.
+     a <literal>WHERE</literal> condition that selexts the data to be dumped.
      For example, you might do
 <programlisting>
 CREATE TABLE my_config (key text, value text, standard_entry boolean);

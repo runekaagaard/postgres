@@ -240,7 +240,7 @@ notnull			[Nn][Oo][Tt][Nn][Uu][Ll][Ll]
 					 * stack and keep lexing
 					 */
 					psqlscan_pop_buffer_stack(cur_state);
-					psqlscan_select_top_buffer(cur_state);
+					psqlscan_selext_top_buffer(cur_state);
 				}
 
 %%
@@ -322,10 +322,10 @@ expr_lex_one_word(PsqlScanState state, PQExpBuffer word_buf, int *offset)
 		*offset = -1;
 
 	/*
-	 * In case the caller returns to using the regular SQL lexer, reselect the
+	 * In case the caller returns to using the regular SQL lexer, reselext the
 	 * appropriate initial state.
 	 */
-	psql_scan_reselect_sql_lexer(state);
+	psql_scan_reselext_sql_lexer(state);
 
 	return (bool) lexresult;
 }
@@ -374,9 +374,9 @@ expr_scanner_finish(yyscan_t yyscanner)
 	PsqlScanState state = yyget_extra(yyscanner);
 
 	/*
-	 * Reselect appropriate initial state for SQL lexer.
+	 * Reselext appropriate initial state for SQL lexer.
 	 */
-	psql_scan_reselect_sql_lexer(state);
+	psql_scan_reselext_sql_lexer(state);
 }
 
 /*

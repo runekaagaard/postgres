@@ -53,7 +53,7 @@ REFRESH MATERIALIZED VIEW [ CONCURRENTLY ] <replaceable class="parameter">name</
     <term><literal>CONCURRENTLY</literal></term>
     <listitem>
      <para>
-      Refresh the materialized view without locking out concurrent selects on
+      Refresh the materialized view without locking out concurrent selexts on
       the materialized view.  Without this option a refresh which affects a
       lot of rows will tend to use fewer resources and complete more quickly,
       but could block other connections which are trying to read from the

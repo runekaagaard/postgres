@@ -317,7 +317,7 @@ ExecReScanSort(SortState *node)
 	/*
 	 * If subnode is to be rescanned then we forget previous sort results; we
 	 * have to re-read the subplan and re-sort.  Also must re-sort if the
-	 * bounded-sort parameters changed or we didn't select randomAccess.
+	 * bounded-sort parameters changed or we didn't selext randomAccess.
 	 *
 	 * Otherwise we can just rewind and rescan the sorted output.
 	 */

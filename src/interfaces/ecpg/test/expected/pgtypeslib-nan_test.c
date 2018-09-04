@@ -81,10 +81,10 @@ if (sqlca.sqlcode < 0) sqlprint ( );}
 #line 33 "nan_test.pgc"
 
 
-	/* declare cur cursor for select id , d , d from nantest1 */
+	/* declare cur cursor for selext id , d , d from nantest1 */
 #line 35 "nan_test.pgc"
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cur cursor for select id , d , d from nantest1", ECPGt_EOIT, ECPGt_EORT);
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cur cursor for selext id , d , d from nantest1", ECPGt_EOIT, ECPGt_EORT);
 #line 36 "nan_test.pgc"
 
 if (sqlca.sqlcode < 0) sqlprint ( );}
@@ -139,7 +139,7 @@ if (sqlca.sqlcode < 0) sqlprint ( );}
 #line 50 "nan_test.pgc"
 
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cur cursor for select id , d , d from nantest1", ECPGt_EOIT, ECPGt_EORT);
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cur cursor for selext id , d , d from nantest1", ECPGt_EOIT, ECPGt_EORT);
 #line 52 "nan_test.pgc"
 
 if (sqlca.sqlcode < 0) sqlprint ( );}
@@ -188,7 +188,7 @@ if (sqlca.sqlcode < 0) sqlprint ( );}
 #line 68 "nan_test.pgc"
 
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select id , d , d from nantest2 where id = 4", ECPGt_EOIT, 
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext id , d , d from nantest2 where id = 4", ECPGt_EOIT, 
 	ECPGt_int,&(id),(long)1,(long)1,sizeof(int), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_numeric,&(num),(long)1,(long)0,sizeof(numeric), 
@@ -220,10 +220,10 @@ if (sqlca.sqlcode < 0) sqlprint ( );}
 #line 75 "nan_test.pgc"
 
 
-	/* declare cur1 cursor for select id , d , d from nantest2 */
+	/* declare cur1 cursor for selext id , d , d from nantest2 */
 #line 77 "nan_test.pgc"
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cur1 cursor for select id , d , d from nantest2", ECPGt_EOIT, ECPGt_EORT);
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cur1 cursor for selext id , d , d from nantest2", ECPGt_EOIT, ECPGt_EORT);
 #line 78 "nan_test.pgc"
 
 if (sqlca.sqlcode < 0) sqlprint ( );}

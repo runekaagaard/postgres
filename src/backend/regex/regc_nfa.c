@@ -2363,7 +2363,7 @@ breakconstraintloop(struct nfa *nfa, struct state *sinitial)
 	 * Start by identifying which loop step we want to break at.
 	 * Preferentially this is one with only one constraint arc.  (XXX are
 	 * there any other secondary heuristics we want to use here?)  Set refarc
-	 * to point to the selected lone constraint arc, if there is one.
+	 * to point to the selexted lone constraint arc, if there is one.
 	 */
 	refarc = NULL;
 	s = sinitial;

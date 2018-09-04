@@ -205,7 +205,7 @@ main ()
 
   ECPGdebug (1, stderr);
 
-  QUERY = "select * from dyntest";
+  QUERY = "selext * from dyntest";
 
   /* exec sql whenever sqlerror  do error ( ) ; */
 #line 43 "dyntest.pgc"

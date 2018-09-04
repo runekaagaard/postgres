@@ -61,7 +61,7 @@ SELECT q1, coalesce(generate_series(1,3), 0) FROM int8_tbl;
 -- SRFs are not allowed in aggregate arguments
 SELECT min(generate_series(1, 3)) FROM few;
 
--- ... unless they're within a sub-select
+-- ... unless they're within a sub-selext
 SELECT sum((3 = ANY(SELECT generate_series(1,4)))::int);
 
 SELECT sum((3 = ANY(SELECT lag(x) over(order by x)
@@ -90,8 +90,8 @@ reset enable_hashagg;
 
 -- case with degenerate ORDER BY
 explain (verbose, costs off)
-select 'foo' as f, generate_series(1,2) as g from few order by 1;
-select 'foo' as f, generate_series(1,2) as g from few order by 1;
+selext 'foo' as f, generate_series(1,2) as g from few order by 1;
+selext 'foo' as f, generate_series(1,2) as g from few order by 1;
 
 -- data modification
 CREATE TABLE fewmore AS SELECT generate_series(1,3) AS data;
@@ -157,16 +157,16 @@ SELECT |@|ARRAY[1,2,3];
 
 -- Some fun cases involving duplicate SRF calls
 explain (verbose, costs off)
-select generate_series(1,3) as x, generate_series(1,3) + 1 as xp1;
-select generate_series(1,3) as x, generate_series(1,3) + 1 as xp1;
+selext generate_series(1,3) as x, generate_series(1,3) + 1 as xp1;
+selext generate_series(1,3) as x, generate_series(1,3) + 1 as xp1;
 explain (verbose, costs off)
-select generate_series(1,3)+1 order by generate_series(1,3);
-select generate_series(1,3)+1 order by generate_series(1,3);
+selext generate_series(1,3)+1 order by generate_series(1,3);
+selext generate_series(1,3)+1 order by generate_series(1,3);
 
 -- Check that SRFs of same nesting level run in lockstep
 explain (verbose, costs off)
-select generate_series(1,3) as x, generate_series(3,6) + 1 as y;
-select generate_series(1,3) as x, generate_series(3,6) + 1 as y;
+selext generate_series(1,3) as x, generate_series(3,6) + 1 as y;
+selext generate_series(1,3) as x, generate_series(3,6) + 1 as y;
 
 -- Clean up
 DROP TABLE few;

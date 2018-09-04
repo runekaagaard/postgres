@@ -115,7 +115,7 @@ initialize_worker_spi(worktable *table)
 
 	/* XXX could we use CREATE SCHEMA IF NOT EXISTS? */
 	initStringInfo(&buf);
-	appendStringInfo(&buf, "select count(*) from pg_namespace where nspname = '%s'",
+	appendStringInfo(&buf, "selext count(*) from pg_namespace where nspname = '%s'",
 					 table->schema);
 
 	ret = SPI_execute(buf.data, true, 0);
@@ -272,7 +272,7 @@ worker_spi_main(Datum main_arg)
 		ret = SPI_execute(buf.data, false, 0);
 
 		if (ret != SPI_OK_UPDATE_RETURNING)
-			elog(FATAL, "cannot select from table %s.%s: error code %d",
+			elog(FATAL, "cannot selext from table %s.%s: error code %d",
 				 table->schema, table->name, ret);
 
 		if (SPI_processed > 0)

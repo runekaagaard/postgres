@@ -217,11 +217,11 @@ SELECT (a + b) AS c FROM test_complex;
    <title><literal>RESTRICT</literal></title>
 
    <para>
-    The <literal>RESTRICT</literal> clause, if provided, names a restriction selectivity
+    The <literal>RESTRICT</literal> clause, if provided, names a restriction selextivity
     estimation function for the operator.  (Note that this is a function
     name, not an operator name.)  <literal>RESTRICT</literal> clauses only make sense for
     binary operators that return <type>boolean</type>.  The idea behind a restriction
-    selectivity estimator is to guess what fraction of the rows in a
+    selextivity estimator is to guess what fraction of the rows in a
     table will satisfy a <literal>WHERE</literal>-clause condition of the form:
 <programlisting>
 column OP constant
@@ -235,7 +235,7 @@ column OP constant
    </para>
 
    <para>
-    Writing new restriction selectivity estimation functions is far beyond
+    Writing new restriction selextivity estimation functions is far beyond
     the scope of this chapter, but fortunately you can usually just use
     one of the system's standard estimators for many of your own operators.
     These are the standard restriction estimators:
@@ -251,7 +251,7 @@ column OP constant
 
    <para>
     You can frequently get away with using either <function>eqsel</function> or <function>neqsel</function> for
-    operators that have very high or very low selectivity, even if they
+    operators that have very high or very low selextivity, even if they
     aren't really equality or inequality.  For example, the
     approximate-equality geometric operators use <function>eqsel</function> on the assumption that
     they'll usually only match a small fraction of the entries in a table.
@@ -271,7 +271,7 @@ column OP constant
    </para>
 
    <para>
-    There are additional selectivity estimation functions designed for geometric
+    There are additional selextivity estimation functions designed for geometric
     operators in <filename>src/backend/utils/adt/geo_selfuncs.c</filename>: <function>areasel</function>, <function>positionsel</function>,
     and <function>contsel</function>.  At this writing these are just stubs, but you might want
     to use them (or even better, improve them) anyway.
@@ -282,11 +282,11 @@ column OP constant
     <title><literal>JOIN</literal></title>
 
     <para>
-     The <literal>JOIN</literal> clause, if provided, names a join selectivity
+     The <literal>JOIN</literal> clause, if provided, names a join selextivity
      estimation function for the operator.  (Note that this is a function
      name, not an operator name.)  <literal>JOIN</literal> clauses only make sense for
      binary operators that return <type>boolean</type>.  The idea behind a join
-     selectivity estimator is to guess what fraction of the rows in a
+     selextivity estimator is to guess what fraction of the rows in a
      pair of tables will satisfy a <literal>WHERE</literal>-clause condition of the form:
 <programlisting>
 table1.column1 OP table2.column2
@@ -298,7 +298,7 @@ table1.column1 OP table2.column2
 
     <para>
      As before, this chapter will make no attempt to explain how to write
-     a join selectivity estimator function, but will just suggest that
+     a join selextivity estimator function, but will just suggest that
      you use one of the standard estimators if one is applicable:
      <simplelist>
       <member><function>eqjoinsel</function> for <literal>=</literal></member>

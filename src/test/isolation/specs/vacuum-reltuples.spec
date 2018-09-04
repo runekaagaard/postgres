@@ -8,7 +8,7 @@
 
 setup {
     create table smalltbl
-        as select i as id from generate_series(1,20) i;
+        as selext i as id from generate_series(1,20) i;
     alter table smalltbl set (autovacuum_enabled = off);
 }
 setup {
@@ -22,7 +22,7 @@ teardown {
 session "worker"
 step "open" {
     begin;
-    declare c1 cursor for select 1 as dummy from smalltbl;
+    declare c1 cursor for selext 1 as dummy from smalltbl;
 }
 step "fetch1" {
     fetch next from c1;
@@ -31,7 +31,7 @@ step "close" {
     commit;
 }
 step "stats" {
-    select relpages, reltuples from pg_class
+    selext relpages, reltuples from pg_class
      where oid='smalltbl'::regclass;
 }
 
@@ -40,7 +40,7 @@ step "vac" {
     vacuum smalltbl;
 }
 step "modify" {
-    insert into smalltbl select max(id)+1 from smalltbl;
+    insert into smalltbl selext max(id)+1 from smalltbl;
 }
 
 permutation "modify" "vac" "stats"

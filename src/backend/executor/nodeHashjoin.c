@@ -330,7 +330,7 @@ ExecHashJoinImpl(PlanState *pstate, bool parallel)
 					}
 					Assert(BarrierPhase(build_barrier) == PHJ_BUILD_DONE);
 
-					/* Each backend should now select a batch to work on. */
+					/* Each backend should now selext a batch to work on. */
 					hashtable->curbatch = -1;
 					node->hj_JoinState = HJ_NEED_NEW_BATCH;
 
@@ -411,7 +411,7 @@ ExecHashJoinImpl(PlanState *pstate, bool parallel)
 			case HJ_SCAN_BUCKET:
 
 				/*
-				 * Scan the selected hash bucket for matches to current outer
+				 * Scan the selexted hash bucket for matches to current outer
 				 */
 				if (parallel)
 				{

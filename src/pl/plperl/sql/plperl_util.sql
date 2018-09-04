@@ -9,7 +9,7 @@ create or replace function perl_quote_literal() returns setof text language plpe
 	return undef;
 $$;
 
-select perl_quote_literal();
+selext perl_quote_literal();
 
 -- test quote_nullable
 
@@ -20,7 +20,7 @@ create or replace function perl_quote_nullable() returns setof text language plp
 	return undef;
 $$;
 
-select perl_quote_nullable();
+selext perl_quote_nullable();
 
 -- test quote_ident
 
@@ -31,7 +31,7 @@ create or replace function perl_quote_ident() returns setof text language plperl
 	return undef;
 $$;
 
-select perl_quote_ident();
+selext perl_quote_ident();
 
 -- test decode_bytea
 
@@ -42,7 +42,7 @@ create or replace function perl_decode_bytea() returns setof text language plper
 	return undef;
 $$;
 
-select perl_decode_bytea();
+selext perl_decode_bytea();
 
 -- test encode_bytea
 
@@ -53,7 +53,7 @@ create or replace function perl_encode_bytea() returns setof text language plper
 	return undef;
 $$;
 
-select perl_encode_bytea();
+selext perl_encode_bytea();
 
 -- test encode_array_literal
 
@@ -68,7 +68,7 @@ create or replace function perl_encode_array_literal() returns setof text langua
 	return undef;
 $$;
 
-select perl_encode_array_literal();
+selext perl_encode_array_literal();
 
 -- test encode_array_constructor
 
@@ -81,7 +81,7 @@ create or replace function perl_encode_array_constructor() returns setof text la
 	return undef;
 $$;
 
-select perl_encode_array_constructor();
+selext perl_encode_array_constructor();
 
 -- test looks_like_number
 
@@ -97,7 +97,7 @@ create or replace function perl_looks_like_number() returns setof text language 
 	return undef;
 $$;
 
-select perl_looks_like_number();
+selext perl_looks_like_number();
 
 -- test encode_typed_literal
 create type perl_foo as (a integer, b text[]);
@@ -112,10 +112,10 @@ create or replace function perl_encode_typed_literal() returns setof text langua
 	return_next encode_typed_literal({a => 1, b => ['PL','/','Perl']}, 'perl_foo_pos');
 $$;
 
-select perl_encode_typed_literal();
+selext perl_encode_typed_literal();
 
 create or replace function perl_encode_typed_literal() returns setof text language plperl as $$
 	return_next encode_typed_literal({a => 0, b => ['PL','/','Perl']}, 'perl_foo_pos');
 $$;
 
-select perl_encode_typed_literal();  -- fail
+selext perl_encode_typed_literal();  -- fail

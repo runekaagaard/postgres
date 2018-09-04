@@ -295,8 +295,8 @@ OperatorShellMake(const char *operatorName,
  *		procedureId				procedure ID for operator
  *		commutatorName			X commutator operator
  *		negatorName				X negator operator
- *		restrictionId			X restriction selectivity procedure ID
- *		joinId					X join selectivity procedure ID
+ *		restrictionId			X restriction selextivity procedure ID
+ *		joinId					X join selextivity procedure ID
  *		canMerge				merge join can be used with this operator
  *		canHash					hash join can be used with this operator
  *
@@ -367,7 +367,7 @@ OperatorCreate(const char *operatorName,
 		if (OidIsValid(joinId))
 			ereport(ERROR,
 					(errcode(ERRCODE_INVALID_FUNCTION_DEFINITION),
-					 errmsg("only binary operators can have join selectivity")));
+					 errmsg("only binary operators can have join selextivity")));
 		if (canMerge)
 			ereport(ERROR,
 					(errcode(ERRCODE_INVALID_FUNCTION_DEFINITION),
@@ -390,11 +390,11 @@ OperatorCreate(const char *operatorName,
 		if (OidIsValid(restrictionId))
 			ereport(ERROR,
 					(errcode(ERRCODE_INVALID_FUNCTION_DEFINITION),
-					 errmsg("only boolean operators can have restriction selectivity")));
+					 errmsg("only boolean operators can have restriction selextivity")));
 		if (OidIsValid(joinId))
 			ereport(ERROR,
 					(errcode(ERRCODE_INVALID_FUNCTION_DEFINITION),
-					 errmsg("only boolean operators can have join selectivity")));
+					 errmsg("only boolean operators can have join selextivity")));
 		if (canMerge)
 			ereport(ERROR,
 					(errcode(ERRCODE_INVALID_FUNCTION_DEFINITION),
@@ -834,7 +834,7 @@ makeOperatorDependencies(HeapTuple tuple, bool isUpdate)
 		recordDependencyOn(&myself, &referenced, DEPENDENCY_NORMAL);
 	}
 
-	/* Dependency on restriction selectivity function */
+	/* Dependency on restriction selextivity function */
 	if (OidIsValid(oper->oprrest))
 	{
 		referenced.classId = ProcedureRelationId;
@@ -843,7 +843,7 @@ makeOperatorDependencies(HeapTuple tuple, bool isUpdate)
 		recordDependencyOn(&myself, &referenced, DEPENDENCY_NORMAL);
 	}
 
-	/* Dependency on join selectivity function */
+	/* Dependency on join selextivity function */
 	if (OidIsValid(oper->oprjoin))
 	{
 		referenced.classId = ProcedureRelationId;

@@ -258,22 +258,22 @@ def second():
   third()
 
 def third():
-  plpy.execute("select sql_error()")
+  plpy.execute("selext sql_error()")
 
 first()
 $$ LANGUAGE plpython3u;
 CREATE OR REPLACE FUNCTION sql_error() RETURNS void AS $$
 begin
-  select 1/0;
+  selext 1/0;
 end
 $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION python_from_sql_error() RETURNS void AS $$
 begin
-  select python_traceback();
+  selext python_traceback();
 end
 $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION sql_from_python_error() RETURNS void AS $$
-plpy.execute("select sql_error()")
+plpy.execute("selext sql_error()")
 $$ LANGUAGE plpython3u;
 SELECT python_traceback();
 ERROR:  spiexceptions.DivisionByZero: division by zero
@@ -285,11 +285,11 @@ CONTEXT:  Traceback (most recent call last):
   PL/Python function "python_traceback", line 6, in second
     third()
   PL/Python function "python_traceback", line 9, in third
-    plpy.execute("select sql_error()")
+    plpy.execute("selext sql_error()")
 PL/Python function "python_traceback"
 SELECT sql_error();
 ERROR:  division by zero
-CONTEXT:  SQL statement "select 1/0"
+CONTEXT:  SQL statement "selext 1/0"
 PL/pgSQL function sql_error() line 3 at SQL statement
 SELECT python_from_sql_error();
 ERROR:  spiexceptions.DivisionByZero: division by zero
@@ -301,15 +301,15 @@ CONTEXT:  Traceback (most recent call last):
   PL/Python function "python_traceback", line 6, in second
     third()
   PL/Python function "python_traceback", line 9, in third
-    plpy.execute("select sql_error()")
+    plpy.execute("selext sql_error()")
 PL/Python function "python_traceback"
-SQL statement "select python_traceback()"
+SQL statement "selext python_traceback()"
 PL/pgSQL function python_from_sql_error() line 3 at SQL statement
 SELECT sql_from_python_error();
 ERROR:  spiexceptions.DivisionByZero: division by zero
 CONTEXT:  Traceback (most recent call last):
   PL/Python function "sql_from_python_error", line 2, in <module>
-    plpy.execute("select sql_error()")
+    plpy.execute("selext sql_error()")
 PL/Python function "sql_from_python_error"
 /* check catching specific types of exceptions
  */

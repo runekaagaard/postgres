@@ -1011,7 +1011,7 @@ GetNewTransactionId()</para>
 This bug could result in failure under out-of-disk-space conditions, including
 inability to restart even after disk space is freed.
 </para></listitem>
-<listitem><para>Ensure configure selects -fno-strict-aliasing even when
+<listitem><para>Ensure configure selexts -fno-strict-aliasing even when
 an external value for CFLAGS is supplied</para>
 <para>
 On some platforms, building with -fstrict-aliasing causes bugs.
@@ -1029,7 +1029,7 @@ NULL</para></listitem>
 corner cases when planning LIKE operations</para></listitem>
 <listitem><para>Ensure text_position() cannot scan past end of source string
 in multibyte cases (Korea PostgreSQL Users' Group)</para></listitem>
-<listitem><para>Fix index optimization and selectivity estimates for LIKE
+<listitem><para>Fix index optimization and selextivity estimates for LIKE
 operations on bytea columns (Joe)</para></listitem>
 </itemizedlist>
 
@@ -1196,7 +1196,7 @@ operations on bytea columns (Joe)</para></listitem>
 <listitem><para>contrib/ltree fixes (Teodor)</para></listitem>
 <listitem><para>Fix core dump in deadlock detection on machines where char is unsigned</para></listitem>
 <listitem><para>Avoid running out of buffers in many-way indexscan (bug introduced in 7.3)</para></listitem>
-<listitem><para>Fix planner's selectivity estimation functions to handle domains properly</para></listitem>
+<listitem><para>Fix planner's selextivity estimation functions to handle domains properly</para></listitem>
 <listitem><para>Fix <application>dbmirror</application> memory-allocation bug (Steven Singer)</para></listitem>
 <listitem><para>Prevent infinite loop in <function>ln(numeric)</function> due to roundoff error</para></listitem>
 <listitem><para><command>GROUP BY</command> got confused if there were multiple equal GROUP BY items</para></listitem>
@@ -2549,7 +2549,7 @@ since <productname>PostgreSQL</productname> 7.1.
 <listitem><para>IS NULL, IS NOT NULL optimizer improvement (Tom)</para></listitem>
 <listitem><para>Improve lock manager to reduce lock contention (Tom)</para></listitem>
 <listitem><para>Keep relcache entries for index access support functions (Tom)</para></listitem>
-<listitem><para>Allow better selectivity with NaN and infinities in NUMERIC (Tom)</para></listitem>
+<listitem><para>Allow better selextivity with NaN and infinities in NUMERIC (Tom)</para></listitem>
 <listitem><para>R-tree performance improvements (Kenneth Been)</para></listitem>
 <listitem><para>B-tree splits more efficient (Tom)</para></listitem>
 </itemizedlist>
@@ -2926,7 +2926,7 @@ PL/pgSQL memory allocation fix (Jan)
 VACUUM buffer fix (Tom)
 Regression test fixes (Tom)
 pg_dump fixes for GRANT/REVOKE/comments on views, user-defined types (Tom)
-Fix subselects with DISTINCT ON or LIMIT (Tom)
+Fix subselexts with DISTINCT ON or LIMIT (Tom)
 BeOS fix
 Disable COPY TO/FROM a view (Tom)
 Cygwin build (Jason Tishler)
@@ -3166,7 +3166,7 @@ Allow UNION in CREATE RULE (Tom)
 Make ALTER/DROP TABLE rollback-able (Vadim, Tom)
 Store initdb collation in pg_control so collation cannot be changed (Tom)
 Fix INSERT...SELECT with rules (Tom)
-Fix FOR UPDATE inside views and subselects (Tom)
+Fix FOR UPDATE inside views and subselexts (Tom)
 Fix OVERLAPS operators conform to SQL92 spec regarding NULLs (Tom)
 Fix lpad() and rpad() to handle length less than input string (Tom)
 Fix use of NOTIFY in some rules (Tom)
@@ -3225,7 +3225,7 @@ New PL/pgSQL EXECUTE command which allows dynamic SQL and utility statements
 New PL/pgSQL GET DIAGNOSTICS statement for SPI value access (Jan)
 New quote_identifiers() and quote_literal() functions (Jan)
 New ALTER TABLE table OWNER TO user command (Mark Hollomon)
-Allow subselects in FROM, i.e. FROM (SELECT ...) [AS] alias (Tom)
+Allow subselexts in FROM, i.e. FROM (SELECT ...) [AS] alias (Tom)
 Update PyGreSQL to version 3.1 (D'Arcy)
 Store tables as files named by OID (Vadim)
 New SQL function setval(seq,val,bool) for use in pg_dump (Philip)
@@ -3362,7 +3362,7 @@ Remove bogus use of int4out() (Tom)
 Fixes for multiple subqueries in COALESCE or BETWEEN (Tom)
 Fix for failure of triggers on heap open in certain cases (Jeroen van
    Vianen)
-Fix for erroneous selectivity of not-equals (Tom)
+Fix for erroneous selextivity of not-equals (Tom)
 Fix for erroneous use of strcmp() (Tom)
 Fix for bug where storage manager accesses items beyond end of file
    (Tom)
@@ -3370,7 +3370,7 @@ Fix to include kernel errno message in all smgr elog messages (Tom)
 Fix for '.' not in PATH at build time (SL Baur)
 Fix for out-of-file-descriptors error (Tom)
 Fix to make pg_dump dump 'iscachable' flag for functions (Tom)
-Fix for subselect in targetlist of Append node (Tom)
+Fix for subselext in targetlist of Append node (Tom)
 Fix for mergejoin plans (Tom)
 Fix TRUNCATE failure on relations with indexes (Tom)
 Avoid database-wide restart on write error (Hiroshi)
@@ -3470,7 +3470,7 @@ Solaris fix for createdb/dropdb (Tatsuo)
 Fix for non-blocking connections (Alfred Perlstein)
 Fix improper recovery after RENAME TABLE failures (Tom)
 Copy pg_ident.conf.sample into /lib directory in install (Bruce)
-Add SJIS UDC (NEC selection IBM kanji) support (Eiji Tokuya)
+Add SJIS UDC (NEC selextion IBM kanji) support (Eiji Tokuya)
 Fix too long syslog message (Tatsuo)
 Fix problem with quoted indexes that are too long (Tom)
 JDBC ResultSet.getTimestamp() fix (Gregory Krasnow &amp; Floyd Marinescu)
@@ -3522,7 +3522,7 @@ ecpg changes (Michael)
     <listitem>
      <para>
       Continuing on work started a year ago, the optimizer has been
-      improved, allowing better query plan selection and faster performance
+      improved, allowing better query plan selextion and faster performance
       with less memory usage.
      </para>
     </listitem>
@@ -3637,7 +3637,7 @@ Fix GROUP BY scan bug (Tom)
 Improvements in SQL grammar processing (Tom)
 Fix for views involved in INSERT ... SELECT ... (Tom)
 Fix for SELECT a/2, a/2 FROM test_missing_target GROUP BY a/2 (Tom)
-Fix for subselects in INSERT ... SELECT (Tom)
+Fix for subselexts in INSERT ... SELECT (Tom)
 Prevent INSERT ... SELECT ... ORDER BY (Tom)
 Fixes for relations greater than 2GB, including vacuum
 Improve propagating system table changes to other backends (Tom)
@@ -3733,8 +3733,8 @@ Add Oracle's COMMENT ON command (Mike Mascari <email>mascarim@yahoo.com</email>)
 libpq's PQsetNoticeProcessor function now returns previous hook(Peter E)
 Prevent PQsetNoticeProcessor from being set to NULL (Peter E)
 Make USING in COPY optional (Bruce)
-Allow subselects in the target list (Tom)
-Allow subselects on the left side of comparison operators (Tom)
+Allow subselexts in the target list (Tom)
+Allow subselexts on the left side of comparison operators (Tom)
 New parallel regression test (Jan)
 Change backend-side COPY to write files with permissions 644 not 666 (Tom)
 Force permissions on PGDATA directory to be secure, even if it exists (Tom)
@@ -3872,11 +3872,11 @@ Allow creation of functional indexes to use default types
 Performance
 -----------
 Prevent exponential space consumption with many AND's and OR's (Tom)
-Collect attribute selectivity values for system columns (Tom)
+Collect attribute selextivity values for system columns (Tom)
 Reduce memory usage of aggregates (Tom)
 Fix for LIKE optimization to use indexes with multibyte encodings (Tom)
-Fix r-tree index optimizer selectivity (Thomas)
-Improve optimizer selectivity computations and functions (Tom)
+Fix r-tree index optimizer selextivity (Thomas)
+Improve optimizer selextivity computations and functions (Tom)
 Optimize btree searching for cases where many equal keys exist (Tom)
 Enable fast LIKE index processing only if index present (Tom)
 Re-use free space on index pages with duplicates (Tom)
@@ -4013,7 +4013,7 @@ Fix dumping rules on inherited tables
 
    <para>
 <programlisting>
-subselect+CASE fixes(Tom)
+subselext+CASE fixes(Tom)
 Add SHLIB_LINK setting for solaris_i386 and solaris_sparc ports(Daren Sefcik)
 Fixes for CASE in WHERE join clauses(Tom)
 Fix BTScan abort(Tom)
@@ -4074,7 +4074,7 @@ Portability fixes for linux_ppc, IRIX, linux_alpha, OpenBSD, alpha
 Remove QUERY_LIMIT, use SELECT...LIMIT
 Fix for EXPLAIN on inheritance(Tom)
 Patch to allow vacuum on multisegment tables(Hiroshi)
-R-Tree optimizer selectivity fix(Tom)
+R-Tree optimizer selextivity fix(Tom)
 ACL file descriptor leak fix(Atsushi Ogawa)
 New expression subtree code(Tom)
 Avoid disk writes for read-only transactions(Vadim)
@@ -4089,7 +4089,7 @@ Tutorial source cleanup
 New linux_m68k port
 Fix for sorting of NULL's in some cases(Tom)
 Shared library dependencies fixed (Tom)
-Fixed glitches affecting GROUP BY in subselects(Tom)
+Fixed glitches affecting GROUP BY in subselexts(Tom)
 Fix some compiler warnings (Tomoaki Nishiyama)
 Add Win1250 (Czech) support (Pavel Behal)
 </programlisting>
@@ -4348,10 +4348,10 @@ Fix for large object write-in-middle, no extra block, memory consumption(Tatsuo)
 Fix for pg_dump -d or -D and  quote special characters in INSERT
 Repair serious problems with dynahash(Tom)
 Fix INET/CIDR portability problems
-Fix problem with selectivity error in ALTER TABLE ADD COLUMN(Bruce)
+Fix problem with selextivity error in ALTER TABLE ADD COLUMN(Bruce)
 Fix executor so mergejoin of different column types works(Tom)
-Fix for Alpha OR selectivity bug
-Fix OR index selectivity problem(Bruce)
+Fix for Alpha OR selextivity bug
+Fix OR index selextivity problem(Bruce)
 Fix so \d shows proper length for char()/varchar()(Ryan)
 Fix tutorial code(Clark)
 Improve destroyuser checking(Oliver)
@@ -4373,7 +4373,7 @@ Reduce default multisegment file size limit to 1GB(Peter)
 Fix for dumping of CREATE OPERATOR(Tom)
 Fix for backward scanning of cursors(Hiroshi Inoue)
 Fix for COPY FROM STDIN when using \i(Tom)
-Fix for subselect is compared inside an expression(Jan)
+Fix for subselext is compared inside an expression(Jan)
 Fix handling of error reporting while returning rows(Tom)
 Fix problems with reference to array types(Tom,Jan)
 Prevent UPDATE SET oid(Jan)
@@ -4713,7 +4713,7 @@ Change owner from oid to int4 type(Bruce)
 Fix a bug in the oracle compatibility functions btrim() ltrim() and rtrim()
 Fix for shared invalidation cache overflow(Massimo)
 Prevent file descriptor leaks in failed COPY's(Bruce)
-Fix memory leak in libpgtcl's pg_select(Constantin)
+Fix memory leak in libpgtcl's pg_selext(Constantin)
 Fix problems with username/passwords over 8 characters(Tom)
 Fix problems with handling of asynchronous NOTIFY in backend(Tom)
 Fix of many bad system table entries(Tom)
@@ -4779,13 +4779,13 @@ Better support for quoted table/column names(Thomas)
 Surround table and column names with double-quotes in pg_dump(Thomas)
 PQreset() now works with passwords(Tom)
 Handle case of GROUP BY target list column number out of range(David)
-Allow UNION in subselects
+Allow UNION in subselexts
 Add auto-size to screen to \d? commands(Bruce)
 Use UNION to show all \d? results in one query(Bruce)
 Add \d? field search feature(Bruce)
 Pg_dump issues fewer \connect requests(Tom)
 Make pg_dump -z flag work better, document it in manual page(Tom)
-Add HAVING clause with full support for subselects and unions(Stephan)
+Add HAVING clause with full support for subselexts and unions(Stephan)
 Full text indexing routines in contrib/fulltextindex(Maarten)
 Transaction ids now stored in shared memory(Vadim)
 New PGCLIENTENCODING when issuing COPY command(Tatsuo)
@@ -4821,9 +4821,9 @@ New rewrite system fixes many problems with rules and views(Jan)
        * New pg_tables, pg_indexes, pg_rules and pg_views system views
        * Only a single action on SELECT rules
        * Total rewrite overhaul, perhaps for 6.5
-       * handle subselects
+       * handle subselexts
        * handle aggregates on views
-       * handle insert into select from view works
+       * handle insert into selext from view works
 System indexes are now multikey(Bruce)
 Oidint2, oidint4, and oidname types are removed(Bruce)
 Use system cache for more system table lookups(Bruce)
@@ -5065,8 +5065,8 @@ Better identify tcl and tk libs and includes(Bruce)
     <listitem>
      <para>
       Many new SQL features, including
-      full <acronym>SQL92</acronym> subselect capability
-      (everything is here but target-list subselects).
+      full <acronym>SQL92</acronym> subselext capability
+      (everything is here but target-list subselexts).
      </para>
     </listitem>
 
@@ -5111,13 +5111,13 @@ Better identify tcl and tk libs and includes(Bruce)
    of the detailed changes list is still needed.
   </para>
   <para>
-   First, we now have subselects.  Now that we have them, I would like to
-   mention that without subselects, SQL is a very limited language.
-   Subselects are a major feature, and you should review your code for
-   places where subselects provide a better solution for your queries.  I
-   think you will find that there are more uses for subselects than you might
-   think.  Vadim has put us on the big SQL map with subselects, and fully
-   functional ones too.  The only thing you cannot do with subselects is to
+   First, we now have subselexts.  Now that we have them, I would like to
+   mention that without subselexts, SQL is a very limited language.
+   Subselexts are a major feature, and you should review your code for
+   places where subselexts provide a better solution for your queries.  I
+   think you will find that there are more uses for subselexts than you might
+   think.  Vadim has put us on the big SQL map with subselexts, and fully
+   functional ones too.  The only thing you cannot do with subselexts is to
    use them in the target list.
   </para>
   <para>
@@ -5205,7 +5205,7 @@ Fix vacuum analyze syntax problem(Bruce)
 Fix for international identifiers(Tatsuo)
 Fix aggregates on inherited tables(Bruce)
 Fix substr() for out-of-bounds data
-Fix for select 1=1 or 2=2, select 1=1 and 2=2, and select sum(2+2)(Bruce)
+Fix for selext 1=1 or 2=2, selext 1=1 and 2=2, and selext sum(2+2)(Bruce)
 Fix notty output to show status result.  -q option still turns it off(Bruce)
 Fix for count(*), aggs with views and multiple tables and sum(3)(Bruce)
 Fix cluster(Bruce)
@@ -5230,7 +5230,7 @@ Fix for index scans in MergeJoin(Vadim)
 
 Enhancements
 ------------
-Subselects with EXISTS, IN, ALL, ANY key words (Vadim, Bruce, Thomas)
+Subselexts with EXISTS, IN, ALL, ANY key words (Vadim, Bruce, Thomas)
 New User Manual(Thomas, others)
 Speedup by inlining some frequently-called functions
 Real deadlock detection, no more timeouts(Bruce)
@@ -5724,7 +5724,7 @@ SIGPIPE crash fix(Darren)
 large object fixes(Sven)
 allow btree indexes to handle NULLs(Vadim)
 timezone fixes(D'Arcy)
-select SUM(x) can return NULL on no rows(Thomas)
+selext SUM(x) can return NULL on no rows(Thomas)
 internal optimizer, executor bug fixes(Vadim)
 fix problem where inner loop in &lt; or &lt;= has no rows(Vadim)
 prevent re-commuting join index clauses(Vadim)
@@ -5887,7 +5887,7 @@ Add EXPLAIN manual page(Bruce)
 Add UNIQUE index capability(Dan)
 Add hostname/user level access control rather than just hostname and user
 Add synonym of != for &lt;&gt;(Bruce)
-Allow "select oid,* from table"
+Allow "selext oid,* from table"
 Allow BY,ORDER BY to specify columns by number, or by non-alias table.column(Bruce)
 Allow COPY from the frontend(Bryan)
 Allow GROUP BY to use alias column name(Bruce)
@@ -5902,7 +5902,7 @@ Change debug level 2 to print queries only, changed debug heading layout(Bruce)
 Change default decimal constant representation from float4 to float8(Bruce)
 European date format now set when postmaster is started
 Execute lowercase function names if not found with exact case
-Fixes for aggregate/GROUP processing, allow 'select sum(func(x),sum(x+y) from z'
+Fixes for aggregate/GROUP processing, allow 'selext sum(func(x),sum(x+y) from z'
 Gist now included in the distribution(Marc)
 Ident authentication of local users(Bryan)
 Implement BETWEEN qualifier(Bruce)

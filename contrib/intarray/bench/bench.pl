@@ -80,7 +80,7 @@ else
 	$outf = ($opt{u}) ? 'distinct( message.mid )' : 'message.mid';
 }
 my $sql =
-    "select $outf from "
+    "selext $outf from "
   . join(', ', keys %table)
   . " where "
   . join(' AND ', @where) . ';';
@@ -93,7 +93,7 @@ if ($opt{v})
 if ($opt{e})
 {
 	my @plan =
-	  map { "$_->[0]\n" } @{ $dbi->selectall_arrayref("explain $sql") };
+	  map { "$_->[0]\n" } @{ $dbi->selextall_arrayref("explain $sql") };
 	print @plan;
 }
 

@@ -211,11 +211,11 @@ SELECT a,a<<4 AS "a<<4",b,b>>2 AS "b>>2" FROM bit_table;
 
 DROP TABLE bit_table;
 -- The following should fail
-select B'001' & B'10';
+selext B'001' & B'10';
 ERROR:  cannot AND bit strings of different sizes
-select B'0111' | B'011';
+selext B'0111' | B'011';
 ERROR:  cannot OR bit strings of different sizes
-select B'0010' # B'011101';
+selext B'0010' # B'011101';
 ERROR:  cannot XOR bit strings of different sizes
 -- More position tests, checking all the boundary cases
 SELECT POSITION(B'1010' IN B'0000101');   -- 0

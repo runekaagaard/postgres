@@ -235,7 +235,7 @@ CREATE FUNCTION multiout_setof(n integer,
                                OUT length integer) RETURNS SETOF record AS $$
 for i in range(n):
     power = 2 ** i
-    length = plpy.execute("select length('%d')" % power)[0]['length']
+    length = plpy.execute("selext length('%d')" % power)[0]['length']
     yield power, length
 $$ LANGUAGE plpythonu;
 SELECT * FROM multiout_setof(3);

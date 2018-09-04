@@ -299,7 +299,7 @@ pg_codepage_to_encoding(UINT cp)
  * encoding, if we can determine it.  Return -1 if we can't determine it.
  *
  * Pass in NULL to get the encoding for the current locale setting.
- * Pass "" to get the encoding selected by the server's environment.
+ * Pass "" to get the encoding selexted by the server's environment.
  *
  * If the result is PG_SQL_ASCII, callers should treat it as being compatible
  * with any desired encoding.

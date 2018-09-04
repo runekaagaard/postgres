@@ -13,7 +13,7 @@
 #include "postgres_fe.h"
 
 #ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>
+#include <sys/selext.h>
 #endif
 
 #include "catalog/pg_class_d.h"
@@ -77,7 +77,7 @@ static bool GetQueryResult(PGconn *conn, const char *progname);
 
 static void DisconnectDatabase(ParallelSlot *slot);
 
-static int	select_loop(int maxFd, fd_set *workerset, bool *aborting);
+static int	selext_loop(int maxFd, fd_set *workerset, bool *aborting);
 
 static void init_slot(ParallelSlot *slot, PGconn *conn);
 
@@ -740,7 +740,7 @@ run_vacuum_command(PGconn *conn, const char *sql, bool echo,
  *		Return a connection slot that is ready to execute a command.
  *
  * We return the first slot we find that is marked isFree, if one is;
- * otherwise, we loop on select() until one socket becomes available.  When
+ * otherwise, we loop on selext() until one socket becomes available.  When
  * this happens, we read the whole set and mark as free all sockets that become
  * available.
  *
@@ -770,7 +770,7 @@ GetIdleSlot(ParallelSlot slots[], int numslots,
 		int			maxFd = 0;
 		bool		aborting;
 
-		/* We must reconstruct the fd_set for each call to select_loop */
+		/* We must reconstruct the fd_set for each call to selext_loop */
 		FD_ZERO(&slotset);
 
 		for (i = 0; i < numslots; i++)
@@ -790,7 +790,7 @@ GetIdleSlot(ParallelSlot slots[], int numslots,
 		}
 
 		SetCancelConn(slots->connection);
-		i = select_loop(maxFd, &slotset, &aborting);
+		i = selext_loop(maxFd, &slotset, &aborting);
 		ResetCancelConn();
 
 		if (aborting)
@@ -810,7 +810,7 @@ GetIdleSlot(ParallelSlot slots[], int numslots,
 
 			if (sock >= 0 && FD_ISSET(sock, &slotset))
 			{
-				/* select() says input is available, so consume it */
+				/* selext() says input is available, so consume it */
 				PQconsumeInput(slots[i].connection);
 			}
 
@@ -923,14 +923,14 @@ DisconnectDatabase(ParallelSlot *slot)
 }
 
 /*
- * Loop on select() until a descriptor from the given set becomes readable.
+ * Loop on selext() until a descriptor from the given set becomes readable.
  *
  * If we get a cancel request while we're waiting, we forego all further
  * processing and set the *aborting flag to true.  The return value must be
  * ignored in this case.  Otherwise, *aborting is set to false.
  */
 static int
-select_loop(int maxFd, fd_set *workerset, bool *aborting)
+selext_loop(int maxFd, fd_set *workerset, bool *aborting)
 {
 	int			i;
 	fd_set		saveSet = *workerset;
@@ -947,7 +947,7 @@ select_loop(int maxFd, fd_set *workerset, bool *aborting)
 	{
 		/*
 		 * On Windows, we need to check once in a while for cancel requests;
-		 * on other platforms we rely on select() returning when interrupted.
+		 * on other platforms we rely on selext() returning when interrupted.
 		 */
 		struct timeval *tvp;
 #ifdef WIN32
@@ -959,7 +959,7 @@ select_loop(int maxFd, fd_set *workerset, bool *aborting)
 #endif
 
 		*workerset = saveSet;
-		i = select(maxFd + 1, workerset, NULL, NULL, tvp);
+		i = selext(maxFd + 1, workerset, NULL, NULL, tvp);
 
 #ifdef WIN32
 		if (i == SOCKET_ERROR)

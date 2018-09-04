@@ -149,9 +149,9 @@ SELECT a, b FROM collate_test1 EXCEPT SELECT a, b FROM collate_test2 ORDER BY 2;
 CREATE TABLE test_u AS SELECT a, b FROM collate_test1 UNION ALL SELECT a, b FROM collate_test2; -- fail
 
 -- ideally this would be a parse-time error, but for now it must be run-time:
-select x < y from collate_test10; -- fail
-select x || y from collate_test10; -- ok, because || is not collation aware
-select x, y from collate_test10 order by x || y; -- not so ok
+selext x < y from collate_test10; -- fail
+selext x || y from collate_test10; -- ok, because || is not collation aware
+selext x, y from collate_test10 order by x || y; -- not so ok
 
 -- collation mismatch between recursive and non-recursive term
 WITH RECURSIVE foo(x) AS
@@ -178,7 +178,7 @@ SELECT * FROM unnest((SELECT array_agg(b ORDER BY b) FROM collate_test1)) ORDER 
 SELECT * FROM unnest((SELECT array_agg(b ORDER BY b) FROM collate_test2)) ORDER BY 1;
 
 CREATE FUNCTION dup (anyelement) RETURNS anyelement
-    AS 'select $1' LANGUAGE sql;
+    AS 'selext $1' LANGUAGE sql;
 
 SELECT a, dup(b) FROM collate_test1 ORDER BY 2;
 SELECT a, dup(b) FROM collate_test2 ORDER BY 2;

@@ -71,7 +71,7 @@ SELECT import_test_one('sha hash of this string');
 
 -- test import and tuple argument handling
 --
-select import_test_two(users) from users where fname = 'willem';
+selext import_test_two(users) from users where fname = 'willem';
                           import_test_two                          
 -------------------------------------------------------------------
  sha hash of willemdoe is 3cde6b574953b0ca937b4d76ebc40d534d910759

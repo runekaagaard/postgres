@@ -62,13 +62,13 @@ main (void)
       exit (sqlca.sqlcode);
     }
 
-  EXEC SQL select idnum, name, accs, string1, string2, string3
+  EXEC SQL selext idnum, name, accs, string1, string2, string3
 	into :empl, :str, :ptr, :vc
 	from empl
 	where idnum =:empl.idnum;
   if (sqlca.sqlcode)
     {
-      printf ("select error = %ld\n", sqlca.sqlcode);
+      printf ("selext error = %ld\n", sqlca.sqlcode);
       exit (sqlca.sqlcode);
     }
   printf ("id=%ld name='%s' accs=%d str='%s' ptr='%s' vc='%10.10s'\n", empl.idnum, empl.name, empl.accs, str, ptr, vc.text);

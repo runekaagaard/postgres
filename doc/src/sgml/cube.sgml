@@ -256,7 +256,7 @@ SELECT c FROM test ORDER BY c &lt;-&gt; cube(array[0.5,0.5,0.5]) LIMIT 1;
 
   <para>
    The <literal>~&gt;</literal> operator can also be used in this way to
-   efficiently retrieve the first few values sorted by a selected coordinate.
+   efficiently retrieve the first few values sorted by a selexted coordinate.
    For example, to get the first few cubes ordered by the first coordinate
    (lower left corner) ascending one could use the following query:
 <programlisting>
@@ -474,7 +474,7 @@ SELECT c FROM test ORDER BY c ~&gt; 3 DESC LIMIT 5;
    I believe this union:
   </para>
 <programlisting>
-select cube_union('(0,5,2),(2,3,1)', '0');
+selext cube_union('(0,5,2),(2,3,1)', '0');
 cube_union
 -------------------
 (0, 0, 0),(2, 5, 2)
@@ -486,7 +486,7 @@ cube_union
    </para>
 
 <programlisting>
-select cube_inter('(0,-1),(1,1)', '(-2),(2)');
+selext cube_inter('(0,-1),(1,1)', '(-2),(2)');
 cube_inter
 -------------
 (0, 0),(1, 0)
@@ -513,7 +513,7 @@ cube_inter('(0,-1),(1,1)','(-2,0),(2,0)');
    </para>
 
 <programlisting>
-select cube_contains('(0,0),(1,1)', '0.5,0.5');
+selext cube_contains('(0,0),(1,1)', '0.5,0.5');
 cube_contains
 --------------
 t

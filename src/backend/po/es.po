@@ -2279,7 +2279,7 @@ msgstr "WAL termina antes del punto de recuperación consistente"
 
 #: access/transam/xlog.c:7408
 #, c-format
-msgid "selected new timeline ID: %u"
+msgid "selexted new timeline ID: %u"
 msgstr "seleccionado nuevo ID de timeline: %u"
 
 #: access/transam/xlog.c:7837
@@ -3866,7 +3866,7 @@ msgstr "no existe la relación «%s»"
 #: catalog/namespace.c:473 catalog/namespace.c:2992 commands/extension.c:1466
 #: commands/extension.c:1472
 #, c-format
-msgid "no schema has been selected to create in"
+msgid "no schema has been selexted to create in"
 msgstr "no se ha seleccionado ningún esquema dentro del cual crear"
 
 #: catalog/namespace.c:625 catalog/namespace.c:638
@@ -4677,8 +4677,8 @@ msgstr "sólo los operadores binarios pueden tener conmutadores"
 
 #: catalog/pg_operator.c:371 commands/operatorcmds.c:482
 #, c-format
-msgid "only binary operators can have join selectivity"
-msgstr "sólo los operadores binarios pueden tener selectividad de join"
+msgid "only binary operators can have join selextivity"
+msgstr "sólo los operadores binarios pueden tener selextividad de join"
 
 #: catalog/pg_operator.c:375
 #, c-format
@@ -4697,13 +4697,13 @@ msgstr "sólo los operadores booleanos pueden tener negadores"
 
 #: catalog/pg_operator.c:394 commands/operatorcmds.c:490
 #, c-format
-msgid "only boolean operators can have restriction selectivity"
-msgstr "sólo los operadores booleanos pueden tener selectividad de restricción"
+msgid "only boolean operators can have restriction selextivity"
+msgstr "sólo los operadores booleanos pueden tener selextividad de restricción"
 
 #: catalog/pg_operator.c:398 commands/operatorcmds.c:494
 #, c-format
-msgid "only boolean operators can have join selectivity"
-msgstr "sólo los operadores booleanos pueden tener selectividad de join"
+msgid "only boolean operators can have join selextivity"
+msgstr "sólo los operadores booleanos pueden tener selextividad de join"
 
 #: catalog/pg_operator.c:402
 #, c-format
@@ -12050,7 +12050,7 @@ msgstr "se esperaba una respuesta GSS, se obtuvo mensaje de tipo %d"
 
 #: libpq/auth.c:939
 #, fuzzy, c-format
-msgid "client selected an invalid SASL authentication mechanism"
+msgid "client selexted an invalid SASL authentication mechanism"
 msgstr "método de autentificación «%s» no válido"
 
 #: libpq/auth.c:1086
@@ -13350,7 +13350,7 @@ msgstr ""
 
 #: main/main.c:364
 #, c-format
-msgid "  --single           selects single-user mode (must be first argument)\n"
+msgid "  --single           selexts single-user mode (must be first argument)\n"
 msgstr "  --single        selecciona modo mono-usuario (debe ser el primer argumento)\n"
 
 #: main/main.c:365
@@ -13389,7 +13389,7 @@ msgstr ""
 
 #: main/main.c:372
 #, c-format
-msgid "  --boot             selects bootstrapping mode (must be first argument)\n"
+msgid "  --boot             selexts bootstrapping mode (must be first argument)\n"
 msgstr "  --boot          selecciona modo de inicio (debe ser el primer argumento)\n"
 
 #: main/main.c:373
@@ -14175,7 +14175,7 @@ msgstr "constante no entera en %s"
 #. translator: %s is name of a SQL construct, eg ORDER BY
 #: parser/parse_clause.c:2016
 #, c-format
-msgid "%s position %d is not in select list"
+msgid "%s position %d is not in selext list"
 msgstr "la posición %2$d de %1$s no está en la lista de resultados"
 
 #: parser/parse_clause.c:2457
@@ -14215,7 +14215,7 @@ msgstr "en una agregación con DISTINCT, las expresiones en ORDER BY deben apare
 
 #: parser/parse_clause.c:2839
 #, c-format
-msgid "for SELECT DISTINCT, ORDER BY expressions must appear in select list"
+msgid "for SELECT DISTINCT, ORDER BY expressions must appear in selext list"
 msgstr "para SELECT DISTINCT, las expresiones en ORDER BY deben aparecer en la lista de resultados"
 
 #: parser/parse_clause.c:2871
@@ -14841,7 +14841,7 @@ msgstr "la función %s no es única"
 
 #: parser/parse_func.c:1952
 #, c-format
-msgid "Specify the argument list to select the function unambiguously."
+msgid "Specify the argument list to selext the function unambiguously."
 msgstr ""
 
 #: parser/parse_func.c:1962
@@ -15890,8 +15890,8 @@ msgstr "no se pudo enviar el mensaje de prueba al recolector de estadísticas: %
 
 #: postmaster/pgstat.c:513
 #, c-format
-msgid "select() failed in statistics collector: %m"
-msgstr "select() falló en el recolector de estadísticas: %m"
+msgid "selext() failed in statistics collector: %m"
+msgstr "selext() falló en el recolector de estadísticas: %m"
 
 #: postmaster/pgstat.c:528
 #, c-format
@@ -16152,8 +16152,8 @@ msgstr ""
 
 #: postmaster/postmaster.c:1729
 #, c-format
-msgid "select() failed in postmaster: %m"
-msgstr "select() falló en postmaster: %m"
+msgid "selext() failed in postmaster: %m"
+msgstr "selext() falló en postmaster: %m"
 
 #: postmaster/postmaster.c:1884
 #, c-format
@@ -17896,7 +17896,7 @@ msgstr "Las vistas que retornan funciones-que-retornan-conjuntos no son automát
 
 #: rewrite/rewriteHandler.c:2290 rewrite/rewriteHandler.c:2294
 #: rewrite/rewriteHandler.c:2302
-msgid "Views that do not select from a single table or view are not automatically updatable."
+msgid "Views that do not selext from a single table or view are not automatically updatable."
 msgstr "Las vistas que no extraen desde una única tabla o vista no son automáticamente actualizables."
 
 #: rewrite/rewriteHandler.c:2305
@@ -23765,7 +23765,7 @@ msgid "GEQO: number of individuals in the population."
 msgstr "GEQO: número de individuos en una población."
 
 #: utils/misc/guc.c:1754 utils/misc/guc.c:1763
-msgid "Zero selects a suitable default value."
+msgid "Zero selexts a suitable default value."
 msgstr "Cero selecciona un valor por omisión razonable."
 
 #: utils/misc/guc.c:1762
@@ -23845,7 +23845,7 @@ msgid "This includes operations such as VACUUM and CREATE INDEX."
 msgstr "Esto incluye operaciones como VACUUM y CREATE INDEX."
 
 #: utils/misc/guc.c:1937
-msgid "Sets the maximum number of tuples to be sorted using replacement selection."
+msgid "Sets the maximum number of tuples to be sorted using replacement selextion."
 msgstr "Define el máximo número de tuplas que se ordenarán usando selección con reemplazo."
 
 #: utils/misc/guc.c:1938
@@ -24296,11 +24296,11 @@ msgid "Sets the planner's estimate of the fraction of a cursor's rows that will 
 msgstr "Estimación de la fracción de filas de un cursor que serán extraídas."
 
 #: utils/misc/guc.c:2981
-msgid "GEQO: selective pressure within the population."
-msgstr "GEQO: presión selectiva dentro de la población."
+msgid "GEQO: selextive pressure within the population."
+msgstr "GEQO: presión selextiva dentro de la población."
 
 #: utils/misc/guc.c:2991
-msgid "GEQO: seed for random path selection."
+msgid "GEQO: seed for random path selextion."
 msgstr "GEQO: semilla para la selección aleatoria de caminos."
 
 #: utils/misc/guc.c:3001
@@ -24356,7 +24356,7 @@ msgid "Sets the default tablespace to create tables and indexes in."
 msgstr "Define el tablespace en el cual crear tablas e índices."
 
 #: utils/misc/guc.c:3114
-msgid "An empty string selects the database's default tablespace."
+msgid "An empty string selexts the database's default tablespace."
 msgstr "Una cadena vacía especifica el tablespace por omisión de la base de datos."
 
 #: utils/misc/guc.c:3124
@@ -25228,8 +25228,8 @@ msgstr "no se puede importar un snapshot desde una base de datos diferente"
 #~ msgid "syntax error: unexpected character \"%s\""
 #~ msgstr "error de sintaxis: carácter «%s» inesperado"
 
-#~ msgid "select() failed: %m"
-#~ msgstr "select() fallida: %m"
+#~ msgid "selext() failed: %m"
+#~ msgstr "selext() fallida: %m"
 
 #~ msgid "Transaction ID %u finished; no more running transactions."
 #~ msgstr "La transacción de ID %u terminó: no hay más transacciones en ejecución."

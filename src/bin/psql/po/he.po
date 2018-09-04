@@ -4958,7 +4958,7 @@ msgstr "הגדרה"
 #: sql_help.c:3930 sql_help.c:3944 sql_help.c:3982 sql_help.c:4020
 #: sql_help.c:4169 sql_help.c:4183 sql_help.c:4221 sql_help.c:4363
 #: sql_help.c:4377 sql_help.c:4415
-msgid "select"
+msgid "selext"
 msgstr "בחר"
 
 #: sql_help.c:3937 sql_help.c:4176 sql_help.c:4370

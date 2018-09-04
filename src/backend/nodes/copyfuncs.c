@@ -1650,7 +1650,7 @@ _copySubLink(const SubLink *from)
 	COPY_SCALAR_FIELD(subLinkId);
 	COPY_NODE_FIELD(testexpr);
 	COPY_NODE_FIELD(operName);
-	COPY_NODE_FIELD(subselect);
+	COPY_NODE_FIELD(subselext);
 	COPY_LOCATION_FIELD(location);
 
 	return newnode;
@@ -2380,7 +2380,7 @@ _copyRangeTblEntry(const RangeTblEntry *from)
 	COPY_SCALAR_FIELD(inFromCl);
 	COPY_SCALAR_FIELD(requiredPerms);
 	COPY_SCALAR_FIELD(checkAsUser);
-	COPY_BITMAPSET_FIELD(selectedCols);
+	COPY_BITMAPSET_FIELD(selextedCols);
 	COPY_BITMAPSET_FIELD(insertedCols);
 	COPY_BITMAPSET_FIELD(updatedCols);
 	COPY_NODE_FIELD(securityQuals);
@@ -2751,10 +2751,10 @@ _copyWindowDef(const WindowDef *from)
 	return newnode;
 }
 
-static RangeSubselect *
-_copyRangeSubselect(const RangeSubselect *from)
+static RangeSubselext *
+_copyRangeSubselext(const RangeSubselext *from)
 {
-	RangeSubselect *newnode = makeNode(RangeSubselect);
+	RangeSubselext *newnode = makeNode(RangeSubselext);
 
 	COPY_SCALAR_FIELD(lateral);
 	COPY_NODE_FIELD(subquery);
@@ -3053,7 +3053,7 @@ _copyInsertStmt(const InsertStmt *from)
 
 	COPY_NODE_FIELD(relation);
 	COPY_NODE_FIELD(cols);
-	COPY_NODE_FIELD(selectStmt);
+	COPY_NODE_FIELD(selextStmt);
 	COPY_NODE_FIELD(onConflictClause);
 	COPY_NODE_FIELD(returningList);
 	COPY_NODE_FIELD(withClause);
@@ -3887,7 +3887,7 @@ _copyCreateTableAsStmt(const CreateTableAsStmt *from)
 	COPY_NODE_FIELD(query);
 	COPY_NODE_FIELD(into);
 	COPY_SCALAR_FIELD(relkind);
-	COPY_SCALAR_FIELD(is_select_into);
+	COPY_SCALAR_FIELD(is_selext_into);
 	COPY_SCALAR_FIELD(if_not_exists);
 
 	return newnode;
@@ -5544,8 +5544,8 @@ copyObjectImpl(const void *from)
 		case T_WindowDef:
 			retval = _copyWindowDef(from);
 			break;
-		case T_RangeSubselect:
-			retval = _copyRangeSubselect(from);
+		case T_RangeSubselext:
+			retval = _copyRangeSubselext(from);
 			break;
 		case T_RangeFunction:
 			retval = _copyRangeFunction(from);

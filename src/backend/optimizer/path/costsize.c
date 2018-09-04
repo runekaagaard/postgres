@@ -38,7 +38,7 @@
  *		total_cost: total estimated cost to fetch all tuples
  *		startup_cost: cost that is expended before first tuple is fetched
  * In some scenarios, such as when there is a LIMIT or we are implementing
- * an EXISTS(...) sub-select, it is not necessary to fetch all tuples of the
+ * an EXISTS(...) sub-selext, it is not necessary to fetch all tuples of the
  * path's result.  A caller can estimate the cost of fetching a partial
  * result by interpolating between startup_cost and total_cost.  In detail:
  *		actual_cost = startup_cost +
@@ -164,7 +164,7 @@ static double calc_joinrel_size_estimate(PlannerInfo *root,
 						   double inner_rows,
 						   SpecialJoinInfo *sjinfo,
 						   List *restrictlist);
-static Selectivity get_foreign_key_join_selectivity(PlannerInfo *root,
+static Selectivity get_foreign_key_join_selextivity(PlannerInfo *root,
 								 Relids outer_relids,
 								 Relids inner_relids,
 								 SpecialJoinInfo *sjinfo,
@@ -328,7 +328,7 @@ cost_samplescan(Path *path, PlannerInfo *root,
 
 	/*
 	 * CPU costs (recall that baserel->tuples has already been set to the
-	 * number of tuples the sampling method will select).  Note that we ignore
+	 * number of tuples the sampling method will selext).  Note that we ignore
 	 * execution cost of the TABLESAMPLE parameter expressions; they will be
 	 * evaluated only once per scan, and in most usages they'll likely be
 	 * simple constants anyway.  We also don't charge anything for the
@@ -462,7 +462,7 @@ cost_gather_merge(GatherMergePath *path, PlannerInfo *root,
  *		estimates of caching behavior
  *
  * In addition to rows, startup_cost and total_cost, cost_index() sets the
- * path's indextotalcost and indexselectivity fields.  These values will be
+ * path's indextotalcost and indexselextivity fields.  These values will be
  * needed if the IndexPath is used in a BitmapIndexScan.
  *
  * NOTE: path->indexquals must contain only clauses usable as index
@@ -535,7 +535,7 @@ cost_index(IndexPath *path, PlannerInfo *root, double loop_count,
 
 	/*
 	 * Call index-access-method-specific code to estimate the processing cost
-	 * for scanning the index, as well as the selectivity of the index (ie,
+	 * for scanning the index, as well as the selextivity of the index (ie,
 	 * the fraction of main-table tuples we will have to retrieve) and its
 	 * correlation to the main-table tuple order.  We need a cast here because
 	 * relation.h uses a weak function type to avoid including amapi.h.
@@ -552,7 +552,7 @@ cost_index(IndexPath *path, PlannerInfo *root, double loop_count,
 	 * bitmap scan doesn't care about either.
 	 */
 	path->indextotalcost = indexTotalCost;
-	path->indexselectivity = indexSelectivity;
+	path->indexselextivity = indexSelectivity;
 
 	/* all costs for touching index itself included here */
 	startup_cost += indexStartupCost;
@@ -576,7 +576,7 @@ cost_index(IndexPath *path, PlannerInfo *root, double loop_count,
 	 *
 	 * When the index ordering is exactly correlated with the table ordering
 	 * (just after a CLUSTER, for example), the number of pages fetched should
-	 * be exactly selectivity * table_size.  What's more, all but the first
+	 * be exactly selextivity * table_size.  What's more, all but the first
 	 * will be sequential fetches, not the random fetches that occur in the
 	 * uncorrelated case.  So if the number of pages is more than 1, we
 	 * ought to charge
@@ -617,7 +617,7 @@ cost_index(IndexPath *path, PlannerInfo *root, double loop_count,
 
 		/*
 		 * In the perfectly correlated case, the number of pages touched by
-		 * each scan is selectivity * table_size, and we can use the Mackert
+		 * each scan is selextivity * table_size, and we can use the Mackert
 		 * and Lohman formula at the page level to estimate how much work is
 		 * saved by caching across scans.  We still assume all the fetches are
 		 * random, though, which is an overestimate that's hard to correct for
@@ -753,7 +753,7 @@ cost_index(IndexPath *path, PlannerInfo *root, double loop_count,
  * will have to be applied as qpquals (ie, the index machinery won't handle
  * them).  The actual rules for this appear in create_indexscan_plan() in
  * createplan.c, but the full rules are fairly expensive and we don't want to
- * go to that much effort for index paths that don't get selected for the
+ * go to that much effort for index paths that don't get selexted for the
  * final plan.  So we approximate it as quals that don't appear directly in
  * indexquals and also are not redundant children of the same EquivalenceClass
  * as some indexqual.  This method neglects some infrequently-relevant
@@ -761,7 +761,7 @@ cost_index(IndexPath *path, PlannerInfo *root, double loop_count,
  * are implied by an indexqual.  It does not seem worth the cycles to try to
  * factor that in at this stage, even though createplan.c will take pains to
  * remove such unnecessary clauses from the qpquals list if this path is
- * selected for use.
+ * selexted for use.
  */
 static List *
 extract_nonindex_conditions(List *qual_clauses, List *indexquals)
@@ -802,7 +802,7 @@ extract_nonindex_conditions(List *qual_clauses, List *indexquals)
  * where
  *		T = # pages in table
  *		N = # tuples in table
- *		s = selectivity = fraction of table to be scanned
+ *		s = selextivity = fraction of table to be scanned
  *		b = # buffer pages available (we include kernel space here)
  *
  * We assume that effective_cache_size is the total number of buffer pages
@@ -1037,7 +1037,7 @@ cost_bitmap_heap_scan(Path *path, PlannerInfo *root, RelOptInfo *baserel,
 
 /*
  * cost_bitmap_tree_node
- *		Extract cost and selectivity from a bitmap tree node (index/and/or)
+ *		Extract cost and selextivity from a bitmap tree node (index/and/or)
  */
 void
 cost_bitmap_tree_node(Path *path, Cost *cost, Selectivity *selec)
@@ -1045,7 +1045,7 @@ cost_bitmap_tree_node(Path *path, Cost *cost, Selectivity *selec)
 	if (IsA(path, IndexPath))
 	{
 		*cost = ((IndexPath *) path)->indextotalcost;
-		*selec = ((IndexPath *) path)->indexselectivity;
+		*selec = ((IndexPath *) path)->indexselextivity;
 
 		/*
 		 * Charge a small amount per retrieved tuple to reflect the costs of
@@ -1058,12 +1058,12 @@ cost_bitmap_tree_node(Path *path, Cost *cost, Selectivity *selec)
 	else if (IsA(path, BitmapAndPath))
 	{
 		*cost = path->total_cost;
-		*selec = ((BitmapAndPath *) path)->bitmapselectivity;
+		*selec = ((BitmapAndPath *) path)->bitmapselextivity;
 	}
 	else if (IsA(path, BitmapOrPath))
 	{
 		*cost = path->total_cost;
-		*selec = ((BitmapOrPath *) path)->bitmapselectivity;
+		*selec = ((BitmapOrPath *) path)->bitmapselextivity;
 	}
 	else
 	{
@@ -1090,7 +1090,7 @@ cost_bitmap_and_node(BitmapAndPath *path, PlannerInfo *root)
 	ListCell   *l;
 
 	/*
-	 * We estimate AND selectivity on the assumption that the inputs are
+	 * We estimate AND selextivity on the assumption that the inputs are
 	 * independent.  This is probably often wrong, but we don't have the info
 	 * to do better.
 	 *
@@ -1114,7 +1114,7 @@ cost_bitmap_and_node(BitmapAndPath *path, PlannerInfo *root)
 		if (l != list_head(path->bitmapquals))
 			totalCost += 100.0 * cpu_operator_cost;
 	}
-	path->bitmapselectivity = selec;
+	path->bitmapselextivity = selec;
 	path->path.rows = 0;		/* per above, not used */
 	path->path.startup_cost = totalCost;
 	path->path.total_cost = totalCost;
@@ -1134,7 +1134,7 @@ cost_bitmap_or_node(BitmapOrPath *path, PlannerInfo *root)
 	ListCell   *l;
 
 	/*
-	 * We estimate OR selectivity on the assumption that the inputs are
+	 * We estimate OR selextivity on the assumption that the inputs are
 	 * non-overlapping, since that's often the case in "x IN (list)" type
 	 * situations.  Of course, we clamp to 1.0 at the end.
 	 *
@@ -1160,7 +1160,7 @@ cost_bitmap_or_node(BitmapOrPath *path, PlannerInfo *root)
 			!IsA(subpath, IndexPath))
 			totalCost += 100.0 * cpu_operator_cost;
 	}
-	path->bitmapselectivity = Min(selec, 1.0);
+	path->bitmapselextivity = Min(selec, 1.0);
 	path->path.rows = 0;		/* per above, not used */
 	path->path.startup_cost = totalCost;
 	path->path.total_cost = totalCost;
@@ -1299,7 +1299,7 @@ cost_subqueryscan(SubqueryScanPath *path, PlannerInfo *root,
 	/*
 	 * Cost of path is cost of evaluating the subplan, plus cost of evaluating
 	 * any restriction clauses and tlist that will be attached to the
-	 * SubqueryScan node, plus cpu_tuple_cost to account for selection and
+	 * SubqueryScan node, plus cpu_tuple_cost to account for selextion and
 	 * projection overhead.
 	 */
 	path->path.startup_cost = path->subpath->startup_cost;
@@ -1919,7 +1919,7 @@ cost_append(AppendPath *apath)
 	}
 
 	/*
-	 * Although Append does not do any selection or projection, it's not free;
+	 * Although Append does not do any selextion or projection, it's not free;
 	 * add a small per-tuple overhead.
 	 */
 	apath->path.total_cost +=
@@ -1978,7 +1978,7 @@ cost_merge_append(Path *path, PlannerInfo *root,
 	run_cost += tuples * comparison_cost * logN;
 
 	/*
-	 * Although MergeAppend does not do any selection or projection, it's not
+	 * Although MergeAppend does not do any selextion or projection, it's not
 	 * free; add a small per-tuple overhead.
 	 */
 	run_cost += cpu_tuple_cost * APPEND_CPU_COST_MULTIPLIER * tuples;
@@ -2141,7 +2141,7 @@ cost_agg(Path *path, PlannerInfo *root,
 
 	/*
 	 * If there are quals (HAVING quals), account for their cost and
-	 * selectivity.
+	 * selextivity.
 	 */
 	if (quals)
 	{
@@ -2152,7 +2152,7 @@ cost_agg(Path *path, PlannerInfo *root,
 		total_cost += qual_cost.startup + output_tuples * qual_cost.per_tuple;
 
 		output_tuples = clamp_row_est(output_tuples *
-									  clauselist_selectivity(root,
+									  clauselist_selextivity(root,
 															 quals,
 															 0,
 															 JOIN_INNER,
@@ -2208,7 +2208,7 @@ cost_windowagg(Path *path, PlannerInfo *root,
 
 		/*
 		 * Add the filter's cost to per-input-row costs.  XXX We should reduce
-		 * input expression costs according to filter selectivity.
+		 * input expression costs according to filter selextivity.
 		 */
 		cost_qual_eval_node(&argcosts, (Node *) wfunc->aggfilter, root);
 		startup_cost += argcosts.startup;
@@ -2264,7 +2264,7 @@ cost_group(Path *path, PlannerInfo *root,
 
 	/*
 	 * If there are quals (HAVING quals), account for their cost and
-	 * selectivity.
+	 * selextivity.
 	 */
 	if (quals)
 	{
@@ -2275,7 +2275,7 @@ cost_group(Path *path, PlannerInfo *root,
 		total_cost += qual_cost.startup + output_tuples * qual_cost.per_tuple;
 
 		output_tuples = clamp_row_est(output_tuples *
-									  clauselist_selectivity(root,
+									  clauselist_selextivity(root,
 															 quals,
 															 0,
 															 JOIN_INNER,
@@ -2575,7 +2575,7 @@ final_cost_nestloop(PlannerInfo *root, NestPath *path,
  * The exact division of labor between this function and final_cost_mergejoin
  * is private to them, and represents a tradeoff between speed of the initial
  * estimate and getting a tight lower bound.  We choose to not examine the
- * join quals here, except for obtaining the scan selectivity estimate which
+ * join quals here, except for obtaining the scan selextivity estimate which
  * is really essential (but fortunately, use of caching keeps the cost of
  * getting that down to something reasonable).
  * We also assume that cost_sort is cheap enough to use here.
@@ -2656,7 +2656,7 @@ initial_cost_mergejoin(PlannerInfo *root, JoinCostWorkspace *workspace,
 			opathkey->pk_nulls_first != ipathkey->pk_nulls_first)
 			elog(ERROR, "left and right pathkeys do not match in mergejoin");
 
-		/* Get the selectivity with caching */
+		/* Get the selextivity with caching */
 		cache = cached_scansel(root, firstclause, opathkey);
 
 		if (bms_is_subset(firstclause->left_relids,
@@ -2696,7 +2696,7 @@ initial_cost_mergejoin(PlannerInfo *root, JoinCostWorkspace *workspace,
 	}
 
 	/*
-	 * Convert selectivities to row counts.  We force outer_rows and
+	 * Convert selextivities to row counts.  We force outer_rows and
 	 * inner_rows to be at least 1, but the skip_rows estimates can be zero.
 	 */
 	outer_skip_rows = rint(outer_path_rows * outerstartsel);
@@ -2708,7 +2708,7 @@ initial_cost_mergejoin(PlannerInfo *root, JoinCostWorkspace *workspace,
 	Assert(inner_skip_rows <= inner_rows);
 
 	/*
-	 * Readjust scan selectivities to account for above rounding.  This is
+	 * Readjust scan selextivities to account for above rounding.  This is
 	 * normally an insignificant effect, but when there are only a few rows in
 	 * the inputs, failing to do this makes for a large percentage error.
 	 */
@@ -2926,7 +2926,7 @@ final_cost_mergejoin(PlannerInfo *root, MergePath *path,
 	 * This equation works correctly for outer tuples having no inner match
 	 * (nk = 0), but not for inner tuples having no outer match (mk = 0); we
 	 * are effectively subtracting those from the number of rescanned tuples,
-	 * when we should not.  Can we do better without expensive selectivity
+	 * when we should not.  Can we do better without expensive selextivity
 	 * computations?
 	 *
 	 * The whole issue is moot if we are working from a unique-ified outer
@@ -2993,7 +2993,7 @@ final_cost_mergejoin(PlannerInfo *root, MergePath *path,
 	 * create order to begin with, and they both support mark/restore, you
 	 * might think there's no problem --- but you'd be wrong.  Nestloop and
 	 * merge joins can *preserve* the order of their inputs, so they can be
-	 * selected as the input of a mergejoin, and they don't support
+	 * selexted as the input of a mergejoin, and they don't support
 	 * mark/restore at present.
 	 *
 	 * We don't test the value of enable_material here, because
@@ -3546,7 +3546,7 @@ cost_subplan(PlannerInfo *root, SubPlan *subplan, Plan *plan)
 		 * evaluation.  We need to estimate how much of the output we will
 		 * actually need to scan.  NOTE: this logic should agree with the
 		 * tuple_fraction estimates used by make_subplan() in
-		 * plan/subselect.c.
+		 * plan/subselext.c.
 		 */
 		Cost		plan_run_cost = plan->total_cost - plan->startup_cost;
 
@@ -3916,20 +3916,20 @@ cost_qual_eval_walker(Node *node, cost_qual_eval_context *context)
 	}
 	else if (IsA(node, CurrentOfExpr))
 	{
-		/* Report high cost to prevent selection of anything but TID scan */
+		/* Report high cost to prevent selextion of anything but TID scan */
 		context->total.startup += disable_cost;
 	}
 	else if (IsA(node, SubLink))
 	{
 		/* This routine should not be applied to un-planned expressions */
-		elog(ERROR, "cannot handle unplanned sub-select");
+		elog(ERROR, "cannot handle unplanned sub-selext");
 	}
 	else if (IsA(node, SubPlan))
 	{
 		/*
 		 * A subplan node in an expression typically indicates that the
 		 * subplan will be executed on each evaluation, so charge accordingly.
-		 * (Sub-selects that can be executed as InitPlans have already been
+		 * (Sub-selexts that can be executed as InitPlans have already been
 		 * removed from the expression.)
 		 */
 		SubPlan    *subplan = (SubPlan *) node;
@@ -4069,16 +4069,16 @@ compute_semi_anti_join_factors(PlannerInfo *root,
 		joinquals = restrictlist;
 
 	/*
-	 * Get the JOIN_SEMI or JOIN_ANTI selectivity of the join clauses.
+	 * Get the JOIN_SEMI or JOIN_ANTI selextivity of the join clauses.
 	 */
-	jselec = clauselist_selectivity(root,
+	jselec = clauselist_selextivity(root,
 									joinquals,
 									0,
 									(jointype == JOIN_ANTI) ? JOIN_ANTI : JOIN_SEMI,
 									sjinfo);
 
 	/*
-	 * Also get the normal inner-join selectivity of the join clauses.
+	 * Also get the normal inner-join selextivity of the join clauses.
 	 */
 	norm_sjinfo.type = T_SpecialJoinInfo;
 	norm_sjinfo.min_lefthand = outerrel->relids;
@@ -4094,7 +4094,7 @@ compute_semi_anti_join_factors(PlannerInfo *root,
 	norm_sjinfo.semi_operators = NIL;
 	norm_sjinfo.semi_rhs_exprs = NIL;
 
-	nselec = clauselist_selectivity(root,
+	nselec = clauselist_selextivity(root,
 									joinquals,
 									0,
 									JOIN_INNER,
@@ -4114,7 +4114,7 @@ compute_semi_anti_join_factors(PlannerInfo *root,
 	 * Note: it is correct to use the inner rel's "rows" count here, even
 	 * though we might later be considering a parameterized inner path with
 	 * fewer rows.  This is because we have included all the join clauses in
-	 * the selectivity estimate.
+	 * the selextivity estimate.
 	 */
 	if (jselec > 0)				/* protect against zero divide */
 	{
@@ -4216,17 +4216,17 @@ has_indexed_join_quals(NestPath *joinpath)
  * The quals can be either an implicitly-ANDed list of boolean expressions,
  * or a list of RestrictInfo nodes (typically the latter).
  *
- * We intentionally compute the selectivity under JOIN_INNER rules, even
+ * We intentionally compute the selextivity under JOIN_INNER rules, even
  * if it's some type of outer join.  This is appropriate because we are
  * trying to figure out how many tuples pass the initial merge or hash
  * join step.
  *
- * This is quick-and-dirty because we bypass clauselist_selectivity, and
- * simply multiply the independent clause selectivities together.  Now
- * clauselist_selectivity often can't do any better than that anyhow, but
+ * This is quick-and-dirty because we bypass clauselist_selextivity, and
+ * simply multiply the independent clause selextivities together.  Now
+ * clauselist_selextivity often can't do any better than that anyhow, but
  * for some situations (such as range constraints) it is smarter.  However,
- * we can't effectively cache the results of clauselist_selectivity, whereas
- * the individual clause selectivities can be and are cached.
+ * we can't effectively cache the results of clauselist_selextivity, whereas
+ * the individual clause selextivities can be and are cached.
  *
  * Since we are only using the results to estimate how many potential
  * output tuples are generated and passed through qpqual checking, it
@@ -4259,13 +4259,13 @@ approx_tuple_count(PlannerInfo *root, JoinPath *path, List *quals)
 	sjinfo.semi_operators = NIL;
 	sjinfo.semi_rhs_exprs = NIL;
 
-	/* Get the approximate selectivity */
+	/* Get the approximate selextivity */
 	foreach(l, quals)
 	{
 		Node	   *qual = (Node *) lfirst(l);
 
-		/* Note that clause_selectivity will be able to cache its result */
-		selec *= clause_selectivity(root, qual, 0, JOIN_INNER, &sjinfo);
+		/* Note that clause_selextivity will be able to cache its result */
+		selec *= clause_selextivity(root, qual, 0, JOIN_INNER, &sjinfo);
 	}
 
 	/* Apply it to the input relation sizes */
@@ -4297,7 +4297,7 @@ set_baserel_size_estimates(PlannerInfo *root, RelOptInfo *rel)
 	Assert(rel->relid > 0);
 
 	nrows = rel->tuples *
-		clauselist_selectivity(root,
+		clauselist_selextivity(root,
 							   rel->baserestrictinfo,
 							   0,
 							   JOIN_INNER,
@@ -4329,12 +4329,12 @@ get_parameterized_baserel_size(PlannerInfo *root, RelOptInfo *rel,
 	 * Estimate the number of rows returned by the parameterized scan, knowing
 	 * that it will apply all the extra join clauses as well as the rel's own
 	 * restriction clauses.  Note that we force the clauses to be treated as
-	 * non-join clauses during selectivity estimation.
+	 * non-join clauses during selextivity estimation.
 	 */
 	allclauses = list_concat(list_copy(param_clauses),
 							 rel->baserestrictinfo);
 	nrows = rel->tuples *
-		clauselist_selectivity(root,
+		clauselist_selextivity(root,
 							   allclauses,
 							   rel->relid,	/* do not use 0! */
 							   JOIN_INNER,
@@ -4357,7 +4357,7 @@ get_parameterized_baserel_size(PlannerInfo *root, RelOptInfo *rel,
  * Since there is more than one way to make a joinrel for more than two
  * base relations, the results we get here could depend on which component
  * rel pair is provided.  In theory we should get the same answers no matter
- * which pair is provided; in practice, since the selectivity estimation
+ * which pair is provided; in practice, since the selextivity estimation
  * routines don't handle all cases equally well, we might not.  But there's
  * not much to be done about it.  (Would it make sense to repeat the
  * calculations for each pair of input rels that's encountered, and somehow
@@ -4411,7 +4411,7 @@ get_parameterized_joinrel_size(PlannerInfo *root, RelOptInfo *rel,
 
 	/*
 	 * Estimate the number of rows returned by the parameterized join as the
-	 * sizes of the input paths times the selectivity of the clauses that have
+	 * sizes of the input paths times the selextivity of the clauses that have
 	 * ended up at this join node.
 	 *
 	 * As with set_joinrel_size_estimates, the rowcount estimate could depend
@@ -4460,28 +4460,28 @@ calc_joinrel_size_estimate(PlannerInfo *root,
 	double		nrows;
 
 	/*
-	 * Compute joinclause selectivity.  Note that we are only considering
+	 * Compute joinclause selextivity.  Note that we are only considering
 	 * clauses that become restriction clauses at this join level; we are not
 	 * double-counting them because they were not considered in estimating the
 	 * sizes of the component rels.
 	 *
 	 * First, see whether any of the joinclauses can be matched to known FK
 	 * constraints.  If so, drop those clauses from the restrictlist, and
-	 * instead estimate their selectivity using FK semantics.  (We do this
+	 * instead estimate their selextivity using FK semantics.  (We do this
 	 * without regard to whether said clauses are local or "pushed down".
 	 * Probably, an FK-matching clause could never be seen as pushed down at
 	 * an outer join, since it would be strict and hence would be grounds for
-	 * join strength reduction.)  fkselec gets the net selectivity for
+	 * join strength reduction.)  fkselec gets the net selextivity for
 	 * FK-matching clauses, or 1.0 if there are none.
 	 */
-	fkselec = get_foreign_key_join_selectivity(root,
+	fkselec = get_foreign_key_join_selextivity(root,
 											   outer_rel->relids,
 											   inner_rel->relids,
 											   sjinfo,
 											   &restrictlist);
 
 	/*
-	 * For an outer join, we have to distinguish the selectivity of the join's
+	 * For an outer join, we have to distinguish the selextivity of the join's
 	 * own clauses (JOIN/ON conditions) from any clauses that were "pushed
 	 * down".  For inner joins we just count them all as joinclauses.
 	 */
@@ -4502,13 +4502,13 @@ calc_joinrel_size_estimate(PlannerInfo *root,
 				joinquals = lappend(joinquals, rinfo);
 		}
 
-		/* Get the separate selectivities */
-		jselec = clauselist_selectivity(root,
+		/* Get the separate selextivities */
+		jselec = clauselist_selextivity(root,
 										joinquals,
 										0,
 										jointype,
 										sjinfo);
-		pselec = clauselist_selectivity(root,
+		pselec = clauselist_selextivity(root,
 										pushedquals,
 										0,
 										jointype,
@@ -4520,7 +4520,7 @@ calc_joinrel_size_estimate(PlannerInfo *root,
 	}
 	else
 	{
-		jselec = clauselist_selectivity(root,
+		jselec = clauselist_selextivity(root,
 										restrictlist,
 										0,
 										jointype,
@@ -4529,15 +4529,15 @@ calc_joinrel_size_estimate(PlannerInfo *root,
 	}
 
 	/*
-	 * Basically, we multiply size of Cartesian product by selectivity.
+	 * Basically, we multiply size of Cartesian product by selextivity.
 	 *
 	 * If we are doing an outer join, take that into account: the joinqual
-	 * selectivity has to be clamped using the knowledge that the output must
+	 * selextivity has to be clamped using the knowledge that the output must
 	 * be at least as large as the non-nullable input.  However, any
 	 * pushed-down quals are applied after the outer join, so their
-	 * selectivity applies fully.
+	 * selextivity applies fully.
 	 *
-	 * For JOIN_SEMI and JOIN_ANTI, the selectivity is defined as the fraction
+	 * For JOIN_SEMI and JOIN_ANTI, the selextivity is defined as the fraction
 	 * of LHS rows that have matches, and we apply that straightforwardly.
 	 */
 	switch (jointype)
@@ -4579,22 +4579,22 @@ calc_joinrel_size_estimate(PlannerInfo *root,
 }
 
 /*
- * get_foreign_key_join_selectivity
- *		Estimate join selectivity for foreign-key-related clauses.
+ * get_foreign_key_join_selextivity
+ *		Estimate join selextivity for foreign-key-related clauses.
  *
  * Remove any clauses that can be matched to FK constraints from *restrictlist,
- * and return a substitute estimate of their selectivity.  1.0 is returned
+ * and return a substitute estimate of their selextivity.  1.0 is returned
  * when there are no such clauses.
  *
  * The reason for treating such clauses specially is that we can get better
- * estimates this way than by relying on clauselist_selectivity(), especially
+ * estimates this way than by relying on clauselist_selextivity(), especially
  * for multi-column FKs where that function's assumption that the clauses are
  * independent falls down badly.  But even with single-column FKs, we may be
  * able to get a better answer when the pg_statistic stats are missing or out
  * of date.
  */
 static Selectivity
-get_foreign_key_join_selectivity(PlannerInfo *root,
+get_foreign_key_join_selextivity(PlannerInfo *root,
 								 Relids outer_relids,
 								 Relids inner_relids,
 								 SpecialJoinInfo *sjinfo,
@@ -4710,7 +4710,7 @@ get_foreign_key_join_selectivity(PlannerInfo *root,
 
 		/*
 		 * If we failed to remove all the matching clauses we expected to
-		 * find, chicken out and ignore this FK; applying its selectivity
+		 * find, chicken out and ignore this FK; applying its selextivity
 		 * might result in double-counting.  Put any clauses we did manage to
 		 * remove back into the worklist.
 		 *
@@ -4720,10 +4720,10 @@ get_foreign_key_join_selectivity(PlannerInfo *root,
 		 * by, some other FK in a previous iteration of this loop.  (A likely
 		 * case is that two FKs are matched to the same EC; there will be only
 		 * one EC-derived clause in the initial list, so the first FK will
-		 * consume it.)  Applying both FKs' selectivity independently risks
+		 * consume it.)  Applying both FKs' selextivity independently risks
 		 * underestimating the join size; in particular, this would undo one
 		 * of the main things that ECs were invented for, namely to avoid
-		 * double-counting the selectivity of redundant equality conditions.
+		 * double-counting the selextivity of redundant equality conditions.
 		 * Later we might think of a reasonable way to combine the estimates,
 		 * but for now, just punt, since this is a fairly uncommon situation.
 		 */
@@ -4735,7 +4735,7 @@ get_foreign_key_join_selectivity(PlannerInfo *root,
 		}
 
 		/*
-		 * Finally we get to the payoff: estimate selectivity using the
+		 * Finally we get to the payoff: estimate selextivity using the
 		 * knowledge that each referencing row will match exactly one row in
 		 * the referenced table.
 		 *
@@ -4762,11 +4762,11 @@ get_foreign_key_join_selectivity(PlannerInfo *root,
 			/*
 			 * For JOIN_SEMI and JOIN_ANTI, we only get here when the FK's
 			 * referenced table is exactly the inside of the join.  The join
-			 * selectivity is defined as the fraction of LHS rows that have
+			 * selextivity is defined as the fraction of LHS rows that have
 			 * matches.  The FK implies that every LHS row has a match *in the
 			 * referenced table*; but any restriction clauses on it will
 			 * reduce the number of matches.  Hence we take the join
-			 * selectivity as equal to the selectivity of the table's
+			 * selextivity as equal to the selextivity of the table's
 			 * restriction clauses, which is rows / tuples; but we must guard
 			 * against tuples == 0.
 			 */
@@ -4778,7 +4778,7 @@ get_foreign_key_join_selectivity(PlannerInfo *root,
 		else
 		{
 			/*
-			 * Otherwise, selectivity is exactly 1/referenced-table-size; but
+			 * Otherwise, selextivity is exactly 1/referenced-table-size; but
 			 * guard against tuples == 0.  Note we should use the raw table
 			 * tuple count, not any estimate of its filtered or joined size.
 			 */
@@ -5390,7 +5390,7 @@ compute_bitmap_pages(PlannerInfo *root, RelOptInfo *baserel, Path *bitmapqual,
 
 	/*
 	 * Fetch total cost of obtaining the bitmap, as well as its total
-	 * selectivity.
+	 * selextivity.
 	 */
 	cost_bitmap_tree_node(bitmapqual, &indexTotalCost, &indexSelectivity);
 

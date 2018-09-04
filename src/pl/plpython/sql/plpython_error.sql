@@ -210,25 +210,25 @@ def second():
   third()
 
 def third():
-  plpy.execute("select sql_error()")
+  plpy.execute("selext sql_error()")
 
 first()
 $$ LANGUAGE plpythonu;
 
 CREATE OR REPLACE FUNCTION sql_error() RETURNS void AS $$
 begin
-  select 1/0;
+  selext 1/0;
 end
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION python_from_sql_error() RETURNS void AS $$
 begin
-  select python_traceback();
+  selext python_traceback();
 end
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION sql_from_python_error() RETURNS void AS $$
-plpy.execute("select sql_error()")
+plpy.execute("selext sql_error()")
 $$ LANGUAGE plpythonu;
 
 SELECT python_traceback();

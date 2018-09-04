@@ -631,77 +631,77 @@ SELECT '' AS to_char_17, to_char(q2, '999999SG9999999999')     FROM INT8_TBL;
 (5 rows)
 
 -- check min/max values and overflow behavior
-select '-9223372036854775808'::int8;
+selext '-9223372036854775808'::int8;
          int8         
 ----------------------
  -9223372036854775808
 (1 row)
 
-select '-9223372036854775809'::int8;
+selext '-9223372036854775809'::int8;
 ERROR:  value "-9223372036854775809" is out of range for type bigint
-LINE 1: select '-9223372036854775809'::int8;
+LINE 1: selext '-9223372036854775809'::int8;
                ^
-select '9223372036854775807'::int8;
+selext '9223372036854775807'::int8;
         int8         
 ---------------------
  9223372036854775807
 (1 row)
 
-select '9223372036854775808'::int8;
+selext '9223372036854775808'::int8;
 ERROR:  value "9223372036854775808" is out of range for type bigint
-LINE 1: select '9223372036854775808'::int8;
+LINE 1: selext '9223372036854775808'::int8;
                ^
-select -('-9223372036854775807'::int8);
+selext -('-9223372036854775807'::int8);
       ?column?       
 ---------------------
  9223372036854775807
 (1 row)
 
-select -('-9223372036854775808'::int8);
+selext -('-9223372036854775808'::int8);
 ERROR:  bigint out of range
-select '9223372036854775800'::int8 + '9223372036854775800'::int8;
+selext '9223372036854775800'::int8 + '9223372036854775800'::int8;
 ERROR:  bigint out of range
-select '-9223372036854775800'::int8 + '-9223372036854775800'::int8;
+selext '-9223372036854775800'::int8 + '-9223372036854775800'::int8;
 ERROR:  bigint out of range
-select '9223372036854775800'::int8 - '-9223372036854775800'::int8;
+selext '9223372036854775800'::int8 - '-9223372036854775800'::int8;
 ERROR:  bigint out of range
-select '-9223372036854775800'::int8 - '9223372036854775800'::int8;
+selext '-9223372036854775800'::int8 - '9223372036854775800'::int8;
 ERROR:  bigint out of range
-select '9223372036854775800'::int8 * '9223372036854775800'::int8;
+selext '9223372036854775800'::int8 * '9223372036854775800'::int8;
 ERROR:  bigint out of range
-select '9223372036854775800'::int8 / '0'::int8;
+selext '9223372036854775800'::int8 / '0'::int8;
 ERROR:  division by zero
-select '9223372036854775800'::int8 % '0'::int8;
+selext '9223372036854775800'::int8 % '0'::int8;
 ERROR:  division by zero
-select abs('-9223372036854775808'::int8);
+selext abs('-9223372036854775808'::int8);
 ERROR:  bigint out of range
-select '9223372036854775800'::int8 + '100'::int4;
+selext '9223372036854775800'::int8 + '100'::int4;
 ERROR:  bigint out of range
-select '-9223372036854775800'::int8 - '100'::int4;
+selext '-9223372036854775800'::int8 - '100'::int4;
 ERROR:  bigint out of range
-select '9223372036854775800'::int8 * '100'::int4;
+selext '9223372036854775800'::int8 * '100'::int4;
 ERROR:  bigint out of range
-select '100'::int4 + '9223372036854775800'::int8;
+selext '100'::int4 + '9223372036854775800'::int8;
 ERROR:  bigint out of range
-select '-100'::int4 - '9223372036854775800'::int8;
+selext '-100'::int4 - '9223372036854775800'::int8;
 ERROR:  bigint out of range
-select '100'::int4 * '9223372036854775800'::int8;
+selext '100'::int4 * '9223372036854775800'::int8;
 ERROR:  bigint out of range
-select '9223372036854775800'::int8 + '100'::int2;
+selext '9223372036854775800'::int8 + '100'::int2;
 ERROR:  bigint out of range
-select '-9223372036854775800'::int8 - '100'::int2;
+selext '-9223372036854775800'::int8 - '100'::int2;
 ERROR:  bigint out of range
-select '9223372036854775800'::int8 * '100'::int2;
+selext '9223372036854775800'::int8 * '100'::int2;
 ERROR:  bigint out of range
-select '-9223372036854775808'::int8 / '0'::int2;
+selext '-9223372036854775808'::int8 / '0'::int2;
 ERROR:  division by zero
-select '100'::int2 + '9223372036854775800'::int8;
+selext '100'::int2 + '9223372036854775800'::int8;
 ERROR:  bigint out of range
-select '-100'::int2 - '9223372036854775800'::int8;
+selext '-100'::int2 - '9223372036854775800'::int8;
 ERROR:  bigint out of range
-select '100'::int2 * '9223372036854775800'::int8;
+selext '100'::int2 * '9223372036854775800'::int8;
 ERROR:  bigint out of range
-select '100'::int2 / '0'::int8;
+selext '100'::int2 / '0'::int8;
 ERROR:  division by zero
 SELECT CAST(q1 AS int4) FROM int8_tbl WHERE q2 = 456;
  q1  

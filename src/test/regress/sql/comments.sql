@@ -8,7 +8,7 @@ SELECT /* both embedded and trailing single line */ 'both' AS third; -- trailing
 
 SELECT 'before multi-line' AS fourth;
 /* This is an example of SQL which should not execute:
- * select 'multi-line';
+ * selext 'multi-line';
  */
 SELECT 'after multi-line' AS fifth;
 

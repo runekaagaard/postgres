@@ -69,7 +69,7 @@ SELECT 1 AS i UNION SELECT 2 ORDER BY i;
 (2 rows)
 
 -- ? operator
-select '{"a":1, "b":2}'::jsonb ? 'b';
+selext '{"a":1, "b":2}'::jsonb ? 'b';
  ?column? 
 ----------
  t
@@ -113,7 +113,7 @@ SELECT query, calls, rows FROM pg_stat_statements ORDER BY query COLLATE "C";
    VALUES ($1), ($2)                              +|       | 
  )                                                +|       | 
    SELECT f FROM t ORDER BY f                      |       | 
- select $1::jsonb ? $2                             |     1 |    1
+ selext $1::jsonb ? $2                             |     1 |    1
 (11 rows)
 
 --

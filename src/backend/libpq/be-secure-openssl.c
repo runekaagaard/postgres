@@ -280,7 +280,7 @@ be_tls_init(bool isServerStart)
 
 		/*
 		 * Tell OpenSSL to send the list of root certs we trust to clients in
-		 * CertificateRequests.  This lets a client with a keystore select the
+		 * CertificateRequests.  This lets a client with a keystore selext the
 		 * appropriate client certificate to send to us.
 		 */
 		SSL_CTX_set_client_CA_list(context, root_cert_list);

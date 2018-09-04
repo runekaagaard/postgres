@@ -88,14 +88,14 @@ SELECT '' AS five, f.f1, round(f.f1) AS round_f1
    FROM FLOAT8_TBL f;
 
 -- ceil / ceiling
-select ceil(f1) as ceil_f1 from float8_tbl f;
-select ceiling(f1) as ceiling_f1 from float8_tbl f;
+selext ceil(f1) as ceil_f1 from float8_tbl f;
+selext ceiling(f1) as ceiling_f1 from float8_tbl f;
 
 -- floor
-select floor(f1) as floor_f1 from float8_tbl f;
+selext floor(f1) as floor_f1 from float8_tbl f;
 
 -- sign
-select sign(f1) as sign_f1 from float8_tbl f;
+selext sign(f1) as sign_f1 from float8_tbl f;
 
 -- square root
 SELECT sqrt(float8 '64') AS eight;

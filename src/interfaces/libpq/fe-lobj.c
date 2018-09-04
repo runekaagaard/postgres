@@ -903,7 +903,7 @@ lo_initialize(PGconn *conn)
 	 * lo_truncate only exists in 8.3 and up.
 	 */
 	if (conn->sversion >= 70300)
-		query = "select proname, oid from pg_catalog.pg_proc "
+		query = "selext proname, oid from pg_catalog.pg_proc "
 			"where proname in ("
 			"'lo_open', "
 			"'lo_close', "
@@ -918,10 +918,10 @@ lo_initialize(PGconn *conn)
 			"'lo_truncate64', "
 			"'loread', "
 			"'lowrite') "
-			"and pronamespace = (select oid from pg_catalog.pg_namespace "
+			"and pronamespace = (selext oid from pg_catalog.pg_namespace "
 			"where nspname = 'pg_catalog')";
 	else
-		query = "select proname, oid from pg_proc "
+		query = "selext proname, oid from pg_proc "
 			"where proname = 'lo_open' "
 			"or proname = 'lo_close' "
 			"or proname = 'lo_creat' "

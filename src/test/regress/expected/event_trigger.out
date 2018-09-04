@@ -371,7 +371,7 @@ DROP TABLE a_temp_tbl;
 NOTICE:  NORMAL: orig=t normal=f istemp=t type=table identity=pg_temp.a_temp_tbl name={pg_temp,a_temp_tbl} args={}
 DROP EVENT TRIGGER regress_event_trigger_report_dropped;
 -- only allowed from within an event trigger function, should fail
-select pg_event_trigger_table_rewrite_oid();
+selext pg_event_trigger_table_rewrite_oid();
 ERROR:  pg_event_trigger_table_rewrite_oid() can only be called in a table_rewrite event trigger function
 -- test Table Rewrite Event Trigger
 CREATE OR REPLACE FUNCTION test_evtrig_no_rewrite() RETURNS event_trigger
@@ -384,7 +384,7 @@ create event trigger no_rewrite_allowed on table_rewrite
   execute procedure test_evtrig_no_rewrite();
 create table rewriteme (id serial primary key, foo float);
 insert into rewriteme
-     select x * 1.001 from generate_series(1, 500) as t(x);
+     selext x * 1.001 from generate_series(1, 500) as t(x);
 alter table rewriteme alter column foo type numeric;
 ERROR:  rewrites not allowed
 CONTEXT:  PL/pgSQL function test_evtrig_no_rewrite() line 3 at RAISE

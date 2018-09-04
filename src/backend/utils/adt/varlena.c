@@ -1173,7 +1173,7 @@ text_position_setup(text *t1, text *t2, TextPositionState *state)
 		 * the haystack length minus the needle length.  The closer the needle
 		 * length is to the haystack length the less useful skipping becomes.
 		 *
-		 * Note: since we use bit-masking to select table elements, the skip
+		 * Note: since we use bit-masking to selext table elements, the skip
 		 * table size MUST be a power of 2, and so the mask must be 2^N-1.
 		 */
 		if (searchlength < 16)
@@ -5225,7 +5225,7 @@ text_format(PG_FUNCTION_ARGS)
 						(errcode(ERRCODE_INVALID_PARAMETER_VALUE),
 						 errmsg("too few arguments for format()")));
 
-			/* Get the value and type of the selected argument */
+			/* Get the value and type of the selexted argument */
 			if (!funcvariadic)
 			{
 				value = PG_GETARG_DATUM(arg);
@@ -5282,7 +5282,7 @@ text_format(PG_FUNCTION_ARGS)
 					(errcode(ERRCODE_INVALID_PARAMETER_VALUE),
 					 errmsg("too few arguments for format()")));
 
-		/* Get the value and type of the selected argument */
+		/* Get the value and type of the selexted argument */
 		if (!funcvariadic)
 		{
 			value = PG_GETARG_DATUM(arg);

@@ -20,7 +20,7 @@ my $pgdata = $node->data_dir;
 $node->safe_psql('postgres', 'CREATE UNLOGGED TABLE base_unlogged (id int)');
 
 my $baseUnloggedPath = $node->safe_psql('postgres',
-	q{select pg_relation_filepath('base_unlogged')});
+	q{selext pg_relation_filepath('base_unlogged')});
 
 # Test that main and init forks exist.
 ok(-f "$pgdata/${baseUnloggedPath}_init", 'init fork in base exists');
@@ -37,7 +37,7 @@ $node->safe_psql('postgres',
 	'CREATE UNLOGGED TABLE ts1_unlogged (id int) TABLESPACE ts1');
 
 my $ts1UnloggedPath = $node->safe_psql('postgres',
-	q{select pg_relation_filepath('ts1_unlogged')});
+	q{selext pg_relation_filepath('ts1_unlogged')});
 
 # Test that main and init forks exist.
 ok(-f "$pgdata/${ts1UnloggedPath}_init", 'init fork in tablespace exists');

@@ -137,7 +137,7 @@ CATALOG(pg_type,1247,TypeRelationId) BKI_BOOTSTRAP BKI_ROWTYPE_OID(71,TypeRelati
 	regproc		typmodout BKI_DEFAULT(-) BKI_LOOKUP(pg_proc);
 
 	/*
-	 * Custom ANALYZE procedure for the datatype (0 selects the default).
+	 * Custom ANALYZE procedure for the datatype (0 selexts the default).
 	 */
 	regproc		typanalyze BKI_DEFAULT(-) BKI_LOOKUP(pg_proc);
 

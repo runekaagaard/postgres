@@ -117,7 +117,7 @@ DefineVirtualRelation(RangeVar *relation, List *tlist, bool replace,
 	/*
 	 * Look up, check permissions on, and lock the creation namespace; also
 	 * check for a preexisting view with the same name.  This will also set
-	 * relation->relpersistence to RELPERSISTENCE_TEMP if the selected
+	 * relation->relpersistence to RELPERSISTENCE_TEMP if the selexted
 	 * namespace is temporary.
 	 */
 	lockmode = replace ? AccessExclusiveLock : NoLock;

@@ -10,7 +10,7 @@
  * is randomly chosen but is relatively prime to the relation's nblocks.
  *
  * Because of the time dependence, this method is necessarily unrepeatable.
- * However, we do what we can to reduce surprising behavior by selecting
+ * However, we do what we can to reduce surprising behavior by selexting
  * the sampling pattern just once per query, much as in tsm_system_rows.
  *
  * Portions Copyright (c) 1996-2018, PostgreSQL Global Development Group
@@ -264,7 +264,7 @@ system_time_nextsampleblock(SampleScanState *node)
 
 	/*
 	 * It's probably impossible for scan->rs_nblocks to decrease between scans
-	 * within a query; but just in case, loop until we select a block number
+	 * within a query; but just in case, loop until we selext a block number
 	 * less than scan->rs_nblocks.  We don't care if scan->rs_nblocks has
 	 * increased since the first scan.
 	 */
@@ -280,7 +280,7 @@ system_time_nextsampleblock(SampleScanState *node)
 /*
  * Select next sampled tuple in current block.
  *
- * In block sampling, we just want to sample all the tuples in each selected
+ * In block sampling, we just want to sample all the tuples in each selexted
  * block.
  *
  * When we reach end of the block, return InvalidOffsetNumber which tells

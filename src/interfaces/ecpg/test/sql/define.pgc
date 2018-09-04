@@ -33,7 +33,7 @@ int main(void)
 
    exec sql define NUMBER 29;
 
-   exec sql select INSERTNULL, NUMBER::text || '-' || STR INTO :i, :s;
+   exec sql selext INSERTNULL, NUMBER::text || '-' || STR INTO :i, :s;
 
    printf("i: %d, s: %s\n", i, s);
 

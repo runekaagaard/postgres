@@ -416,8 +416,8 @@ msgstr "не удалось записать в канал взаимодейс�
 
 #: parallel.c:1635
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "ошибка в select(): %s\n"
+msgid "selext() failed: %s\n"
+msgstr "ошибка в selext(): %s\n"
 
 #: parallel.c:1760
 #, c-format
@@ -2811,7 +2811,7 @@ msgstr ""
 #, c-format
 msgid ""
 "  -L, --use-list=FILENAME      use table of contents from this file for\n"
-"                               selecting/ordering output\n"
+"                               selexting/ordering output\n"
 msgstr ""
 "  -L, --use-list=ИМЯ_ФАЙЛА     использовать оглавление из этого файла для\n"
 "                               чтения/упорядочивания данных\n"
@@ -2933,7 +2933,7 @@ msgstr "  --role=ИМЯ_РОЛИ          выполнить SET ROLE перед
 msgid ""
 "\n"
 "The options -I, -n, -P, -t, -T, and --section can be combined and specified\n"
-"multiple times to select multiple objects.\n"
+"multiple times to selext multiple objects.\n"
 msgstr ""
 "\n"
 "Параметры -I, -n, -P, -t, -T и --section можно комбинировать и указывать\n"
@@ -3003,7 +3003,7 @@ msgstr ""
 #~ msgstr "ошибка в процессе резервного копирования\n"
 
 #~ msgid ""
-#~ "server version must be at least 7.3 to use schema selection switches\n"
+#~ "server version must be at least 7.3 to use schema selextion switches\n"
 #~ msgstr ""
 #~ "для использования параметров выбора схемы нужен сервер версии 7.3 или "
 #~ "новее\n"

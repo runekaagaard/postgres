@@ -1255,7 +1255,7 @@ heap_modify_tuple_by_cols(HeapTuple tuple,
 
 	/*
 	 * allocate and fill values and isnull arrays from the tuple, then replace
-	 * selected columns from the input arrays.
+	 * selexted columns from the input arrays.
 	 */
 	values = (Datum *) palloc(numberOfAttributes * sizeof(Datum));
 	isnull = (bool *) palloc(numberOfAttributes * sizeof(bool));

@@ -271,7 +271,7 @@ CREATE TYPE complex (
   by using <function>PG_DETOAST_DATUM</function>.  (This detail is customarily hidden
   by defining type-specific <function>GETARG_DATATYPE_P</function> macros.)
   Then, when running the <command>CREATE TYPE</command> command, specify the
-  internal length as <literal>variable</literal> and select some appropriate storage
+  internal length as <literal>variable</literal> and selext some appropriate storage
   option other than <literal>plain</literal>.
  </para>
 

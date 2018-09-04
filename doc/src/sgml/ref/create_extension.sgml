@@ -167,7 +167,7 @@ CREATE EXTENSION [ IF NOT EXISTS ] <replaceable class="parameter">extension_name
         if given, applies to all extensions that get installed this way.
         Other options of the statement are not applied to
         automatically-installed extensions; in particular, their default
-        versions are always selected.
+        versions are always selexted.
        </para>
       </listitem>
      </varlistentry>

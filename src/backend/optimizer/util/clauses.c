@@ -611,7 +611,7 @@ get_agg_clause_costs_walker(Node *node, get_agg_clause_costs_context *context)
 			 * Add any filter's cost to per-input-row costs.
 			 *
 			 * XXX Ideally we should reduce input expression costs according
-			 * to filter selectivity, but it's not clear it's worth the
+			 * to filter selextivity, but it's not clear it's worth the
 			 * trouble.
 			 */
 			if (aggref->aggfilter)
@@ -834,7 +834,7 @@ expression_returns_set_rows(Node *clause)
  *	  Recursively search for subplan nodes within a clause.
  *
  * If we see a SubLink node, we will return true.  This is only possible if
- * the expression tree hasn't yet been transformed by subselect.c.  We do not
+ * the expression tree hasn't yet been transformed by subselext.c.  We do not
  * know whether the node will produce a true subplan or just an initplan,
  * but we make the conservative assumption that it will be a subplan.
  *
@@ -872,7 +872,7 @@ contain_subplans_walker(Node *node, void *context)
  * mistakenly think that something like "WHERE random() < 0.5" can be treated
  * as a constant qualification.
  *
- * We will recursively look into Query nodes (i.e., SubLink sub-selects)
+ * We will recursively look into Query nodes (i.e., SubLink sub-selexts)
  * but not into SubPlans.  See comments for contain_volatile_functions().
  */
 bool
@@ -922,7 +922,7 @@ contain_mutable_functions_walker(Node *node, void *context)
 	/* Recurse to check arguments */
 	if (IsA(node, Query))
 	{
-		/* Recurse into subselects */
+		/* Recurse into subselexts */
 		return query_tree_walker((Query *) node,
 								 contain_mutable_functions_walker,
 								 context, 0);
@@ -944,11 +944,11 @@ contain_mutable_functions_walker(Node *node, void *context)
  * volatile function) is found. This test prevents, for example,
  * invalid conversions of volatile expressions into indexscan quals.
  *
- * We will recursively look into Query nodes (i.e., SubLink sub-selects)
+ * We will recursively look into Query nodes (i.e., SubLink sub-selexts)
  * but not into SubPlans.  This is a bit odd, but intentional.  If we are
  * looking at a SubLink, we are probably deciding whether a query tree
- * transformation is safe, and a contained sub-select should affect that;
- * for example, duplicating a sub-select containing a volatile function
+ * transformation is safe, and a contained sub-selext should affect that;
+ * for example, duplicating a sub-selext containing a volatile function
  * would be bad.  However, once we've got to the stage of having SubPlans,
  * subsequent planning need not consider volatility within those, since
  * the executor won't change its evaluation rules for a SubPlan based on
@@ -991,7 +991,7 @@ contain_volatile_functions_walker(Node *node, void *context)
 	/* Recurse to check arguments */
 	if (IsA(node, Query))
 	{
-		/* Recurse into subselects */
+		/* Recurse into subselexts */
 		return query_tree_walker((Query *) node,
 								 contain_volatile_functions_walker,
 								 context, 0);
@@ -1039,7 +1039,7 @@ contain_volatile_functions_not_nextval_walker(Node *node, void *context)
 	/* Recurse to check arguments */
 	if (IsA(node, Query))
 	{
-		/* Recurse into subselects */
+		/* Recurse into subselexts */
 		return query_tree_walker((Query *) node,
 								 contain_volatile_functions_not_nextval_walker,
 								 context, 0);
@@ -1296,7 +1296,7 @@ max_parallel_hazard_walker(Node *node, max_parallel_hazard_context *context)
 			return true;
 		}
 
-		/* Recurse into subselects */
+		/* Recurse into subselexts */
 		return query_tree_walker(query,
 								 max_parallel_hazard_walker,
 								 context, 0);
@@ -3422,11 +3422,11 @@ eval_const_expressions_mutator(Node *node,
 		case T_FieldSelect:
 			{
 				/*
-				 * We can optimize field selection from a whole-row Var into a
+				 * We can optimize field selextion from a whole-row Var into a
 				 * simple Var.  (This case won't be generated directly by the
 				 * parser, because ParseComplexProjection short-circuits it.
 				 * But it can arise while simplifying functions.)  Also, we
-				 * can optimize field selection from a RowExpr construct, or
+				 * can optimize field selextion from a RowExpr construct, or
 				 * of course from a constant.
 				 *
 				 * However, replacing a whole-row Var in this way has a
@@ -3445,67 +3445,67 @@ eval_const_expressions_mutator(Node *node,
 				 * If it isn't, we skip the optimization; the case will
 				 * probably fail at runtime, but that's not our problem here.
 				 */
-				FieldSelect *fselect = (FieldSelect *) node;
-				FieldSelect *newfselect;
+				FieldSelect *fselext = (FieldSelect *) node;
+				FieldSelect *newfselext;
 				Node	   *arg;
 
-				arg = eval_const_expressions_mutator((Node *) fselect->arg,
+				arg = eval_const_expressions_mutator((Node *) fselext->arg,
 													 context);
 				if (arg && IsA(arg, Var) &&
 					((Var *) arg)->varattno == InvalidAttrNumber &&
 					((Var *) arg)->varlevelsup == 0)
 				{
 					if (rowtype_field_matches(((Var *) arg)->vartype,
-											  fselect->fieldnum,
-											  fselect->resulttype,
-											  fselect->resulttypmod,
-											  fselect->resultcollid))
+											  fselext->fieldnum,
+											  fselext->resulttype,
+											  fselext->resulttypmod,
+											  fselext->resultcollid))
 						return (Node *) makeVar(((Var *) arg)->varno,
-												fselect->fieldnum,
-												fselect->resulttype,
-												fselect->resulttypmod,
-												fselect->resultcollid,
+												fselext->fieldnum,
+												fselext->resulttype,
+												fselext->resulttypmod,
+												fselext->resultcollid,
 												((Var *) arg)->varlevelsup);
 				}
 				if (arg && IsA(arg, RowExpr))
 				{
 					RowExpr    *rowexpr = (RowExpr *) arg;
 
-					if (fselect->fieldnum > 0 &&
-						fselect->fieldnum <= list_length(rowexpr->args))
+					if (fselext->fieldnum > 0 &&
+						fselext->fieldnum <= list_length(rowexpr->args))
 					{
 						Node	   *fld = (Node *) list_nth(rowexpr->args,
-															fselect->fieldnum - 1);
+															fselext->fieldnum - 1);
 
 						if (rowtype_field_matches(rowexpr->row_typeid,
-												  fselect->fieldnum,
-												  fselect->resulttype,
-												  fselect->resulttypmod,
-												  fselect->resultcollid) &&
-							fselect->resulttype == exprType(fld) &&
-							fselect->resulttypmod == exprTypmod(fld) &&
-							fselect->resultcollid == exprCollation(fld))
+												  fselext->fieldnum,
+												  fselext->resulttype,
+												  fselext->resulttypmod,
+												  fselext->resultcollid) &&
+							fselext->resulttype == exprType(fld) &&
+							fselext->resulttypmod == exprTypmod(fld) &&
+							fselext->resultcollid == exprCollation(fld))
 							return fld;
 					}
 				}
-				newfselect = makeNode(FieldSelect);
-				newfselect->arg = (Expr *) arg;
-				newfselect->fieldnum = fselect->fieldnum;
-				newfselect->resulttype = fselect->resulttype;
-				newfselect->resulttypmod = fselect->resulttypmod;
-				newfselect->resultcollid = fselect->resultcollid;
+				newfselext = makeNode(FieldSelect);
+				newfselext->arg = (Expr *) arg;
+				newfselext->fieldnum = fselext->fieldnum;
+				newfselext->resulttype = fselext->resulttype;
+				newfselext->resulttypmod = fselext->resulttypmod;
+				newfselext->resultcollid = fselext->resultcollid;
 				if (arg && IsA(arg, Const))
 				{
 					Const	   *con = (Const *) arg;
 
 					if (rowtype_field_matches(con->consttype,
-											  newfselect->fieldnum,
-											  newfselect->resulttype,
-											  newfselect->resulttypmod,
-											  newfselect->resultcollid))
-						return ece_evaluate_expr(newfselect);
+											  newfselext->fieldnum,
+											  newfselext->resulttype,
+											  newfselext->resulttypmod,
+											  newfselext->resultcollid))
+						return ece_evaluate_expr(newfselext);
 				}
-				return (Node *) newfselect;
+				return (Node *) newfselext;
 			}
 		case T_NullTest:
 			{
@@ -4712,7 +4712,7 @@ inline_function(Oid funcid, Oid result_type, Oid result_collid,
 			 * We define "expensive" as "contains any subplan or more than 10
 			 * operators".  Note that the subplan search has to be done
 			 * explicitly, since cost_qual_eval() will barf on unplanned
-			 * subselects.
+			 * subselexts.
 			 */
 			if (contain_subplans(param))
 				goto fail;
@@ -5005,9 +5005,9 @@ inline_set_returning_function(PlannerInfo *root, RangeTblEntry *rte)
 
 	/*
 	 * Refuse to inline if the arguments contain any volatile functions or
-	 * sub-selects.  Volatile functions are rejected because inlining may
+	 * sub-selexts.  Volatile functions are rejected because inlining may
 	 * result in the arguments being evaluated multiple times, risking a
-	 * change in behavior.  Sub-selects are rejected partly for implementation
+	 * change in behavior.  Sub-selexts are rejected partly for implementation
 	 * reasons (pushing them down another level might change their behavior)
 	 * and partly because they're likely to be expensive and so multiple
 	 * evaluation would be bad.

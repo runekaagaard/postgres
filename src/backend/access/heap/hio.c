@@ -103,7 +103,7 @@ ReadBufferBI(Relation relation, BlockNumber targetBlock,
 	buffer = ReadBufferExtended(relation, MAIN_FORKNUM, targetBlock,
 								RBM_NORMAL, bistate->strategy);
 
-	/* Save the selected block as target for future inserts */
+	/* Save the selexted block as target for future inserts */
 	IncrBufferRefCount(buffer);
 	bistate->current_buf = buffer;
 
@@ -273,7 +273,7 @@ RelationAddExtraBlocks(Relation relation, BulkInsertState bistate)
  *	for ordering.
  *
  *	NOTE: it is unlikely, but not quite impossible, for otherBuffer to be the
- *	same buffer we select for insertion of the new tuple (this could only
+ *	same buffer we selext for insertion of the new tuple (this could only
  *	happen if space is freed in that page after heap_update finds there's not
  *	enough there).  In that case, the page will be pinned and locked only once.
  *
@@ -298,8 +298,8 @@ RelationAddExtraBlocks(Relation relation, BulkInsertState bistate)
  *	The caller can also provide a BulkInsertState object to optimize many
  *	insertions into the same relation.  This keeps a pin on the current
  *	insertion target page (to save pin/unpin cycles) and also passes a
- *	BULKWRITE buffer selection strategy object to the buffer manager.
- *	Passing NULL for bistate selects the default behavior.
+ *	BULKWRITE buffer selextion strategy object to the buffer manager.
+ *	Passing NULL for bistate selexts the default behavior.
  *
  *	We always try to avoid filling existing pages further than the fillfactor.
  *	This is OK since this routine is not consulted when updating a tuple and
@@ -448,7 +448,7 @@ loop:
 		 * We now have the target page (and the other buffer, if any) pinned
 		 * and locked.  However, since our initial PageIsAllVisible checks
 		 * were performed before acquiring the lock, the results might now be
-		 * out of date, either for the selected victim buffer, or for the
+		 * out of date, either for the selexted victim buffer, or for the
 		 * other buffer passed by the caller.  In that case, we'll need to
 		 * give up our locks, go get the pin(s) we failed to get earlier, and
 		 * re-lock.  That's pretty painful, but hopefully shouldn't happen

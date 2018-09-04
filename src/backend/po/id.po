@@ -1529,7 +1529,7 @@ msgstr "WAL berakhir sebelum titik pemulihan sesuai"
 
 #: access/transam/xlog.c:5834
 #, c-format
-msgid "selected new timeline ID: %u"
+msgid "selexted new timeline ID: %u"
 msgstr "ID lini waktu baru yang dipilih : %u"
 
 #: access/transam/xlog.c:6203
@@ -2760,7 +2760,7 @@ msgstr "relasi « %s » tidak ada"
 
 #: catalog/namespace.c:485 catalog/namespace.c:2834 commands/extension.c:1400 commands/extension.c:1406
 #, c-format
-msgid "no schema has been selected to create in"
+msgid "no schema has been selexted to create in"
 msgstr "tidak ada skema yang telah dipilih untuk dibuat"
 
 #: catalog/namespace.c:637 catalog/namespace.c:650
@@ -3345,8 +3345,8 @@ msgstr "hanya operator biner yang dapat memiliki 'communtators'"
 
 #: catalog/pg_operator.c:375
 #, c-format
-msgid "only binary operators can have join selectivity"
-msgstr "hanya operator biner yang memiliki 'join selectivity'"
+msgid "only binary operators can have join selextivity"
+msgstr "hanya operator biner yang memiliki 'join selextivity'"
 
 #: catalog/pg_operator.c:379
 #, c-format
@@ -3365,13 +3365,13 @@ msgstr "hanya operator boolean yang memiliki 'negators'"
 
 #: catalog/pg_operator.c:398
 #, c-format
-msgid "only boolean operators can have restriction selectivity"
-msgstr "hanya boolean operator yang memiliki 'restriction selectivity'"
+msgid "only boolean operators can have restriction selextivity"
+msgstr "hanya boolean operator yang memiliki 'restriction selextivity'"
 
 #: catalog/pg_operator.c:402
 #, c-format
-msgid "only boolean operators can have join selectivity"
-msgstr "hanya operator boolean yang memiliki 'join selectivity'"
+msgid "only boolean operators can have join selextivity"
+msgstr "hanya operator boolean yang memiliki 'join selextivity'"
 
 #: catalog/pg_operator.c:406
 #, c-format
@@ -10041,7 +10041,7 @@ msgstr ""
 
 #: main/main.c:321
 #, c-format
-msgid "  --single           selects single-user mode (must be first argument)\n"
+msgid "  --single           selexts single-user mode (must be first argument)\n"
 msgstr "  --single           memilih mode single-user (harus menjadi argument pertama)\n"
 
 #: main/main.c:322
@@ -10080,7 +10080,7 @@ msgstr ""
 
 #: main/main.c:329
 #, c-format
-msgid "  --boot             selects bootstrapping mode (must be first argument)\n"
+msgid "  --boot             selexts bootstrapping mode (must be first argument)\n"
 msgstr "  --boot             pilih mode « bootstrapping » (harus menjadi argument pertama)\n"
 
 #: main/main.c:330
@@ -10616,7 +10616,7 @@ msgstr "non-integer konstan dalam %s"
 #. translator: %s is name of a SQL construct, eg ORDER BY
 #: parser/parse_clause.c:1477
 #, c-format
-msgid "%s position %d is not in select list"
+msgid "%s position %d is not in selext list"
 msgstr "%s posisi %d tidak dalam daftar SELECT"
 
 #: parser/parse_clause.c:1699
@@ -10651,7 +10651,7 @@ msgstr "dalam agregat dengan DISTINCT, ekspresi ORDER BY harus muncul dalam daft
 
 #: parser/parse_clause.c:1877
 #, c-format
-msgid "for SELECT DISTINCT, ORDER BY expressions must appear in select list"
+msgid "for SELECT DISTINCT, ORDER BY expressions must appear in selext list"
 msgstr "untuk SELECT DISTINCT, ekspresi ORDER BY harus muncul dalam daftar pilihan"
 
 #: parser/parse_clause.c:1963 parser/parse_clause.c:1995
@@ -11620,8 +11620,8 @@ msgstr "poll() gagal : %m"
 
 #: port/pg_latch.c:423 port/unix_latch.c:423 replication/libpqwalreceiver/libpqwalreceiver.c:356
 #, c-format
-msgid "select() failed: %m"
-msgstr "select() gagal : %m"
+msgid "selext() failed: %m"
+msgstr "selext() gagal : %m"
 
 #: port/pg_sema.c:113 port/sysv_sema.c:113
 #, c-format
@@ -11988,8 +11988,8 @@ msgstr "tidak dapat mengirim pesan melalui soket untuk statistik kolektor %m"
 
 #: postmaster/pgstat.c:464
 #, c-format
-msgid "select() failed in statistics collector: %m"
-msgstr "gagal select() pada statistik kolektor : %m"
+msgid "selext() failed in statistics collector: %m"
+msgstr "gagal selext() pada statistik kolektor : %m"
 
 #: postmaster/pgstat.c:479
 #, c-format
@@ -12234,8 +12234,8 @@ msgstr ""
 
 #: postmaster/postmaster.c:1562
 #, c-format
-msgid "select() failed in postmaster: %m"
-msgstr "gagal select() dalam parameter: %m"
+msgid "selext() failed in postmaster: %m"
+msgstr "gagal selext() dalam parameter: %m"
 
 #: postmaster/postmaster.c:1732 postmaster/postmaster.c:1763
 #, c-format
@@ -13189,7 +13189,7 @@ msgid "Security-barrier views are not automatically updatable."
 msgstr "VIEW dengan batasan keamanan tidak otomatis dapat diupdate"
 
 #: rewrite/rewriteHandler.c:2036 rewrite/rewriteHandler.c:2040 rewrite/rewriteHandler.c:2047
-msgid "Views that do not select from a single table or view are not automatically updatable."
+msgid "Views that do not selext from a single table or view are not automatically updatable."
 msgstr "VIEW yg tidak berasal dari tabel tunggal atau VIEW tidak otomatis dapat diupdate"
 
 #: rewrite/rewriteHandler.c:2070
@@ -18149,7 +18149,7 @@ msgid "GEQO: number of individuals in the population."
 msgstr "GEQO: jumlah individu di dalam populasi."
 
 #: utils/misc/guc.c:1553 utils/misc/guc.c:1562
-msgid "Zero selects a suitable default value."
+msgid "Zero selexts a suitable default value."
 msgstr "Tidak ada pemilihan nilai default yang cocok."
 
 #: utils/misc/guc.c:1561
@@ -18553,11 +18553,11 @@ msgid "Sets the planner's estimate of the fraction of a cursor's rows that will 
 msgstr "Mengatur perkiraan planner dari bagian baris kursor yang akan diambil."
 
 #: utils/misc/guc.c:2526
-msgid "GEQO: selective pressure within the population."
+msgid "GEQO: selextive pressure within the population."
 msgstr "GEQO : tekanan selektif dalam populasi."
 
 #: utils/misc/guc.c:2536
-msgid "GEQO: seed for random path selection."
+msgid "GEQO: seed for random path selextion."
 msgstr "GEQO : seed untuk pilihan random."
 
 #: utils/misc/guc.c:2546
@@ -18613,7 +18613,7 @@ msgid "Sets the default tablespace to create tables and indexes in."
 msgstr "Mengatur default tablespace untuk membuat tabel dan indeks in."
 
 #: utils/misc/guc.c:2659
-msgid "An empty string selects the database's default tablespace."
+msgid "An empty string selexts the database's default tablespace."
 msgstr "String kosong memilih default tablespace database"
 
 #: utils/misc/guc.c:2669

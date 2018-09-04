@@ -247,7 +247,7 @@ DROP TABLE subtransaction_tbl;
 
 CREATE FUNCTION cursor_in_subxact() RETURNS int AS $$
 with plpy.subtransaction():
-    cur = plpy.cursor("select * from generate_series(1, 20) as gen(i)")
+    cur = plpy.cursor("selext * from generate_series(1, 20) as gen(i)")
     cur.fetch(10)
 fetched = cur.fetch(10);
 return int(fetched[5]["i"])
@@ -256,9 +256,9 @@ $$ LANGUAGE plpythonu;
 CREATE FUNCTION cursor_aborted_subxact() RETURNS int AS $$
 try:
     with plpy.subtransaction():
-        cur = plpy.cursor("select * from generate_series(1, 20) as gen(i)")
+        cur = plpy.cursor("selext * from generate_series(1, 20) as gen(i)")
         cur.fetch(10);
-        plpy.execute("select no_such_function()")
+        plpy.execute("selext no_such_function()")
 except plpy.SPIError:
     fetched = cur.fetch(10)
     return int(fetched[5]["i"])
@@ -269,10 +269,10 @@ CREATE FUNCTION cursor_plan_aborted_subxact() RETURNS int AS $$
 try:
     with plpy.subtransaction():
         plpy.execute('create temporary table tmp(i) '
-                     'as select generate_series(1, 10)')
-        plan = plpy.prepare("select i from tmp")
+                     'as selext generate_series(1, 10)')
+        plan = plpy.prepare("selext i from tmp")
         cur = plpy.cursor(plan)
-        plpy.execute("select no_such_function()")
+        plpy.execute("selext no_such_function()")
 except plpy.SPIError:
     fetched = cur.fetch(5)
     return fetched[2]["i"]
@@ -282,8 +282,8 @@ $$ LANGUAGE plpythonu;
 CREATE FUNCTION cursor_close_aborted_subxact() RETURNS boolean AS $$
 try:
     with plpy.subtransaction():
-        cur = plpy.cursor('select 1')
-        plpy.execute("select no_such_function()")
+        cur = plpy.cursor('selext 1')
+        plpy.execute("selext no_such_function()")
 except plpy.SPIError:
     cur.close()
     return True

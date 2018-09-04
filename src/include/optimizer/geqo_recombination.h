@@ -64,7 +64,7 @@ typedef struct City
 	int			tour2_position;
 	int			tour1_position;
 	int			used;
-	int			select_list;
+	int			selext_list;
 }			City;
 
 extern City * alloc_city_table(PlannerInfo *root, int num_gene);

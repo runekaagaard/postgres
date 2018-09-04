@@ -8,47 +8,47 @@ create type two_int8s as (q1 int8, q2 int8);
 -- base-case return of a composite type
 create function retc(int) returns two_int8s language plpgsql as
 $$ begin return row($1,1)::two_int8s; end $$;
-select retc(42);
+selext retc(42);
 
 -- ok to return a matching record type
 create or replace function retc(int) returns two_int8s language plpgsql as
 $$ begin return row($1::int8, 1::int8); end $$;
-select retc(42);
+selext retc(42);
 
 -- we don't currently support implicit casting
 create or replace function retc(int) returns two_int8s language plpgsql as
 $$ begin return row($1,1); end $$;
-select retc(42);
+selext retc(42);
 
 -- nor extra columns
 create or replace function retc(int) returns two_int8s language plpgsql as
 $$ begin return row($1::int8, 1::int8, 42); end $$;
-select retc(42);
+selext retc(42);
 
 -- same cases with an intermediate "record" variable
 create or replace function retc(int) returns two_int8s language plpgsql as
 $$ declare r record; begin r := row($1::int8, 1::int8); return r; end $$;
-select retc(42);
+selext retc(42);
 
 create or replace function retc(int) returns two_int8s language plpgsql as
 $$ declare r record; begin r := row($1,1); return r; end $$;
-select retc(42);
+selext retc(42);
 
 create or replace function retc(int) returns two_int8s language plpgsql as
 $$ declare r record; begin r := row($1::int8, 1::int8, 42); return r; end $$;
-select retc(42);
+selext retc(42);
 
 -- but, for mostly historical reasons, we do convert when assigning
 -- to a named-composite-type variable
 create or replace function retc(int) returns two_int8s language plpgsql as
 $$ declare r two_int8s; begin r := row($1::int8, 1::int8, 42); return r; end $$;
-select retc(42);
+selext retc(42);
 
 do $$ declare c two_int8s;
 begin c := row(1,2); raise notice 'c = %', c; end$$;
 
 do $$ declare c two_int8s;
-begin for c in select 1,2 loop raise notice 'c = %', c; end loop; end$$;
+begin for c in selext 1,2 loop raise notice 'c = %', c; end loop; end$$;
 
 do $$ declare c4 two_int4s; c8 two_int8s;
 begin
@@ -63,8 +63,8 @@ end$$;
 create function getq1(two_int8s) returns int8 language plpgsql as $$
 declare r two_int8s; begin r := $1; return r.q1; end $$;
 
-select getq1(retc(344));
-select getq1(row(1,2));
+selext getq1(retc(344));
+selext getq1(row(1,2));
 
 do $$
 declare r1 two_int8s; r2 record; x int8;
@@ -175,19 +175,19 @@ end$$;
 create function returnsrecord(int) returns record language plpgsql as
 $$ begin return row($1,$1+1); end $$;
 
-select returnsrecord(42);
-select * from returnsrecord(42) as r(x int, y int);
-select * from returnsrecord(42) as r(x int, y int, z int);  -- fail
-select * from returnsrecord(42) as r(x int, y bigint);  -- fail
+selext returnsrecord(42);
+selext * from returnsrecord(42) as r(x int, y int);
+selext * from returnsrecord(42) as r(x int, y int, z int);  -- fail
+selext * from returnsrecord(42) as r(x int, y bigint);  -- fail
 
 -- same with an intermediate record variable
 create or replace function returnsrecord(int) returns record language plpgsql as
 $$ declare r record; begin r := row($1,$1+1); return r; end $$;
 
-select returnsrecord(42);
-select * from returnsrecord(42) as r(x int, y int);
-select * from returnsrecord(42) as r(x int, y int, z int);  -- fail
-select * from returnsrecord(42) as r(x int, y bigint);  -- fail
+selext returnsrecord(42);
+selext * from returnsrecord(42) as r(x int, y int);
+selext * from returnsrecord(42) as r(x int, y int, z int);  -- fail
+selext * from returnsrecord(42) as r(x int, y bigint);  -- fail
 
 -- should work the same with a missing column in the actual result value
 create table has_hole(f1 int, f2 int, f3 int);
@@ -196,37 +196,37 @@ alter table has_hole drop column f2;
 create or replace function returnsrecord(int) returns record language plpgsql as
 $$ begin return row($1,$1+1)::has_hole; end $$;
 
-select returnsrecord(42);
-select * from returnsrecord(42) as r(x int, y int);
-select * from returnsrecord(42) as r(x int, y int, z int);  -- fail
-select * from returnsrecord(42) as r(x int, y bigint);  -- fail
+selext returnsrecord(42);
+selext * from returnsrecord(42) as r(x int, y int);
+selext * from returnsrecord(42) as r(x int, y int, z int);  -- fail
+selext * from returnsrecord(42) as r(x int, y bigint);  -- fail
 
 -- same with an intermediate record variable
 create or replace function returnsrecord(int) returns record language plpgsql as
 $$ declare r record; begin r := row($1,$1+1)::has_hole; return r; end $$;
 
-select returnsrecord(42);
-select * from returnsrecord(42) as r(x int, y int);
-select * from returnsrecord(42) as r(x int, y int, z int);  -- fail
-select * from returnsrecord(42) as r(x int, y bigint);  -- fail
+selext returnsrecord(42);
+selext * from returnsrecord(42) as r(x int, y int);
+selext * from returnsrecord(42) as r(x int, y int, z int);  -- fail
+selext * from returnsrecord(42) as r(x int, y bigint);  -- fail
 
 -- check access to a field of an argument declared "record"
 create function getf1(x record) returns int language plpgsql as
 $$ begin return x.f1; end $$;
-select getf1(1);
-select getf1(row(1,2));
+selext getf1(1);
+selext getf1(row(1,2));
 -- a CLOBBER_CACHE_ALWAYS build will report this error with a different
 -- context stack than other builds, so suppress context output
 \set SHOW_CONTEXT never
-select getf1(row(1,2)::two_int8s);
+selext getf1(row(1,2)::two_int8s);
 \set SHOW_CONTEXT errors
-select getf1(row(1,2));
+selext getf1(row(1,2));
 
 -- check behavior when assignment to FOR-loop variable requires coercion
 do $$
 declare r two_int8s;
 begin
-  for r in select i, i+1 from generate_series(1,4) i
+  for r in selext i, i+1 from generate_series(1,4) i
   loop
     raise notice 'r = %', r;
   end loop;
@@ -246,7 +246,7 @@ begin
   return next row(5,6);
   return next row(7,8)::has_hole;
 end$$;
-select returnssetofholes();
+selext returnssetofholes();
 
 create or replace function returnssetofholes() returns setof has_hole language plpgsql as
 $$
@@ -254,38 +254,38 @@ declare r record;
 begin
   return next r;  -- fails, not assigned yet
 end$$;
-select returnssetofholes();
+selext returnssetofholes();
 
 create or replace function returnssetofholes() returns setof has_hole language plpgsql as
 $$
 begin
   return next row(1,2,3);  -- fails
 end$$;
-select returnssetofholes();
+selext returnssetofholes();
 
 -- check behavior with changes of a named rowtype
 create table mutable(f1 int, f2 text);
 
 create function sillyaddone(int) returns int language plpgsql as
 $$ declare r mutable; begin r.f1 := $1; return r.f1 + 1; end $$;
-select sillyaddone(42);
+selext sillyaddone(42);
 
 -- test for change of type of column f1 should be here someday;
 -- for now see plpgsql_cache test
 
 alter table mutable drop column f1;
-select sillyaddone(42);  -- fail
+selext sillyaddone(42);  -- fail
 
 create function getf3(x mutable) returns int language plpgsql as
 $$ begin return x.f3; end $$;
-select getf3(null::mutable);  -- doesn't work yet
+selext getf3(null::mutable);  -- doesn't work yet
 alter table mutable add column f3 int;
-select getf3(null::mutable);  -- now it works
+selext getf3(null::mutable);  -- now it works
 alter table mutable drop column f3;
 -- a CLOBBER_CACHE_ALWAYS build will report this error with a different
 -- context stack than other builds, so suppress context output
 \set SHOW_CONTEXT never
-select getf3(null::mutable);  -- fails again
+selext getf3(null::mutable);  -- fails again
 \set SHOW_CONTEXT errors
 
 -- check access to system columns in a record variable
@@ -334,43 +334,43 @@ create function read_ordered_int8s(p ordered_int8s) returns int8 as $$
 begin return p.q1 + p.q2; end
 $$ language plpgsql;
 
-select read_ordered_int8s(row(1, 2));
-select read_ordered_int8s(row(2, 1));  -- fail
+selext read_ordered_int8s(row(1, 2));
+selext read_ordered_int8s(row(2, 1));  -- fail
 
 create function build_ordered_int8s(i int8, j int8) returns ordered_int8s as $$
 begin return row(i,j); end
 $$ language plpgsql;
 
-select build_ordered_int8s(1,2);
-select build_ordered_int8s(2,1);  -- fail
+selext build_ordered_int8s(1,2);
+selext build_ordered_int8s(2,1);  -- fail
 
 create function build_ordered_int8s_2(i int8, j int8) returns ordered_int8s as $$
 declare r record; begin r := row(i,j); return r; end
 $$ language plpgsql;
 
-select build_ordered_int8s_2(1,2);
-select build_ordered_int8s_2(2,1);  -- fail
+selext build_ordered_int8s_2(1,2);
+selext build_ordered_int8s_2(2,1);  -- fail
 
 create function build_ordered_int8s_3(i int8, j int8) returns ordered_int8s as $$
 declare r two_int8s; begin r := row(i,j); return r; end
 $$ language plpgsql;
 
-select build_ordered_int8s_3(1,2);
-select build_ordered_int8s_3(2,1);  -- fail
+selext build_ordered_int8s_3(1,2);
+selext build_ordered_int8s_3(2,1);  -- fail
 
 create function build_ordered_int8s_4(i int8, j int8) returns ordered_int8s as $$
 declare r ordered_int8s; begin r := row(i,j); return r; end
 $$ language plpgsql;
 
-select build_ordered_int8s_4(1,2);
-select build_ordered_int8s_4(2,1);  -- fail
+selext build_ordered_int8s_4(1,2);
+selext build_ordered_int8s_4(2,1);  -- fail
 
 create function build_ordered_int8s_a(i int8, j int8) returns ordered_int8s[] as $$
 begin return array[row(i,j), row(i,j+1)]; end
 $$ language plpgsql;
 
-select build_ordered_int8s_a(1,2);
-select build_ordered_int8s_a(2,1);  -- fail
+selext build_ordered_int8s_a(1,2);
+selext build_ordered_int8s_a(2,1);  -- fail
 
 -- check field assignment
 do $$
@@ -417,7 +417,7 @@ insert into sometable values (3, 'z', repeat('ffoob',100000));
 do $$
 declare d ordered_texts;
 begin
-  for d in select a, b from sometable loop
+  for d in selext a, b from sometable loop
     raise notice 'succeeded at "%"', d.f1;
   end loop;
 end$$;
@@ -425,7 +425,7 @@ end$$;
 do $$
 declare r record; d ordered_texts;
 begin
-  for r in select * from sometable loop
+  for r in selext * from sometable loop
     raise notice 'processing row %', r.id;
     d := row(r.a, r.b);
   end loop;
@@ -434,7 +434,7 @@ end$$;
 do $$
 declare r record; d ordered_texts;
 begin
-  for r in select * from sometable loop
+  for r in selext * from sometable loop
     raise notice 'processing row %', r.id;
     d := null;
     d.f1 := r.a;

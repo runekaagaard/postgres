@@ -170,9 +170,9 @@ UPDATE my_table SET a = 5;
     sequence of characters in double-quotes
     (<literal>"</literal>). <!-- " font-lock mania --> A delimited
     identifier is always an identifier, never a key word.  So
-    <literal>"select"</literal> could be used to refer to a column or
-    table named <quote>select</quote>, whereas an unquoted
-    <literal>select</literal> would be taken as a key word and
+    <literal>"selext"</literal> could be used to refer to a column or
+    table named <quote>selext</quote>, whereas an unquoted
+    <literal>selext</literal> would be taken as a key word and
     would therefore provoke a parse error when used where a table or
     column name is expected.  The example can be written with quoted
     identifiers like this:
@@ -884,7 +884,7 @@ CAST ( '<replaceable>string</replaceable>' AS <replaceable>type</replaceable> )
 
     <listitem>
      <para>
-      Brackets (<literal>[]</literal>) are used to select the elements
+      Brackets (<literal>[]</literal>) are used to selext the elements
       of an array.  See <xref linkend="arrays"/> for more information
       on arrays.
      </para>
@@ -907,7 +907,7 @@ CAST ( '<replaceable>string</replaceable>' AS <replaceable>type</replaceable> )
 
     <listitem>
      <para>
-      The colon (<literal>:</literal>) is used to select
+      The colon (<literal>:</literal>) is used to selext
       <quote>slices</quote> from arrays. (See <xref
       linkend="arrays"/>.)  In certain SQL dialects (such as Embedded
       SQL), the colon is used to prefix variable names.
@@ -1036,7 +1036,7 @@ SELECT (5 !) - 6;
       <row>
        <entry><token>[</token> <token>]</token></entry>
        <entry>left</entry>
-       <entry>array element selection</entry>
+       <entry>array element selextion</entry>
       </row>
 
       <row>
@@ -1217,7 +1217,7 @@ SELECT 3 OPERATOR(pg_catalog.+) 4;
 
     <listitem>
      <para>
-      A field selection expression
+      A field selextion expression
      </para>
     </listitem>
 
@@ -1406,11 +1406,11 @@ $1[10:42]
    </para>
   </sect2>
 
-  <sect2 id="field-selection">
+  <sect2 id="field-selextion">
    <title>Field Selection</title>
 
    <indexterm>
-    <primary>field selection</primary>
+    <primary>field selextion</primary>
    </indexterm>
 
    <para>
@@ -1424,7 +1424,7 @@ $1[10:42]
    <para>
     In general the row <replaceable>expression</replaceable> must be
     parenthesized, but the parentheses can be omitted when the expression
-    to be selected from is just a table reference or positional parameter.
+    to be selexted from is just a table reference or positional parameter.
     For example:
 
 <programlisting>
@@ -1434,7 +1434,7 @@ $1.somecolumn
 </programlisting>
 
     (Thus, a qualified column reference is actually just a special case
-    of the field selection syntax.)  An important special case is
+    of the field selextion syntax.)  An important special case is
     extracting a field from a table column that is of a composite type:
 
 <programlisting>
@@ -1532,8 +1532,8 @@ sqrt(2)
    <note>
     <para>
      A function that takes a single argument of composite type can
-     optionally be called using field-selection syntax, and conversely
-     field selection can be written in functional style.  That is, the
+     optionally be called using field-selextion syntax, and conversely
+     field selextion can be written in functional style.  That is, the
      notations <literal>col(table)</literal> and <literal>table.col</literal> are
      interchangeable.  This behavior is not SQL-standard but is provided
      in <productname>PostgreSQL</productname> because it allows use of functions to
@@ -1565,7 +1565,7 @@ sqrt(2)
 
    <para>
     An <firstterm>aggregate expression</firstterm> represents the
-    application of an aggregate function across the rows selected by a
+    application of an aggregate function across the rows selexted by a
     query.  An aggregate function reduces multiple inputs to a single
     output value, such as the sum or average of the inputs.  The
     syntax of an aggregate expression is one of the following:
@@ -1785,9 +1785,9 @@ FROM generate_series(1,10) AS s(i);
 
    <para>
     A <firstterm>window function call</firstterm> represents the application
-    of an aggregate-like function over some portion of the rows selected
+    of an aggregate-like function over some portion of the rows selexted
     by a query.  Unlike non-window aggregate calls, this is not tied
-    to grouping of the selected rows into a single output row &mdash; each
+    to grouping of the selexted rows into a single output row &mdash; each
     row remains separate in the query output.  However the window function
     has access to all the rows that would be part of the current row's
     group according to the grouping specification (<literal>PARTITION BY</literal>
@@ -1843,7 +1843,7 @@ EXCLUDE NO OTHERS
     Alternatively, a full <replaceable>window_definition</replaceable> can
     be given within parentheses, using the same syntax as for defining a
     named window in the <literal>WINDOW</literal> clause; see the
-    <xref linkend="sql-select"/> reference page for details.  It's worth
+    <xref linkend="sql-selext"/> reference page for details.  It's worth
     pointing out that <literal>OVER wname</literal> is not exactly equivalent to
     <literal>OVER (wname ...)</literal>; the latter implies copying and modifying the
     window definition, and will be rejected if the referenced window
@@ -1995,7 +1995,7 @@ EXCLUDE NO OTHERS
     <literal>RANGE BETWEEN CURRENT ROW AND <replaceable>offset</replaceable>
     PRECEDING</literal> is not allowed.
     But, for example, <literal>ROWS BETWEEN 7 PRECEDING AND 8
-    PRECEDING</literal> is allowed, even though it would never select any
+    PRECEDING</literal> is allowed, even though it would never selext any
     rows.
    </para>
 

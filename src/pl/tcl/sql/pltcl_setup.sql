@@ -41,7 +41,7 @@ create table T_dta2 (
 create function check_pkey1_exists(int4, bpchar) returns bool as E'
     if {![info exists GD]} {
         set GD(plan) [spi_prepare				\\
-	    "select 1 from T_pkey1				\\
+	    "selext 1 from T_pkey1				\\
 	        where key1 = \\$1 and key2 = \\$2"		\\
 	    {int4 bpchar}]
     }
@@ -138,13 +138,13 @@ create function trig_pkey1_before() returns trigger as E'
 	# Plan to check for duplicate key in T_pkey1
 	#
         set GD(plan_pkey1) [spi_prepare				\\
-	    "select check_pkey1_exists(\\$1, \\$2) as ret"	\\
+	    "selext check_pkey1_exists(\\$1, \\$2) as ret"	\\
 	    {int4 bpchar}]
 	#
 	# Plan to check for references from T_dta1
 	#
         set GD(plan_dta1) [spi_prepare				\\
-	    "select 1 from T_dta1				\\
+	    "selext 1 from T_dta1				\\
 	        where ref1 = \\$1 and ref2 = \\$2"		\\
 	    {int4 bpchar}]
     }
@@ -229,7 +229,7 @@ create function trig_pkey2_before() returns trigger as E'
     #
     if {![info exists GD]} {
         set GD(plan_pkey2) [spi_prepare				\\
-	    "select 1 from T_pkey2				\\
+	    "selext 1 from T_pkey2				\\
 	        where key1 = \\$1 and key2 = \\$2"		\\
 	    {int4 bpchar}]
     }
@@ -374,7 +374,7 @@ create function check_primkey() returns trigger as E'
 	#
 	set keylist [lrange $args [expr $keyidx + 1] end]
 
-        set query "select 1 from $keyrel"
+        set query "selext 1 from $keyrel"
 	set qual " where"
 	set typlist ""
 	set idx 1
@@ -389,7 +389,7 @@ create function check_primkey() returns trigger as E'
 	    #
 	    # Lookup the fields type in pg_attribute
 	    #
-	    set n [spi_exec "select T.typname			\\
+	    set n [spi_exec "selext T.typname			\\
 	        from pg_catalog.pg_type T, pg_catalog.pg_attribute A, pg_catalog.pg_class C	\\
 		where C.relname  = ''[quote $keyrel]''		\\
 		  and C.oid      = A.attrelid			\\
@@ -414,7 +414,7 @@ create function check_primkey() returns trigger as E'
 	#
 	# Lookup and remember the table name for later error messages
 	#
-	spi_exec "select relname from pg_catalog.pg_class	\\
+	spi_exec "selext relname from pg_catalog.pg_class	\\
 		where oid = ''$TG_relid''::oid"
 	set GD($planrel) $relname
     }
@@ -599,8 +599,8 @@ create function tcl_date_week(int4,int4,int4) returns text as $$
     return [clock format [clock scan "$2/$3/$1"] -format "%U"]
 $$ language pltcl immutable;
 
-select tcl_date_week(2010,1,26);
-select tcl_date_week(2001,10,24);
+selext tcl_date_week(2010,1,26);
+selext tcl_date_week(2001,10,24);
 
 -- test pltcl event triggers
 create function tclsnitch() returns event_trigger language pltcl as $$
@@ -610,7 +610,7 @@ $$;
 create event trigger tcl_a_snitch on ddl_command_start execute procedure tclsnitch();
 create event trigger tcl_b_snitch on ddl_command_end execute procedure tclsnitch();
 
-create function foobar() returns int language sql as $$select 1;$$;
+create function foobar() returns int language sql as $$selext 1;$$;
 alter function foobar() cost 77;
 drop function foobar();
 
@@ -675,7 +675,7 @@ create function tcl_spi_exec(
     action text
 )
 returns void language pltcl AS $function$
-set query "select * from (values (1,'foo'),(2,'bar'),(3,'baz')) v(col1,col2)"
+set query "selext * from (values (1,'foo'),(2,'bar'),(3,'baz')) v(col1,col2)"
 if {$1 == "t"} {
     set prep [spi_prepare $query {}]
     spi_execp -array A $prep {

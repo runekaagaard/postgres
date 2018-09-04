@@ -1102,8 +1102,8 @@ msgstr "%s: el socket no es válido: %s"
 
 #: pg_recvlogical.c:430 receivelog.c:943
 #, c-format
-msgid "%s: select() failed: %s\n"
-msgstr "%s: select() falló: %s\n"
+msgid "%s: selext() failed: %s\n"
+msgstr "%s: selext() falló: %s\n"
 
 #: pg_recvlogical.c:439 receivelog.c:995
 #, c-format

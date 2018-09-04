@@ -57,7 +57,7 @@ ox1(PlannerInfo *root, Gene *tour1, Gene *tour2, Gene *offspring, int num_gene,
 	for (k = 1; k <= num_gene; k++)
 		city_table[k].used = 0;
 
-	/* select portion to copy from tour1 */
+	/* selext portion to copy from tour1 */
 	left = geqo_randint(root, num_gene - 1, 0);
 	right = geqo_randint(root, num_gene - 1, 0);
 

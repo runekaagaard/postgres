@@ -2423,7 +2423,7 @@ msgstr "WAL kończy się przed punktem spójnego odzyskiwania"
 
 #: access/transam/xlog.c:7410
 #, c-format
-msgid "selected new timeline ID: %u"
+msgid "selexted new timeline ID: %u"
 msgstr "wybrany nowy ID linii czasowej: %u"
 
 #: access/transam/xlog.c:7839
@@ -4045,7 +4045,7 @@ msgstr "relacja \"%s\" nie istnieje"
 #: catalog/namespace.c:472 catalog/namespace.c:2882 commands/extension.c:1462
 #: commands/extension.c:1468
 #, c-format
-msgid "no schema has been selected to create in"
+msgid "no schema has been selexted to create in"
 msgstr "nie wskazano schematu utworzenia obiektu"
 
 #: catalog/namespace.c:624 catalog/namespace.c:637
@@ -4864,7 +4864,7 @@ msgstr "tylko operatory binarne mogą mieć komutatory"
 
 #: catalog/pg_operator.c:371 commands/operatorcmds.c:482
 #, c-format
-msgid "only binary operators can have join selectivity"
+msgid "only binary operators can have join selextivity"
 msgstr "tylko operatory binarne mogą mieć selektywność ograniczenia"
 
 #: catalog/pg_operator.c:375
@@ -4884,12 +4884,12 @@ msgstr "tylko operatory logiczne mogą mieć negatory"
 
 #: catalog/pg_operator.c:394 commands/operatorcmds.c:490
 #, c-format
-msgid "only boolean operators can have restriction selectivity"
+msgid "only boolean operators can have restriction selextivity"
 msgstr "tylko operatory logiczne mogą mieć selektywność ograniczenia"
 
 #: catalog/pg_operator.c:398 commands/operatorcmds.c:494
 #, c-format
-msgid "only boolean operators can have join selectivity"
+msgid "only boolean operators can have join selextivity"
 msgstr "tylko operatory logiczne mogą mieć selektywność przyłączania"
 
 #: catalog/pg_operator.c:402
@@ -13549,7 +13549,7 @@ msgstr ""
 
 #: main/main.c:364
 #, c-format
-msgid "  --single           selects single-user mode (must be first argument)\n"
+msgid "  --single           selexts single-user mode (must be first argument)\n"
 msgstr "  --single           wybiera tryb pojedynczego użytkownika (musi być pierwszym argumentem)\n"
 
 #: main/main.c:365
@@ -13588,7 +13588,7 @@ msgstr ""
 
 #: main/main.c:372
 #, c-format
-msgid "  --boot             selects bootstrapping mode (must be first argument)\n"
+msgid "  --boot             selexts bootstrapping mode (must be first argument)\n"
 msgstr "  --boot             wybiera tryb ładowania (musi być pierwszym argumentem)\n"
 
 #: main/main.c:373
@@ -14364,7 +14364,7 @@ msgstr "niecałkowita stała w %s"
 #. translator: %s is name of a SQL construct, eg ORDER BY
 #: parser/parse_clause.c:1992
 #, c-format
-msgid "%s position %d is not in select list"
+msgid "%s position %d is not in selext list"
 msgstr "%s pozycja %d nie jest na liście wyboru"
 
 #: parser/parse_clause.c:2433
@@ -14404,7 +14404,7 @@ msgstr "w agregacie z DISTINCT, wyrażenia ORDER BY muszą występować na liśc
 
 #: parser/parse_clause.c:2815
 #, c-format
-msgid "for SELECT DISTINCT, ORDER BY expressions must appear in select list"
+msgid "for SELECT DISTINCT, ORDER BY expressions must appear in selext list"
 msgstr "dla SELECT DISTINCT, ORDER BY wyrażenia muszą występować na liście wyboru"
 
 #: parser/parse_clause.c:2847
@@ -15022,7 +15022,7 @@ msgstr "nazwa funkcji \"%s\" nie jest unikalna"
 
 #: parser/parse_func.c:1933
 #, c-format
-msgid "Specify the argument list to select the function unambiguously."
+msgid "Specify the argument list to selext the function unambiguously."
 msgstr ""
 
 #: parser/parse_func.c:1943
@@ -16114,8 +16114,8 @@ msgstr "nie można wysłać komunikatu testowego na gnieździe dla kolektora sta
 
 #: postmaster/pgstat.c:510
 #, c-format
-msgid "select() failed in statistics collector: %m"
-msgstr "nie powiodło się select() na kolektorze statystyk: %m"
+msgid "selext() failed in statistics collector: %m"
+msgstr "nie powiodło się selext() na kolektorze statystyk: %m"
 
 #: postmaster/pgstat.c:525
 #, c-format
@@ -16376,8 +16376,8 @@ msgstr ""
 
 #: postmaster/postmaster.c:1705
 #, c-format
-msgid "select() failed in postmaster: %m"
-msgstr "nie powiodło się select() w postmasterze: %m"
+msgid "selext() failed in postmaster: %m"
+msgstr "nie powiodło się selext() w postmasterze: %m"
 
 #: postmaster/postmaster.c:1856
 #, c-format
@@ -18136,7 +18136,7 @@ msgstr "Widoki zwracające funkcje zwracające zbiór nie są automatycznie mody
 
 #: rewrite/rewriteHandler.c:2289 rewrite/rewriteHandler.c:2293
 #: rewrite/rewriteHandler.c:2301
-msgid "Views that do not select from a single table or view are not automatically updatable."
+msgid "Views that do not selext from a single table or view are not automatically updatable."
 msgstr "Widoki, które nie pobierają danych z jednej tabeli czy widoku nie są automatycznie modyfikowalne."
 
 #: rewrite/rewriteHandler.c:2304
@@ -18640,8 +18640,8 @@ msgstr "poll() nie powiodła się: %m"
 
 #: storage/ipc/latch.c:1287
 #, c-format
-msgid "select() failed: %m"
-msgstr "select() nie powiodła się: %m"
+msgid "selext() failed: %m"
+msgstr "selext() nie powiodła się: %m"
 
 #: storage/ipc/shm_toc.c:108 storage/ipc/shm_toc.c:189 storage/lmgr/lock.c:883
 #: storage/lmgr/lock.c:917 storage/lmgr/lock.c:2679 storage/lmgr/lock.c:4004
@@ -24036,7 +24036,7 @@ msgid "GEQO: number of individuals in the population."
 msgstr "GEQO: liczba jednostek w populacji."
 
 #: utils/misc/guc.c:1756 utils/misc/guc.c:1765
-msgid "Zero selects a suitable default value."
+msgid "Zero selexts a suitable default value."
 msgstr "Zero wybiera odpowiednią wartość domyślną."
 
 #: utils/misc/guc.c:1764
@@ -24116,7 +24116,7 @@ msgid "This includes operations such as VACUUM and CREATE INDEX."
 msgstr "Zawarte tu są operacje takie jak VACUUM i CREATE INDEX."
 
 #: utils/misc/guc.c:1939
-msgid "Sets the maximum number of tuples to be sorted using replacement selection."
+msgid "Sets the maximum number of tuples to be sorted using replacement selextion."
 msgstr "Ustawia maksymalną liczbę krotek do posortowania przez selekcję zastępowania."
 
 #: utils/misc/guc.c:1940
@@ -24577,11 +24577,11 @@ msgid "Sets the planner's estimate of the fraction of a cursor's rows that will 
 msgstr "Ustawia oszacowania planisty, jaka część wierszy kursora ma być pobierana."
 
 #: utils/misc/guc.c:2983
-msgid "GEQO: selective pressure within the population."
+msgid "GEQO: selextive pressure within the population."
 msgstr "GEQO: selektywne ciśnienie wewnątrz populacji."
 
 #: utils/misc/guc.c:2993
-msgid "GEQO: seed for random path selection."
+msgid "GEQO: seed for random path selextion."
 msgstr "GEQO: ziarno dla wyboru ścieżek losowych."
 
 #: utils/misc/guc.c:3003
@@ -24637,7 +24637,7 @@ msgid "Sets the default tablespace to create tables and indexes in."
 msgstr "Ustawia domyślną przestrzeń tabel w której tworzy się nowe tabele i indeksy."
 
 #: utils/misc/guc.c:3116
-msgid "An empty string selects the database's default tablespace."
+msgid "An empty string selexts the database's default tablespace."
 msgstr "Pusty ciąg znaków wybiera domyślną przestrzeń tabel bazy danych."
 
 #: utils/misc/guc.c:3126

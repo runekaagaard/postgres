@@ -1724,8 +1724,8 @@ find_expr_references_walker(Node *node,
 	}
 	else if (IsA(node, FieldSelect))
 	{
-		FieldSelect *fselect = (FieldSelect *) node;
-		Oid			argtype = getBaseType(exprType((Node *) fselect->arg));
+		FieldSelect *fselext = (FieldSelect *) node;
+		Oid			argtype = getBaseType(exprType((Node *) fselext->arg));
 		Oid			reltype = get_typ_typrelid(argtype);
 
 		/*
@@ -1738,15 +1738,15 @@ find_expr_references_walker(Node *node,
 		 * anywhere else in the expression.
 		 */
 		if (OidIsValid(reltype))
-			add_object_address(OCLASS_CLASS, reltype, fselect->fieldnum,
+			add_object_address(OCLASS_CLASS, reltype, fselext->fieldnum,
 							   context->addrs);
 		else
-			add_object_address(OCLASS_TYPE, fselect->resulttype, 0,
+			add_object_address(OCLASS_TYPE, fselext->resulttype, 0,
 							   context->addrs);
 		/* the collation might not be referenced anywhere else, either */
-		if (OidIsValid(fselect->resultcollid) &&
-			fselect->resultcollid != DEFAULT_COLLATION_OID)
-			add_object_address(OCLASS_COLLATION, fselect->resultcollid, 0,
+		if (OidIsValid(fselext->resultcollid) &&
+			fselext->resultcollid != DEFAULT_COLLATION_OID)
+			add_object_address(OCLASS_COLLATION, fselext->resultcollid, 0,
 							   context->addrs);
 	}
 	else if (IsA(node, FieldStore))

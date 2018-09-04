@@ -57,7 +57,7 @@ int main()
     EXEC SQL insert into customers values ('John Doe', '12345');
     EXEC SQL insert into customers values ('Jane Doe', '67890');
 
-    EXEC SQL select * INTO :custs1:inds from customers limit 2;
+    EXEC SQL selext * INTO :custs1:inds from customers limit 2;
     printf("custs1:\n");
     for (r = 0; r < 2; r++)
     {
@@ -65,7 +65,7 @@ int main()
 	    printf( "phone - %d\n", custs1[r].phone );
     }
 
-    EXEC SQL select * INTO :custs2:inds from customers limit 2;
+    EXEC SQL selext * INTO :custs2:inds from customers limit 2;
     printf("\ncusts2:\n");
     for (r = 0; r < 2; r++)
     {
@@ -73,7 +73,7 @@ int main()
 	    printf( "phone - %d\n", custs2[r].phone );
     }
 
-    EXEC SQL select * INTO :custs3:inds from customers limit 2;
+    EXEC SQL selext * INTO :custs3:inds from customers limit 2;
     printf("\ncusts3:\n");
     for (r = 0; r < 2; r++)
     {
@@ -81,12 +81,12 @@ int main()
 	    printf( "phone - %d\n", custs3[r].phone );
     }
 
-    EXEC SQL select * INTO :custs4:inds from customers limit 1;
+    EXEC SQL selext * INTO :custs4:inds from customers limit 1;
     printf("\ncusts4:\n");
     printf( "name  - %s\n", custs4->name.arr );
     printf( "phone - %d\n", custs4->phone );
 
-    EXEC SQL select c INTO :onlyname from customers limit 2;
+    EXEC SQL selext c INTO :onlyname from customers limit 2;
     printf("\nname:\n");
     for (r = 0; r < 2; r++)
     {

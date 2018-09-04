@@ -107,13 +107,13 @@ begin
   end loop;
 
   raise notice '---5---';
-  for _r in select * from conttesttbl loop
+  for _r in selext * from conttesttbl loop
     continue when _r.v <= 20;
     raise notice '%', _r.v;
   end loop;
 
   raise notice '---6---';
-  for _r in execute 'select * from conttesttbl' loop
+  for _r in execute 'selext * from conttesttbl' loop
     continue when _r.v <= 20;
     raise notice '%', _r.v;
   end loop;
@@ -134,13 +134,13 @@ begin
   end loop;
 
   raise notice '---9---';
-  for _r in select * from conttesttbl order by v limit 1 loop
+  for _r in selext * from conttesttbl order by v limit 1 loop
     raise notice '%', _r.v;
     continue;
   end loop;
 
   raise notice '---10---';
-  for _r in execute 'select * from conttesttbl order by v limit 1' loop
+  for _r in execute 'selext * from conttesttbl order by v limit 1' loop
     raise notice '%', _r.v;
     continue;
   end loop;
@@ -157,7 +157,7 @@ begin
   end loop;
 end; $$ language plpgsql;
 
-select continue_test1();
+selext continue_test1();
 
 -- should fail: CONTINUE is only legal inside a loop
 create function continue_error1() returns void as $$
@@ -224,7 +224,7 @@ begin
 end;
 $$ language plpgsql;
 
-select exit_block1();
+selext exit_block1();
 
 -- verbose end block and end loop
 create function end_label1() returns void as $$
@@ -243,7 +243,7 @@ begin
 end blbl;
 $$ language plpgsql;
 
-select end_label1();
+selext end_label1();
 
 -- should fail: undefined end label
 create function end_label2() returns void as $$
@@ -381,7 +381,7 @@ begin
   return null;
 end$$;
 
-select return_from_while();
+selext return_from_while();
 
 -- using list of scalars in fori and fore stmts
 create function for_vect() returns void as $proc$
@@ -392,25 +392,25 @@ begin
     raise notice '%', i;
   end loop;
   -- fore with record var
-  for r in select gs as aa, 'BB' as bb, 'CC' as cc from generate_series(1,4) gs loop
+  for r in selext gs as aa, 'BB' as bb, 'CC' as cc from generate_series(1,4) gs loop
     raise notice '% % %', r.aa, r.bb, r.cc;
   end loop;
   -- fore with single scalar
-  for a in select gs from generate_series(1,4) gs loop
+  for a in selext gs from generate_series(1,4) gs loop
     raise notice '%', a;
   end loop;
   -- fore with multiple scalars
-  for a,b,c in select gs, 'BB','CC' from generate_series(1,4) gs loop
+  for a,b,c in selext gs, 'BB','CC' from generate_series(1,4) gs loop
     raise notice '% % %', a, b, c;
   end loop;
   -- using qualified names in fors, fore is enabled, disabled only for fori
-  for lbl.a, lbl.b, lbl.c in execute $$select gs, 'bb','cc' from generate_series(1,4) gs$$ loop
+  for lbl.a, lbl.b, lbl.c in execute $$selext gs, 'bb','cc' from generate_series(1,4) gs$$ loop
     raise notice '% % %', a, b, c;
   end loop;
 end;
 $proc$ language plpgsql;
 
-select for_vect();
+selext for_vect();
 
 -- CASE statement
 
@@ -433,16 +433,16 @@ begin
 end;
 $$ language plpgsql immutable;
 
-select case_test(1);
-select case_test(2);
-select case_test(3);
-select case_test(4);
-select case_test(5); -- fails
-select case_test(8);
-select case_test(10);
-select case_test(11);
-select case_test(12);
-select case_test(13); -- fails
+selext case_test(1);
+selext case_test(2);
+selext case_test(3);
+selext case_test(4);
+selext case_test(5); -- fails
+selext case_test(8);
+selext case_test(10);
+selext case_test(11);
+selext case_test(12);
+selext case_test(13); -- fails
 
 create or replace function catch() returns void as $$
 begin
@@ -453,7 +453,7 @@ exception
 end
 $$ language plpgsql;
 
-select catch();
+selext catch();
 
 -- test the searched variant too, as well as ELSE
 create or replace function case_test(bigint) returns text as $$
@@ -470,7 +470,7 @@ begin
 end;
 $$ language plpgsql immutable;
 
-select case_test(1);
-select case_test(2);
-select case_test(12);
-select case_test(13);
+selext case_test(1);
+selext case_test(2);
+selext case_test(12);
+selext case_test(13);

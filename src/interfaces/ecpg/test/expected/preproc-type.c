@@ -137,7 +137,7 @@ main (void)
       exit (sqlca.sqlcode);
     }
 
-  { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select idnum , name , accs , string1 , string2 , string3 from empl where idnum = $1 ", 
+  { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext idnum , name , accs , string1 , string2 , string3 from empl where idnum = $1 ", 
 	ECPGt_long,&(empl.idnum),(long)1,(long)1,sizeof(long), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, 
 	ECPGt_long,&(empl.idnum),(long)1,(long)1,sizeof( struct TBempl ), 
@@ -156,7 +156,7 @@ main (void)
 
   if (sqlca.sqlcode)
     {
-      printf ("select error = %ld\n", sqlca.sqlcode);
+      printf ("selext error = %ld\n", sqlca.sqlcode);
       exit (sqlca.sqlcode);
     }
   printf ("id=%ld name='%s' accs=%d str='%s' ptr='%s' vc='%10.10s'\n", empl.idnum, empl.name, empl.accs, str, ptr, vc.text);

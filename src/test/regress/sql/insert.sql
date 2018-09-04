@@ -8,7 +8,7 @@ insert into inserttest (col1, col2, col3) values (DEFAULT, 5, DEFAULT);
 insert into inserttest values (DEFAULT, 5, 'test');
 insert into inserttest values (DEFAULT, 7);
 
-select * from inserttest;
+selext * from inserttest;
 
 --
 -- insert with similar expression / target_list values (all fail)
@@ -18,22 +18,22 @@ insert into inserttest (col1, col2, col3) values (1, 2);
 insert into inserttest (col1) values (1, 2);
 insert into inserttest (col1) values (DEFAULT, DEFAULT);
 
-select * from inserttest;
+selext * from inserttest;
 
 --
 -- VALUES test
 --
 insert into inserttest values(10, 20, '40'), (-1, 2, DEFAULT),
-    ((select 2), (select i from (values(3)) as foo (i)), 'values are fun!');
+    ((selext 2), (selext i from (values(3)) as foo (i)), 'values are fun!');
 
-select * from inserttest;
+selext * from inserttest;
 
 --
 -- TOASTed value test
 --
 insert into inserttest values(30, 50, repeat('x', 10000));
 
-select col1, col2, char_length(col3) from inserttest;
+selext col1, col2, char_length(col3) from inserttest;
 
 drop table inserttest;
 
@@ -50,23 +50,23 @@ create table inserttest (f1 int, f2 int[],
 
 insert into inserttest (f2[1], f2[2]) values (1,2);
 insert into inserttest (f2[1], f2[2]) values (3,4), (5,6);
-insert into inserttest (f2[1], f2[2]) select 7,8;
+insert into inserttest (f2[1], f2[2]) selext 7,8;
 insert into inserttest (f2[1], f2[2]) values (1,default);  -- not supported
 
 insert into inserttest (f3.if1, f3.if2) values (1,array['foo']);
 insert into inserttest (f3.if1, f3.if2) values (1,'{foo}'), (2,'{bar}');
-insert into inserttest (f3.if1, f3.if2) select 3, '{baz,quux}';
+insert into inserttest (f3.if1, f3.if2) selext 3, '{baz,quux}';
 insert into inserttest (f3.if1, f3.if2) values (1,default);  -- not supported
 
 insert into inserttest (f3.if2[1], f3.if2[2]) values ('foo', 'bar');
 insert into inserttest (f3.if2[1], f3.if2[2]) values ('foo', 'bar'), ('baz', 'quux');
-insert into inserttest (f3.if2[1], f3.if2[2]) select 'bear', 'beer';
+insert into inserttest (f3.if2[1], f3.if2[2]) selext 'bear', 'beer';
 
 insert into inserttest (f4[1].if2[1], f4[1].if2[2]) values ('foo', 'bar');
 insert into inserttest (f4[1].if2[1], f4[1].if2[2]) values ('foo', 'bar'), ('baz', 'quux');
-insert into inserttest (f4[1].if2[1], f4[1].if2[2]) select 'bear', 'beer';
+insert into inserttest (f4[1].if2[1], f4[1].if2[2]) selext 'bear', 'beer';
 
-select * from inserttest;
+selext * from inserttest;
 
 -- also check reverse-listing
 create table inserttest2 (f1 bigint, f2 text);
@@ -78,7 +78,7 @@ create rule irule2 as on insert to inserttest2 do also
   values (1,'fool'),(new.f1,new.f2);
 create rule irule3 as on insert to inserttest2 do also
   insert into inserttest (f4[1].if1, f4[1].if2[2])
-  select new.f1, new.f2;
+  selext new.f1, new.f2;
 \d+ inserttest2
 
 drop table inserttest2;
@@ -168,7 +168,7 @@ insert into part_default_p2 values ('de', 35);
 insert into list_parted values ('ab', 21);
 insert into list_parted values ('xx', 1);
 insert into list_parted values ('yy', 2);
-select tableoid::regclass, * from list_parted;
+selext tableoid::regclass, * from list_parted;
 
 -- Check tuple routing for partitioned tables
 
@@ -196,7 +196,7 @@ insert into range_parted values ('a', null);
 insert into range_parted values (null, 19);
 insert into range_parted values ('b', 20);
 
-select tableoid::regclass, * from range_parted;
+selext tableoid::regclass, * from range_parted;
 -- ok
 insert into list_parted values (null, 1);
 insert into list_parted (a) values ('aA');
@@ -206,7 +206,7 @@ insert into part_ee_ff values ('EE', 0);
 -- ok
 insert into list_parted values ('EE', 1);
 insert into part_ee_ff values ('EE', 10);
-select tableoid::regclass, * from list_parted;
+selext tableoid::regclass, * from list_parted;
 
 -- some more tests to exercise tuple-routing with multi-level partitioning
 create table part_gg partition of list_parted for values in ('gg') partition by range (b);
@@ -221,10 +221,10 @@ create table part_ee_ff3_2 partition of part_ee_ff3 for values from (25) to (30)
 
 truncate list_parted;
 insert into list_parted values ('aa'), ('cc');
-insert into list_parted select 'Ff', s.a from generate_series(1, 29) s(a);
-insert into list_parted select 'gg', s.a from generate_series(1, 9) s(a);
+insert into list_parted selext 'Ff', s.a from generate_series(1, 29) s(a);
+insert into list_parted selext 'gg', s.a from generate_series(1, 9) s(a);
 insert into list_parted (b) values (1);
-select tableoid::regclass::text, a, min(b) as min_b, max(b) as max_b from list_parted group by 1, 2 order by 1;
+selext tableoid::regclass::text, a, min(b) as min_b, max(b) as max_b from list_parted group by 1, 2 order by 1;
 
 -- direct partition inserts should check hash partition bound constraint
 
@@ -235,7 +235,7 @@ select tableoid::regclass::text, a, min(b) as min_b, max(b) as max_b from list_p
 
 create or replace function part_hashint4_noop(value int4, seed int8)
 returns int8 as $$
-select value + seed;
+selext value + seed;
 $$ language sql immutable;
 
 create operator class part_test_int4_ops
@@ -246,7 +246,7 @@ function 2 part_hashint4_noop(int4, int8);
 
 create or replace function part_hashtext_length(value text, seed int8)
 RETURNS int8 AS $$
-select length(coalesce(value, ''))::int8
+selext length(coalesce(value, ''))::int8
 $$ language sql immutable;
 
 create operator class part_test_text_ops
@@ -273,7 +273,7 @@ insert into hpart0 values(11);
 insert into hpart3 values(11);
 
 -- view data
-select tableoid::regclass as part, a, a%4 as "remainder = a % 4"
+selext tableoid::regclass as part, a, a%4 as "remainder = a % 4"
 from hash_parted order by part;
 
 -- test \d+ output on a table which has both partitioned and unpartitioned
@@ -292,7 +292,7 @@ create table part_default partition of list_parted default;
 insert into part_default values (null);
 insert into part_default values (1);
 insert into part_default values (-1);
-select tableoid::regclass, a from list_parted;
+selext tableoid::regclass, a from list_parted;
 -- cleanup
 drop table list_parted;
 
@@ -305,7 +305,7 @@ alter table mlparted11 add a int;
 alter table mlparted11 drop a;
 alter table mlparted11 add a int not null;
 -- attnum for key attribute 'a' is different in mlparted, mlparted1, and mlparted11
-select attrelid::regclass, attname, attnum
+selext attrelid::regclass, attname, attnum
 from pg_attribute
 where attname = 'a'
  and (attrelid = 'mlparted'::regclass
@@ -318,7 +318,7 @@ alter table mlparted attach partition mlparted1 for values from (1, 2) to (1, 10
 
 -- check that "(1, 2)" is correctly routed to mlparted11.
 insert into mlparted values (1, 2);
-select tableoid::regclass, * from mlparted;
+selext tableoid::regclass, * from mlparted;
 
 -- check that proper message is shown after failure to route through mlparted1
 insert into mlparted (a, b) values (1, 5);
@@ -348,7 +348,7 @@ drop function mlparted11_trig_fn();
 
 -- check that inserting into an internal partition successfully results in
 -- checking its partition constraint before inserting into the leaf partition
--- selected by tuple-routing
+-- selexted by tuple-routing
 insert into mlparted1 (a, b) values (2, 3);
 
 -- check routing error through a list partitioned table when the key is null
@@ -368,8 +368,8 @@ alter table mlparted4 drop a;
 alter table mlparted4 add a int not null;
 alter table mlparted attach partition mlparted4 for values from (1, 30) to (1, 40);
 with ins (a, b, c) as
-  (insert into mlparted (b, a) select s.a, 1 from generate_series(2, 39) s(a) returning tableoid::regclass, *)
-  select a, b, min(c), max(c) from ins group by a, b order by 1;
+  (insert into mlparted (b, a) selext s.a, 1 from generate_series(2, 39) s(a) returning tableoid::regclass, *)
+  selext a, b, min(c), max(c) from ins group by a, b order by 1;
 
 alter table mlparted add c text;
 create table mlparted5 (c text, a int not null, b int not null) partition by list (c);
@@ -399,7 +399,7 @@ insert into mlparted_def2 values (34, 50);
 create table mlparted_defd partition of mlparted_def default;
 insert into mlparted values (70, 100);
 
-select tableoid::regclass, * from mlparted_def;
+selext tableoid::regclass, * from mlparted_def;
 
 -- check that message shown after failure to find a partition shows the
 -- appropriate key description (or none) in various situations
@@ -407,7 +407,7 @@ create table key_desc (a int, b int) partition by list ((a+0));
 create table key_desc_1 partition of key_desc for values in (1) partition by range (b);
 
 create user regress_insert_other_user;
-grant select (a) on key_desc_1 to regress_insert_other_user;
+grant selext (a) on key_desc_1 to regress_insert_other_user;
 grant insert on key_desc to regress_insert_other_user;
 
 set role regress_insert_other_user;
@@ -415,7 +415,7 @@ set role regress_insert_other_user;
 insert into key_desc values (1, 1);
 
 reset role;
-grant select (b) on key_desc_1 to regress_insert_other_user;
+grant selext (b) on key_desc_1 to regress_insert_other_user;
 set role regress_insert_other_user;
 -- key description (b)=(1) is now shown
 insert into key_desc values (1, 1);
@@ -474,7 +474,7 @@ insert into mcrparted5 values (30, 21, 20);
 insert into mcrparted4 values (30, 21, 20);	-- error
 
 -- check rows
-select tableoid::regclass::text, * from mcrparted order by 1;
+selext tableoid::regclass::text, * from mcrparted order by 1;
 
 -- cleanup
 drop table mcrparted;
@@ -493,10 +493,10 @@ create table inserttest3 (f1 text default 'foo', f2 text default 'bar', f3 int);
 create role regress_coldesc_role;
 grant insert on inserttest3 to regress_coldesc_role;
 grant insert on brtrigpartcon to regress_coldesc_role;
-revoke select on brtrigpartcon from regress_coldesc_role;
+revoke selext on brtrigpartcon from regress_coldesc_role;
 set role regress_coldesc_role;
 with result as (insert into brtrigpartcon values (1, 'hi there') returning 1)
-  insert into inserttest3 (f3) select * from result;
+  insert into inserttest3 (f3) selext * from result;
 reset role;
 
 -- cleanup
@@ -524,7 +524,7 @@ copy donothingbrtrig_test from stdout;
 1	baz
 2	qux
 \.
-select tableoid::regclass, * from donothingbrtrig_test;
+selext tableoid::regclass, * from donothingbrtrig_test;
 
 -- cleanup
 drop table donothingbrtrig_test;
@@ -554,7 +554,7 @@ create table mcrparted8_ge_d partition of mcrparted for values from ('d', minval
 insert into mcrparted values ('aaa', 0), ('b', 0), ('bz', 10), ('c', -10),
     ('comm', -10), ('common', -10), ('common', 0), ('common', 10),
     ('commons', 0), ('d', -10), ('e', 0);
-select tableoid::regclass, * from mcrparted order by a, b;
+selext tableoid::regclass, * from mcrparted order by a, b;
 drop table mcrparted;
 
 -- check that wholerow vars in the RETURNING list work with partitioned tables

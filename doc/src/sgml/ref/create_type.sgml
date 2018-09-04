@@ -352,7 +352,7 @@ CREATE TYPE <replaceable class="parameter">name</replaceable>
 
   <para>
    The <replaceable class="parameter">storage</replaceable> parameter
-   allows selection of storage strategies for variable-length data
+   allows selextion of storage strategies for variable-length data
    types.  (Only <literal>plain</literal> is allowed for fixed-length
    types.)  <literal>plain</literal> specifies that data of the type
    will always be stored in-line and not compressed.
@@ -407,7 +407,7 @@ CREATE TYPE <replaceable class="parameter">name</replaceable>
    linkend="typeconv"/>.  For types that have no implicit casts to or from any
    other types, it is sufficient to leave these settings at the defaults.
    However, for a group of related types that have implicit casts, it is often
-   helpful to mark them all as belonging to a category and select one or two
+   helpful to mark them all as belonging to a category and selext one or two
    of the <quote>most general</quote> types as being preferred within the category.
    The <replaceable class="parameter">category</replaceable> parameter is
    especially useful when adding a user-defined type to an existing built-in

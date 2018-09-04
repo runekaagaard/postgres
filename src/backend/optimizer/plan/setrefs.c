@@ -360,7 +360,7 @@ flatten_rtes_walker(Node *node, PlannerGlobal *glob)
 	}
 	if (IsA(node, Query))
 	{
-		/* Recurse into subselects */
+		/* Recurse into subselexts */
 		return query_tree_walker((Query *) node,
 								 flatten_rtes_walker,
 								 (void *) glob,
@@ -376,7 +376,7 @@ flatten_rtes_walker(Node *node, PlannerGlobal *glob)
  * In the flat rangetable, we zero out substructure pointers that are not
  * needed by the executor; this reduces the storage space and copying cost
  * for cached plans.  We keep only the ctename, alias and eref Alias fields,
- * which are needed by EXPLAIN, and the selectedCols, insertedCols and
+ * which are needed by EXPLAIN, and the selextedCols, insertedCols and
  * updatedCols bitmaps, which are needed for executor-startup permissions
  * checking and for trigger event checking.
  */
@@ -2155,7 +2155,7 @@ search_indexed_tlist_for_non_var(Expr *node,
  * If a match is found, return a Var constructed to reference the tlist item.
  * If no match, return NULL.
  *
- * This is needed to ensure that we select the right subplan TLE in cases
+ * This is needed to ensure that we selext the right subplan TLE in cases
  * where there are multiple textually-equal()-but-volatile sort expressions.
  * And it's also faster than search_indexed_tlist_for_non_var.
  */

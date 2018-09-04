@@ -470,7 +470,7 @@ CheckForExternalTrigger(void)
 	int			len;
 
 	/*
-	 * Look for a trigger file, if that option has been selected
+	 * Look for a trigger file, if that option has been selexted
 	 *
 	 * We use stat() here because triggerPath is always a file rather than
 	 * potentially being in an archive

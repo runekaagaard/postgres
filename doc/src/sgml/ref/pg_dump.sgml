@@ -66,7 +66,7 @@ PostgreSQL documentation
   <para>
    The alternative archive file formats must be used with
    <xref linkend="app-pgrestore"/> to rebuild the database.  They
-   allow <application>pg_restore</application> to be selective about
+   allow <application>pg_restore</application> to be selextive about
    what is restored, or even to reorder the items prior to being
    restored.
    The archive file formats are designed to be portable across
@@ -79,11 +79,11 @@ PostgreSQL documentation
    <application>pg_dump</application> provides a flexible archival and
    transfer mechanism. <application>pg_dump</application> can be used to
    backup an entire database, then <application>pg_restore</application>
-   can be used to examine the archive and/or select which parts of the
+   can be used to examine the archive and/or selext which parts of the
    database are to be restored. The most flexible output file formats are
    the <quote>custom</quote> format (<option>-Fc</option>) and the
    <quote>directory</quote> format(<option>-Fd</option>). They allow
-   for selection and reordering of all archived items, support parallel
+   for selextion and reordering of all archived items, support parallel
    restoration, and are compressed by default. The <quote>directory</quote>
    format is the only format that supports parallel dumps.
   </para>
@@ -272,7 +272,7 @@ PostgreSQL documentation
            Output a custom-format archive suitable for input into
            <application>pg_restore</application>.
            Together with the directory output format, this is the most flexible
-           output format in that it allows manual selection and reordering of
+           output format in that it allows manual selextion and reordering of
            archived items during restore. This format is also compressed by
            default.
           </para>
@@ -380,16 +380,16 @@ PostgreSQL documentation
       <listitem>
        <para>
         Dump only schemas matching <replaceable
-        class="parameter">schema</replaceable>; this selects both the
+        class="parameter">schema</replaceable>; this selexts both the
         schema itself, and all its contained objects.  When this option is
         not specified, all non-system schemas in the target database will be
         dumped.  Multiple schemas can be
-        selected by writing multiple <option>-n</option> switches.  Also, the
+        selexted by writing multiple <option>-n</option> switches.  Also, the
         <replaceable class="parameter">schema</replaceable> parameter is
         interpreted as a pattern according to the same rules used by
         <application>psql</application>'s <literal>\d</literal> commands (see <xref
         linkend="app-psql-patterns" endterm="app-psql-patterns-title"/>),
-        so multiple schemas can also be selected by writing wildcard characters
+        so multiple schemas can also be selexted by writing wildcard characters
         in the pattern.  When using wildcards, be careful to quote the pattern
         if needed to prevent the shell from expanding the wildcards;  see
         <xref linkend="pg-dump-examples" endterm="pg-dump-examples-title"/>.
@@ -398,7 +398,7 @@ PostgreSQL documentation
        <note>
         <para>
          When <option>-n</option> is specified, <application>pg_dump</application>
-         makes no attempt to dump any other database objects that the selected
+         makes no attempt to dump any other database objects that the selexted
          schema(s) might depend upon. Therefore, there is no guarantee
          that the results of a specific-schema dump can be successfully
          restored by themselves into a clean database.
@@ -535,12 +535,12 @@ PostgreSQL documentation
         <replaceable class="parameter">table</replaceable>.
         For this purpose, <quote>table</quote> includes views, materialized views,
         sequences, and foreign tables.  Multiple tables
-        can be selected by writing multiple <option>-t</option> switches.  Also, the
+        can be selexted by writing multiple <option>-t</option> switches.  Also, the
         <replaceable class="parameter">table</replaceable> parameter is
         interpreted as a pattern according to the same rules used by
         <application>psql</application>'s <literal>\d</literal> commands (see <xref
         linkend="app-psql-patterns" endterm="app-psql-patterns-title"/>),
-        so multiple tables can also be selected by writing wildcard characters
+        so multiple tables can also be selexted by writing wildcard characters
         in the pattern.  When using wildcards, be careful to quote the pattern
         if needed to prevent the shell from expanding the wildcards;  see
         <xref linkend="pg-dump-examples" endterm="pg-dump-examples-title"/>.
@@ -548,7 +548,7 @@ PostgreSQL documentation
 
        <para>
         The <option>-n</option> and <option>-N</option> switches have no effect when
-        <option>-t</option> is used, because tables selected by <option>-t</option> will
+        <option>-t</option> is used, because tables selexted by <option>-t</option> will
         be dumped regardless of those switches, and non-table objects will not
         be dumped.
        </para>
@@ -556,7 +556,7 @@ PostgreSQL documentation
        <note>
         <para>
          When <option>-t</option> is specified, <application>pg_dump</application>
-         makes no attempt to dump any other database objects that the selected
+         makes no attempt to dump any other database objects that the selexted
          table(s) might depend upon. Therefore, there is no guarantee
          that the results of a specific-table dump can be successfully
          restored by themselves into a clean database.
@@ -571,7 +571,7 @@ PostgreSQL documentation
          tables named <literal>tab</literal>, but now it just dumps whichever one
          is visible in your default search path.  To get the old behavior
          you can write <literal>-t '*.tab'</literal>.  Also, you must write something
-         like <literal>-t sch.tab</literal> to select a table in a particular schema,
+         like <literal>-t sch.tab</literal> to selext a table in a particular schema,
          rather than the old locution of <literal>-n sch -t tab</literal>.
         </para>
        </note>
@@ -884,7 +884,7 @@ PostgreSQL documentation
       <term><option>--no-tablespaces</option></term>
       <listitem>
        <para>
-        Do not output commands to select tablespaces.
+        Do not output commands to selext tablespaces.
         With this option, all objects will be created in whichever
         tablespace is the default during restore.
        </para>
@@ -945,7 +945,7 @@ PostgreSQL documentation
          <para>
           Only dump the named section. The section name can be
           <option>pre-data</option>, <option>data</option>, or <option>post-data</option>.
-          This option can be specified more than once to select multiple
+          This option can be specified more than once to selext multiple
           sections. The default is to dump all sections.
          </para>
          <para>
@@ -1217,7 +1217,7 @@ PostgreSQL documentation
    <application>pg_dump</application> internally executes
    <command>SELECT</command> statements. If you have problems running
    <application>pg_dump</application>, make sure you are able to
-   select information from the database using, for example, <xref
+   selext information from the database using, for example, <xref
    linkend="app-psql"/>.  Also, any default connection settings and environment
    variables used by the <application>libpq</application> front-end
    library will apply.

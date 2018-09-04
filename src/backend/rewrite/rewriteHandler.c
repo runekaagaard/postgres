@@ -297,7 +297,7 @@ acquireLocksOnSubLinks(Node *node, acquireLocksOnSubLinks_context *context)
 		SubLink    *sub = (SubLink *) node;
 
 		/* Do what we came for */
-		AcquireRewriteLocks((Query *) sub->subselect,
+		AcquireRewriteLocks((Query *) sub->subselext,
 							context->for_execute,
 							false);
 		/* Fall through to process lefthand args of SubLink */
@@ -305,7 +305,7 @@ acquireLocksOnSubLinks(Node *node, acquireLocksOnSubLinks_context *context)
 
 	/*
 	 * Do NOT recurse into Query nodes, because AcquireRewriteLocks already
-	 * processed subselects of subselects for us.
+	 * processed subselexts of subselexts for us.
 	 */
 	return expression_tree_walker(node, acquireLocksOnSubLinks, context);
 }
@@ -387,7 +387,7 @@ rewriteRuleAction(Query *parsetree,
 	 * but we leave them all in place for two reasons:
 	 *
 	 * We'd have a much harder job to adjust the query's varnos if we
-	 * selectively removed RT entries.
+	 * selextively removed RT entries.
 	 *
 	 * If the rule is INSTEAD, then the original query won't be executed at
 	 * all, and so its rtable must be preserved so that the executor will do
@@ -1505,7 +1505,7 @@ ApplyRetrieveRule(Query *parsetree,
 			 */
 			rte->requiredPerms = 0;
 			rte->checkAsUser = InvalidOid;
-			rte->selectedCols = NULL;
+			rte->selextedCols = NULL;
 			rte->insertedCols = NULL;
 			rte->updatedCols = NULL;
 
@@ -1582,7 +1582,7 @@ ApplyRetrieveRule(Query *parsetree,
 	rule_action = fireRIRrules(rule_action, activeRIRs);
 
 	/*
-	 * Now, plug the view query in as a subselect, replacing the relation's
+	 * Now, plug the view query in as a subselext, replacing the relation's
 	 * original RTE.
 	 */
 	rte = rt_fetch(rt_index, parsetree->rtable);
@@ -1601,13 +1601,13 @@ ApplyRetrieveRule(Query *parsetree,
 	Assert(subrte->relid == relation->rd_id);
 	subrte->requiredPerms = rte->requiredPerms;
 	subrte->checkAsUser = rte->checkAsUser;
-	subrte->selectedCols = rte->selectedCols;
+	subrte->selextedCols = rte->selextedCols;
 	subrte->insertedCols = rte->insertedCols;
 	subrte->updatedCols = rte->updatedCols;
 
 	rte->requiredPerms = 0;		/* no permission check on subquery itself */
 	rte->checkAsUser = InvalidOid;
-	rte->selectedCols = NULL;
+	rte->selextedCols = NULL;
 	rte->insertedCols = NULL;
 	rte->updatedCols = NULL;
 
@@ -1674,16 +1674,16 @@ markQueryForLocking(Query *qry, Node *jtnode,
 
 /*
  * fireRIRonSubLink -
- *	Apply fireRIRrules() to each SubLink (subselect in expression) found
+ *	Apply fireRIRrules() to each SubLink (subselext in expression) found
  *	in the given tree.
  *
  * NOTE: although this has the form of a walker, we cheat and modify the
  * SubLink nodes in-place.  It is caller's responsibility to ensure that
  * no unwanted side-effects occur!
  *
- * This is unlike most of the other routines that recurse into subselects,
+ * This is unlike most of the other routines that recurse into subselexts,
  * because we must take control at the SubLink node in order to replace
- * the SubLink's subselect link with the possibly-rewritten subquery.
+ * the SubLink's subselext link with the possibly-rewritten subquery.
  */
 static bool
 fireRIRonSubLink(Node *node, List *activeRIRs)
@@ -1695,14 +1695,14 @@ fireRIRonSubLink(Node *node, List *activeRIRs)
 		SubLink    *sub = (SubLink *) node;
 
 		/* Do what we came for */
-		sub->subselect = (Node *) fireRIRrules((Query *) sub->subselect,
+		sub->subselext = (Node *) fireRIRrules((Query *) sub->subselext,
 											   activeRIRs);
 		/* Fall through to process lefthand args of SubLink */
 	}
 
 	/*
 	 * Do NOT recurse into Query nodes, because fireRIRrules already processed
-	 * subselects of subselects for us.
+	 * subselexts of subselexts for us.
 	 */
 	return expression_tree_walker(node, fireRIRonSubLink,
 								  (void *) activeRIRs);
@@ -2346,15 +2346,15 @@ view_query_is_auto_updatable(Query *viewquery, bool check_cols)
 		return gettext_noop("Views that return set-returning functions are not automatically updatable.");
 
 	/*
-	 * The view query should select from a single base relation, which must be
+	 * The view query should selext from a single base relation, which must be
 	 * a table or another view.
 	 */
 	if (list_length(viewquery->jointree->fromlist) != 1)
-		return gettext_noop("Views that do not select from a single table or view are not automatically updatable.");
+		return gettext_noop("Views that do not selext from a single table or view are not automatically updatable.");
 
 	rtr = (RangeTblRef *) linitial(viewquery->jointree->fromlist);
 	if (!IsA(rtr, RangeTblRef))
-		return gettext_noop("Views that do not select from a single table or view are not automatically updatable.");
+		return gettext_noop("Views that do not selext from a single table or view are not automatically updatable.");
 
 	base_rte = rt_fetch(rtr->rtindex, viewquery->rtable);
 	if (base_rte->rtekind != RTE_RELATION ||
@@ -2362,7 +2362,7 @@ view_query_is_auto_updatable(Query *viewquery, bool check_cols)
 		 base_rte->relkind != RELKIND_FOREIGN_TABLE &&
 		 base_rte->relkind != RELKIND_VIEW &&
 		 base_rte->relkind != RELKIND_PARTITIONED_TABLE))
-		return gettext_noop("Views that do not select from a single table or view are not automatically updatable.");
+		return gettext_noop("Views that do not selext from a single table or view are not automatically updatable.");
 
 	if (base_rte->tablesample)
 		return gettext_noop("Views containing TABLESAMPLE are not automatically updatable.");
@@ -2962,21 +2962,21 @@ rewriteTargetView(Query *parsetree, Relation view)
 	/*
 	 * Now for the per-column permissions bits.
 	 *
-	 * Initially, new_rte contains selectedCols permission check bits for all
+	 * Initially, new_rte contains selextedCols permission check bits for all
 	 * base-rel columns referenced by the view, but since the view is a SELECT
 	 * query its insertedCols/updatedCols is empty.  We set insertedCols and
 	 * updatedCols to include all the columns the outer query is trying to
 	 * modify, adjusting the column numbers as needed.  But we leave
-	 * selectedCols as-is, so the view owner must have read permission for all
+	 * selextedCols as-is, so the view owner must have read permission for all
 	 * columns used in the view definition, even if some of them are not read
-	 * by the outer query.  We could try to limit selectedCols to only columns
+	 * by the outer query.  We could try to limit selextedCols to only columns
 	 * used in the transformed query, but that does not correspond to what
 	 * happens in ordinary SELECT usage of a view: all referenced columns must
 	 * have read permission, even if optimization finds that some of them can
 	 * be discarded during query transformation.  The flattening we're doing
 	 * here is an optional optimization, too.  (If you are unpersuaded and
 	 * want to change this, note that applying adjust_view_column_set to
-	 * view_rte->selectedCols is clearly *not* the right answer, since that
+	 * view_rte->selextedCols is clearly *not* the right answer, since that
 	 * neglects base-rel columns used in the view's WHERE quals.)
 	 *
 	 * This step needs the modified view targetlist, so we have to do things

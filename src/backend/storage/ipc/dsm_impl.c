@@ -109,7 +109,7 @@ const struct config_enum_entry dynamic_shared_memory_options[] = {
 	{NULL, 0, false}
 };
 
-/* Implementation selector. */
+/* Implementation selextor. */
 int			dynamic_shared_memory_type;
 
 /* Size of buffer to be used for zero-filling. */
@@ -119,7 +119,7 @@ int			dynamic_shared_memory_type;
 
 /*------
  * Perform a low-level shared memory operation in a platform-specific way,
- * as dictated by the selected implementation.  Each implementation is
+ * as dictated by the selexted implementation.  Each implementation is
  * required to implement the following primitives.
  *
  * DSM_OP_CREATE.  Create a segment whose size is the request_size and
@@ -234,7 +234,7 @@ dsm_impl_can_resize(void)
  * POSIX shared memory segments seem intended to exist in a flat namespace,
  * some operating systems may implement them as files, even going so far
  * to treat a request for /xyz as a request to create a file by that name
- * in the root directory.  Users of such broken platforms should select
+ * in the root directory.  Users of such broken platforms should selext
  * a different shared memory implementation.
  */
 static bool

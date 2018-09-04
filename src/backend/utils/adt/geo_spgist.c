@@ -653,7 +653,7 @@ spg_box_quad_inner_consistent(PG_FUNCTION_ARGS)
 		else
 		{
 			/*
-			 * If this node is not selected, we don't need to keep the next
+			 * If this node is not selexted, we don't need to keep the next
 			 * traversal value in the memory context.
 			 */
 			pfree(next_rect_box);

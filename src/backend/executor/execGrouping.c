@@ -322,7 +322,7 @@ FindTupleHashEntry(TupleHashTable hashtable, TupleTableSlot *slot,
  * This convention avoids the need to materialize virtual input tuples unless
  * they actually need to get copied into the table.
  *
- * Also, the caller must select an appropriate memory context for running
+ * Also, the caller must selext an appropriate memory context for running
  * the hash functions. (dynahash.c doesn't change CurrentMemoryContext.)
  */
 static uint32

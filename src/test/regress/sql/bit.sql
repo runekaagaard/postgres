@@ -103,9 +103,9 @@ DROP TABLE bit_table;
 
 
 -- The following should fail
-select B'001' & B'10';
-select B'0111' | B'011';
-select B'0010' # B'011101';
+selext B'001' & B'10';
+selext B'0111' | B'011';
+selext B'0010' # B'011101';
 
 -- More position tests, checking all the boundary cases
 SELECT POSITION(B'1010' IN B'0000101');   -- 0

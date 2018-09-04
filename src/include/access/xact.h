@@ -45,7 +45,7 @@ extern PGDLLIMPORT int XactIsoLevel;
  * The two stronger ones use one snapshot per database transaction;
  * the others use one snapshot per statement.
  * Serializable uses predicate locks in addition to snapshots.
- * These macros should be used to check which isolation level is selected.
+ * These macros should be used to check which isolation level is selexted.
  */
 #define IsolationUsesXactSnapshot() (XactIsoLevel >= XACT_REPEATABLE_READ)
 #define IsolationIsSerializable() (XactIsoLevel == XACT_SERIALIZABLE)

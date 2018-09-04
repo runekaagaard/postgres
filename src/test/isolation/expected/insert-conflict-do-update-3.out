@@ -1,6 +1,6 @@
 Parsed test spec with 2 sessions
 
-starting permutation: update2 insert1 c2 select1surprise c1
+starting permutation: update2 insert1 c2 selext1surprise c1
 step update2: UPDATE colors SET is_active = true WHERE key = 1;
 step insert1: 
     WITH t AS (
@@ -17,7 +17,7 @@ key            color          is_active
 1              Red            f              
 2              Green          f              
 3              Blue           f              
-step select1surprise: SELECT * FROM colors ORDER BY key;
+step selext1surprise: SELECT * FROM colors ORDER BY key;
 key            color          is_active      
 
 1              Brown          t              

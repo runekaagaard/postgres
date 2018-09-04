@@ -28,7 +28,7 @@ setup
   BEGIN ISOLATION LEVEL READ COMMITTED;
 }
 step "insert2" { INSERT INTO upsert(key, val) VALUES(1, 'insert2') ON CONFLICT (key) DO UPDATE set val = upsert.val || ' updated by insert2'; }
-step "select2" { SELECT * FROM upsert; }
+step "selext2" { SELECT * FROM upsert; }
 step "c2" { COMMIT; }
 step "a2" { ABORT; }
 
@@ -36,5 +36,5 @@ step "a2" { ABORT; }
 # should proceed with an insert or update.  Notably, this entails updating a
 # tuple while there is no version of that tuple visible to the updating
 # session's snapshot.  This is permitted only in READ COMMITTED mode.
-permutation "insert1" "insert2" "c1" "select2" "c2"
-permutation "insert1" "insert2" "a1" "select2" "c2"
+permutation "insert1" "insert2" "c1" "selext2" "c2"
+permutation "insert1" "insert2" "a1" "selext2" "c2"

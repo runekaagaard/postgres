@@ -2064,7 +2064,7 @@ distribute_qual_to_rels(PlannerInfo *root, Node *clause,
  * flag to be set true.  This will prevent any higher-level OJs from
  * being interchanged with that OJ, which would result in not having any
  * correct place to evaluate the qual.  (The case we care about here is a
- * sub-select WHERE clause within the RHS of some outer join.  The WHERE
+ * sub-selext WHERE clause within the RHS of some outer join.  The WHERE
  * clause must effectively be treated as a degenerate clause of that outer
  * join's condition.  Rather than trying to match such clauses with joins
  * directly, we set delay_upper_joins here, and when the upper outer join
@@ -2186,7 +2186,7 @@ check_equivalence_delay(PlannerInfo *root,
  *	  a lower JOIN_ANTI join.
  *
  * We want to suppress redundant IS NULL quals, not so much to save cycles
- * as to avoid generating bogus selectivity estimates for them.  So if
+ * as to avoid generating bogus selextivity estimates for them.  So if
  * redundancy is detected here, distribute_qual_to_rels() just throws away
  * the qual.
  */
@@ -2328,7 +2328,7 @@ process_implied_equality(PlannerInfo *root,
 
 	/*
 	 * Build the new clause.  Copy to ensure it shares no substructure with
-	 * original (this is necessary in case there are subselects in there...)
+	 * original (this is necessary in case there are subselexts in there...)
 	 */
 	clause = make_opclause(opno,
 						   BOOLOID, /* opresulttype */
@@ -2391,7 +2391,7 @@ build_implied_join_equality(Oid opno,
 
 	/*
 	 * Build the new clause.  Copy to ensure it shares no substructure with
-	 * original (this is necessary in case there are subselects in there...)
+	 * original (this is necessary in case there are subselexts in there...)
 	 */
 	clause = make_opclause(opno,
 						   BOOLOID, /* opresulttype */
@@ -2427,7 +2427,7 @@ build_implied_join_equality(Oid opno,
  *
  * The idea here is to see which query join conditions match equality
  * constraints of a foreign-key relationship.  For such join conditions,
- * we can use the FK semantics to make selectivity estimates that are more
+ * we can use the FK semantics to make selextivity estimates that are more
  * reliable than estimating from statistics, especially for multiple-column
  * FKs, where the normal assumption of independent conditions tends to fail.
  *

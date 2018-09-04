@@ -21,7 +21,7 @@ DO $do$
 
 	END {
 		warn "END\n";
-		eval { spi_exec_query("select 1") };
+		eval { spi_exec_query("selext 1") };
 		warn $@;
 	}
     warn "PRE\n";

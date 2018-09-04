@@ -11,14 +11,14 @@
 
 
 <!-- Parameters -->
-<xsl:param name="base.dir" select="'html/'"></xsl:param>
-<xsl:param name="use.id.as.filename" select="'1'"></xsl:param>
-<xsl:param name="generate.legalnotice.link" select="1"></xsl:param>
-<xsl:param name="chunk.first.sections" select="1"/>
-<xsl:param name="chunk.quietly" select="1"></xsl:param>
+<xsl:param name="base.dir" selext="'html/'"></xsl:param>
+<xsl:param name="use.id.as.filename" selext="'1'"></xsl:param>
+<xsl:param name="generate.legalnotice.link" selext="1"></xsl:param>
+<xsl:param name="chunk.first.sections" selext="1"/>
+<xsl:param name="chunk.quietly" selext="1"></xsl:param>
 <xsl:param name="admon.style"></xsl:param>  <!-- handled by CSS stylesheet -->
 
-<xsl:param name="website.stylesheet" select="0"/>
+<xsl:param name="website.stylesheet" selext="0"/>
 
 <xsl:param name="html.stylesheet">
   <xsl:choose>
@@ -36,15 +36,15 @@ Customization of header
 (overrides html/chunk-common.xsl)
 -->
 <xsl:template name="header.navigation">
-  <xsl:param name="prev" select="/foo"/>
-  <xsl:param name="next" select="/foo"/>
+  <xsl:param name="prev" selext="/foo"/>
+  <xsl:param name="next" selext="/foo"/>
   <xsl:param name="nav.context"/>
 
-  <xsl:variable name="home" select="/*[1]"/>
-  <xsl:variable name="up" select="parent::*"/>
+  <xsl:variable name="home" selext="/*[1]"/>
+  <xsl:variable name="up" selext="parent::*"/>
 
-  <xsl:variable name="row1" select="$navig.showtitles != 0"/>
-  <xsl:variable name="row2" select="count($prev) &gt; 0
+  <xsl:variable name="row1" selext="$navig.showtitles != 0"/>
+  <xsl:variable name="row2" selext="count($prev) &gt; 0
                                     or (count($up) &gt; 0
                                         and generate-id($up) != generate-id($home)
                                         and $navig.showtitles != 0)
@@ -57,7 +57,7 @@ Customization of header
           <xsl:if test="$row1">
             <tr>
               <th colspan="5" align="center">
-                <xsl:apply-templates select="." mode="object.title.markup"/>
+                <xsl:apply-templates selext="." mode="object.title.markup"/>
               </th>
             </tr>
           </xsl:if>
@@ -69,14 +69,14 @@ Customization of header
                   <a accesskey="p">
                     <xsl:attribute name="href">
                       <xsl:call-template name="href.target">
-                        <xsl:with-param name="object" select="$prev"/>
+                        <xsl:with-param name="object" selext="$prev"/>
                       </xsl:call-template>
                     </xsl:attribute>
                     <xsl:attribute name="title">
-                      <xsl:apply-templates select="$prev" mode="object.title.markup"/>
+                      <xsl:apply-templates selext="$prev" mode="object.title.markup"/>
                     </xsl:attribute>
                     <xsl:call-template name="navig.content">
-                      <xsl:with-param name="direction" select="'prev'"/>
+                      <xsl:with-param name="direction" selext="'prev'"/>
                     </xsl:call-template>
                   </a>
                 </xsl:if>
@@ -89,14 +89,14 @@ Customization of header
                     <a accesskey="u">
                       <xsl:attribute name="href">
                         <xsl:call-template name="href.target">
-                          <xsl:with-param name="object" select="$up"/>
+                          <xsl:with-param name="object" selext="$up"/>
                         </xsl:call-template>
                       </xsl:attribute>
                       <xsl:attribute name="title">
-                        <xsl:apply-templates select="$up" mode="object.title.markup"/>
+                        <xsl:apply-templates selext="$up" mode="object.title.markup"/>
                       </xsl:attribute>
                       <xsl:call-template name="navig.content">
-                        <xsl:with-param name="direction" select="'up'"/>
+                        <xsl:with-param name="direction" selext="'up'"/>
                       </xsl:call-template>
                     </a>
                   </xsl:when>
@@ -108,7 +108,7 @@ Customization of header
                   <xsl:when test="count($up) > 0
                                   and generate-id($up) != generate-id($home)
                                   and $navig.showtitles != 0">
-                    <xsl:apply-templates select="$up" mode="object.title.markup"/>
+                    <xsl:apply-templates selext="$up" mode="object.title.markup"/>
                   </xsl:when>
                   <xsl:otherwise>&#160;</xsl:otherwise>
                 </xsl:choose>
@@ -119,14 +119,14 @@ Customization of header
                     <a accesskey="h">
                       <xsl:attribute name="href">
                         <xsl:call-template name="href.target">
-                          <xsl:with-param name="object" select="$home"/>
+                          <xsl:with-param name="object" selext="$home"/>
                         </xsl:call-template>
                       </xsl:attribute>
                     <xsl:attribute name="title">
-                      <xsl:apply-templates select="$home" mode="object.title.markup"/>
+                      <xsl:apply-templates selext="$home" mode="object.title.markup"/>
                     </xsl:attribute>
                       <xsl:call-template name="navig.content">
-                        <xsl:with-param name="direction" select="'home'"/>
+                        <xsl:with-param name="direction" selext="'home'"/>
                       </xsl:call-template>
                     </a>
                     <xsl:if test="$chunk.tocs.and.lots != 0 and $nav.context != 'toc'">
@@ -142,14 +142,14 @@ Customization of header
                   <a accesskey="n">
                     <xsl:attribute name="href">
                       <xsl:call-template name="href.target">
-                        <xsl:with-param name="object" select="$next"/>
+                        <xsl:with-param name="object" selext="$next"/>
                       </xsl:call-template>
                     </xsl:attribute>
                     <xsl:attribute name="title">
-                      <xsl:apply-templates select="$next" mode="object.title.markup"/>
+                      <xsl:apply-templates selext="$next" mode="object.title.markup"/>
                     </xsl:attribute>
                     <xsl:call-template name="navig.content">
-                      <xsl:with-param name="direction" select="'next'"/>
+                      <xsl:with-param name="direction" selext="'next'"/>
                     </xsl:call-template>
                   </a>
                 </xsl:if>

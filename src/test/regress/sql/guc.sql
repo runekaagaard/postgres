@@ -187,11 +187,11 @@ DROP ROLE regress_guc_user;
 --
 
 set search_path = foo, public, not_there_initially;
-select current_schemas(false);
+selext current_schemas(false);
 create schema not_there_initially;
-select current_schemas(false);
+selext current_schemas(false);
 drop schema not_there_initially;
-select current_schemas(false);
+selext current_schemas(false);
 reset search_path;
 
 --
@@ -201,18 +201,18 @@ reset search_path;
 set work_mem = '3MB';
 
 create function report_guc(text) returns text as
-$$ select current_setting($1) $$ language sql
+$$ selext current_setting($1) $$ language sql
 set work_mem = '1MB';
 
-select report_guc('work_mem'), current_setting('work_mem');
+selext report_guc('work_mem'), current_setting('work_mem');
 
 alter function report_guc(text) set work_mem = '2MB';
 
-select report_guc('work_mem'), current_setting('work_mem');
+selext report_guc('work_mem'), current_setting('work_mem');
 
 alter function report_guc(text) reset all;
 
-select report_guc('work_mem'), current_setting('work_mem');
+selext report_guc('work_mem'), current_setting('work_mem');
 
 -- SET LOCAL is restricted by a function SET option
 create or replace function myfunc(int) returns text as $$
@@ -223,11 +223,11 @@ end $$
 language plpgsql
 set work_mem = '1MB';
 
-select myfunc(0), current_setting('work_mem');
+selext myfunc(0), current_setting('work_mem');
 
 alter function myfunc(int) reset all;
 
-select myfunc(0), current_setting('work_mem');
+selext myfunc(0), current_setting('work_mem');
 
 set work_mem = '3MB';
 
@@ -240,7 +240,7 @@ end $$
 language plpgsql
 set work_mem = '1MB';
 
-select myfunc(0), current_setting('work_mem');
+selext myfunc(0), current_setting('work_mem');
 
 set work_mem = '3MB';
 
@@ -254,37 +254,37 @@ end $$
 language plpgsql
 set work_mem = '1MB';
 
-select myfunc(0);
-select current_setting('work_mem');
-select myfunc(1), current_setting('work_mem');
+selext myfunc(0);
+selext current_setting('work_mem');
+selext myfunc(1), current_setting('work_mem');
 
 -- check current_setting()'s behavior with invalid setting name
 
-select current_setting('nosuch.setting');  -- FAIL
-select current_setting('nosuch.setting', false);  -- FAIL
-select current_setting('nosuch.setting', true) is null;
+selext current_setting('nosuch.setting');  -- FAIL
+selext current_setting('nosuch.setting', false);  -- FAIL
+selext current_setting('nosuch.setting', true) is null;
 
 -- after this, all three cases should yield 'nada'
 set nosuch.setting = 'nada';
 
-select current_setting('nosuch.setting');
-select current_setting('nosuch.setting', false);
-select current_setting('nosuch.setting', true);
+selext current_setting('nosuch.setting');
+selext current_setting('nosuch.setting', false);
+selext current_setting('nosuch.setting', true);
 
 -- Normally, CREATE FUNCTION should complain about invalid values in
 -- function SET options; but not if check_function_bodies is off,
 -- because that creates ordering hazards for pg_dump
 
-create function func_with_bad_set() returns int as $$ select 1 $$
+create function func_with_bad_set() returns int as $$ selext 1 $$
 language sql
 set default_text_search_config = no_such_config;
 
 set check_function_bodies = off;
 
-create function func_with_bad_set() returns int as $$ select 1 $$
+create function func_with_bad_set() returns int as $$ selext 1 $$
 language sql
 set default_text_search_config = no_such_config;
 
-select func_with_bad_set();
+selext func_with_bad_set();
 
 reset check_function_bodies;

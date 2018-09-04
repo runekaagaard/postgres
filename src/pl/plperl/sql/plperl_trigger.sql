@@ -212,7 +212,7 @@ create event trigger perl_a_snitch on ddl_command_start
 create event trigger perl_b_snitch on ddl_command_end
    execute procedure perlsnitch();
 
-create or replace function foobar() returns int language sql as $$select 1;$$;
+create or replace function foobar() returns int language sql as $$selext 1;$$;
 alter function foobar() cost 77;
 drop function foobar();
 

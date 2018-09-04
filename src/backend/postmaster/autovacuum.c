@@ -10,7 +10,7 @@
  * parameter is set.  The launcher schedules autovacuum workers to be started
  * when appropriate.  The workers are the processes which execute the actual
  * vacuuming; they connect to a database as determined in the launcher, and
- * once connected they examine the catalogs to select the tables to vacuum.
+ * once connected they examine the catalogs to selext the tables to vacuum.
  *
  * The autovacuum launcher cannot start the worker processes by itself,
  * because doing so would cause robustness issues (namely, failure to shut
@@ -1247,8 +1247,8 @@ do_start_worker(void)
 		/*
 		 * Also, skip a database that appears on the database list as having
 		 * been processed recently (less than autovacuum_naptime seconds ago).
-		 * We do this so that we don't select a database which we just
-		 * selected, but that pgstat hasn't gotten around to updating the last
+		 * We do this so that we don't selext a database which we just
+		 * selexted, but that pgstat hasn't gotten around to updating the last
 		 * autovacuum time yet.
 		 */
 		skipit = false;
@@ -1332,11 +1332,11 @@ do_start_worker(void)
  *
  * Wrapper for starting a worker from the launcher.  Besides actually starting
  * it, update the database list to reflect the next time that another one will
- * need to be started on the selected database.  The actual database choice is
+ * need to be started on the selexted database.  The actual database choice is
  * left to do_start_worker.
  *
  * This routine is also expected to insert an entry into the database list if
- * the selected database was previously absent from the list.
+ * the selexted database was previously absent from the list.
  */
 static void
 launch_worker(TimestampTz now)
@@ -1677,16 +1677,16 @@ AutoVacWorkerMain(int argc, char *argv[])
 		 * Report autovac startup to the stats collector.  We deliberately do
 		 * this before InitPostgres, so that the last_autovac_time will get
 		 * updated even if the connection attempt fails.  This is to prevent
-		 * autovac from getting "stuck" repeatedly selecting an unopenable
+		 * autovac from getting "stuck" repeatedly selexting an unopenable
 		 * database, rather than making any progress on stuff it can connect
 		 * to.
 		 */
 		pgstat_report_autovac(dbid);
 
 		/*
-		 * Connect to the selected database
+		 * Connect to the selexted database
 		 *
-		 * Note: if we have selected a just-deleted database (due to using
+		 * Note: if we have selexted a just-deleted database (due to using
 		 * stale stats info), we'll fail and exit here.
 		 */
 		InitPostgres(NULL, dbid, NULL, InvalidOid, dbname, false);
@@ -1991,7 +1991,7 @@ do_autovacuum(void)
 	effective_multixact_freeze_max_age = MultiXactMemberFreezeThreshold();
 
 	/*
-	 * Find the pg_database entry and select the default freeze ages. We use
+	 * Find the pg_database entry and selext the default freeze ages. We use
 	 * zero in template and nonconnectable databases, else the system-wide
 	 * default.
 	 */

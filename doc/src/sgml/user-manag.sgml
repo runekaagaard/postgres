@@ -364,7 +364,7 @@ RESET ROLE;
 
   <note>
    <para>
-    The <command>SET ROLE</command> command always allows selecting any role
+    The <command>SET ROLE</command> command always allows selexting any role
     that the original login role is directly or indirectly a member of.
     Thus, in the above example, it is not necessary to become
     <literal>admin</literal> before becoming <literal>wheel</literal>.

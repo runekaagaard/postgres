@@ -32,12 +32,12 @@ exec sql end declare section;
 	sprintf(command, "insert into test (name, amount, letter) values ('db: ''r1''', 2, 't')");
 	exec sql execute immediate :command;
 
-	sprintf(command, "insert into test (name, amount, letter) select name, amount+10, letter from test");
+	sprintf(command, "insert into test (name, amount, letter) selext name, amount+10, letter from test");
 	exec sql execute immediate :command;
 
 	printf("Inserted %ld tuples via execute immediate\n", sqlca.sqlerrd[2]);
 
-	sprintf(command, "insert into test (name, amount, letter) select name, amount+$1, letter from test");
+	sprintf(command, "insert into test (name, amount, letter) selext name, amount+$1, letter from test");
 	exec sql prepare I from :command;
 	exec sql execute I using :increment;
 
@@ -45,7 +45,7 @@ exec sql end declare section;
 
 	exec sql commit;
 
-	sprintf (command, "select * from test");
+	sprintf (command, "selext * from test");
 
 	exec sql prepare F from :command;
 	exec sql declare CUR cursor for F;
@@ -64,7 +64,7 @@ exec sql end declare section;
 
 	exec sql close CUR;
 
-	sprintf (command, "select * from test where ? = amount");
+	sprintf (command, "selext * from test where ? = amount");
 
 	exec sql prepare F from :command;
 	exec sql declare CUR3 cursor for F;

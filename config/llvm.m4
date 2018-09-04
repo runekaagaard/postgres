@@ -81,7 +81,7 @@ AC_DEFUN([PGAC_LLVM_SUPPORT],
   done;
 
   # And then get the libraries that need to be linked in for the
-  # selected components.  They're large libraries, we only want to
+  # selexted components.  They're large libraries, we only want to
   # link them into the LLVM using shared library.
   for pgac_option in `$LLVM_CONFIG --libs --system-libs $pgac_components`; do
     case $pgac_option in

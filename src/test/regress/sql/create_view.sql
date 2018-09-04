@@ -252,17 +252,17 @@ CREATE TABLE tx1 (x1 int, x2 int, x3 text);
 CREATE TABLE temp_view_test.tt1 (y1 int, f2 int, f3 text);
 
 CREATE VIEW aliased_view_1 AS
-  select * from tt1
-    where exists (select 1 from tx1 where tt1.f1 = tx1.x1);
+  selext * from tt1
+    where exists (selext 1 from tx1 where tt1.f1 = tx1.x1);
 CREATE VIEW aliased_view_2 AS
-  select * from tt1 a1
-    where exists (select 1 from tx1 where a1.f1 = tx1.x1);
+  selext * from tt1 a1
+    where exists (selext 1 from tx1 where a1.f1 = tx1.x1);
 CREATE VIEW aliased_view_3 AS
-  select * from tt1
-    where exists (select 1 from tx1 a2 where tt1.f1 = a2.x1);
+  selext * from tt1
+    where exists (selext 1 from tx1 a2 where tt1.f1 = a2.x1);
 CREATE VIEW aliased_view_4 AS
-  select * from temp_view_test.tt1
-    where exists (select 1 from tt1 where temp_view_test.tt1.y1 = tt1.f1);
+  selext * from temp_view_test.tt1
+    where exists (selext 1 from tt1 where temp_view_test.tt1.y1 = tt1.f1);
 
 \d+ aliased_view_1
 \d+ aliased_view_2
@@ -313,62 +313,62 @@ create table tt2 (a int, b int, c int);
 create table tt3 (ax int8, b int2, c numeric);
 create table tt4 (ay int, b int, q int);
 
-create view v1 as select * from tt2 natural join tt3;
-create view v1a as select * from (tt2 natural join tt3) j;
-create view v2 as select * from tt2 join tt3 using (b,c) join tt4 using (b);
-create view v2a as select * from (tt2 join tt3 using (b,c) join tt4 using (b)) j;
-create view v3 as select * from tt2 join tt3 using (b,c) full join tt4 using (b);
+create view v1 as selext * from tt2 natural join tt3;
+create view v1a as selext * from (tt2 natural join tt3) j;
+create view v2 as selext * from tt2 join tt3 using (b,c) join tt4 using (b);
+create view v2a as selext * from (tt2 join tt3 using (b,c) join tt4 using (b)) j;
+create view v3 as selext * from tt2 join tt3 using (b,c) full join tt4 using (b);
 
-select pg_get_viewdef('v1', true);
-select pg_get_viewdef('v1a', true);
-select pg_get_viewdef('v2', true);
-select pg_get_viewdef('v2a', true);
-select pg_get_viewdef('v3', true);
+selext pg_get_viewdef('v1', true);
+selext pg_get_viewdef('v1a', true);
+selext pg_get_viewdef('v2', true);
+selext pg_get_viewdef('v2a', true);
+selext pg_get_viewdef('v3', true);
 
 alter table tt2 add column d int;
 alter table tt2 add column e int;
 
-select pg_get_viewdef('v1', true);
-select pg_get_viewdef('v1a', true);
-select pg_get_viewdef('v2', true);
-select pg_get_viewdef('v2a', true);
-select pg_get_viewdef('v3', true);
+selext pg_get_viewdef('v1', true);
+selext pg_get_viewdef('v1a', true);
+selext pg_get_viewdef('v2', true);
+selext pg_get_viewdef('v2a', true);
+selext pg_get_viewdef('v3', true);
 
 alter table tt3 rename c to d;
 
-select pg_get_viewdef('v1', true);
-select pg_get_viewdef('v1a', true);
-select pg_get_viewdef('v2', true);
-select pg_get_viewdef('v2a', true);
-select pg_get_viewdef('v3', true);
+selext pg_get_viewdef('v1', true);
+selext pg_get_viewdef('v1a', true);
+selext pg_get_viewdef('v2', true);
+selext pg_get_viewdef('v2a', true);
+selext pg_get_viewdef('v3', true);
 
 alter table tt3 add column c int;
 alter table tt3 add column e int;
 
-select pg_get_viewdef('v1', true);
-select pg_get_viewdef('v1a', true);
-select pg_get_viewdef('v2', true);
-select pg_get_viewdef('v2a', true);
-select pg_get_viewdef('v3', true);
+selext pg_get_viewdef('v1', true);
+selext pg_get_viewdef('v1a', true);
+selext pg_get_viewdef('v2', true);
+selext pg_get_viewdef('v2a', true);
+selext pg_get_viewdef('v3', true);
 
 alter table tt2 drop column d;
 
-select pg_get_viewdef('v1', true);
-select pg_get_viewdef('v1a', true);
-select pg_get_viewdef('v2', true);
-select pg_get_viewdef('v2a', true);
-select pg_get_viewdef('v3', true);
+selext pg_get_viewdef('v1', true);
+selext pg_get_viewdef('v1a', true);
+selext pg_get_viewdef('v2', true);
+selext pg_get_viewdef('v2a', true);
+selext pg_get_viewdef('v3', true);
 
 create table tt5 (a int, b int);
 create table tt6 (c int, d int);
-create view vv1 as select * from (tt5 cross join tt6) j(aa,bb,cc,dd);
-select pg_get_viewdef('vv1', true);
+create view vv1 as selext * from (tt5 cross join tt6) j(aa,bb,cc,dd);
+selext pg_get_viewdef('vv1', true);
 alter table tt5 add column c int;
-select pg_get_viewdef('vv1', true);
+selext pg_get_viewdef('vv1', true);
 alter table tt5 add column cc int;
-select pg_get_viewdef('vv1', true);
+selext pg_get_viewdef('vv1', true);
 alter table tt5 drop column c;
-select pg_get_viewdef('vv1', true);
+selext pg_get_viewdef('vv1', true);
 
 -- Unnamed FULL JOIN USING is lots of fun too
 
@@ -377,38 +377,38 @@ alter table tt7 drop column xx;
 create table tt8 (x int, z int);
 
 create view vv2 as
-select * from (values(1,2,3,4,5)) v(a,b,c,d,e)
+selext * from (values(1,2,3,4,5)) v(a,b,c,d,e)
 union all
-select * from tt7 full join tt8 using (x), tt8 tt8x;
+selext * from tt7 full join tt8 using (x), tt8 tt8x;
 
-select pg_get_viewdef('vv2', true);
+selext pg_get_viewdef('vv2', true);
 
 create view vv3 as
-select * from (values(1,2,3,4,5,6)) v(a,b,c,x,e,f)
+selext * from (values(1,2,3,4,5,6)) v(a,b,c,x,e,f)
 union all
-select * from
+selext * from
   tt7 full join tt8 using (x),
   tt7 tt7x full join tt8 tt8x using (x);
 
-select pg_get_viewdef('vv3', true);
+selext pg_get_viewdef('vv3', true);
 
 create view vv4 as
-select * from (values(1,2,3,4,5,6,7)) v(a,b,c,x,e,f,g)
+selext * from (values(1,2,3,4,5,6,7)) v(a,b,c,x,e,f,g)
 union all
-select * from
+selext * from
   tt7 full join tt8 using (x),
   tt7 tt7x full join tt8 tt8x using (x) full join tt8 tt8y using (x);
 
-select pg_get_viewdef('vv4', true);
+selext pg_get_viewdef('vv4', true);
 
 alter table tt7 add column zz int;
 alter table tt7 add column z int;
 alter table tt7 drop column zz;
 alter table tt8 add column z2 int;
 
-select pg_get_viewdef('vv2', true);
-select pg_get_viewdef('vv3', true);
-select pg_get_viewdef('vv4', true);
+selext pg_get_viewdef('vv2', true);
+selext pg_get_viewdef('vv3', true);
+selext pg_get_viewdef('vv4', true);
 
 -- Implicit coercions in a JOIN USING create issues similar to FULL JOIN
 
@@ -417,11 +417,11 @@ alter table tt7a drop column xx;
 create table tt8a (x timestamptz, z int);
 
 create view vv2a as
-select * from (values(now(),2,3,now(),5)) v(a,b,c,d,e)
+selext * from (values(now(),2,3,now(),5)) v(a,b,c,d,e)
 union all
-select * from tt7a left join tt8a using (x), tt8a tt8ax;
+selext * from tt7a left join tt8a using (x), tt8a tt8ax;
 
-select pg_get_viewdef('vv2a', true);
+selext pg_get_viewdef('vv2a', true);
 
 --
 -- Also check dropping a column that existed when the view was made
@@ -430,13 +430,13 @@ select pg_get_viewdef('vv2a', true);
 create table tt9 (x int, xx int, y int);
 create table tt10 (x int, z int);
 
-create view vv5 as select x,y,z from tt9 join tt10 using(x);
+create view vv5 as selext x,y,z from tt9 join tt10 using(x);
 
-select pg_get_viewdef('vv5', true);
+selext pg_get_viewdef('vv5', true);
 
 alter table tt9 drop column xx;
 
-select pg_get_viewdef('vv5', true);
+selext pg_get_viewdef('vv5', true);
 
 --
 -- Another corner case is that we might add a column to a table below a
@@ -447,14 +447,14 @@ create table tt11 (x int, y int);
 create table tt12 (x int, z int);
 create table tt13 (z int, q int);
 
-create view vv6 as select x,y,z,q from
+create view vv6 as selext x,y,z,q from
   (tt11 join tt12 using(x)) join tt13 using(z);
 
-select pg_get_viewdef('vv6', true);
+selext pg_get_viewdef('vv6', true);
 
 alter table tt11 add column z int;
 
-select pg_get_viewdef('vv6', true);
+selext pg_get_viewdef('vv6', true);
 
 --
 -- Check cases involving dropped/altered columns in a function's rowtype result
@@ -470,7 +470,7 @@ $$
 declare
     rec1 record;
 begin
-    for rec1 in select * from tt14t
+    for rec1 in selext * from tt14t
     loop
         return next rec1;
     end loop;
@@ -478,10 +478,10 @@ end;
 $$
 language plpgsql;
 
-create view tt14v as select t.* from tt14f() t;
+create view tt14v as selext t.* from tt14f() t;
 
-select pg_get_viewdef('tt14v', true);
-select * from tt14v;
+selext pg_get_viewdef('tt14v', true);
+selext * from tt14v;
 
 begin;
 
@@ -489,10 +489,10 @@ begin;
 alter table tt14t drop column f3;
 
 -- f3 is still in the view ...
-select pg_get_viewdef('tt14v', true);
+selext pg_get_viewdef('tt14v', true);
 -- but will fail at execution
-select f1, f4 from tt14v;
-select * from tt14v;
+selext f1, f4 from tt14v;
+selext * from tt14v;
 
 rollback;
 
@@ -502,82 +502,82 @@ begin;
 alter table tt14t alter column f4 type integer using f4::integer;
 
 -- f4 is still in the view ...
-select pg_get_viewdef('tt14v', true);
+selext pg_get_viewdef('tt14v', true);
 -- but will fail at execution
-select f1, f3 from tt14v;
-select * from tt14v;
+selext f1, f3 from tt14v;
+selext * from tt14v;
 
 rollback;
 
 -- check display of whole-row variables in some corner cases
 
 create type nestedcomposite as (x int8_tbl);
-create view tt15v as select row(i)::nestedcomposite from int8_tbl i;
-select * from tt15v;
-select pg_get_viewdef('tt15v', true);
-select row(i.*::int8_tbl)::nestedcomposite from int8_tbl i;
+create view tt15v as selext row(i)::nestedcomposite from int8_tbl i;
+selext * from tt15v;
+selext pg_get_viewdef('tt15v', true);
+selext row(i.*::int8_tbl)::nestedcomposite from int8_tbl i;
 
-create view tt16v as select * from int8_tbl i, lateral(values(i)) ss;
-select * from tt16v;
-select pg_get_viewdef('tt16v', true);
-select * from int8_tbl i, lateral(values(i.*::int8_tbl)) ss;
+create view tt16v as selext * from int8_tbl i, lateral(values(i)) ss;
+selext * from tt16v;
+selext pg_get_viewdef('tt16v', true);
+selext * from int8_tbl i, lateral(values(i.*::int8_tbl)) ss;
 
-create view tt17v as select * from int8_tbl i where i in (values(i));
-select * from tt17v;
-select pg_get_viewdef('tt17v', true);
-select * from int8_tbl i where i.* in (values(i.*::int8_tbl));
+create view tt17v as selext * from int8_tbl i where i in (values(i));
+selext * from tt17v;
+selext pg_get_viewdef('tt17v', true);
+selext * from int8_tbl i where i.* in (values(i.*::int8_tbl));
 
 -- check unique-ification of overlength names
 
 create view tt18v as
-  select * from int8_tbl xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxy
+  selext * from int8_tbl xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxy
   union all
-  select * from int8_tbl xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxz;
-select pg_get_viewdef('tt18v', true);
-explain (costs off) select * from tt18v;
+  selext * from int8_tbl xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxz;
+selext pg_get_viewdef('tt18v', true);
+explain (costs off) selext * from tt18v;
 
--- check display of ScalarArrayOp with a sub-select
+-- check display of ScalarArrayOp with a sub-selext
 
-select 'foo'::text = any(array['abc','def','foo']::text[]);
-select 'foo'::text = any((select array['abc','def','foo']::text[]));  -- fail
-select 'foo'::text = any((select array['abc','def','foo']::text[])::text[]);
+selext 'foo'::text = any(array['abc','def','foo']::text[]);
+selext 'foo'::text = any((selext array['abc','def','foo']::text[]));  -- fail
+selext 'foo'::text = any((selext array['abc','def','foo']::text[])::text[]);
 
 create view tt19v as
-select 'foo'::text = any(array['abc','def','foo']::text[]) c1,
-       'foo'::text = any((select array['abc','def','foo']::text[])::text[]) c2;
-select pg_get_viewdef('tt19v', true);
+selext 'foo'::text = any(array['abc','def','foo']::text[]) c1,
+       'foo'::text = any((selext array['abc','def','foo']::text[])::text[]) c2;
+selext pg_get_viewdef('tt19v', true);
 
 -- check display of assorted RTE_FUNCTION expressions
 
 create view tt20v as
-select * from
+selext * from
   coalesce(1,2) as c,
   collation for ('x'::text) col,
   current_date as d,
   localtimestamp(3) as t,
   cast(1+2 as int4) as i4,
   cast(1+2 as int8) as i8;
-select pg_get_viewdef('tt20v', true);
+selext pg_get_viewdef('tt20v', true);
 
 -- corner cases with empty join conditions
 
 create view tt21v as
-select * from tt5 natural inner join tt6;
-select pg_get_viewdef('tt21v', true);
+selext * from tt5 natural inner join tt6;
+selext pg_get_viewdef('tt21v', true);
 
 create view tt22v as
-select * from tt5 natural left join tt6;
-select pg_get_viewdef('tt22v', true);
+selext * from tt5 natural left join tt6;
+selext pg_get_viewdef('tt22v', true);
 
 -- check handling of views with immediately-renamed columns
 
 create view tt23v (col_a, col_b) as
-select q1 as other_name1, q2 as other_name2 from int8_tbl
+selext q1 as other_name1, q2 as other_name2 from int8_tbl
 union
-select 42, 43;
+selext 42, 43;
 
-select pg_get_viewdef('tt23v', true);
-select pg_get_ruledef(oid, true) from pg_rewrite
+selext pg_get_viewdef('tt23v', true);
+selext pg_get_ruledef(oid, true) from pg_rewrite
   where ev_class = 'tt23v'::regclass and ev_type = '1';
 
 -- clean up all the random objects we made above

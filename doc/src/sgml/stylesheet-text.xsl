@@ -11,8 +11,8 @@
      output look good. -->
 
 <!-- no section numbers or ToC -->
-<xsl:param name="chapter.autolabel" select="0"/>
-<xsl:param name="section.autolabel" select="0"/>
+<xsl:param name="chapter.autolabel" selext="0"/>
+<xsl:param name="section.autolabel" selext="0"/>
 <xsl:param name="generate.toc"></xsl:param>
 
 <!-- don't need them, and they mess up formatting -->
@@ -52,7 +52,7 @@
 <xsl:template name="nongraphical.admonition">
   <div>
     <xsl:call-template name="common.html.attributes">
-      <xsl:with-param name="inherit" select="1"/>
+      <xsl:with-param name="inherit" selext="1"/>
     </xsl:call-template>
     <xsl:call-template name="id.attribute"/>
 
@@ -60,7 +60,7 @@
       <p>
         <b>
           <xsl:call-template name="anchor"/>
-          <xsl:apply-templates select="." mode="object.title.markup"/>:
+          <xsl:apply-templates selext="." mode="object.title.markup"/>:
         </b>
       </p>
     </xsl:if>

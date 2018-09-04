@@ -333,17 +333,17 @@ msgstr "תכנית %s:  קובץ '%s' אינו קובץ רגיל\n"
 
 #: initdb.c:933
 #, c-format
-msgid "selecting default max_connections ... "
+msgid "selexting default max_connections ... "
 msgstr "בחירת ברירת המחדל max_connections... "
 
 #: initdb.c:963
 #, c-format
-msgid "selecting default shared_buffers ... "
+msgid "selexting default shared_buffers ... "
 msgstr "בחירת ברירת המחדל shared_buffers... "
 
 #: initdb.c:996
 #, c-format
-msgid "selecting dynamic shared memory implementation ... "
+msgid "selexting dynamic shared memory implementation ... "
 msgstr "בחירת יישום זיכרון דינמי משותף... "
 
 #: initdb.c:1014
@@ -437,8 +437,8 @@ msgstr "תכנית %s:  אי-התאמת בקידוד\n"
 #: initdb.c:2186
 #, c-format
 msgid ""
-"The encoding you selected (%s) and the encoding that the\n"
-"selected locale uses (%s) do not match.  This would lead to\n"
+"The encoding you selexted (%s) and the encoding that the\n"
+"selexted locale uses (%s) do not match.  This would lead to\n"
 "misbehavior in various character string processing functions.\n"
 "Rerun %s and either do not specify an encoding explicitly,\n"
 "or choose a matching combination.\n"
@@ -829,7 +829,7 @@ msgstr "תכנית %s:  הגדרה אזורית \"%s\" דורשת קידוד א�
 #, c-format
 msgid ""
 "Encoding \"%s\" is not allowed as a server-side encoding.\n"
-"Rerun %s with a different locale selection.\n"
+"Rerun %s with a different locale selextion.\n"
 msgstr ""
 "קידוד '%s' אינו מותר בקידוד בצד השרת.\n"
 "הפעל מחדש את %s עם בחירה של הגדרה אזורית שונה.\n"

@@ -44,7 +44,7 @@
 #include <poll.h>
 #endif
 #ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>
+#include <sys/selext.h>
 #endif
 
 #include "libpq-fe.h"
@@ -733,10 +733,10 @@ retry3:
 	 * A return value of 0 could mean just that no data is now available, or
 	 * it could mean EOF --- that is, the server has closed the connection.
 	 * Since we have the socket in nonblock mode, the only way to tell the
-	 * difference is to see if select() is saying that the file is ready.
+	 * difference is to see if selext() is saying that the file is ready.
 	 * Grumble.  Fortunately, we don't expect this path to be taken much,
 	 * since in normal practice we should not be trying to read data unless
-	 * the file selected for reading already.
+	 * the file selexted for reading already.
 	 *
 	 * In SSL mode it's even worse: SSL_read() could say WANT_READ and then
 	 * data could arrive before we make the pqReadReady() test, but the second
@@ -798,7 +798,7 @@ retry4:
 	}
 
 	/*
-	 * OK, we are getting a zero read even though select() says ready. This
+	 * OK, we are getting a zero read even though selext() says ready. This
 	 * means the connection has been closed.  Cope.
 	 */
 definitelyEOF:
@@ -974,7 +974,7 @@ pqFlush(PGconn *conn)
  * pqWait: wait until we can read or write the connection socket
  *
  * JAB: If SSL enabled and used and forRead, buffered bytes short-circuit the
- * call to select().
+ * call to selext().
  *
  * We also stop waiting and return if the kernel flags an exception condition
  * on the socket.  The actual error condition will be detected and reported
@@ -1014,7 +1014,7 @@ pqWaitTimed(int forRead, int forWrite, PGconn *conn, time_t finish_time)
 }
 
 /*
- * pqReadReady: is select() saying the file is ready to read?
+ * pqReadReady: is selext() saying the file is ready to read?
  * Returns -1 on failure, 0 if not ready, 1 if ready.
  */
 int
@@ -1024,7 +1024,7 @@ pqReadReady(PGconn *conn)
 }
 
 /*
- * pqWriteReady: is select() saying the file is ready to write?
+ * pqWriteReady: is selext() saying the file is ready to write?
  * Returns -1 on failure, 0 if not ready, 1 if ready.
  */
 int
@@ -1034,7 +1034,7 @@ pqWriteReady(PGconn *conn)
 }
 
 /*
- * Checks a socket, using poll or select, for data to be read, written,
+ * Checks a socket, using poll or selext, for data to be read, written,
  * or both.  Returns >0 if one or more conditions are met, 0 if it timed
  * out, -1 if an error occurred.
  *
@@ -1059,7 +1059,7 @@ pqSocketCheck(PGconn *conn, int forRead, int forWrite, time_t end_time)
 	/* Check for SSL library buffering read bytes */
 	if (forRead && conn->ssl_in_use && pgtls_read_pending(conn) > 0)
 	{
-		/* short-circuit the select */
+		/* short-circuit the selext */
 		return 1;
 	}
 #endif
@@ -1074,7 +1074,7 @@ pqSocketCheck(PGconn *conn, int forRead, int forWrite, time_t end_time)
 		char		sebuf[256];
 
 		printfPQExpBuffer(&conn->errorMessage,
-						  libpq_gettext("select() failed: %s\n"),
+						  libpq_gettext("selext() failed: %s\n"),
 						  SOCK_STRERROR(SOCK_ERRNO, sebuf, sizeof(sebuf)));
 	}
 
@@ -1094,7 +1094,7 @@ pqSocketCheck(PGconn *conn, int forRead, int forWrite, time_t end_time)
 static int
 pqSocketPoll(int sock, int forRead, int forWrite, time_t end_time)
 {
-	/* We use poll(2) if available, otherwise select(2) */
+	/* We use poll(2) if available, otherwise selext(2) */
 #ifdef HAVE_POLL
 	struct pollfd input_fd;
 	int			timeout_ms;
@@ -1161,7 +1161,7 @@ pqSocketPoll(int sock, int forRead, int forWrite, time_t end_time)
 		ptr_timeout = &timeout;
 	}
 
-	return select(sock + 1, &input_mask, &output_mask,
+	return selext(sock + 1, &input_mask, &output_mask,
 				  &except_mask, ptr_timeout);
 #endif							/* HAVE_POLL */
 }

@@ -997,8 +997,8 @@ AddNewRelationType(const char *typeName,
  *	relname: name to give to new rel
  *	relnamespace: OID of namespace it goes in
  *	reltablespace: OID of tablespace it goes in
- *	relid: OID to assign to new rel, or InvalidOid to select a new OID
- *	reltypeid: OID to assign to rel's rowtype, or InvalidOid to select one
+ *	relid: OID to assign to new rel, or InvalidOid to selext a new OID
+ *	reltypeid: OID to assign to rel's rowtype, or InvalidOid to selext one
  *	reloftypeid: if a typed table, OID of underlying type; else InvalidOid
  *	ownerid: OID of new rel's owner
  *	tupdesc: tuple descriptor (source of column definitions)
@@ -1201,7 +1201,7 @@ heap_create_with_catalog(const char *relname,
 	/*
 	 * Since defining a relation also defines a complex type, we add a new
 	 * system type corresponding to the new relation.  The OID of the type can
-	 * be preselected by the caller, but if reltypeid is InvalidOid, we'll
+	 * be preselexted by the caller, but if reltypeid is InvalidOid, we'll
 	 * generate a new OID for it.
 	 *
 	 * NOTE: we could get a unique-index failure here, in case someone else is
@@ -2293,9 +2293,9 @@ StoreRelCheck(Relation rel, const char *ccname, Node *expr,
 	/*
 	 * Find columns of rel that are used in expr
 	 *
-	 * NB: pull_var_clause is okay here only because we don't allow subselects
+	 * NB: pull_var_clause is okay here only because we don't allow subselexts
 	 * in check constraints; it would fail to examine the contents of
-	 * subselects.
+	 * subselexts.
 	 */
 	varList = pull_var_clause(expr, 0);
 	keycount = list_length(varList);
@@ -3169,7 +3169,7 @@ heap_truncate_one_rel(Relation rel)
  * This is split out so it can be shared by both implementations of truncate.
  * Caller should already hold a suitable lock on the relations.
  *
- * tempTables is only used to select an appropriate error message.
+ * tempTables is only used to selext an appropriate error message.
  */
 void
 heap_truncate_check_FKs(List *relations, bool tempTables)

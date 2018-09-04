@@ -43,7 +43,7 @@ typedef struct PlannedStmt
 {
 	NodeTag		type;
 
-	CmdType		commandType;	/* select|insert|update|delete|utility */
+	CmdType		commandType;	/* selext|insert|update|delete|utility */
 
 	uint64		queryId;		/* query identifier (copied from Query) */
 
@@ -149,7 +149,7 @@ typedef struct Plan
 	struct Plan *lefttree;		/* input plan tree(s) */
 	struct Plan *righttree;
 	List	   *initPlan;		/* Init Plan nodes (un-correlated expr
-								 * subselects) */
+								 * subselexts) */
 
 	/*
 	 * Information for management of parameter-change-driven rescanning
@@ -969,7 +969,7 @@ typedef struct Limit
  * table; in particular we are likely to lock more rows than would be locked
  * locally, since remote rows will be locked even if they then fail
  * locally-checked restriction or join quals.  However, the prospect of
- * doing a separate remote query to lock each selected row is usually pretty
+ * doing a separate remote query to lock each selexted row is usually pretty
  * unappealing, so early locking remains a credible design choice for FDWs.
  *
  * When doing UPDATE, DELETE, or SELECT FOR UPDATE/SHARE, we have to uniquely

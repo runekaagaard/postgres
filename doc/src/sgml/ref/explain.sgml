@@ -228,7 +228,7 @@ ROLLBACK;
     <term><replaceable class="parameter">boolean</replaceable></term>
     <listitem>
      <para>
-      Specifies whether the selected option should be turned on or off.
+      Specifies whether the selexted option should be turned on or off.
       You can write <literal>TRUE</literal>, <literal>ON</literal>, or
       <literal>1</literal> to enable the option, and <literal>FALSE</literal>,
       <literal>OFF</literal>, or <literal>0</literal> to disable it.  The
@@ -257,7 +257,7 @@ ROLLBACK;
   <title>Outputs</title>
 
    <para>
-    The command's result is a textual description of the plan selected
+    The command's result is a textual description of the plan selexted
     for the <replaceable class="parameter">statement</replaceable>,
     optionally annotated with execution statistics.
     <xref linkend="using-explain"/> describes the information provided.
@@ -428,7 +428,7 @@ EXPLAIN ANALYZE EXECUTE query(100, 200);
   <para>
    Of course, the specific numbers shown here depend on the actual
    contents of the tables involved.  Also note that the numbers, and
-   even the selected query strategy, might vary between
+   even the selexted query strategy, might vary between
    <productname>PostgreSQL</productname> releases due to planner
    improvements. In addition, the <command>ANALYZE</command> command
    uses random sampling to estimate data statistics; therefore, it is

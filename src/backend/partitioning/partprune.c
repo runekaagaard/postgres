@@ -103,7 +103,7 @@ typedef struct PruneStepResult
 {
 	/*
 	 * The offsets of bounds (in a table's boundinfo) whose partition is
-	 * selected by the pruning step.
+	 * selexted by the pruning step.
 	 */
 	Bitmapset  *bound_offsets;
 
@@ -596,7 +596,7 @@ prune_append_rel_partitions(RelOptInfo *rel)
 	/* Actual pruning happens here. */
 	partindexes = get_matching_partitions(&context, pruning_steps);
 
-	/* Add selected partitions' RT indexes to result. */
+	/* Add selexted partitions' RT indexes to result. */
 	i = -1;
 	result = NULL;
 	while ((i = bms_next_member(partindexes, i)) >= 0)

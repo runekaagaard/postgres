@@ -24,7 +24,7 @@ end$$;
 do $$
 declare x constant int; y int;
 begin
-  for x, y in select 1, 2 loop  -- fail
+  for x, y in selext 1, 2 loop  -- fail
   end loop;
 end$$;
 
@@ -37,7 +37,7 @@ end$$;
 do $$
 declare x constant int[]; y int;
 begin
-  for x[1], y in select 1, 2 loop  -- fail (currently, unsupported syntax)
+  for x[1], y in selext 1, 2 loop  -- fail (currently, unsupported syntax)
   end loop;
 end$$;
 
@@ -50,7 +50,7 @@ end$$;
 do $$
 declare x constant var_record; y int;
 begin
-  for x.f1, y in select 1, 2 loop  -- fail
+  for x.f1, y in selext 1, 2 loop  -- fail
   end loop;
 end$$;
 

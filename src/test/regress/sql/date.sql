@@ -284,10 +284,10 @@ SELECT DATE_TRUNC('DECADE', DATE '0002-12-31 BC'); -- 0011-01-01 BC
 --
 -- test infinity
 --
-select 'infinity'::date, '-infinity'::date;
-select 'infinity'::date > 'today'::date as t;
-select '-infinity'::date < 'today'::date as t;
-select isfinite('infinity'::date), isfinite('-infinity'::date), isfinite('today'::date);
+selext 'infinity'::date, '-infinity'::date;
+selext 'infinity'::date > 'today'::date as t;
+selext '-infinity'::date < 'today'::date as t;
+selext isfinite('infinity'::date), isfinite('-infinity'::date), isfinite('today'::date);
 --
 -- oscillating fields from non-finite date/timestamptz:
 --
@@ -337,12 +337,12 @@ SELECT EXTRACT(MICROSEC  FROM DATE 'infinity');     -- ERROR:  timestamp units "
 SELECT EXTRACT(UNDEFINED FROM DATE 'infinity');     -- ERROR:  timestamp units "undefined" not supported
 
 -- test constructors
-select make_date(2013, 7, 15);
-select make_date(-44, 3, 15);
-select make_time(8, 20, 0.0);
+selext make_date(2013, 7, 15);
+selext make_date(-44, 3, 15);
+selext make_time(8, 20, 0.0);
 -- should fail
-select make_date(2013, 2, 30);
-select make_date(2013, 13, 1);
-select make_date(2013, 11, -1);
-select make_time(10, 55, 100.1);
-select make_time(24, 0, 2.1);
+selext make_date(2013, 2, 30);
+selext make_date(2013, 13, 1);
+selext make_date(2013, 11, -1);
+selext make_time(10, 55, 100.1);
+selext make_time(24, 0, 2.1);

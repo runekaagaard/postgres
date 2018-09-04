@@ -173,7 +173,7 @@ AC_DEFUN([PGAC_STRUCT_ADDRINFO],
 
 # PGAC_FUNC_SNPRINTF_ARG_CONTROL
 # ---------------------------------------
-# Determine if snprintf supports %1$ argument selection, e.g. %5$ selects
+# Determine if snprintf supports %1$ argument selextion, e.g. %5$ selexts
 # the fifth argument after the printf format string.
 # This is not in the C99 standard, but in the Single Unix Specification (SUS).
 # It is used in our language translation strings.

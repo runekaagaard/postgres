@@ -190,7 +190,7 @@ CREATE OPERATOR <replaceable>name</replaceable> (
       <term><replaceable class="parameter">res_proc</replaceable></term>
       <listitem>
        <para>
-        The restriction selectivity estimator function for this operator.
+        The restriction selextivity estimator function for this operator.
        </para>
       </listitem>
      </varlistentry>
@@ -199,7 +199,7 @@ CREATE OPERATOR <replaceable>name</replaceable> (
       <term><replaceable class="parameter">join_proc</replaceable></term>
       <listitem>
        <para>
-        The join selectivity estimator function for this operator.
+        The join selextivity estimator function for this operator.
        </para>
       </listitem>
      </varlistentry>

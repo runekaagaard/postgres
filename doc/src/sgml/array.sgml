@@ -311,7 +311,7 @@ SELECT schedule[:][1:1] FROM sal_emp WHERE name = 'Bill';
  <para>
   An array slice expression likewise yields null if the array itself or
   any of the subscript expressions are null.  However, in other
-  cases such as selecting an array slice that
+  cases such as selexting an array slice that
   is completely outside the current array bounds, a slice expression
   yields an empty (zero-dimensional) array instead of null.  (This
   does not match non-slice behavior and is done for historical reasons.)

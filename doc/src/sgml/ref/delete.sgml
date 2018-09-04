@@ -48,7 +48,7 @@ DELETE FROM [ ONLY ] <replaceable class="parameter">table_name</replaceable> [ *
 
   <para>
    There are two ways to delete rows in a table using information
-   contained in other tables in the database: using sub-selects, or
+   contained in other tables in the database: using sub-selexts, or
    specifying additional tables in the <literal>USING</literal> clause.
    Which technique is more appropriate depends on the specific
    circumstances.
@@ -82,7 +82,7 @@ DELETE FROM [ ONLY ] <replaceable class="parameter">table_name</replaceable> [ *
      <para>
       The <literal>WITH</literal> clause allows you to specify one or more
       subqueries that can be referenced by name in the <command>DELETE</command>
-      query. See <xref linkend="queries-with"/> and <xref linkend="sql-select"/>
+      query. See <xref linkend="queries-with"/> and <xref linkend="sql-selext"/>
       for details.
      </para>
     </listitem>
@@ -232,7 +232,7 @@ DELETE FROM films
   WHERE producer_id IN (SELECT id FROM producers WHERE name = 'foo');
 </programlisting>
    In some cases the join style is easier to write or faster to
-   execute than the sub-select style.
+   execute than the sub-selext style.
   </para>
  </refsect1>
 

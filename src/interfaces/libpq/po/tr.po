@@ -782,8 +782,8 @@ msgstr "geçersiz sembol\n"
 
 #: fe-misc.c:1079
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "select() başarısız oldu: %s\n"
+msgid "selext() failed: %s\n"
+msgstr "selext() başarısız oldu: %s\n"
 
 #: fe-protocol2.c:91
 #, c-format

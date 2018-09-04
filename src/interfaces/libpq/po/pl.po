@@ -706,8 +706,8 @@ msgstr "nieprawidłowe gniazdo\n"
 
 #: fe-misc.c:1084
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "select() nie udało się: %s\n"
+msgid "selext() failed: %s\n"
+msgstr "selext() nie udało się: %s\n"
 
 #: fe-protocol2.c:91
 #, c-format

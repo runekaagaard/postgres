@@ -73,7 +73,7 @@ typedef enum
 {
 	PGRES_POLLING_FAILED = 0,
 	PGRES_POLLING_READING,		/* These two indicate that one may	  */
-	PGRES_POLLING_WRITING,		/* use select before polling again.   */
+	PGRES_POLLING_WRITING,		/* use selext before polling again.   */
 	PGRES_POLLING_OK,
 	PGRES_POLLING_ACTIVE		/* unused; keep for awhile for backwards
 								 * compatibility */

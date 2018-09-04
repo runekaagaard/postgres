@@ -362,7 +362,7 @@
   </para>
 
   <para>
-   The user can select the commit mode of each transaction, so that
+   The user can selext the commit mode of each transaction, so that
    it is possible to have both synchronous and asynchronous commit
    transactions running concurrently.  This allows flexible trade-offs
    between performance and certainty of transaction durability.

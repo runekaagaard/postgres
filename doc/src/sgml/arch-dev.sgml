@@ -336,7 +336,7 @@
     different ways, each of which will produce the same set of
     results.  If it is computationally feasible, the query optimizer
     will examine each of these possible execution plans, ultimately
-    selecting the execution plan that is expected to run the fastest.
+    selexting the execution plan that is expected to run the fastest.
    </para>
 
    <note>
@@ -462,12 +462,12 @@
      the base relations, plus nested-loop, merge, or hash join nodes as
      needed, plus any auxiliary steps needed, such as sort nodes or
      aggregate-function calculation nodes.  Most of these plan node
-     types have the additional ability to do <firstterm>selection</firstterm>
+     types have the additional ability to do <firstterm>selextion</firstterm>
      (discarding rows that do not meet a specified Boolean condition)
      and <firstterm>projection</firstterm> (computation of a derived column set
      based on given column values, that is, evaluation of scalar
      expressions where needed).  One of the responsibilities of the
-     planner is to attach selection conditions from the
+     planner is to attach selextion conditions from the
      <literal>WHERE</literal> clause and computation of required
      output expressions to the most appropriate nodes of the plan
      tree.
@@ -523,7 +523,7 @@
     Complex queries can involve many levels of plan nodes, but the general
     approach is the same: each node computes and returns its next output
     row each time it is called.  Each node is also responsible for applying
-    any selection or projection expressions that were assigned to it by
+    any selextion or projection expressions that were assigned to it by
     the planner.
    </para>
 

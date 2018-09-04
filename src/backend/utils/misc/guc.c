@@ -1916,7 +1916,7 @@ static struct config_int ConfigureNamesInt[] =
 	{
 		{"geqo_pool_size", PGC_USERSET, QUERY_TUNING_GEQO,
 			gettext_noop("GEQO: number of individuals in the population."),
-			gettext_noop("Zero selects a suitable default value.")
+			gettext_noop("Zero selexts a suitable default value.")
 		},
 		&Geqo_pool_size,
 		0, 0, INT_MAX,
@@ -1925,7 +1925,7 @@ static struct config_int ConfigureNamesInt[] =
 	{
 		{"geqo_generations", PGC_USERSET, QUERY_TUNING_GEQO,
 			gettext_noop("GEQO: number of iterations of the algorithm."),
-			gettext_noop("Zero selects a suitable default value.")
+			gettext_noop("Zero selexts a suitable default value.")
 		},
 		&Geqo_generations,
 		0, 0, INT_MAX,
@@ -3186,18 +3186,18 @@ static struct config_real ConfigureNamesReal[] =
 	},
 
 	{
-		{"geqo_selection_bias", PGC_USERSET, QUERY_TUNING_GEQO,
-			gettext_noop("GEQO: selective pressure within the population."),
+		{"geqo_selextion_bias", PGC_USERSET, QUERY_TUNING_GEQO,
+			gettext_noop("GEQO: selextive pressure within the population."),
 			NULL
 		},
-		&Geqo_selection_bias,
+		&Geqo_selextion_bias,
 		DEFAULT_GEQO_SELECTION_BIAS,
 		MIN_GEQO_SELECTION_BIAS, MAX_GEQO_SELECTION_BIAS,
 		NULL, NULL, NULL
 	},
 	{
 		{"geqo_seed", PGC_USERSET, QUERY_TUNING_GEQO,
-			gettext_noop("GEQO: seed for random path selection."),
+			gettext_noop("GEQO: seed for random path selextion."),
 			NULL
 		},
 		&Geqo_seed,
@@ -3330,7 +3330,7 @@ static struct config_string ConfigureNamesString[] =
 	{
 		{"default_tablespace", PGC_USERSET, CLIENT_CONN_STATEMENT,
 			gettext_noop("Sets the default tablespace to create tables and indexes in."),
-			gettext_noop("An empty string selects the database's default tablespace."),
+			gettext_noop("An empty string selexts the database's default tablespace."),
 			GUC_IS_NAME
 		},
 		&default_tablespace,
@@ -4175,7 +4175,7 @@ static struct config_enum ConfigureNamesEnum[] =
 
 	{
 		{"plan_cache_mode", PGC_USERSET, QUERY_TUNING_OTHER,
-			gettext_noop("Controls the planner's selection of custom or generic plan."),
+			gettext_noop("Controls the planner's selextion of custom or generic plan."),
 			gettext_noop("Prepared statements can have custom and generic plans, and the planner "
 						 "will attempt to choose which is better.  This can be set to override "
 						 "the default behavior.")
@@ -5885,7 +5885,7 @@ parse_real(const char *value, double *result)
 
 
 /*
- * Lookup the name for an enum option with the selected value.
+ * Lookup the name for an enum option with the selexted value.
  * Should only ever be called with known-valid values, so throws
  * an elog(ERROR) if the enum option is not found.
  *
@@ -5910,7 +5910,7 @@ config_enum_lookup_by_value(struct config_enum *record, int val)
 
 
 /*
- * Lookup the value for an enum option with the selected name
+ * Lookup the value for an enum option with the selexted name
  * (case-insensitive).
  * If the enum option is found, sets the retval value and returns
  * true. If it's not found, return false and retval is set to 0.
@@ -10560,7 +10560,7 @@ assign_timezone_abbreviations(const char *newval, void *extra)
  * pg_timezone_abbrev_initialize --- set default value if not done already
  *
  * This is called after initial loading of postgresql.conf.  If no
- * timezone_abbreviations setting was found therein, select default.
+ * timezone_abbreviations setting was found therein, selext default.
  * If a non-default value is already installed, nothing will happen.
  *
  * This can also be called from ProcessConfigFile to establish the default

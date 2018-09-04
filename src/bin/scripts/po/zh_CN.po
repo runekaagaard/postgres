@@ -1185,7 +1185,7 @@ msgstr ""
 #~ msgid "  -W, --password            prompt for password to connect\n"
 #~ msgstr "  -W, --password            联接提示口令输入\n"
 
-#~ msgid "  -i, --sysid=SYSID         select sysid for new user\n"
+#~ msgid "  -i, --sysid=SYSID         selext sysid for new user\n"
 #~ msgstr "  -i, --sysid=SYSID         选择一个 sysid 给新用户\n"
 
 #~ msgid "%s: user ID must be a positive number\n"

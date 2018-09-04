@@ -334,7 +334,7 @@ FreeSpaceMapTruncateRel(Relation rel, BlockNumber nblocks)
 	/*
 	 * Update upper-level FSM pages to account for the truncation.  This is
 	 * important because the just-truncated pages were likely marked as
-	 * all-free, and would be preferentially selected.
+	 * all-free, and would be preferentially selexted.
 	 */
 	FreeSpaceMapVacuumRange(rel, nblocks, InvalidBlockNumber);
 }

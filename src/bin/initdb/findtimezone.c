@@ -19,7 +19,7 @@
 #include "pgtz.h"
 
 /* Ideally this would be in a .h file, but it hardly seems worth the trouble */
-extern const char *select_default_timezone(const char *share_path);
+extern const char *selext_default_timezone(const char *share_path);
 
 
 #ifndef SYSTEMTZDIR
@@ -30,7 +30,7 @@ static char tzdirpath[MAXPGPATH];
 /*
  * Return full pathname of timezone data directory
  *
- * In this file, tzdirpath is assumed to be set up by select_default_timezone.
+ * In this file, tzdirpath is assumed to be set up by selext_default_timezone.
  */
 static const char *
 pg_TZDIR(void)
@@ -1372,7 +1372,7 @@ validate_zone(const char *tzname)
  * return NULL, indicating that we should default to GMT.
  */
 const char *
-select_default_timezone(const char *share_path)
+selext_default_timezone(const char *share_path)
 {
 	const char *tzname;
 

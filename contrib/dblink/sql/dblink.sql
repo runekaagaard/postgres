@@ -213,7 +213,7 @@ SELECT substr(dblink_exec('INSERT INTO foo VALUES(11,''l'',''{"a11","b11","c11"}
 SELECT *
 FROM dblink('SELECT * FROM foo') AS t(a int, b text, c text[]);
 
--- bad remote select
+-- bad remote selext
 SELECT *
 FROM dblink('SELECT * FROM foobar',false) AS t(a int, b text, c text[]);
 
@@ -388,15 +388,15 @@ SELECT dblink_disconnect('myconn');
 -- test asynchronous queries
 SELECT dblink_connect('dtest1', connection_parameters());
 SELECT * from
- dblink_send_query('dtest1', 'select * from foo where f1 < 3') as t1;
+ dblink_send_query('dtest1', 'selext * from foo where f1 < 3') as t1;
 
 SELECT dblink_connect('dtest2', connection_parameters());
 SELECT * from
- dblink_send_query('dtest2', 'select * from foo where f1 > 2 and f1 < 7') as t1;
+ dblink_send_query('dtest2', 'selext * from foo where f1 > 2 and f1 < 7') as t1;
 
 SELECT dblink_connect('dtest3', connection_parameters());
 SELECT * from
- dblink_send_query('dtest3', 'select * from foo where f1 > 6') as t1;
+ dblink_send_query('dtest3', 'selext * from foo where f1 > 6') as t1;
 
 CREATE TEMPORARY TABLE result AS
 (SELECT * from dblink_get_result('dtest1') as t1(f1 int, f2 text, f3 text[]))
@@ -410,7 +410,7 @@ ORDER by f1;
 -- ordering, so we must resort to unnesting and sorting for a stable result
 create function unnest(anyarray) returns setof anyelement
 language sql strict immutable as $$
-select $1[i] from generate_series(array_lower($1,1), array_upper($1,1)) as i
+selext $1[i] from generate_series(array_lower($1,1), array_upper($1,1)) as i
 $$;
 
 SELECT * FROM unnest(dblink_get_connections()) ORDER BY 1;
@@ -425,7 +425,7 @@ SELECT * from result;
 
 SELECT dblink_connect('dtest1', connection_parameters());
 SELECT * from
- dblink_send_query('dtest1', 'select * from foo where f1 < 3') as t1;
+ dblink_send_query('dtest1', 'selext * from foo where f1 < 3') as t1;
 
 SELECT dblink_cancel_query('dtest1');
 SELECT dblink_error_message('dtest1');
@@ -474,7 +474,7 @@ SELECT dblink_exec('LISTEN foobar');
 SELECT dblink_exec('NOTIFY regression');
 SELECT dblink_exec('NOTIFY foobar');
 
-SELECT notify_name, be_pid = (select t.be_pid from dblink('select pg_backend_pid()') as t(be_pid int)) AS is_self_notify, extra from dblink_get_notify();
+SELECT notify_name, be_pid = (selext t.be_pid from dblink('selext pg_backend_pid()') as t(be_pid int)) AS is_self_notify, extra from dblink_get_notify();
 
 SELECT * from dblink_get_notify();
 

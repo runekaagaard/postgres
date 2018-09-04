@@ -54,9 +54,9 @@ int main(void)
 	);
 	$commit;
 
-	printf("first select\n");
+	printf("first selext\n");
 
-	$select c, s, i, b, f, l, dbl, dec, dat, tmp
+	$selext c, s, i, b, f, l, dbl, dec, dat, tmp
 		into :c, :s, :i, :b, :f, :l, :dbl, :dec, :dat, :tmp
 		from test where id = 1;
 
@@ -71,9 +71,9 @@ int main(void)
 	test_null(CDATETYPE, (char *) &dat);
 	test_null(CDTIMETYPE, (char *) &tmp);
 
-	printf("second select\n");
+	printf("second selext\n");
 
-	$select c, s, i, b, f, l, dbl, dec, dat, tmp
+	$selext c, s, i, b, f, l, dbl, dec, dat, tmp
 		into :c, :s, :i, :b, :f, :l, :dbl, :dec, :dat, :tmp
 		from test where id = 2;
 

@@ -10,7 +10,7 @@
  * single array of ranges. This has the same shape as the histogram that
  * std_typanalyze would collect, but the values are different. Each range
  * in the array is a valid range, even though the lower and upper bounds
- * come from different tuples. In theory, the standard scalar selectivity
+ * come from different tuples. In theory, the standard scalar selextivity
  * functions could be used with the combined histogram.
  *
  * Portions Copyright (c) 1996-2018, PostgreSQL Global Development Group

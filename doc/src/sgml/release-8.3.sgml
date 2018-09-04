@@ -55,7 +55,7 @@
 
     <listitem>
      <para>
-      Fix SQL grammar to allow subscripting or field selection from a
+      Fix SQL grammar to allow subscripting or field selextion from a
       sub-SELECT result (Tom Lane)
      </para>
     </listitem>
@@ -2640,12 +2640,12 @@
 
     <listitem>
      <para>
-      Fix <quote>cannot handle unplanned sub-select</quote> error (Tom Lane)
+      Fix <quote>cannot handle unplanned sub-selext</quote> error (Tom Lane)
      </para>
 
      <para>
-      This occurred when a sub-select contains a join alias reference that
-      expands into an expression containing another sub-select.
+      This occurred when a sub-selext contains a join alias reference that
+      expands into an expression containing another sub-selext.
      </para>
     </listitem>
 
@@ -3043,7 +3043,7 @@
     <listitem>
      <para>
       Fix <application>psql</application>'s <literal>\copy</literal> to not add spaces around
-      a dot within <literal>\copy (select ...)</literal> (Tom)
+      a dot within <literal>\copy (selext ...)</literal> (Tom)
      </para>
 
      <para>
@@ -3404,7 +3404,7 @@
       This case was formerly rejected as an error, but it's more convenient to
       treat it the same as a zero-element array.  In particular this avoids
       unnecessary failures when an <type>ltree</type> operation is applied to the
-      result of <literal>ARRAY(SELECT ...)</literal> and the sub-select returns no
+      result of <literal>ARRAY(SELECT ...)</literal> and the sub-selext returns no
       rows.
      </para>
     </listitem>
@@ -3691,7 +3691,7 @@
 
      <para>
       An error exit from the inner function could result in crashes due to
-      failure to re-select the correct Perl interpreter for the outer function.
+      failure to re-selext the correct Perl interpreter for the outer function.
      </para>
     </listitem>
 
@@ -4457,7 +4457,7 @@
 
     <listitem>
      <para>
-      Fix planner misestimation of selectivity when transitive equality
+      Fix planner misestimation of selextivity when transitive equality
       is applied to an outer-join clause (Tom)
      </para>
 
@@ -5102,11 +5102,11 @@
 
     <listitem>
      <para>
-      Fix planner bug with nested sub-select expressions (Tom)
+      Fix planner bug with nested sub-selext expressions (Tom)
      </para>
 
      <para>
-      If the outer sub-select has no direct dependency on the parent query,
+      If the outer sub-selext has no direct dependency on the parent query,
       but the inner one does, the outer value might not get recalculated
       for new parent query rows.
      </para>

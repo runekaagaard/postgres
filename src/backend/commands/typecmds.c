@@ -507,7 +507,7 @@ DefineType(ParseState *pstate, List *names, List *parameters)
 
 	/*
 	 * Convert analysis function proc name to an OID. If no analysis function
-	 * is specified, we'll use zero to select the built-in default algorithm.
+	 * is specified, we'll use zero to selext the built-in default algorithm.
 	 */
 	if (analyzeName)
 		analyzeOid = findTypeAnalyzeFunction(analyzeName, typoid);

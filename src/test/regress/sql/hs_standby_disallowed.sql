@@ -11,8 +11,8 @@ commit;
 
 -- SELECT
 
-select * from hs1 FOR SHARE;
-select * from hs1 FOR UPDATE;
+selext * from hs1 FOR SHARE;
+selext * from hs1 FOR UPDATE;
 
 -- DML
 BEGIN;

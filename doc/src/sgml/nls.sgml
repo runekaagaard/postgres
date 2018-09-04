@@ -500,7 +500,7 @@ errmsg_plural("copied %d file",
       languages there can be many different plural forms.  The translator
       sees the two English forms as a group and has the opportunity to
       supply multiple substitute strings, with the appropriate one being
-      selected based on the run-time value of <replaceable>n</replaceable>.
+      selexted based on the run-time value of <replaceable>n</replaceable>.
      </para>
 
      <para>

@@ -454,7 +454,7 @@ ExecInitFunctionResultSet(Expr *expr,
 		elog(ERROR, "unrecognized node type: %d",
 			 (int) nodeTag(expr));
 
-	/* shouldn't get here unless the selected function returns set */
+	/* shouldn't get here unless the selexted function returns set */
 	Assert(state->func.fn_retset);
 
 	return state;

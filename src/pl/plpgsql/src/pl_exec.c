@@ -356,7 +356,7 @@ static Datum exec_eval_expr(PLpgSQL_execstate *estate,
 			   bool *isNull,
 			   Oid *rettype,
 			   int32 *rettypmod);
-static int exec_run_select(PLpgSQL_execstate *estate,
+static int exec_run_selext(PLpgSQL_execstate *estate,
 				PLpgSQL_expr *expr, long maxtuples, Portal *portalP);
 static int exec_for_query(PLpgSQL_execstate *estate, PLpgSQL_stmt_forq *stmt,
 			   Portal portal, bool prefetch_ok);
@@ -2057,7 +2057,7 @@ exec_stmt_perform(PLpgSQL_execstate *estate, PLpgSQL_stmt_perform *stmt)
 {
 	PLpgSQL_expr *expr = stmt->expr;
 
-	(void) exec_run_select(estate, expr, 0, NULL);
+	(void) exec_run_selext(estate, expr, 0, NULL);
 	exec_set_found(estate, (estate->eval_processed != 0));
 	exec_eval_cleanup(estate);
 
@@ -2708,9 +2708,9 @@ exec_stmt_fors(PLpgSQL_execstate *estate, PLpgSQL_stmt_fors *stmt)
 	int			rc;
 
 	/*
-	 * Open the implicit cursor for the statement using exec_run_select
+	 * Open the implicit cursor for the statement using exec_run_selext
 	 */
-	exec_run_select(estate, stmt->query, 0, &portal);
+	exec_run_selext(estate, stmt->query, 0, &portal);
 
 	/*
 	 * Execute the loop
@@ -3436,7 +3436,7 @@ exec_stmt_return_query(PLpgSQL_execstate *estate,
 	if (stmt->query != NULL)
 	{
 		/* static query */
-		exec_run_select(estate, stmt->query, 0, &portal);
+		exec_run_selext(estate, stmt->query, 0, &portal);
 	}
 	else
 	{
@@ -3936,7 +3936,7 @@ plpgsql_estate_setup(PLpgSQL_execstate *estate,
 }
 
 /* ----------
- * Release temporary memory used by expression/subselect evaluation
+ * Release temporary memory used by expression/subselext evaluation
  *
  * NB: the result of the evaluation is no longer valid after this is done,
  * unless it is a pass-by-value datatype.
@@ -5700,9 +5700,9 @@ exec_eval_expr(PLpgSQL_execstate *estate,
 		return result;
 
 	/*
-	 * Else do it the hard way via exec_run_select
+	 * Else do it the hard way via exec_run_selext
 	 */
-	rc = exec_run_select(estate, expr, 2, NULL);
+	rc = exec_run_selext(estate, expr, 2, NULL);
 	if (rc != SPI_OK_SELECT)
 		ereport(ERROR,
 				(errcode(ERRCODE_WRONG_OBJECT_TYPE),
@@ -5728,7 +5728,7 @@ exec_eval_expr(PLpgSQL_execstate *estate,
 	*rettypmod = attr->atttypmod;
 
 	/*
-	 * If there are no rows selected, the result is a NULL of that type.
+	 * If there are no rows selexted, the result is a NULL of that type.
 	 */
 	if (estate->eval_processed == 0)
 	{
@@ -5754,11 +5754,11 @@ exec_eval_expr(PLpgSQL_execstate *estate,
 
 
 /* ----------
- * exec_run_select			Execute a select query
+ * exec_run_selext			Execute a selext query
  * ----------
  */
 static int
-exec_run_select(PLpgSQL_execstate *estate,
+exec_run_selext(PLpgSQL_execstate *estate,
 				PLpgSQL_expr *expr, long maxtuples, Portal *portalP)
 {
 	ParamListInfo paramLI;
@@ -7925,7 +7925,7 @@ exec_check_rw_parameter(PLpgSQL_expr *expr, int target_dno)
 
 	/*
 	 * If the expression isn't simple, there's no point in trying to optimize
-	 * (because the exec_run_select code path will flatten any expanded result
+	 * (because the exec_run_selext code path will flatten any expanded result
 	 * anyway).  Even without that, this seems like a good safety restriction.
 	 */
 	if (expr->expr_simple_expr == NULL)

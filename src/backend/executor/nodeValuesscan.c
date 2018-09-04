@@ -118,8 +118,8 @@ ValuesNext(ValuesScanState *node)
 
 		/*
 		 * The expressions might contain SubPlans (this is currently only
-		 * possible if there's a sub-select containing a LATERAL reference,
-		 * otherwise sub-selects in a VALUES list should be InitPlans). Those
+		 * possible if there's a sub-selext containing a LATERAL reference,
+		 * otherwise sub-selexts in a VALUES list should be InitPlans). Those
 		 * subplans will want to hook themselves into our subPlan list, which
 		 * would result in a corrupted list after we delete the eval state. We
 		 * can work around this by saving and restoring the subPlan list.

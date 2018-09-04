@@ -110,7 +110,7 @@ compare_path_costs(Path *path1, Path *path2, CostSelector criterion)
  *	  or more expensive than path2 for fetching the specified fraction
  *	  of the total tuples.
  *
- * If fraction is <= 0 or > 1, we interpret it as 1, ie, we select the
+ * If fraction is <= 0 or > 1, we interpret it as 1, ie, we selext the
  * path with the cheaper total_cost.
  */
 int
@@ -1138,7 +1138,7 @@ create_bitmap_and_path(PlannerInfo *root,
 
 	pathnode->bitmapquals = bitmapquals;
 
-	/* this sets bitmapselectivity as well as the regular cost fields: */
+	/* this sets bitmapselextivity as well as the regular cost fields: */
 	cost_bitmap_and_node(pathnode, root);
 
 	return pathnode;
@@ -1174,7 +1174,7 @@ create_bitmap_or_path(PlannerInfo *root,
 
 	pathnode->bitmapquals = bitmapquals;
 
-	/* this sets bitmapselectivity as well as the regular cost fields: */
+	/* this sets bitmapselextivity as well as the regular cost fields: */
 	cost_bitmap_or_node(pathnode, root);
 
 	return pathnode;
@@ -1458,7 +1458,7 @@ create_result_path(PlannerInfo *root, RelOptInfo *rel,
 		cpu_tuple_cost + target->cost.per_tuple;
 
 	/*
-	 * Add cost of qual, if any --- but we ignore its selectivity, since our
+	 * Add cost of qual, if any --- but we ignore its selextivity, since our
 	 * rowcount estimate should be 1 no matter what the qual is.
 	 */
 	if (resconstantqual)
@@ -2056,7 +2056,7 @@ create_worktablescan_path(PlannerInfo *root, RelOptInfo *rel,
  * GetForeignUpperPaths function of a foreign data wrapper.  We make the FDW
  * supply all fields of the path, since we do not have any way to calculate
  * them in core.  However, there is a usually-sane default for the pathtarget
- * (rel->reltarget), so we let a NULL for "target" select that.
+ * (rel->reltarget), so we let a NULL for "target" selext that.
  */
 ForeignPath *
 create_foreignscan_path(PlannerInfo *root, RelOptInfo *rel,
@@ -2308,7 +2308,7 @@ create_mergejoin_path(PlannerInfo *root,
  * 'extra' contains various information about the join
  * 'outer_path' is the cheapest outer path
  * 'inner_path' is the cheapest inner path
- * 'parallel_hash' to select Parallel Hash of inner path (shared hash table)
+ * 'parallel_hash' to selext Parallel Hash of inner path (shared hash table)
  * 'restrict_clauses' are the RestrictInfo nodes to apply at the join
  * 'required_outer' is the set of required outer rels
  * 'hashclauses' are the RestrictInfo nodes to use as hash clauses
@@ -3048,7 +3048,7 @@ create_minmaxagg_path(PlannerInfo *root,
 		target->cost.per_tuple + cpu_tuple_cost;
 
 	/*
-	 * Add cost of qual, if any --- but we ignore its selectivity, since our
+	 * Add cost of qual, if any --- but we ignore its selextivity, since our
 	 * rowcount estimate should be 1 no matter what the qual is.
 	 */
 	if (quals)

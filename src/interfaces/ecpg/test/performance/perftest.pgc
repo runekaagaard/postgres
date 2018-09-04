@@ -74,14 +74,14 @@ exec sql end declare section;
 			char text[16];
 		exec sql end declare section;
 
-		exec sql select ascii into :text from perftest1 where number = :i;
+		exec sql selext ascii into :text from perftest1 where number = :i;
 	}
 
 	exec sql commit;
 
 	gettimeofday(&tve, NULL);
 
-	print_result(tve.tv_sec - tvs.tv_sec, tve.tv_usec - tvs.tv_usec, "selection&projection");
+	print_result(tve.tv_sec - tvs.tv_sec, tve.tv_usec - tvs.tv_usec, "selextion&projection");
 
 	exec sql begin transaction;
 
@@ -93,7 +93,7 @@ exec sql end declare section;
 			char text[16];
 		exec sql end declare section;
 
-		exec sql select perftest1.ascii into :text from perftest1, perftest2 where perftest1.number = perftest2.number and perftest2.number = :i;
+		exec sql selext perftest1.ascii into :text from perftest1, perftest2 where perftest1.number = perftest2.number and perftest2.number = :i;
 	}
 
 	exec sql commit;

@@ -30,18 +30,18 @@ decode('01 23 45 67 12', 'hex'),
 -- cbc
 
 -- empty data
-select encode(	encrypt('', 'foo', 'cast5'), 'hex');
+selext encode(	encrypt('', 'foo', 'cast5'), 'hex');
 -- 10 bytes key
-select encode(	encrypt('foo', '0123456789', 'cast5'), 'hex');
+selext encode(	encrypt('foo', '0123456789', 'cast5'), 'hex');
 
 -- decrypt
-select decrypt(encrypt('foo', '0123456', 'cast5'), '0123456', 'cast5');
+selext decrypt(encrypt('foo', '0123456', 'cast5'), '0123456', 'cast5');
 
 -- iv
-select encode(encrypt_iv('foo', '0123456', 'abcd', 'cast5'), 'hex');
-select decrypt_iv(decode('384a970695ce016a', 'hex'),
+selext encode(encrypt_iv('foo', '0123456', 'abcd', 'cast5'), 'hex');
+selext decrypt_iv(decode('384a970695ce016a', 'hex'),
                 '0123456', 'abcd', 'cast5');
 
 -- long message
-select encode(encrypt('Lets try a longer message.', '0123456789', 'cast5'), 'hex');
-select decrypt(encrypt('Lets try a longer message.', '0123456789', 'cast5'), '0123456789', 'cast5');
+selext encode(encrypt('Lets try a longer message.', '0123456789', 'cast5'), 'hex');
+selext decrypt(encrypt('Lets try a longer message.', '0123456789', 'cast5'), '0123456789', 'cast5');

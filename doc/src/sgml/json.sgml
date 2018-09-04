@@ -352,7 +352,7 @@ SELECT '"foo"'::jsonb ? 'foo';
   <tip>
    <para>
     Because JSON containment is nested, an appropriate query can skip
-    explicit selection of sub-objects.  As an example, suppose that we have
+    explicit selextion of sub-objects.  As an example, suppose that we have
     a <structfield>doc</structfield> column containing objects at the top level, with
     most objects containing <literal>tags</literal> fields that contain arrays of
     sub-objects.  This query finds entries in which sub-objects containing

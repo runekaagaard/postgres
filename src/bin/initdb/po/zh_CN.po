@@ -326,17 +326,17 @@ msgstr "%s: 文件 \"%s\" 不是常规文件\n"
 
 #: initdb.c:1122
 #, c-format
-msgid "selecting default max_connections ... "
+msgid "selexting default max_connections ... "
 msgstr "选择默认最大联接数 (max_connections) ... "
 
 #: initdb.c:1152
 #, c-format
-msgid "selecting default shared_buffers ... "
+msgid "selexting default shared_buffers ... "
 msgstr "选择默认共享缓冲区大小 (shared_buffers) ... "
 
 #: initdb.c:1185
 #, c-format
-msgid "selecting dynamic shared memory implementation ... "
+msgid "selexting dynamic shared memory implementation ... "
 msgstr "选择动态共享内存实现 ......"
 
 #: initdb.c:1203
@@ -454,8 +454,8 @@ msgstr "%s: 警告: 编码不匹配\n"
 #: initdb.c:2585
 #, c-format
 msgid ""
-"The encoding you selected (%s) and the encoding that the\n"
-"selected locale uses (%s) do not match.  This would lead to\n"
+"The encoding you selexted (%s) and the encoding that the\n"
+"selexted locale uses (%s) do not match.  This would lead to\n"
 "misbehavior in various character string processing functions.\n"
 "Rerun %s and either do not specify an encoding explicitly,\n"
 "or choose a matching combination.\n"
@@ -786,7 +786,7 @@ msgstr "%s: 本地化语言环境 \"%s\"要求使用不支持的编码\"%s\"\n"
 #, c-format
 msgid ""
 "Encoding \"%s\" is not allowed as a server-side encoding.\n"
-"Rerun %s with a different locale selection.\n"
+"Rerun %s with a different locale selextion.\n"
 msgstr ""
 "不允许将编码\"%s\"作为服务器端编码.\n"
 "使用一个不同的本地化语言环境重新运行%s.\n"

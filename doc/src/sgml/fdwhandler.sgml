@@ -172,10 +172,10 @@ GetForeignPlan(PlannerInfo *root,
                Plan *outer_plan);
 </programlisting>
 
-     Create a <structname>ForeignScan</structname> plan node from the selected foreign
+     Create a <structname>ForeignScan</structname> plan node from the selexted foreign
      access path.  This is called at the end of query planning.
      The parameters are as for <function>GetForeignRelSize</function>, plus
-     the selected <structname>ForeignPath</structname> (previously produced by
+     the selexted <structname>ForeignPath</structname> (previously produced by
      <function>GetForeignPaths</function>, <function>GetForeignJoinPaths</function>,
      or <function>GetForeignUpperPaths</function>),
      the target list to be emitted by the plan node,
@@ -1553,7 +1553,7 @@ GetForeignServerByName(const char *name, bool missing_ok);
 
     <para>
      <function>GetForeignPlan</function> can examine the <structfield>fdw_private</structfield>
-     field of the selected <structname>ForeignPath</structname> node, and can generate
+     field of the selexted <structname>ForeignPath</structname> node, and can generate
      <structfield>fdw_exprs</structfield> and <structfield>fdw_private</structfield> lists to be
      placed in the <structname>ForeignScan</structname> plan node, where they will be
      available at execution time.  Both of these lists must be
@@ -1642,7 +1642,7 @@ GetForeignServerByName(const char *name, bool missing_ok);
      <literal>baserel-&gt;baserestrictinfo</literal> but must be sought in the
      relation's join lists.  A path using such a clause is called a
      <quote>parameterized path</quote>.  It must identify the other relations
-     used in the selected join clause(s) with a suitable value of
+     used in the selexted join clause(s) with a suitable value of
      <literal>param_info</literal>; use <function>get_baserel_parampathinfo</function>
      to compute that value.  In <function>GetForeignPlan</function>, the
      <replaceable>local_variable</replaceable> portion of the join clause would be added
@@ -1799,7 +1799,7 @@ GetForeignServerByName(const char *name, bool missing_ok);
      of <command>SELECT FOR UPDATE/SHARE</command>.  To perform late locking
      instead, provide the callback functions defined
      in <xref linkend="fdw-callbacks-row-locking"/>.
-     In <function>GetForeignRowMarkType</function>, select rowmark option
+     In <function>GetForeignRowMarkType</function>, selext rowmark option
      <literal>ROW_MARK_EXCLUSIVE</literal>, <literal>ROW_MARK_NOKEYEXCLUSIVE</literal>,
      <literal>ROW_MARK_SHARE</literal>, or <literal>ROW_MARK_KEYSHARE</literal> depending
      on the requested lock strength.  (The core code will act the same
@@ -1815,13 +1815,13 @@ GetForeignServerByName(const char *name, bool missing_ok);
      Lastly, for foreign tables that are used in an <command>UPDATE</command>,
      <command>DELETE</command> or <command>SELECT FOR UPDATE/SHARE</command> command but
      are not specified to be row-locked, you can override the default choice
-     to copy entire rows by having <function>GetForeignRowMarkType</function> select
+     to copy entire rows by having <function>GetForeignRowMarkType</function> selext
      option <literal>ROW_MARK_REFERENCE</literal> when it sees lock strength
      <literal>LCS_NONE</literal>.  This will cause <function>RefetchForeignRow</function> to
      be called with that value for <structfield>markType</structfield>; it should then
      re-fetch the row without acquiring any new lock.  (If you have
      a <function>GetForeignRowMarkType</function> function but don't wish to re-fetch
-     unlocked rows, select option <literal>ROW_MARK_COPY</literal>
+     unlocked rows, selext option <literal>ROW_MARK_COPY</literal>
      for <literal>LCS_NONE</literal>.)
     </para>
 

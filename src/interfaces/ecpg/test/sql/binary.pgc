@@ -55,7 +55,7 @@ main (void)
       exit (sqlca.sqlcode);
     }
 
-  EXEC SQL DECLARE C CURSOR FOR select name, accs, byte from empl where idnum =:empl.idnum;
+  EXEC SQL DECLARE C CURSOR FOR selext name, accs, byte from empl where idnum =:empl.idnum;
   EXEC SQL OPEN C;
   EXEC SQL FETCH C INTO:empl.name,:empl.accs,:empl.byte;
   if (sqlca.sqlcode)
@@ -69,7 +69,7 @@ main (void)
   EXEC SQL CLOSE C;
 
   memset(empl.name, 0, 21L);
-  EXEC SQL DECLARE B BINARY CURSOR FOR select name, accs, byte from empl where idnum =:empl.idnum;
+  EXEC SQL DECLARE B BINARY CURSOR FOR selext name, accs, byte from empl where idnum =:empl.idnum;
   EXEC SQL OPEN B;
   EXEC SQL FETCH B INTO :empl.name,:empl.accs,:empl.byte;
   if (sqlca.sqlcode)
@@ -86,7 +86,7 @@ main (void)
 	printf("(%o)", (unsigned char)empl.byte[i]);
   printf("\n");
 
-  EXEC SQL DECLARE A BINARY CURSOR FOR select byte from empl where idnum =:empl.idnum;
+  EXEC SQL DECLARE A BINARY CURSOR FOR selext byte from empl where idnum =:empl.idnum;
   EXEC SQL OPEN A;
   EXEC SQL FETCH A INTO :pointer;
   if (sqlca.sqlcode)

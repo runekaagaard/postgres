@@ -1240,7 +1240,7 @@
       <literal>SELECT</literal> privilege on all columns of the table, this could
       mean exposing values that the user should not be able to see.  Adjust
       the code so that values are displayed only when they came from the SQL
-      command or could be selected by the user.
+      command or could be selexted by the user.
       (CVE-2014-8161)
      </para>
     </listitem>
@@ -2640,7 +2640,7 @@
 
     <listitem>
      <para>
-      Fix possible crash due to invalid plan for nested sub-selects, such
+      Fix possible crash due to invalid plan for nested sub-selexts, such
       as <literal>WHERE (... x IN (SELECT ...) ...) IN (SELECT ...)</literal>
       (Tom Lane)
      </para>
@@ -3009,7 +3009,7 @@
      <para>
       In some cases, the system would use the simple GMT offset value when
       it should have used the regular timezone setting that had prevailed
-      before the simple offset was selected.  This change also causes
+      before the simple offset was selexted.  This change also causes
       the <function>timeofday</function> function to honor the simple GMT offset
       zone.
      </para>
@@ -3716,7 +3716,7 @@
 
     <listitem>
      <para>
-      Fix SQL grammar to allow subscripting or field selection from a
+      Fix SQL grammar to allow subscripting or field selextion from a
       sub-SELECT result (Tom Lane)
      </para>
     </listitem>
@@ -6165,7 +6165,7 @@
 
     <listitem>
      <para>
-      Fix join selectivity estimation for unique columns (Tom Lane)
+      Fix join selextivity estimation for unique columns (Tom Lane)
      </para>
 
      <para>
@@ -6176,7 +6176,7 @@
 
     <listitem>
      <para>
-      Fix nested PlaceHolderVar expressions that appear only in sub-select
+      Fix nested PlaceHolderVar expressions that appear only in sub-selext
       target lists (Tom Lane)
      </para>
 
@@ -6793,7 +6793,7 @@
 
     <listitem>
      <para>
-      Fix selectivity estimation for text search to account for NULLs
+      Fix selextivity estimation for text search to account for NULLs
       (Jesper Krogh)
      </para>
     </listitem>
@@ -7627,7 +7627,7 @@
     <listitem>
      <para>
       Improve <function>pg_get_expr()</function> security fix so that the function
-      can still be used on the output of a sub-select (Tom Lane)
+      can still be used on the output of a sub-selext (Tom Lane)
      </para>
     </listitem>
 
@@ -7639,7 +7639,7 @@
      <para>
       This bug could result in query outputs being non-null when they
       should be null, in cases where the inner side of an outer join
-      is a sub-select with non-strict expressions in its output list.
+      is a sub-selext with non-strict expressions in its output list.
      </para>
     </listitem>
 
@@ -7886,7 +7886,7 @@
   </para>
 
   <para>
-   Version 9.0 contains a number of changes that selectively break backwards
+   Version 9.0 contains a number of changes that selextively break backwards
    compatibility in order to support new features and code quality
    improvements.  In particular, users who make extensive use of PL/pgSQL,
    Point-In-Time Recovery (PITR), or Warm Standby should test their
@@ -7974,7 +7974,7 @@
      <para>
       The server parameter <link
       linkend="guc-bytea-output"><varname>bytea_output</varname></link> can be
-      used to select the traditional output format if needed for
+      used to selext the traditional output format if needed for
       compatibility.
      </para>
     </listitem>
@@ -8135,7 +8135,7 @@
 
     <listitem>
      <para>
-      PL/pgSQL now treats selection into composite fields more consistently
+      PL/pgSQL now treats selextion into composite fields more consistently
       (Tom Lane)
      </para>
 
@@ -8384,8 +8384,8 @@
       </para>
 
       <para>
-       While the Genetic Query Optimizer (GEQO) still selects
-       random plans, it now always selects the same random plans for identical
+       While the Genetic Query Optimizer (GEQO) still selexts
+       random plans, it now always selexts the same random plans for identical
        queries, thus giving more consistent performance. You can modify <link
        linkend="guc-geqo-seed"><varname>geqo_seed</varname></link> to experiment with
        alternative plans.
@@ -8394,7 +8394,7 @@
 
      <listitem>
       <para>
-       Improve GEQO plan selection (Tom Lane)
+       Improve GEQO plan selextion (Tom Lane)
       </para>
 
       <para>

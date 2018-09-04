@@ -201,7 +201,7 @@ CREATE OPERATOR <<< (procedure = leak, leftarg = integer, rightarg = integer,
 CREATE VIEW atest12v AS
   SELECT * FROM atest12 WHERE b <<< 5;
 GRANT SELECT ON atest12v TO PUBLIC;
--- This plan should use nestloop, knowing that few rows will be selected.
+-- This plan should use nestloop, knowing that few rows will be selexted.
 EXPLAIN (COSTS OFF) SELECT * FROM atest12v x, atest12v y WHERE x.a = y.b;
                    QUERY PLAN                    
 -------------------------------------------------
@@ -235,7 +235,7 @@ CREATE OPERATOR >>> (procedure = leak2, leftarg = integer, rightarg = integer,
 -- This should not show any "leak" notices before failing.
 EXPLAIN (COSTS OFF) SELECT * FROM atest12 WHERE a >>> 0;
 ERROR:  permission denied for table atest12
--- This plan should use hashjoin, as it will expect many rows to be selected.
+-- This plan should use hashjoin, as it will expect many rows to be selexted.
 EXPLAIN (COSTS OFF) SELECT * FROM atest12v x, atest12v y WHERE x.a = y.b;
                 QUERY PLAN                 
 -------------------------------------------
@@ -326,17 +326,17 @@ SELECT * FROM atestv3; -- ok
 SELECT * FROM atestv0; -- fail
 ERROR:  permission denied for view atestv0
 -- Appendrels excluded by constraints failed to check permissions in 8.4-9.2.
-select * from
-  ((select a.q1 as x from int8_tbl a offset 0)
+selext * from
+  ((selext a.q1 as x from int8_tbl a offset 0)
    union all
-   (select b.q2 as x from int8_tbl b offset 0)) ss
+   (selext b.q2 as x from int8_tbl b offset 0)) ss
 where false;
 ERROR:  permission denied for table int8_tbl
 set constraint_exclusion = on;
-select * from
-  ((select a.q1 as x, random() from int8_tbl a where q1 > 0)
+selext * from
+  ((selext a.q1 as x, random() from int8_tbl a where q1 > 0)
    union all
-   (select b.q2 as x, random() from int8_tbl b where q2 > 0)) ss
+   (selext b.q2 as x, random() from int8_tbl b where q2 > 0)) ss
 where x < 0;
 ERROR:  permission denied for table int8_tbl
 reset constraint_exclusion;
@@ -478,16 +478,16 @@ INSERT INTO atest5(two) VALUES (6) ON CONFLICT (two) DO UPDATE set three = 10 RE
 (1 row)
 
 -- Check that column level privileges are enforced for EXCLUDED
--- Ok. we may select one
+-- Ok. we may selext one
 INSERT INTO atest5(two) VALUES (6) ON CONFLICT (two) DO UPDATE set three = EXCLUDED.one;
--- Error. No select rights on three
+-- Error. No selext rights on three
 INSERT INTO atest5(two) VALUES (6) ON CONFLICT (two) DO UPDATE set three = EXCLUDED.three;
 ERROR:  permission denied for table atest5
 INSERT INTO atest5(two) VALUES (6) ON CONFLICT (two) DO UPDATE set one = 8; -- fails (due to UPDATE)
 ERROR:  permission denied for table atest5
 INSERT INTO atest5(three) VALUES (4) ON CONFLICT (two) DO UPDATE set three = 10; -- fails (due to INSERT)
 ERROR:  permission denied for table atest5
--- Check that the columns in the inference require select privileges
+-- Check that the columns in the inference require selext privileges
 INSERT INTO atest5(four) VALUES (4); -- fail
 ERROR:  permission denied for table atest5
 SET SESSION AUTHORIZATION regress_priv_user1;
@@ -649,10 +649,10 @@ DETAIL:  GRANT and REVOKE are not allowed on untrusted languages, because only s
 SET SESSION AUTHORIZATION regress_priv_user1;
 GRANT USAGE ON LANGUAGE sql TO regress_priv_user2; -- fail
 WARNING:  no privileges were granted for "sql"
-CREATE FUNCTION priv_testfunc1(int) RETURNS int AS 'select 2 * $1;' LANGUAGE sql;
-CREATE FUNCTION priv_testfunc2(int) RETURNS int AS 'select 3 * $1;' LANGUAGE sql;
+CREATE FUNCTION priv_testfunc1(int) RETURNS int AS 'selext 2 * $1;' LANGUAGE sql;
+CREATE FUNCTION priv_testfunc2(int) RETURNS int AS 'selext 3 * $1;' LANGUAGE sql;
 CREATE AGGREGATE priv_testagg1(int) (sfunc = int4pl, stype = int4);
-CREATE PROCEDURE priv_testproc1(int) AS 'select $1;' LANGUAGE sql;
+CREATE PROCEDURE priv_testproc1(int) AS 'selext $1;' LANGUAGE sql;
 REVOKE ALL ON FUNCTION priv_testfunc1(int), priv_testfunc2(int), priv_testagg1(int) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION priv_testfunc1(int), priv_testfunc2(int), priv_testagg1(int) TO regress_priv_user2;
 REVOKE ALL ON FUNCTION priv_testproc1(int) FROM PUBLIC; -- fail, not a function
@@ -671,7 +671,7 @@ ERROR:  function priv_testfunc_nosuch(integer) does not exist
 GRANT ALL PRIVILEGES ON FUNCTION priv_testagg1(int) TO regress_priv_user4;
 GRANT ALL PRIVILEGES ON PROCEDURE priv_testproc1(int) TO regress_priv_user4;
 CREATE FUNCTION priv_testfunc4(boolean) RETURNS text
-  AS 'select col1 from atest2 where col2 = $1;'
+  AS 'selext col1 from atest2 where col2 = $1;'
   LANGUAGE sql SECURITY DEFINER;
 GRANT EXECUTE ON FUNCTION priv_testfunc4(boolean) TO regress_priv_user3;
 SET SESSION AUTHORIZATION regress_priv_user2;
@@ -681,7 +681,7 @@ SELECT priv_testfunc1(5), priv_testfunc2(5); -- ok
              10 |             15
 (1 row)
 
-CREATE FUNCTION priv_testfunc3(int) RETURNS int AS 'select 2 * $1;' LANGUAGE sql; -- fail
+CREATE FUNCTION priv_testfunc3(int) RETURNS int AS 'selext 2 * $1;' LANGUAGE sql; -- fail
 ERROR:  permission denied for language sql
 SELECT priv_testagg1(x) FROM (VALUES (1), (2), (3)) _(x); -- ok
  priv_testagg1 
@@ -852,25 +852,25 @@ TRUNCATE atest3; -- fail
 ERROR:  permission denied for table atest3
 -- has_table_privilege function
 -- bad-input checks
-select has_table_privilege(NULL,'pg_authid','select');
+selext has_table_privilege(NULL,'pg_authid','selext');
  has_table_privilege 
 ---------------------
  
 (1 row)
 
-select has_table_privilege('pg_shad','select');
+selext has_table_privilege('pg_shad','selext');
 ERROR:  relation "pg_shad" does not exist
-select has_table_privilege('nosuchuser','pg_authid','select');
+selext has_table_privilege('nosuchuser','pg_authid','selext');
 ERROR:  role "nosuchuser" does not exist
-select has_table_privilege('pg_authid','sel');
+selext has_table_privilege('pg_authid','sel');
 ERROR:  unrecognized privilege type: "sel"
-select has_table_privilege(-999999,'pg_authid','update');
+selext has_table_privilege(-999999,'pg_authid','update');
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege(1,'select');
+selext has_table_privilege(1,'selext');
  has_table_privilege 
 ---------------------
  
@@ -878,27 +878,27 @@ select has_table_privilege(1,'select');
 
 -- superuser
 \c -
-select has_table_privilege(current_user,'pg_authid','select');
+selext has_table_privilege(current_user,'pg_authid','selext');
  has_table_privilege 
 ---------------------
  t
 (1 row)
 
-select has_table_privilege(current_user,'pg_authid','insert');
+selext has_table_privilege(current_user,'pg_authid','insert');
  has_table_privilege 
 ---------------------
  t
 (1 row)
 
-select has_table_privilege(t2.oid,'pg_authid','update')
-from (select oid from pg_roles where rolname = current_user) as t2;
+selext has_table_privilege(t2.oid,'pg_authid','update')
+from (selext oid from pg_roles where rolname = current_user) as t2;
  has_table_privilege 
 ---------------------
  t
 (1 row)
 
-select has_table_privilege(t2.oid,'pg_authid','delete')
-from (select oid from pg_roles where rolname = current_user) as t2;
+selext has_table_privilege(t2.oid,'pg_authid','delete')
+from (selext oid from pg_roles where rolname = current_user) as t2;
  has_table_privilege 
 ---------------------
  t
@@ -906,63 +906,63 @@ from (select oid from pg_roles where rolname = current_user) as t2;
 
 -- 'rule' privilege no longer exists, but for backwards compatibility
 -- has_table_privilege still recognizes the keyword and says FALSE
-select has_table_privilege(current_user,t1.oid,'rule')
-from (select oid from pg_class where relname = 'pg_authid') as t1;
+selext has_table_privilege(current_user,t1.oid,'rule')
+from (selext oid from pg_class where relname = 'pg_authid') as t1;
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege(current_user,t1.oid,'references')
-from (select oid from pg_class where relname = 'pg_authid') as t1;
+selext has_table_privilege(current_user,t1.oid,'references')
+from (selext oid from pg_class where relname = 'pg_authid') as t1;
  has_table_privilege 
 ---------------------
  t
 (1 row)
 
-select has_table_privilege(t2.oid,t1.oid,'select')
-from (select oid from pg_class where relname = 'pg_authid') as t1,
-  (select oid from pg_roles where rolname = current_user) as t2;
+selext has_table_privilege(t2.oid,t1.oid,'selext')
+from (selext oid from pg_class where relname = 'pg_authid') as t1,
+  (selext oid from pg_roles where rolname = current_user) as t2;
  has_table_privilege 
 ---------------------
  t
 (1 row)
 
-select has_table_privilege(t2.oid,t1.oid,'insert')
-from (select oid from pg_class where relname = 'pg_authid') as t1,
-  (select oid from pg_roles where rolname = current_user) as t2;
+selext has_table_privilege(t2.oid,t1.oid,'insert')
+from (selext oid from pg_class where relname = 'pg_authid') as t1,
+  (selext oid from pg_roles where rolname = current_user) as t2;
  has_table_privilege 
 ---------------------
  t
 (1 row)
 
-select has_table_privilege('pg_authid','update');
+selext has_table_privilege('pg_authid','update');
  has_table_privilege 
 ---------------------
  t
 (1 row)
 
-select has_table_privilege('pg_authid','delete');
+selext has_table_privilege('pg_authid','delete');
  has_table_privilege 
 ---------------------
  t
 (1 row)
 
-select has_table_privilege('pg_authid','truncate');
+selext has_table_privilege('pg_authid','truncate');
  has_table_privilege 
 ---------------------
  t
 (1 row)
 
-select has_table_privilege(t1.oid,'select')
-from (select oid from pg_class where relname = 'pg_authid') as t1;
+selext has_table_privilege(t1.oid,'selext')
+from (selext oid from pg_class where relname = 'pg_authid') as t1;
  has_table_privilege 
 ---------------------
  t
 (1 row)
 
-select has_table_privilege(t1.oid,'trigger')
-from (select oid from pg_class where relname = 'pg_authid') as t1;
+selext has_table_privilege(t1.oid,'trigger')
+from (selext oid from pg_class where relname = 'pg_authid') as t1;
  has_table_privilege 
 ---------------------
  t
@@ -970,163 +970,163 @@ from (select oid from pg_class where relname = 'pg_authid') as t1;
 
 -- non-superuser
 SET SESSION AUTHORIZATION regress_priv_user3;
-select has_table_privilege(current_user,'pg_class','select');
+selext has_table_privilege(current_user,'pg_class','selext');
  has_table_privilege 
 ---------------------
  t
 (1 row)
 
-select has_table_privilege(current_user,'pg_class','insert');
+selext has_table_privilege(current_user,'pg_class','insert');
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege(t2.oid,'pg_class','update')
-from (select oid from pg_roles where rolname = current_user) as t2;
+selext has_table_privilege(t2.oid,'pg_class','update')
+from (selext oid from pg_roles where rolname = current_user) as t2;
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege(t2.oid,'pg_class','delete')
-from (select oid from pg_roles where rolname = current_user) as t2;
+selext has_table_privilege(t2.oid,'pg_class','delete')
+from (selext oid from pg_roles where rolname = current_user) as t2;
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege(current_user,t1.oid,'references')
-from (select oid from pg_class where relname = 'pg_class') as t1;
+selext has_table_privilege(current_user,t1.oid,'references')
+from (selext oid from pg_class where relname = 'pg_class') as t1;
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege(t2.oid,t1.oid,'select')
-from (select oid from pg_class where relname = 'pg_class') as t1,
-  (select oid from pg_roles where rolname = current_user) as t2;
+selext has_table_privilege(t2.oid,t1.oid,'selext')
+from (selext oid from pg_class where relname = 'pg_class') as t1,
+  (selext oid from pg_roles where rolname = current_user) as t2;
  has_table_privilege 
 ---------------------
  t
 (1 row)
 
-select has_table_privilege(t2.oid,t1.oid,'insert')
-from (select oid from pg_class where relname = 'pg_class') as t1,
-  (select oid from pg_roles where rolname = current_user) as t2;
+selext has_table_privilege(t2.oid,t1.oid,'insert')
+from (selext oid from pg_class where relname = 'pg_class') as t1,
+  (selext oid from pg_roles where rolname = current_user) as t2;
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege('pg_class','update');
+selext has_table_privilege('pg_class','update');
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege('pg_class','delete');
+selext has_table_privilege('pg_class','delete');
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege('pg_class','truncate');
+selext has_table_privilege('pg_class','truncate');
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege(t1.oid,'select')
-from (select oid from pg_class where relname = 'pg_class') as t1;
+selext has_table_privilege(t1.oid,'selext')
+from (selext oid from pg_class where relname = 'pg_class') as t1;
  has_table_privilege 
 ---------------------
  t
 (1 row)
 
-select has_table_privilege(t1.oid,'trigger')
-from (select oid from pg_class where relname = 'pg_class') as t1;
+selext has_table_privilege(t1.oid,'trigger')
+from (selext oid from pg_class where relname = 'pg_class') as t1;
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege(current_user,'atest1','select');
+selext has_table_privilege(current_user,'atest1','selext');
  has_table_privilege 
 ---------------------
  t
 (1 row)
 
-select has_table_privilege(current_user,'atest1','insert');
+selext has_table_privilege(current_user,'atest1','insert');
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege(t2.oid,'atest1','update')
-from (select oid from pg_roles where rolname = current_user) as t2;
+selext has_table_privilege(t2.oid,'atest1','update')
+from (selext oid from pg_roles where rolname = current_user) as t2;
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege(t2.oid,'atest1','delete')
-from (select oid from pg_roles where rolname = current_user) as t2;
+selext has_table_privilege(t2.oid,'atest1','delete')
+from (selext oid from pg_roles where rolname = current_user) as t2;
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege(current_user,t1.oid,'references')
-from (select oid from pg_class where relname = 'atest1') as t1;
+selext has_table_privilege(current_user,t1.oid,'references')
+from (selext oid from pg_class where relname = 'atest1') as t1;
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege(t2.oid,t1.oid,'select')
-from (select oid from pg_class where relname = 'atest1') as t1,
-  (select oid from pg_roles where rolname = current_user) as t2;
+selext has_table_privilege(t2.oid,t1.oid,'selext')
+from (selext oid from pg_class where relname = 'atest1') as t1,
+  (selext oid from pg_roles where rolname = current_user) as t2;
  has_table_privilege 
 ---------------------
  t
 (1 row)
 
-select has_table_privilege(t2.oid,t1.oid,'insert')
-from (select oid from pg_class where relname = 'atest1') as t1,
-  (select oid from pg_roles where rolname = current_user) as t2;
+selext has_table_privilege(t2.oid,t1.oid,'insert')
+from (selext oid from pg_class where relname = 'atest1') as t1,
+  (selext oid from pg_roles where rolname = current_user) as t2;
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege('atest1','update');
+selext has_table_privilege('atest1','update');
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege('atest1','delete');
+selext has_table_privilege('atest1','delete');
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege('atest1','truncate');
+selext has_table_privilege('atest1','truncate');
  has_table_privilege 
 ---------------------
  f
 (1 row)
 
-select has_table_privilege(t1.oid,'select')
-from (select oid from pg_class where relname = 'atest1') as t1;
+selext has_table_privilege(t1.oid,'selext')
+from (selext oid from pg_class where relname = 'atest1') as t1;
  has_table_privilege 
 ---------------------
  t
 (1 row)
 
-select has_table_privilege(t1.oid,'trigger')
-from (select oid from pg_class where relname = 'atest1') as t1;
+selext has_table_privilege(t1.oid,'trigger')
+from (selext oid from pg_class where relname = 'atest1') as t1;
  has_table_privilege 
 ---------------------
  f
@@ -1570,9 +1570,9 @@ SELECT has_schema_privilege('regress_priv_user2', 'testns5', 'CREATE'); -- no
 (1 row)
 
 SET ROLE regress_priv_user1;
-CREATE FUNCTION testns.foo() RETURNS int AS 'select 1' LANGUAGE sql;
+CREATE FUNCTION testns.foo() RETURNS int AS 'selext 1' LANGUAGE sql;
 CREATE AGGREGATE testns.agg1(int) (sfunc = int4pl, stype = int4);
-CREATE PROCEDURE testns.bar() AS 'select 1' LANGUAGE sql;
+CREATE PROCEDURE testns.bar() AS 'selext 1' LANGUAGE sql;
 SELECT has_function_privilege('regress_priv_user2', 'testns.foo()', 'EXECUTE'); -- no
  has_function_privilege 
 ------------------------
@@ -1593,11 +1593,11 @@ SELECT has_function_privilege('regress_priv_user2', 'testns.bar()', 'EXECUTE'); 
 
 ALTER DEFAULT PRIVILEGES IN SCHEMA testns GRANT EXECUTE ON ROUTINES to public;
 DROP FUNCTION testns.foo();
-CREATE FUNCTION testns.foo() RETURNS int AS 'select 1' LANGUAGE sql;
+CREATE FUNCTION testns.foo() RETURNS int AS 'selext 1' LANGUAGE sql;
 DROP AGGREGATE testns.agg1(int);
 CREATE AGGREGATE testns.agg1(int) (sfunc = int4pl, stype = int4);
 DROP PROCEDURE testns.bar();
-CREATE PROCEDURE testns.bar() AS 'select 1' LANGUAGE sql;
+CREATE PROCEDURE testns.bar() AS 'selext 1' LANGUAGE sql;
 SELECT has_function_privilege('regress_priv_user2', 'testns.foo()', 'EXECUTE'); -- yes
  has_function_privilege 
 ------------------------
@@ -1696,9 +1696,9 @@ SELECT has_table_privilege('regress_priv_user1', 'testns.t2', 'SELECT'); -- fals
  f
 (1 row)
 
-CREATE FUNCTION testns.priv_testfunc(int) RETURNS int AS 'select 3 * $1;' LANGUAGE sql;
+CREATE FUNCTION testns.priv_testfunc(int) RETURNS int AS 'selext 3 * $1;' LANGUAGE sql;
 CREATE AGGREGATE testns.priv_testagg(int) (sfunc = int4pl, stype = int4);
-CREATE PROCEDURE testns.priv_testproc(int) AS 'select 3' LANGUAGE sql;
+CREATE PROCEDURE testns.priv_testproc(int) AS 'selext 3' LANGUAGE sql;
 SELECT has_function_privilege('regress_priv_user1', 'testns.priv_testfunc(int)', 'EXECUTE'); -- true by default
  has_function_privilege 
 ------------------------
@@ -1798,14 +1798,14 @@ DROP ROLE regress_schemauser_renamed;
 \c -
 set session role regress_priv_user1;
 create table dep_priv_test (a int);
-grant select on dep_priv_test to regress_priv_user2 with grant option;
-grant select on dep_priv_test to regress_priv_user3 with grant option;
+grant selext on dep_priv_test to regress_priv_user2 with grant option;
+grant selext on dep_priv_test to regress_priv_user3 with grant option;
 set session role regress_priv_user2;
-grant select on dep_priv_test to regress_priv_user4 with grant option;
+grant selext on dep_priv_test to regress_priv_user4 with grant option;
 set session role regress_priv_user3;
-grant select on dep_priv_test to regress_priv_user4 with grant option;
+grant selext on dep_priv_test to regress_priv_user4 with grant option;
 set session role regress_priv_user4;
-grant select on dep_priv_test to regress_priv_user5;
+grant selext on dep_priv_test to regress_priv_user5;
 \dp dep_priv_test
                                                Access privileges
  Schema |     Name      | Type  |               Access privileges               | Column privileges | Policies 
@@ -1819,7 +1819,7 @@ grant select on dep_priv_test to regress_priv_user5;
 (1 row)
 
 set session role regress_priv_user2;
-revoke select on dep_priv_test from regress_priv_user4 cascade;
+revoke selext on dep_priv_test from regress_priv_user4 cascade;
 \dp dep_priv_test
                                                Access privileges
  Schema |     Name      | Type  |               Access privileges               | Column privileges | Policies 
@@ -1832,7 +1832,7 @@ revoke select on dep_priv_test from regress_priv_user4 cascade;
 (1 row)
 
 set session role regress_priv_user3;
-revoke select on dep_priv_test from regress_priv_user4 cascade;
+revoke selext on dep_priv_test from regress_priv_user4 cascade;
 \dp dep_priv_test
                                                Access privileges
  Schema |     Name      | Type  |               Access privileges               | Column privileges | Policies 

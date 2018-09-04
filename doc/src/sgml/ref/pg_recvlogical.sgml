@@ -52,7 +52,7 @@ PostgreSQL documentation
   <title>Options</title>
 
    <para>
-    At least one of the following options must be specified to select an action:
+    At least one of the following options must be specified to selext an action:
 
     <variablelist>
 

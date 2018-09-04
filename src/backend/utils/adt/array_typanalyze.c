@@ -160,7 +160,7 @@ array_typanalyze(PG_FUNCTION_ARGS)
 /*
  * compute_array_stats() -- compute statistics for an array column
  *
- * This function computes statistics useful for determining selectivity of
+ * This function computes statistics useful for determining selextivity of
  * the array operators <@, &&, and @>.  It is invoked by ANALYZE via the
  * compute_stats hook after sample rows have been collected.
  *
@@ -521,7 +521,7 @@ compute_array_stats(VacAttrStats *stats, AnalyzeAttrFetchFunc fetchfunc,
 			/*
 			 * We want to store statistics sorted on the element value using
 			 * the element type's default comparison function.  This permits
-			 * fast binary searches in selectivity estimation functions.
+			 * fast binary searches in selextivity estimation functions.
 			 */
 			qsort(sort_table, num_mcelem, sizeof(TrackItem *),
 				  trackitem_compare_element);

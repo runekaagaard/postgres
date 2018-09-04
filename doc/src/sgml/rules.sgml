@@ -304,10 +304,10 @@ CREATE RULE "_RETURN" AS ON SELECT TO myview DO INSTEAD
     same thing: relations.
 </para>
 
-<sect2 id="rules-select">
+<sect2 id="rules-selext">
 <title>How <command>SELECT</command> Rules Work</title>
 
-<indexterm zone="rules-select">
+<indexterm zone="rules-selext">
  <primary>rule</primary>
  <secondary sortas="SELECT">for SELECT</secondary>
 </indexterm>
@@ -816,7 +816,7 @@ SELECT t1.a, t2.b, t1.ctid FROM t1, t2 WHERE t1.a = t2.a;
 </para>
 
 <para>
-    If the subquery selects from a single base relation and is simple
+    If the subquery selexts from a single base relation and is simple
     enough, the rewriter can automatically replace the subquery with the
     underlying base relation so that the <command>INSERT</command>,
     <command>UPDATE</command>, or <command>DELETE</command> is applied to

@@ -411,8 +411,8 @@ msgstr "kunde inte skriva till kommunikationskanal: %s\n"
 
 #: parallel.c:1637
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "select() misslyckades: %s\n"
+msgid "selext() failed: %s\n"
+msgstr "selext() misslyckades: %s\n"
 
 #: parallel.c:1762
 #, c-format
@@ -2590,7 +2590,7 @@ msgstr "  -j, --jobs=NUM               använda så här många parallella job f
 #, c-format
 msgid ""
 "  -L, --use-list=FILENAME      use table of contents from this file for\n"
-"                               selecting/ordering output\n"
+"                               selexting/ordering output\n"
 msgstr ""
 "  -L, --use-list=FILNAMN       använd innehållsförteckning från denna fil för\n"
 "                               att välja/sortera utdata\n"
@@ -2689,7 +2689,7 @@ msgstr "  --role=ROLENAME          gör SET ROLE innan återställning\n"
 msgid ""
 "\n"
 "The options -I, -n, -P, -t, -T, and --section can be combined and specified\n"
-"multiple times to select multiple objects.\n"
+"multiple times to selext multiple objects.\n"
 msgstr ""
 "\n"
 "Flaggorna -I, -n, -P, -t, -T och --section kan kombineras och anges\n"
@@ -2944,7 +2944,7 @@ msgstr ""
 #~ msgid "missing pg_database entry for database \"%s\"\n"
 #~ msgstr "pg_database-post för databas \"%s\" saknas\n"
 
-#~ msgid "server version must be at least 7.3 to use schema selection switches\n"
+#~ msgid "server version must be at least 7.3 to use schema selextion switches\n"
 #~ msgstr "serverversionen måste vara minst 7.3 för att man skall kunna använda schemavalflaggorna\n"
 
 #~ msgid "*** aborted because of error\n"

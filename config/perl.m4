@@ -48,7 +48,7 @@ AC_DEFUN([PGAC_CHECK_PERL_CONFIGS],
 
 # PGAC_CHECK_PERL_EMBED_CCFLAGS
 # -----------------------------
-# We selectively extract stuff from $Config{ccflags}.  For debugging purposes,
+# We selextively extract stuff from $Config{ccflags}.  For debugging purposes,
 # let's have the configure output report the raw ccflags value as well as the
 # set of flags we chose to adopt.  We don't really need anything except -D
 # switches, and other sorts of compiler switches can actively break things if

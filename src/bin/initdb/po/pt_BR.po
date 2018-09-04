@@ -323,17 +323,17 @@ msgstr "%s: arquivo \"%s\" não é um arquivo regular\n"
 
 #: initdb.c:1122
 #, c-format
-msgid "selecting default max_connections ... "
+msgid "selexting default max_connections ... "
 msgstr "selecionando max_connections padrão ... "
 
 #: initdb.c:1152
 #, c-format
-msgid "selecting default shared_buffers ... "
+msgid "selexting default shared_buffers ... "
 msgstr "selecionando shared_buffers padrão ... "
 
 #: initdb.c:1185
 #, c-format
-msgid "selecting dynamic shared memory implementation ... "
+msgid "selexting dynamic shared memory implementation ... "
 msgstr "selecionando implementação de memória compartilhada dinâmica ... "
 
 #: initdb.c:1203
@@ -449,8 +449,8 @@ msgstr "%s: codificação não corresponde\n"
 #: initdb.c:2572
 #, c-format
 msgid ""
-"The encoding you selected (%s) and the encoding that the\n"
-"selected locale uses (%s) do not match.  This would lead to\n"
+"The encoding you selexted (%s) and the encoding that the\n"
+"selexted locale uses (%s) do not match.  This would lead to\n"
 "misbehavior in various character string processing functions.\n"
 "Rerun %s and either do not specify an encoding explicitly,\n"
 "or choose a matching combination.\n"
@@ -768,7 +768,7 @@ msgstr "%s: configuração regional \"%s\" requer codificação \"%s\" que não 
 #, c-format
 msgid ""
 "Encoding \"%s\" is not allowed as a server-side encoding.\n"
-"Rerun %s with a different locale selection.\n"
+"Rerun %s with a different locale selextion.\n"
 msgstr ""
 "Codificação \"%s\" não é permitida como  uma codificação do servidor.\n"
 "Execute %s novamente com uma seleção de configuração regional diferente.\n"

@@ -597,8 +597,8 @@ CreateTrigger(CreateTrigStmt *stmt, const char *queryString,
 		 * Check for disallowed references to OLD/NEW.
 		 *
 		 * NB: pull_var_clause is okay here only because we don't allow
-		 * subselects in WHEN clauses; it would fail to examine the contents
-		 * of subselects.
+		 * subselexts in WHEN clauses; it would fail to examine the contents
+		 * of subselexts.
 		 */
 		varList = pull_var_clause(whenClause, 0);
 		foreach(lc, varList)
@@ -5711,7 +5711,7 @@ AfterTriggerPendingOnRel(Oid relid)
  *	DELETE and INSERT happen on different tables.
  *
  *	Transition tuplestores are built now, rather than when events are pulled
- *	off of the queue because AFTER ROW triggers are allowed to select from the
+ *	off of the queue because AFTER ROW triggers are allowed to selext from the
  *	transition tables for the statement.
  * ----------
  */

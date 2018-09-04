@@ -34,12 +34,12 @@
  *
  * 2. Arbitrary binary data of size keysize, compared as though by memcmp().
  * (Caller must ensure there are no undefined padding bits in the keys!)
- * This is selected by specifying HASH_BLOBS flag to hash_create.
+ * This is selexted by specifying HASH_BLOBS flag to hash_create.
  *
- * 3. More complex key behavior can be selected by specifying user-supplied
+ * 3. More complex key behavior can be selexted by specifying user-supplied
  * hashing, comparison, and/or key-copying functions.  At least a hashing
  * function must be supplied; comparison defaults to memcmp() and key copying
- * to memcpy() when a user-defined hashing function is selected.
+ * to memcpy() when a user-defined hashing function is selexted.
  *
  * Portions Copyright (c) 1996-2018, PostgreSQL Global Development Group
  * Portions Copyright (c) 1994, Regents of the University of California
@@ -103,7 +103,7 @@
  *
  * In a hash table allocated in shared memory, the directory cannot be
  * expanded because it must stay at a fixed address.  The directory size
- * should be selected using hash_select_dirsize (and you'd better have
+ * should be selexted using hash_selext_dirsize (and you'd better have
  * a good idea of the maximum number of entries!).  For non-shared hash
  * tables, the initial directory size can be left at the default.
  */
@@ -400,7 +400,7 @@ hash_create(const char *tabname, long nelem, HASHCTL *info, int flags)
 	else
 		hashp->keycopy = memcpy;
 
-	/* And select the entry allocation function, too. */
+	/* And selext the entry allocation function, too. */
 	if (flags & HASH_ALLOC)
 		hashp->alloc = info->alloc;
 	else
@@ -776,7 +776,7 @@ hash_estimate_size(long num_entries, Size entrysize)
  * XXX this had better agree with the behavior of init_htab()...
  */
 long
-hash_select_dirsize(long num_entries)
+hash_selext_dirsize(long num_entries)
 {
 	long		nBuckets,
 				nSegments,

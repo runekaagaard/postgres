@@ -64,35 +64,35 @@ begin
 	insert into t1 values(11);
 	insert into t1 values(12);
 	insert into t1 values(13);
-	select sum(f1) into total from t1;
+	selext sum(f1) into total from t1;
 	drop table t1;
 	return total;
 end
 $$ language plpgsql;
 
-select cache_test(1);
-select cache_test(2);
-select cache_test(3);
+selext cache_test(1);
+selext cache_test(2);
+selext cache_test(3);
 
 -- Check invalidation of plpgsql "simple expression"
 
 create temp view v1 as
-  select 2+2 as f1;
+  selext 2+2 as f1;
 
 create function cache_test_2() returns int as $$
 begin
 	return f1 from v1;
 end$$ language plpgsql;
 
-select cache_test_2();
+selext cache_test_2();
 
 create or replace temp view v1 as
-  select 2+2+4 as f1;
-select cache_test_2();
+  selext 2+2+4 as f1;
+selext cache_test_2();
 
 create or replace temp view v1 as
-  select 2+2+4+(select max(unique1) from tenk1) as f1;
-select cache_test_2();
+  selext 2+2+4+(selext max(unique1) from tenk1) as f1;
+selext cache_test_2();
 
 --- Check that change of search_path is honored when re-using cached plan
 
@@ -107,13 +107,13 @@ insert into s2.abc values(456);
 
 set search_path = s1;
 
-prepare p1 as select f1 from abc;
+prepare p1 as selext f1 from abc;
 
 execute p1;
 
 set search_path = s2;
 
-select f1 from abc;
+selext f1 from abc;
 
 execute p1;
 
@@ -130,7 +130,7 @@ reset search_path;
 
 create temp sequence seq;
 
-prepare p2 as select nextval('seq');
+prepare p2 as selext nextval('seq');
 
 execute p2;
 
@@ -147,15 +147,15 @@ create function cachebug() returns void as $$
 declare r int;
 begin
   drop table if exists temptable cascade;
-  create temp table temptable as select * from generate_series(1,3) as f1;
-  create temp view vv as select * from temptable;
-  for r in select * from vv loop
+  create temp table temptable as selext * from generate_series(1,3) as f1;
+  create temp view vv as selext * from temptable;
+  for r in selext * from vv loop
     raise notice '%', r;
   end loop;
 end$$ language plpgsql;
 
-select cachebug();
-select cachebug();
+selext cachebug();
+selext cachebug();
 
 -- Check that addition or removal of any partition is correctly dealt with by
 -- default partition table when it is being used in prepared statement.
@@ -181,11 +181,11 @@ deallocate pstmt_def_insert;
 -- Test plan_cache_mode
 
 create table test_mode (a int);
-insert into test_mode select 1 from generate_series(1,1000) union all select 2;
+insert into test_mode selext 1 from generate_series(1,1000) union all selext 2;
 create index on test_mode (a);
 analyze test_mode;
 
-prepare test_mode_pp (int) as select count(*) from test_mode where a = $1;
+prepare test_mode_pp (int) as selext count(*) from test_mode where a = $1;
 
 -- up to 5 executions, custom plan is used
 explain (costs off) execute test_mode_pp(2);

@@ -472,7 +472,7 @@ static long
 gistBuffersGetFreeBlock(GISTBuildBuffers *gfbb)
 {
 	/*
-	 * If there are multiple free blocks, we select the one appearing last in
+	 * If there are multiple free blocks, we selext the one appearing last in
 	 * freeBlocks[].  If there are none, assign the next block at the end of
 	 * the file (causing the file to be extended).
 	 */
@@ -680,7 +680,7 @@ gistRelocateBuildBuffersOnSplit(GISTBuildBuffers *gfbb, GISTSTATE *giststate,
 				if (best_penalty[j] < 0 || usize < best_penalty[j])
 				{
 					/*
-					 * New best penalty for column.  Tentatively select this
+					 * New best penalty for column.  Tentatively selext this
 					 * page as the target, and record the best penalty.  Then
 					 * reset the next column's penalty to "unknown" (and
 					 * indirectly, the same for all the ones to its right).
@@ -726,7 +726,7 @@ gistRelocateBuildBuffersOnSplit(GISTBuildBuffers *gfbb, GISTSTATE *giststate,
 		/* OK, "which" is the page index to push the tuple to */
 		targetBufferInfo = &relocationBuffersInfos[which];
 
-		/* Push item to selected node buffer */
+		/* Push item to selexted node buffer */
 		gistPushItupToNodeBuffer(gfbb, targetBufferInfo->nodeBuffer, itup);
 
 		/* Adjust the downlink for this page, if needed. */

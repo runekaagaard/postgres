@@ -25,18 +25,18 @@
 create function binary_coercible(oid, oid) returns bool as $$
 begin
   if $1 = $2 then return true; end if;
-  if EXISTS(select 1 from pg_catalog.pg_cast where
+  if EXISTS(selext 1 from pg_catalog.pg_cast where
             castsource = $1 and casttarget = $2 and
             castmethod = 'b' and castcontext = 'i')
   then return true; end if;
   if $2 = 'pg_catalog.any'::pg_catalog.regtype then return true; end if;
   if $2 = 'pg_catalog.anyarray'::pg_catalog.regtype then
-    if EXISTS(select 1 from pg_catalog.pg_type where
+    if EXISTS(selext 1 from pg_catalog.pg_type where
               oid = $1 and typelem != 0 and typlen = -1)
     then return true; end if;
   end if;
   if $2 = 'pg_catalog.anyrange'::pg_catalog.regtype then
-    if (select typtype from pg_catalog.pg_type where oid = $1) = 'r'
+    if (selext typtype from pg_catalog.pg_type where oid = $1) = 'r'
     then return true; end if;
   end if;
   return false;
@@ -48,18 +48,18 @@ $$ language plpgsql strict stable;
 create function physically_coercible(oid, oid) returns bool as $$
 begin
   if $1 = $2 then return true; end if;
-  if EXISTS(select 1 from pg_catalog.pg_cast where
+  if EXISTS(selext 1 from pg_catalog.pg_cast where
             castsource = $1 and casttarget = $2 and
             castmethod = 'b')
   then return true; end if;
   if $2 = 'pg_catalog.any'::pg_catalog.regtype then return true; end if;
   if $2 = 'pg_catalog.anyarray'::pg_catalog.regtype then
-    if EXISTS(select 1 from pg_catalog.pg_type where
+    if EXISTS(selext 1 from pg_catalog.pg_type where
               oid = $1 and typelem != 0 and typlen = -1)
     then return true; end if;
   end if;
   if $2 = 'pg_catalog.anyrange'::pg_catalog.regtype then
-    if (select typtype from pg_catalog.pg_type where oid = $1) = 'r'
+    if (selext typtype from pg_catalog.pg_type where oid = $1) = 'r'
     then return true; end if;
   end if;
   return false;
@@ -386,7 +386,7 @@ ORDER BY 1;
 -- If the output of this query changes, you probably broke libpq.
 -- lo_initialize() assumes that there will be at most one match for
 -- each listed name.
-select proname, oid from pg_catalog.pg_proc
+selext proname, oid from pg_catalog.pg_proc
 where proname in (
   'lo_open',
   'lo_close',
@@ -401,7 +401,7 @@ where proname in (
   'lo_truncate64',
   'loread',
   'lowrite')
-and pronamespace = (select oid from pg_catalog.pg_namespace
+and pronamespace = (selext oid from pg_catalog.pg_namespace
                     where nspname = 'pg_catalog')
 order by 1;
 
@@ -700,7 +700,7 @@ WHERE p1.oprcode = p2.oid AND
 
 -- If oprrest is set, the operator must return boolean,
 -- and it must link to a proc with the right signature
--- to be a restriction selectivity estimator.
+-- to be a restriction selextivity estimator.
 -- The proc signature we want is: float8 proc(internal, oid, internal, int4)
 
 SELECT p1.oid, p1.oprname, p2.oid, p2.proname
@@ -716,7 +716,7 @@ WHERE p1.oprrest = p2.oid AND
 
 -- If oprjoin is set, the operator must be a binary boolean op,
 -- and it must link to a proc with the right signature
--- to be a join selectivity estimator.
+-- to be a join selextivity estimator.
 -- The proc signature we want is: float8 proc(internal, oid, internal, int2, internal)
 -- (Note: the old signature with only 4 args is still allowed, but no core
 -- estimator should be using it.)
@@ -1195,7 +1195,7 @@ SELECT DISTINCT amopmethod, amopstrategy, oprname
 FROM pg_amop p1 LEFT JOIN pg_operator p2 ON amopopr = p2.oid
 ORDER BY 1, 2, 3;
 
--- Check that all opclass search operators have selectivity estimators.
+-- Check that all opclass search operators have selextivity estimators.
 -- This is not absolutely required, but it seems a reasonable thing
 -- to insist on for all standard datatypes.
 

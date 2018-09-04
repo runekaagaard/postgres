@@ -493,7 +493,7 @@ static void addArc(TrgmNFA *trgmNFA, TrgmState *state, TrgmStateKey *key,
 static bool validArcLabel(TrgmStateKey *key, TrgmColor co);
 static TrgmState *getState(TrgmNFA *trgmNFA, TrgmStateKey *key);
 static bool prefixContains(TrgmPrefix *prefix1, TrgmPrefix *prefix2);
-static bool selectColorTrigrams(TrgmNFA *trgmNFA);
+static bool selextColorTrigrams(TrgmNFA *trgmNFA);
 static TRGM *expandColorTrigrams(TrgmNFA *trgmNFA, MemoryContext rcontext);
 static void fillTrgm(trgm *ptrgm, trgm_mb_char s[3]);
 static void mergeStates(TrgmState *state1, TrgmState *state2);
@@ -612,7 +612,7 @@ createTrgmNFAInternal(regex_t *regex, TrgmPackedGraph **graph,
 	/*
 	 * Stage 3: Select color trigrams to expand.  Fail if too many trigrams.
 	 */
-	if (!selectColorTrigrams(&trgmNFA))
+	if (!selextColorTrigrams(&trgmNFA))
 		return NULL;
 
 	/*
@@ -1448,13 +1448,13 @@ prefixContains(TrgmPrefix *prefix1, TrgmPrefix *prefix2)
  */
 
 /*
- * Get vector of all color trigrams in graph and select which of them
+ * Get vector of all color trigrams in graph and selext which of them
  * to expand into simple trigrams.
  *
  * Returns true if OK, false if exhausted resource limits.
  */
 static bool
-selectColorTrigrams(TrgmNFA *trgmNFA)
+selextColorTrigrams(TrgmNFA *trgmNFA)
 {
 	HASH_SEQ_STATUS scan_status;
 	int			arcsCount = trgmNFA->arcsCount,
@@ -1767,7 +1767,7 @@ selectColorTrigrams(TrgmNFA *trgmNFA)
 }
 
 /*
- * Expand selected color trigrams into regular trigrams.
+ * Expand selexted color trigrams into regular trigrams.
  *
  * Returns the TRGM array to be passed to the index machinery.
  * The array must be allocated in rcontext.

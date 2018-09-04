@@ -4,54 +4,54 @@ INSERT INTO rngfunc2 VALUES(2, 22);
 INSERT INTO rngfunc2 VALUES(1, 111);
 CREATE FUNCTION rngfunct(int) returns setof rngfunc2 as 'SELECT * FROM rngfunc2 WHERE rngfuncid = $1 ORDER BY f2;' LANGUAGE SQL;
 -- function with ORDINALITY
-select * from rngfunct(1) with ordinality as z(a,b,ord);
+selext * from rngfunct(1) with ordinality as z(a,b,ord);
  a |  b  | ord 
 ---+-----+-----
  1 |  11 |   1
  1 | 111 |   2
 (2 rows)
 
-select * from rngfunct(1) with ordinality as z(a,b,ord) where b > 100;   -- ordinal 2, not 1
+selext * from rngfunct(1) with ordinality as z(a,b,ord) where b > 100;   -- ordinal 2, not 1
  a |  b  | ord 
 ---+-----+-----
  1 | 111 |   2
 (1 row)
 
 -- ordinality vs. column names and types
-select a,b,ord from rngfunct(1) with ordinality as z(a,b,ord);
+selext a,b,ord from rngfunct(1) with ordinality as z(a,b,ord);
  a |  b  | ord 
 ---+-----+-----
  1 |  11 |   1
  1 | 111 |   2
 (2 rows)
 
-select a,ord from unnest(array['a','b']) with ordinality as z(a,ord);
+selext a,ord from unnest(array['a','b']) with ordinality as z(a,ord);
  a | ord 
 ---+-----
  a |   1
  b |   2
 (2 rows)
 
-select * from unnest(array['a','b']) with ordinality as z(a,ord);
+selext * from unnest(array['a','b']) with ordinality as z(a,ord);
  a | ord 
 ---+-----
  a |   1
  b |   2
 (2 rows)
 
-select a,ord from unnest(array[1.0::float8]) with ordinality as z(a,ord);
+selext a,ord from unnest(array[1.0::float8]) with ordinality as z(a,ord);
  a | ord 
 ---+-----
  1 |   1
 (1 row)
 
-select * from unnest(array[1.0::float8]) with ordinality as z(a,ord);
+selext * from unnest(array[1.0::float8]) with ordinality as z(a,ord);
  a | ord 
 ---+-----
  1 |   1
 (1 row)
 
-select row_to_json(s.*) from generate_series(11,14) with ordinality s;
+selext row_to_json(s.*) from generate_series(11,14) with ordinality s;
        row_to_json       
 -------------------------
  {"s":11,"ordinality":1}
@@ -61,14 +61,14 @@ select row_to_json(s.*) from generate_series(11,14) with ordinality s;
 (4 rows)
 
 -- ordinality vs. views
-create temporary view vw_ord as select * from (values (1)) v(n) join rngfunct(1) with ordinality as z(a,b,ord) on (n=ord);
-select * from vw_ord;
+create temporary view vw_ord as selext * from (values (1)) v(n) join rngfunct(1) with ordinality as z(a,b,ord) on (n=ord);
+selext * from vw_ord;
  n | a | b  | ord 
 ---+---+----+-----
  1 | 1 | 11 |   1
 (1 row)
 
-select definition from pg_views where viewname='vw_ord';
+selext definition from pg_views where viewname='vw_ord';
                                definition                                
 -------------------------------------------------------------------------
   SELECT v.n,                                                           +
@@ -81,21 +81,21 @@ select definition from pg_views where viewname='vw_ord';
 
 drop view vw_ord;
 -- multiple functions
-select * from rows from(rngfunct(1),rngfunct(2)) with ordinality as z(a,b,c,d,ord);
+selext * from rows from(rngfunct(1),rngfunct(2)) with ordinality as z(a,b,c,d,ord);
  a |  b  | c | d  | ord 
 ---+-----+---+----+-----
  1 |  11 | 2 | 22 |   1
  1 | 111 |   |    |   2
 (2 rows)
 
-create temporary view vw_ord as select * from (values (1)) v(n) join rows from(rngfunct(1),rngfunct(2)) with ordinality as z(a,b,c,d,ord) on (n=ord);
-select * from vw_ord;
+create temporary view vw_ord as selext * from (values (1)) v(n) join rows from(rngfunct(1),rngfunct(2)) with ordinality as z(a,b,c,d,ord) on (n=ord);
+selext * from vw_ord;
  n | a | b  | c | d  | ord 
 ---+---+----+---+----+-----
  1 | 1 | 11 | 2 | 22 |   1
 (1 row)
 
-select definition from pg_views where viewname='vw_ord';
+selext definition from pg_views where viewname='vw_ord';
                                               definition                                               
 -------------------------------------------------------------------------------------------------------
   SELECT v.n,                                                                                         +
@@ -110,43 +110,43 @@ select definition from pg_views where viewname='vw_ord';
 
 drop view vw_ord;
 -- expansions of unnest()
-select * from unnest(array[10,20],array['foo','bar'],array[1.0]);
+selext * from unnest(array[10,20],array['foo','bar'],array[1.0]);
  unnest | unnest | unnest 
 --------+--------+--------
      10 | foo    |    1.0
      20 | bar    |       
 (2 rows)
 
-select * from unnest(array[10,20],array['foo','bar'],array[1.0]) with ordinality as z(a,b,c,ord);
+selext * from unnest(array[10,20],array['foo','bar'],array[1.0]) with ordinality as z(a,b,c,ord);
  a  |  b  |  c  | ord 
 ----+-----+-----+-----
  10 | foo | 1.0 |   1
  20 | bar |     |   2
 (2 rows)
 
-select * from rows from(unnest(array[10,20],array['foo','bar'],array[1.0])) with ordinality as z(a,b,c,ord);
+selext * from rows from(unnest(array[10,20],array['foo','bar'],array[1.0])) with ordinality as z(a,b,c,ord);
  a  |  b  |  c  | ord 
 ----+-----+-----+-----
  10 | foo | 1.0 |   1
  20 | bar |     |   2
 (2 rows)
 
-select * from rows from(unnest(array[10,20],array['foo','bar']), generate_series(101,102)) with ordinality as z(a,b,c,ord);
+selext * from rows from(unnest(array[10,20],array['foo','bar']), generate_series(101,102)) with ordinality as z(a,b,c,ord);
  a  |  b  |  c  | ord 
 ----+-----+-----+-----
  10 | foo | 101 |   1
  20 | bar | 102 |   2
 (2 rows)
 
-create temporary view vw_ord as select * from unnest(array[10,20],array['foo','bar'],array[1.0]) as z(a,b,c);
-select * from vw_ord;
+create temporary view vw_ord as selext * from unnest(array[10,20],array['foo','bar'],array[1.0]) as z(a,b,c);
+selext * from vw_ord;
  a  |  b  |  c  
 ----+-----+-----
  10 | foo | 1.0
  20 | bar |    
 (2 rows)
 
-select definition from pg_views where viewname='vw_ord';
+selext definition from pg_views where viewname='vw_ord';
                                        definition                                       
 ----------------------------------------------------------------------------------------
   SELECT z.a,                                                                          +
@@ -156,15 +156,15 @@ select definition from pg_views where viewname='vw_ord';
 (1 row)
 
 drop view vw_ord;
-create temporary view vw_ord as select * from rows from(unnest(array[10,20],array['foo','bar'],array[1.0])) as z(a,b,c);
-select * from vw_ord;
+create temporary view vw_ord as selext * from rows from(unnest(array[10,20],array['foo','bar'],array[1.0])) as z(a,b,c);
+selext * from vw_ord;
  a  |  b  |  c  
 ----+-----+-----
  10 | foo | 1.0
  20 | bar |    
 (2 rows)
 
-select definition from pg_views where viewname='vw_ord';
+selext definition from pg_views where viewname='vw_ord';
                                        definition                                       
 ----------------------------------------------------------------------------------------
   SELECT z.a,                                                                          +
@@ -174,15 +174,15 @@ select definition from pg_views where viewname='vw_ord';
 (1 row)
 
 drop view vw_ord;
-create temporary view vw_ord as select * from rows from(unnest(array[10,20],array['foo','bar']), generate_series(1,2)) as z(a,b,c);
-select * from vw_ord;
+create temporary view vw_ord as selext * from rows from(unnest(array[10,20],array['foo','bar']), generate_series(1,2)) as z(a,b,c);
+selext * from vw_ord;
  a  |  b  | c 
 ----+-----+---
  10 | foo | 1
  20 | bar | 2
 (2 rows)
 
-select definition from pg_views where viewname='vw_ord';
+selext definition from pg_views where viewname='vw_ord';
                                                       definition                                                      
 ----------------------------------------------------------------------------------------------------------------------
   SELECT z.a,                                                                                                        +
@@ -194,7 +194,7 @@ select definition from pg_views where viewname='vw_ord';
 drop view vw_ord;
 -- ordinality and multiple functions vs. rewind and reverse scan
 begin;
-declare rf_cur scroll cursor for select * from rows from(generate_series(1,5),generate_series(1,2)) with ordinality as g(i,j,o);
+declare rf_cur scroll cursor for selext * from rows from(generate_series(1,5),generate_series(1,2)) with ordinality as g(i,j,o);
 fetch all from rf_cur;
  i | j | o 
 ---+---+---
@@ -285,7 +285,7 @@ fetch prior from rf_cur;
 
 commit;
 -- function with implicit LATERAL
-select * from rngfunc2, rngfunct(rngfunc2.rngfuncid) z where rngfunc2.f2 = z.f2;
+selext * from rngfunc2, rngfunct(rngfunc2.rngfuncid) z where rngfunc2.f2 = z.f2;
  rngfuncid | f2  | rngfuncid | f2  
 -----------+-----+-----------+-----
          1 |  11 |         1 |  11
@@ -294,7 +294,7 @@ select * from rngfunc2, rngfunct(rngfunc2.rngfuncid) z where rngfunc2.f2 = z.f2;
 (3 rows)
 
 -- function with implicit LATERAL and explicit ORDINALITY
-select * from rngfunc2, rngfunct(rngfunc2.rngfuncid) with ordinality as z(rngfuncid,f2,ord) where rngfunc2.f2 = z.f2;
+selext * from rngfunc2, rngfunct(rngfunc2.rngfuncid) with ordinality as z(rngfuncid,f2,ord) where rngfunc2.f2 = z.f2;
  rngfuncid | f2  | rngfuncid | f2  | ord 
 -----------+-----+-----------+-----+-----
          1 |  11 |         1 |  11 |   1
@@ -302,8 +302,8 @@ select * from rngfunc2, rngfunct(rngfunc2.rngfuncid) with ordinality as z(rngfun
          1 | 111 |         1 | 111 |   2
 (3 rows)
 
--- function in subselect
-select * from rngfunc2 where f2 in (select f2 from rngfunct(rngfunc2.rngfuncid) z where z.rngfuncid = rngfunc2.rngfuncid) ORDER BY 1,2;
+-- function in subselext
+selext * from rngfunc2 where f2 in (selext f2 from rngfunct(rngfunc2.rngfuncid) z where z.rngfuncid = rngfunc2.rngfuncid) ORDER BY 1,2;
  rngfuncid | f2  
 -----------+-----
          1 |  11
@@ -311,16 +311,16 @@ select * from rngfunc2 where f2 in (select f2 from rngfunct(rngfunc2.rngfuncid) 
          2 |  22
 (3 rows)
 
--- function in subselect
-select * from rngfunc2 where f2 in (select f2 from rngfunct(1) z where z.rngfuncid = rngfunc2.rngfuncid) ORDER BY 1,2;
+-- function in subselext
+selext * from rngfunc2 where f2 in (selext f2 from rngfunct(1) z where z.rngfuncid = rngfunc2.rngfuncid) ORDER BY 1,2;
  rngfuncid | f2  
 -----------+-----
          1 |  11
          1 | 111
 (2 rows)
 
--- function in subselect
-select * from rngfunc2 where f2 in (select f2 from rngfunct(rngfunc2.rngfuncid) z where z.rngfuncid = 1) ORDER BY 1,2;
+-- function in subselext
+selext * from rngfunc2 where f2 in (selext f2 from rngfunct(rngfunc2.rngfuncid) z where z.rngfuncid = 1) ORDER BY 1,2;
  rngfuncid | f2  
 -----------+-----
          1 |  11
@@ -328,7 +328,7 @@ select * from rngfunc2 where f2 in (select f2 from rngfunct(rngfunc2.rngfuncid) 
 (2 rows)
 
 -- nested functions
-select rngfunct.rngfuncid, rngfunct.f2 from rngfunct(sin(pi()/2)::int) ORDER BY 1,2;
+selext rngfunct.rngfuncid, rngfunct.f2 from rngfunct(sin(pi()/2)::int) ORDER BY 1,2;
  rngfuncid | f2  
 -----------+-----
          1 |  11
@@ -632,7 +632,7 @@ SELECT * FROM vw_getrngfunc;
 
 DROP VIEW vw_getrngfunc;
 -- mix 'n match kinds, to exercise expandRTE and related logic
-select * from rows from(getrngfunc1(1),getrngfunc2(1),getrngfunc3(1),getrngfunc4(1),getrngfunc5(1),
+selext * from rows from(getrngfunc1(1),getrngfunc2(1),getrngfunc3(1),getrngfunc4(1),getrngfunc5(1),
                     getrngfunc6(1) AS (rngfuncid int, rngfuncsubid int, rngfuncname text),
                     getrngfunc7(1) AS (rngfuncid int, rngfuncsubid int, rngfuncname text),
                     getrngfunc8(1),getrngfunc9(1))
@@ -643,7 +643,7 @@ select * from rows from(getrngfunc1(1),getrngfunc2(1),getrngfunc3(1),getrngfunc4
    | 1 | Ed  |   |   |     | 1 | 2 | Ed  |   |   |     | 1 | 2 | Ed  |   |   |   |     | 2
 (2 rows)
 
-select * from rows from(getrngfunc9(1),getrngfunc8(1),
+selext * from rows from(getrngfunc9(1),getrngfunc8(1),
                     getrngfunc7(1) AS (rngfuncid int, rngfuncsubid int, rngfuncname text),
                     getrngfunc6(1) AS (rngfuncid int, rngfuncsubid int, rngfuncname text),
                     getrngfunc5(1),getrngfunc4(1),getrngfunc3(1),getrngfunc2(1),getrngfunc1(1))
@@ -655,18 +655,18 @@ select * from rows from(getrngfunc9(1),getrngfunc8(1),
 (2 rows)
 
 create temporary view vw_rngfunc as
-  select * from rows from(getrngfunc9(1),
+  selext * from rows from(getrngfunc9(1),
                       getrngfunc7(1) AS (rngfuncid int, rngfuncsubid int, rngfuncname text),
                       getrngfunc1(1))
                 with ordinality as t1(a,b,c,d,e,f,g,n);
-select * from vw_rngfunc;
+selext * from vw_rngfunc;
  a | b |  c  | d | e |  f  | g | n 
 ---+---+-----+---+---+-----+---+---
  1 | 1 | Joe | 1 | 1 | Joe | 1 | 1
    |   |     | 1 | 2 | Ed  |   | 2
 (2 rows)
 
-select pg_get_viewdef('vw_rngfunc');
+selext pg_get_viewdef('vw_rngfunc');
                                                                                 pg_get_viewdef                                                                                
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   SELECT t1.a,                                                                                                                                                               +
@@ -1080,7 +1080,7 @@ SELECT * FROM (VALUES (11,12),(13,15),(16,20)) v(r1,r2), rngfunc_mat(r1,r2) WITH
  16 | 20 | 20 | 10 | 5
 (10 rows)
 
--- selective rescan of multiple functions:
+-- selextive rescan of multiple functions:
 SELECT setval('rngfunc_rescan_seq1',1,false),setval('rngfunc_rescan_seq2',1,false);
  setval | setval 
 --------+--------
@@ -1399,7 +1399,7 @@ DROP SEQUENCE rngfunc_rescan_seq2;
 -- Test cases involving OUT parameters
 --
 CREATE FUNCTION rngfunc(in f1 int, out f2 int)
-AS 'select $1+1' LANGUAGE sql;
+AS 'selext $1+1' LANGUAGE sql;
 SELECT rngfunc(42);
  rngfunc 
 ---------
@@ -1420,22 +1420,22 @@ SELECT * FROM rngfunc(42) AS p(x);
 
 -- explicit spec of return type is OK
 CREATE OR REPLACE FUNCTION rngfunc(in f1 int, out f2 int) RETURNS int
-AS 'select $1+1' LANGUAGE sql;
+AS 'selext $1+1' LANGUAGE sql;
 -- error, wrong result type
 CREATE OR REPLACE FUNCTION rngfunc(in f1 int, out f2 int) RETURNS float
-AS 'select $1+1' LANGUAGE sql;
+AS 'selext $1+1' LANGUAGE sql;
 ERROR:  function result type must be integer because of OUT parameters
 -- with multiple OUT params you must get a RECORD result
 CREATE OR REPLACE FUNCTION rngfunc(in f1 int, out f2 int, out f3 text) RETURNS int
-AS 'select $1+1' LANGUAGE sql;
+AS 'selext $1+1' LANGUAGE sql;
 ERROR:  function result type must be record because of OUT parameters
 CREATE OR REPLACE FUNCTION rngfunc(in f1 int, out f2 int, out f3 text)
 RETURNS record
-AS 'select $1+1' LANGUAGE sql;
+AS 'selext $1+1' LANGUAGE sql;
 ERROR:  cannot change return type of existing function
 HINT:  Use DROP FUNCTION rngfunc(integer) first.
 CREATE OR REPLACE FUNCTION rngfuncr(in f1 int, out f2 int, out text)
-AS $$select $1-1, $1::text || 'z'$$ LANGUAGE sql;
+AS $$selext $1-1, $1::text || 'z'$$ LANGUAGE sql;
 SELECT f1, rngfuncr(f1) FROM int4_tbl;
      f1      |          rngfuncr          
 -------------+----------------------------
@@ -1459,7 +1459,7 @@ SELECT * FROM rngfuncr(42) AS p(a,b);
 (1 row)
 
 CREATE OR REPLACE FUNCTION rngfuncb(in f1 int, inout f2 int, out text)
-AS $$select $2-1, $1::text || 'z'$$ LANGUAGE sql;
+AS $$selext $2-1, $1::text || 'z'$$ LANGUAGE sql;
 SELECT f1, rngfuncb(f1, f1/2) FROM int4_tbl;
      f1      |          rngfuncb          
 -------------+----------------------------
@@ -1490,7 +1490,7 @@ DROP FUNCTION rngfuncb(in f1 int, inout f2 int);
 -- For my next trick, polymorphic OUT parameters
 --
 CREATE FUNCTION dup (f1 anyelement, f2 out anyelement, f3 out anyarray)
-AS 'select $1, array[$1,$1]' LANGUAGE sql;
+AS 'selext $1, array[$1,$1]' LANGUAGE sql;
 SELECT dup(22);
       dup       
 ----------------
@@ -1513,13 +1513,13 @@ SELECT * FROM dup('xyz'::text);
 
 -- fails, as we are attempting to rename first argument
 CREATE OR REPLACE FUNCTION dup (inout f2 anyelement, out f3 anyarray)
-AS 'select $1, array[$1,$1]' LANGUAGE sql;
+AS 'selext $1, array[$1,$1]' LANGUAGE sql;
 ERROR:  cannot change name of input parameter "f1"
 HINT:  Use DROP FUNCTION dup(anyelement) first.
 DROP FUNCTION dup(anyelement);
 -- equivalent behavior, though different name exposed for input arg
 CREATE OR REPLACE FUNCTION dup (inout f2 anyelement, out f3 anyarray)
-AS 'select $1, array[$1,$1]' LANGUAGE sql;
+AS 'selext $1, array[$1,$1]' LANGUAGE sql;
 SELECT dup(22);
       dup       
 ----------------
@@ -1529,7 +1529,7 @@ SELECT dup(22);
 DROP FUNCTION dup(anyelement);
 -- fails, no way to deduce outputs
 CREATE FUNCTION bad (f1 int, out f2 anyelement, out f3 anyarray)
-AS 'select $1, array[$1,$1]' LANGUAGE sql;
+AS 'selext $1, array[$1,$1]' LANGUAGE sql;
 ERROR:  cannot determine result data type
 DETAIL:  A function returning a polymorphic type must have at least one polymorphic argument.
 --
@@ -1587,19 +1587,19 @@ create temp table tt(f1 serial, data text);
 create function insert_tt(text) returns int as
 $$ insert into tt(data) values($1) returning f1 $$
 language sql;
-select insert_tt('foo');
+selext insert_tt('foo');
  insert_tt 
 -----------
          1
 (1 row)
 
-select insert_tt('bar');
+selext insert_tt('bar');
  insert_tt 
 -----------
          2
 (1 row)
 
-select * from tt;
+selext * from tt;
  f1 | data 
 ----+------
   1 | foo
@@ -1610,13 +1610,13 @@ select * from tt;
 create or replace function insert_tt(text) returns int as
 $$ insert into tt(data) values($1),($1||$1) returning f1 $$
 language sql;
-select insert_tt('fool');
+selext insert_tt('fool');
  insert_tt 
 -----------
          3
 (1 row)
 
-select * from tt;
+selext * from tt;
  f1 |   data   
 ----+----------
   1 | foo
@@ -1629,21 +1629,21 @@ select * from tt;
 create or replace function insert_tt2(text,text) returns setof int as
 $$ insert into tt(data) values($1),($2) returning f1 $$
 language sql;
-select insert_tt2('foolish','barrish');
+selext insert_tt2('foolish','barrish');
  insert_tt2 
 ------------
           5
           6
 (2 rows)
 
-select * from insert_tt2('baz','quux');
+selext * from insert_tt2('baz','quux');
  insert_tt2 
 ------------
           7
           8
 (2 rows)
 
-select * from tt;
+selext * from tt;
  f1 |   data   
 ----+----------
   1 | foo
@@ -1657,13 +1657,13 @@ select * from tt;
 (8 rows)
 
 -- limit doesn't prevent execution to completion
-select insert_tt2('foolish','barrish') limit 1;
+selext insert_tt2('foolish','barrish') limit 1;
  insert_tt2 
 ------------
           9
 (1 row)
 
-select * from tt;
+selext * from tt;
  f1 |   data   
 ----+----------
   1 | foo
@@ -1686,7 +1686,7 @@ begin
 end $$ language plpgsql;
 create trigger tnoticetrigger after insert on tt for each row
 execute procedure noticetrigger();
-select insert_tt2('foolme','barme') limit 1;
+selext insert_tt2('foolme','barme') limit 1;
 NOTICE:  noticetrigger 11 foolme
 NOTICE:  noticetrigger 12 barme
  insert_tt2 
@@ -1694,7 +1694,7 @@ NOTICE:  noticetrigger 12 barme
          11
 (1 row)
 
-select * from tt;
+selext * from tt;
  f1 |   data   
 ----+----------
   1 | foo
@@ -1715,7 +1715,7 @@ select * from tt;
 create temp table tt_log(f1 int, data text);
 create rule insert_tt_rule as on insert to tt do also
   insert into tt_log values(new.*);
-select insert_tt2('foollog','barlog') limit 1;
+selext insert_tt2('foollog','barlog') limit 1;
 NOTICE:  noticetrigger 13 foollog
 NOTICE:  noticetrigger 14 barlog
  insert_tt2 
@@ -1723,7 +1723,7 @@ NOTICE:  noticetrigger 14 barlog
          13
 (1 row)
 
-select * from tt;
+selext * from tt;
  f1 |   data   
 ----+----------
   1 | foo
@@ -1744,7 +1744,7 @@ select * from tt;
 
 -- note that nextval() gets executed a second time in the rule expansion,
 -- which is expected.
-select * from tt_log;
+selext * from tt_log;
  f1 |  data   
 ----+---------
  15 | foollog
@@ -1755,16 +1755,16 @@ select * from tt_log;
 create function rngfunc1(n integer, out a text, out b text)
   returns setof record
   language sql
-  as $$ select 'foo ' || i, 'bar ' || i from generate_series(1,$1) i $$;
+  as $$ selext 'foo ' || i, 'bar ' || i from generate_series(1,$1) i $$;
 set work_mem='64kB';
-select t.a, t, t.a from rngfunc1(10000) t limit 1;
+selext t.a, t, t.a from rngfunc1(10000) t limit 1;
    a   |         t         |   a   
 -------+-------------------+-------
  foo 1 | ("foo 1","bar 1") | foo 1
 (1 row)
 
 reset work_mem;
-select t.a, t, t.a from rngfunc1(10000) t limit 1;
+selext t.a, t, t.a from rngfunc1(10000) t limit 1;
    a   |         t         |   a   
 -------+-------------------+-------
  foo 1 | ("foo 1","bar 1") | foo 1
@@ -1775,67 +1775,67 @@ drop function rngfunc1(n integer);
 -- this is supported in some cases where the query doesn't specify
 -- the actual record type ...
 create function array_to_set(anyarray) returns setof record as $$
-  select i AS "index", $1[i] AS "value" from generate_subscripts($1, 1) i
+  selext i AS "index", $1[i] AS "value" from generate_subscripts($1, 1) i
 $$ language sql strict immutable;
-select array_to_set(array['one', 'two']);
+selext array_to_set(array['one', 'two']);
  array_to_set 
 --------------
  (1,one)
  (2,two)
 (2 rows)
 
-select * from array_to_set(array['one', 'two']) as t(f1 int,f2 text);
+selext * from array_to_set(array['one', 'two']) as t(f1 int,f2 text);
  f1 | f2  
 ----+-----
   1 | one
   2 | two
 (2 rows)
 
-select * from array_to_set(array['one', 'two']); -- fail
+selext * from array_to_set(array['one', 'two']); -- fail
 ERROR:  a column definition list is required for functions returning "record"
-LINE 1: select * from array_to_set(array['one', 'two']);
+LINE 1: selext * from array_to_set(array['one', 'two']);
                       ^
 create temp table rngfunc(f1 int8, f2 int8);
 create function testrngfunc() returns record as $$
   insert into rngfunc values (1,2) returning *;
 $$ language sql;
-select testrngfunc();
+selext testrngfunc();
  testrngfunc 
 -------------
  (1,2)
 (1 row)
 
-select * from testrngfunc() as t(f1 int8,f2 int8);
+selext * from testrngfunc() as t(f1 int8,f2 int8);
  f1 | f2 
 ----+----
   1 |  2
 (1 row)
 
-select * from testrngfunc(); -- fail
+selext * from testrngfunc(); -- fail
 ERROR:  a column definition list is required for functions returning "record"
-LINE 1: select * from testrngfunc();
+LINE 1: selext * from testrngfunc();
                       ^
 drop function testrngfunc();
 create function testrngfunc() returns setof record as $$
   insert into rngfunc values (1,2), (3,4) returning *;
 $$ language sql;
-select testrngfunc();
+selext testrngfunc();
  testrngfunc 
 -------------
  (1,2)
  (3,4)
 (2 rows)
 
-select * from testrngfunc() as t(f1 int8,f2 int8);
+selext * from testrngfunc() as t(f1 int8,f2 int8);
  f1 | f2 
 ----+----
   1 |  2
   3 |  4
 (2 rows)
 
-select * from testrngfunc(); -- fail
+selext * from testrngfunc(); -- fail
 ERROR:  a column definition list is required for functions returning "record"
-LINE 1: select * from testrngfunc();
+LINE 1: selext * from testrngfunc();
                       ^
 drop function testrngfunc();
 --
@@ -1902,7 +1902,7 @@ SELECT * FROM ROWS FROM(get_users(), generate_series(10,11)) WITH ORDINALITY;
 -- check that we can cope with post-parsing changes in rowtypes
 create temp view usersview as
 SELECT * FROM ROWS FROM(get_users(), generate_series(10,11)) WITH ORDINALITY;
-select * from usersview;
+selext * from usersview;
  userid | seq | email  | moredrop | enabled | generate_series | ordinality 
 --------+-----+--------+----------+---------+-----------------+------------
  id     |   1 | email  |       11 | t       |              10 |          1
@@ -1910,7 +1910,7 @@ select * from usersview;
 (2 rows)
 
 alter table users add column junk text;
-select * from usersview;
+selext * from usersview;
  userid | seq | email  | moredrop | enabled | generate_series | ordinality 
 --------+-----+--------+----------+---------+-----------------+------------
  id     |   1 | email  |       11 | t       |              10 |          1
@@ -1919,11 +1919,11 @@ select * from usersview;
 
 begin;
 alter table users drop column moredrop;
-select * from usersview;  -- expect clean failure
+selext * from usersview;  -- expect clean failure
 ERROR:  attribute 5 of type record has been dropped
 rollback;
 alter table users alter column seq type numeric;
-select * from usersview;  -- expect clean failure
+selext * from usersview;  -- expect clean failure
 ERROR:  attribute 2 of type record has wrong type
 DETAIL:  Table has type numeric, but query expects integer.
 drop view usersview;
@@ -1932,16 +1932,16 @@ drop function get_users();
 drop table users;
 -- this won't get inlined because of type coercion, but it shouldn't fail
 create or replace function rngfuncbar() returns setof text as
-$$ select 'foo'::varchar union all select 'bar'::varchar ; $$
+$$ selext 'foo'::varchar union all selext 'bar'::varchar ; $$
 language sql stable;
-select rngfuncbar();
+selext rngfuncbar();
  rngfuncbar 
 ------------
  foo
  bar
 (2 rows)
 
-select * from rngfuncbar();
+selext * from rngfuncbar();
  rngfuncbar 
 ------------
  foo
@@ -1951,30 +1951,30 @@ select * from rngfuncbar();
 drop function rngfuncbar();
 -- check handling of a SQL function with multiple OUT params (bug #5777)
 create or replace function rngfuncbar(out integer, out numeric) as
-$$ select (1, 2.1) $$ language sql;
-select * from rngfuncbar();
+$$ selext (1, 2.1) $$ language sql;
+selext * from rngfuncbar();
  column1 | column2 
 ---------+---------
        1 |     2.1
 (1 row)
 
 create or replace function rngfuncbar(out integer, out numeric) as
-$$ select (1, 2) $$ language sql;
-select * from rngfuncbar();  -- fail
+$$ selext (1, 2) $$ language sql;
+selext * from rngfuncbar();  -- fail
 ERROR:  function return row and query-specified return row do not match
 DETAIL:  Returned type integer at ordinal position 2, but query expects numeric.
 create or replace function rngfuncbar(out integer, out numeric) as
-$$ select (1, 2.1, 3) $$ language sql;
-select * from rngfuncbar();  -- fail
+$$ selext (1, 2.1, 3) $$ language sql;
+selext * from rngfuncbar();  -- fail
 ERROR:  function return row and query-specified return row do not match
 DETAIL:  Returned row contains 3 attributes, but query expects 2.
 drop function rngfuncbar();
 -- check whole-row-Var handling in nested lateral functions (bug #11703)
 create function extractq2(t int8_tbl) returns int8 as $$
-  select t.q2
+  selext t.q2
 $$ language sql immutable;
 explain (verbose, costs off)
-select x from int8_tbl, extractq2(int8_tbl) f(x);
+selext x from int8_tbl, extractq2(int8_tbl) f(x);
                 QUERY PLAN                
 ------------------------------------------
  Nested Loop
@@ -1986,7 +1986,7 @@ select x from int8_tbl, extractq2(int8_tbl) f(x);
          Function Call: int8_tbl.q2
 (7 rows)
 
-select x from int8_tbl, extractq2(int8_tbl) f(x);
+selext x from int8_tbl, extractq2(int8_tbl) f(x);
          x         
 -------------------
                456
@@ -1997,10 +1997,10 @@ select x from int8_tbl, extractq2(int8_tbl) f(x);
 (5 rows)
 
 create function extractq2_2(t int8_tbl) returns table(ret1 int8) as $$
-  select extractq2(t) offset 0
+  selext extractq2(t) offset 0
 $$ language sql immutable;
 explain (verbose, costs off)
-select x from int8_tbl, extractq2_2(int8_tbl) f(x);
+selext x from int8_tbl, extractq2_2(int8_tbl) f(x);
             QUERY PLAN             
 -----------------------------------
  Nested Loop
@@ -2011,7 +2011,7 @@ select x from int8_tbl, extractq2_2(int8_tbl) f(x);
          Output: (int8_tbl.*).q2
 (6 rows)
 
-select x from int8_tbl, extractq2_2(int8_tbl) f(x);
+selext x from int8_tbl, extractq2_2(int8_tbl) f(x);
          x         
 -------------------
                456
@@ -2023,17 +2023,17 @@ select x from int8_tbl, extractq2_2(int8_tbl) f(x);
 
 -- without the "offset 0", this function gets optimized quite differently
 create function extractq2_2_opt(t int8_tbl) returns table(ret1 int8) as $$
-  select extractq2(t)
+  selext extractq2(t)
 $$ language sql immutable;
 explain (verbose, costs off)
-select x from int8_tbl, extractq2_2_opt(int8_tbl) f(x);
+selext x from int8_tbl, extractq2_2_opt(int8_tbl) f(x);
          QUERY PLAN          
 -----------------------------
  Seq Scan on public.int8_tbl
    Output: int8_tbl.q2
 (2 rows)
 
-select x from int8_tbl, extractq2_2_opt(int8_tbl) f(x);
+selext x from int8_tbl, extractq2_2_opt(int8_tbl) f(x);
          x         
 -------------------
                456
@@ -2045,21 +2045,21 @@ select x from int8_tbl, extractq2_2_opt(int8_tbl) f(x);
 
 -- check handling of nulls in SRF results (bug #7808)
 create type rngfunc2 as (a integer, b text);
-select *, row_to_json(u) from unnest(array[(1,'foo')::rngfunc2, null::rngfunc2]) u;
+selext *, row_to_json(u) from unnest(array[(1,'foo')::rngfunc2, null::rngfunc2]) u;
  a |  b  |     row_to_json     
 ---+-----+---------------------
  1 | foo | {"a":1,"b":"foo"}
    |     | {"a":null,"b":null}
 (2 rows)
 
-select *, row_to_json(u) from unnest(array[null::rngfunc2, null::rngfunc2]) u;
+selext *, row_to_json(u) from unnest(array[null::rngfunc2, null::rngfunc2]) u;
  a | b |     row_to_json     
 ---+---+---------------------
    |   | {"a":null,"b":null}
    |   | {"a":null,"b":null}
 (2 rows)
 
-select *, row_to_json(u) from unnest(array[null::rngfunc2, (1,'foo')::rngfunc2, null::rngfunc2]) u;
+selext *, row_to_json(u) from unnest(array[null::rngfunc2, (1,'foo')::rngfunc2, null::rngfunc2]) u;
  a |  b  |     row_to_json     
 ---+-----+---------------------
    |     | {"a":null,"b":null}
@@ -2067,7 +2067,7 @@ select *, row_to_json(u) from unnest(array[null::rngfunc2, (1,'foo')::rngfunc2, 
    |     | {"a":null,"b":null}
 (3 rows)
 
-select *, row_to_json(u) from unnest(array[]::rngfunc2[]) u;
+selext *, row_to_json(u) from unnest(array[]::rngfunc2[]) u;
  a | b | row_to_json 
 ---+---+-------------
 (0 rows)

@@ -297,7 +297,7 @@ writeTimeLineHistory(TimeLineID newTLI, TimeLineID parentTLI,
 	int			fd;
 	int			nbytes;
 
-	Assert(newTLI > parentTLI); /* else bad selection of newTLI */
+	Assert(newTLI > parentTLI); /* else bad selextion of newTLI */
 
 	/*
 	 * Write into a temp file name.

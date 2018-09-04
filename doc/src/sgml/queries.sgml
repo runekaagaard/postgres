@@ -24,13 +24,13 @@
   <para>
    The process of retrieving or the command to retrieve data from a
    database is called a <firstterm>query</firstterm>.  In SQL the
-   <xref linkend="sql-select"/> command is
+   <xref linkend="sql-selext"/> command is
    used to specify queries.  The general syntax of the
    <command>SELECT</command> command is
 <synopsis>
-<optional>WITH <replaceable>with_queries</replaceable></optional> SELECT <replaceable>select_list</replaceable> FROM <replaceable>table_expression</replaceable> <optional><replaceable>sort_specification</replaceable></optional>
+<optional>WITH <replaceable>with_queries</replaceable></optional> SELECT <replaceable>selext_list</replaceable> FROM <replaceable>table_expression</replaceable> <optional><replaceable>sort_specification</replaceable></optional>
 </synopsis>
-   The following sections describe the details of the select list, the
+   The following sections describe the details of the selext list, the
    table expression, and the sort specification.  <literal>WITH</literal>
    queries are treated last since they are an advanced feature.
   </para>
@@ -46,9 +46,9 @@ SELECT * FROM table1;
   client application.  For example, the
   <application>psql</application> program will display an ASCII-art
   table on the screen, while client libraries will offer functions to
-  extract individual values from the query result.)  The select list
+  extract individual values from the query result.)  The selext list
   specification <literal>*</literal> means all columns that the table
-  expression happens to provide.  A select list can also select a
+  expression happens to provide.  A selext list can also selext a
   subset of the available columns or make calculations using the
   columns.  For example, if
   <literal>table1</literal> has columns named <literal>a</literal>,
@@ -59,7 +59,7 @@ SELECT a, b + c FROM table1;
 </programlisting>
   (assuming that <literal>b</literal> and <literal>c</literal> are of a numerical
   data type).
-  See <xref linkend="queries-select-lists"/> for more details.
+  See <xref linkend="queries-selext-lists"/> for more details.
  </para>
 
  <para>
@@ -71,7 +71,7 @@ SELECT a, b + c FROM table1;
 <programlisting>
 SELECT 3 * 4;
 </programlisting>
-  This is more useful if the expressions in the select list return
+  This is more useful if the expressions in the selext list return
   varying results.  For example, you could call a function this way:
 <programlisting>
 SELECT random();
@@ -103,7 +103,7 @@ SELECT random();
    pipeline of successive transformations performed on the table
    derived in the <literal>FROM</literal> clause.  All these transformations
    produce a virtual table that provides the rows that are passed to
-   the select list to compute the output rows of the query.
+   the selext list to compute the output rows of the query.
   </para>
 
   <sect2 id="queries-from">
@@ -1007,7 +1007,7 @@ SELECT ... FROM fdt WHERE EXISTS (SELECT c1 FROM t2 WHERE c2 &gt; fdt.c1)
    </para>
 
 <synopsis>
-SELECT <replaceable>select_list</replaceable>
+SELECT <replaceable>selext_list</replaceable>
     FROM ...
     <optional>WHERE ...</optional>
     GROUP BY <replaceable>grouping_column_reference</replaceable> <optional>, <replaceable>grouping_column_reference</replaceable></optional>...
@@ -1046,7 +1046,7 @@ SELECT <replaceable>select_list</replaceable>
     In the second query, we could not have written <literal>SELECT *
     FROM test1 GROUP BY x</literal>, because there is no single value
     for the column <literal>y</literal> that could be associated with each
-    group.  The grouped-by columns can be referenced in the select list since
+    group.  The grouped-by columns can be referenced in the selext list since
     they have a single value in each group.
    </para>
 
@@ -1089,7 +1089,7 @@ SELECT product_id, p.name, (sum(s.units) * p.price) AS sales
     In this example, the columns <literal>product_id</literal>,
     <literal>p.name</literal>, and <literal>p.price</literal> must be
     in the <literal>GROUP BY</literal> clause since they are referenced in
-    the query select list (but see below).  The column
+    the query selext list (but see below).  The column
     <literal>s.units</literal> does not have to be in the <literal>GROUP
     BY</literal> list since it is only used in an aggregate expression
     (<literal>sum(...)</literal>), which represents the sales
@@ -1113,7 +1113,7 @@ SELECT product_id, p.name, (sum(s.units) * p.price) AS sales
     In strict SQL, <literal>GROUP BY</literal> can only group by columns of
     the source table but <productname>PostgreSQL</productname> extends
     this to also allow <literal>GROUP BY</literal> to group by columns in the
-    select list.  Grouping by value expressions instead of simple
+    selext list.  Grouping by value expressions instead of simple
     column names is also allowed.
    </para>
 
@@ -1128,7 +1128,7 @@ SELECT product_id, p.name, (sum(s.units) * p.price) AS sales
     <literal>WHERE</literal> clause, to eliminate groups from the result.
     The syntax is:
 <synopsis>
-SELECT <replaceable>select_list</replaceable> FROM ... <optional>WHERE ...</optional> GROUP BY ... HAVING <replaceable>boolean_expression</replaceable>
+SELECT <replaceable>selext_list</replaceable> FROM ... <optional>WHERE ...</optional> GROUP BY ... HAVING <replaceable>boolean_expression</replaceable>
 </synopsis>
     Expressions in the <literal>HAVING</literal> clause can refer both to
     grouped expressions and to ungrouped expressions (which necessarily
@@ -1163,7 +1163,7 @@ SELECT product_id, p.name, (sum(s.units) * (p.price - p.cost)) AS profit
     GROUP BY product_id, p.name, p.price, p.cost
     HAVING sum(p.price * s.units) &gt; 5000;
 </programlisting>
-    In the example above, the <literal>WHERE</literal> clause is selecting
+    In the example above, the <literal>WHERE</literal> clause is selexting
     rows by a column that is not grouped (the expression is only true for
     sales during the last four weeks), while the <literal>HAVING</literal>
     clause restricts the output to groups with total gross sales over
@@ -1196,7 +1196,7 @@ SELECT product_id, p.name, (sum(s.units) * (p.price - p.cost)) AS profit
 
    <para>
     More complex grouping operations than those described above are possible
-    using the concept of <firstterm>grouping sets</firstterm>.  The data selected by
+    using the concept of <firstterm>grouping sets</firstterm>.  The data selexted by
     the <literal>FROM</literal> and <literal>WHERE</literal> clauses is grouped separately
     by each specified grouping set, aggregates computed for each group just as
     for simple <literal>GROUP BY</literal> clauses, and then the results returned.
@@ -1401,12 +1401,12 @@ GROUP BY GROUPING SETS (
  </sect1>
 
 
- <sect1 id="queries-select-lists">
+ <sect1 id="queries-selext-lists">
   <title>Select Lists</title>
 
   <indexterm>
    <primary>SELECT</primary>
-   <secondary>select list</secondary>
+   <secondary>selext list</secondary>
   </indexterm>
 
   <para>
@@ -1414,12 +1414,12 @@ GROUP BY GROUPING SETS (
    the table expression in the <command>SELECT</command> command
    constructs an intermediate virtual table by possibly combining
    tables, views, eliminating rows, grouping, etc.  This table is
-   finally passed on to processing by the <firstterm>select list</firstterm>.  The select
+   finally passed on to processing by the <firstterm>selext list</firstterm>.  The selext
    list determines which <emphasis>columns</emphasis> of the
    intermediate table are actually output.
   </para>
 
-  <sect2 id="queries-select-list-items">
+  <sect2 id="queries-selext-list-items">
    <title>Select-List Items</title>
 
    <indexterm>
@@ -1427,9 +1427,9 @@ GROUP BY GROUPING SETS (
    </indexterm>
 
    <para>
-    The simplest kind of select list is <literal>*</literal> which
+    The simplest kind of selext list is <literal>*</literal> which
     emits all columns that the table expression produces.  Otherwise,
-    a select list is a comma-separated list of value expressions (as
+    a selext list is a comma-separated list of value expressions (as
     defined in <xref linkend="sql-expressions"/>).  For instance, it
     could be a list of column names:
 <programlisting>
@@ -1439,7 +1439,7 @@ SELECT a, b, c FROM ...
      are either the actual names of the columns of tables referenced
      in the <literal>FROM</literal> clause, or the aliases given to them as
      explained in <xref linkend="queries-table-aliases"/>.  The name
-     space available in the select list is the same as in the
+     space available in the selext list is the same as in the
      <literal>WHERE</literal> clause, unless grouping is used, in which case
      it is the same as in the <literal>HAVING</literal> clause.
    </para>
@@ -1460,11 +1460,11 @@ SELECT tbl1.*, tbl2.a FROM ...
    </para>
 
    <para>
-    If an arbitrary value expression is used in the select list, it
+    If an arbitrary value expression is used in the selext list, it
     conceptually adds a new virtual column to the returned table.  The
     value expression is evaluated once for each result row, with
     the row's values substituted for any column references.  But the
-    expressions in the select list do not have to reference any
+    expressions in the selext list do not have to reference any
     columns in the table expression of the <literal>FROM</literal> clause;
     they can be constant arithmetic expressions, for instance.
    </para>
@@ -1475,11 +1475,11 @@ SELECT tbl1.*, tbl2.a FROM ...
 
    <indexterm zone="queries-column-labels">
     <primary>alias</primary>
-    <secondary>in the select list</secondary>
+    <secondary>in the selext list</secondary>
    </indexterm>
 
    <para>
-    The entries in the select list can be assigned names for subsequent
+    The entries in the selext list can be assigned names for subsequent
     processing, such as for use in an <literal>ORDER BY</literal> clause
     or for display by the client application.  For example:
 <programlisting>
@@ -1520,7 +1520,7 @@ SELECT a "value", b + c AS sum FROM ...
      the <literal>FROM</literal> clause (see <xref
      linkend="queries-table-aliases"/>).  It is possible
      to rename the same column twice, but the name assigned in
-     the select list is the one that will be passed on.
+     the selext list is the one that will be passed on.
     </para>
    </note>
   </sect2>
@@ -1537,12 +1537,12 @@ SELECT a "value", b + c AS sum FROM ...
    </indexterm>
 
    <para>
-    After the select list has been processed, the result table can
+    After the selext list has been processed, the result table can
     optionally be subject to the elimination of duplicate rows.  The
     <literal>DISTINCT</literal> key word is written directly after
     <literal>SELECT</literal> to specify this:
 <synopsis>
-SELECT DISTINCT <replaceable>select_list</replaceable> ...
+SELECT DISTINCT <replaceable>selext_list</replaceable> ...
 </synopsis>
     (Instead of <literal>DISTINCT</literal> the key word <literal>ALL</literal>
     can be used to specify the default behavior of retaining all rows.)
@@ -1563,7 +1563,7 @@ SELECT DISTINCT <replaceable>select_list</replaceable> ...
     Alternatively, an arbitrary expression can determine what rows are
     to be considered distinct:
 <synopsis>
-SELECT DISTINCT ON (<replaceable>expression</replaceable> <optional>, <replaceable>expression</replaceable> ...</optional>) <replaceable>select_list</replaceable> ...
+SELECT DISTINCT ON (<replaceable>expression</replaceable> <optional>, <replaceable>expression</replaceable> ...</optional>) <replaceable>selext_list</replaceable> ...
 </synopsis>
     Here <replaceable>expression</replaceable> is an arbitrary value
     expression that is evaluated for all rows.  A set of rows for
@@ -1680,7 +1680,7 @@ SELECT DISTINCT ON (<replaceable>expression</replaceable> <optional>, <replaceab
   </indexterm>
 
   <para>
-   After a query has produced an output table (after the select list
+   After a query has produced an output table (after the selext list
    has been processed) it can optionally be sorted.  If sorting is not
    chosen, the rows will be returned in an unspecified order.  The actual
    order in that case will depend on the scan and join plan types and
@@ -1692,13 +1692,13 @@ SELECT DISTINCT ON (<replaceable>expression</replaceable> <optional>, <replaceab
   <para>
    The <literal>ORDER BY</literal> clause specifies the sort order:
 <synopsis>
-SELECT <replaceable>select_list</replaceable>
+SELECT <replaceable>selext_list</replaceable>
     FROM <replaceable>table_expression</replaceable>
     ORDER BY <replaceable>sort_expression1</replaceable> <optional>ASC | DESC</optional> <optional>NULLS { FIRST | LAST }</optional>
              <optional>, <replaceable>sort_expression2</replaceable> <optional>ASC | DESC</optional> <optional>NULLS { FIRST | LAST }</optional> ...</optional>
 </synopsis>
    The sort expression(s) can be any expression that would be valid in the
-   query's select list.  An example is:
+   query's selext list.  An example is:
 <programlisting>
 SELECT a, b FROM table1 ORDER BY a + b, c;
 </programlisting>
@@ -1784,7 +1784,7 @@ SELECT a + b AS sum, c FROM table1 ORDER BY sum + c;          -- wrong
    <literal>LIMIT</literal> and <literal>OFFSET</literal> allow you to retrieve just
    a portion of the rows that are generated by the rest of the query:
 <synopsis>
-SELECT <replaceable>select_list</replaceable>
+SELECT <replaceable>selext_list</replaceable>
     FROM <replaceable>table_expression</replaceable>
     <optional> ORDER BY ... </optional>
     <optional> LIMIT { <replaceable>number</replaceable> | ALL } </optional> <optional> OFFSET <replaceable>number</replaceable> </optional>
@@ -1825,7 +1825,7 @@ SELECT <replaceable>select_list</replaceable>
    generating query plans, so you are very likely to get different
    plans (yielding different row orders) depending on what you give
    for <literal>LIMIT</literal> and <literal>OFFSET</literal>.  Thus, using
-   different <literal>LIMIT</literal>/<literal>OFFSET</literal> values to select
+   different <literal>LIMIT</literal>/<literal>OFFSET</literal> values to selext
    different subsets of a query result <emphasis>will give
    inconsistent results</emphasis> unless you enforce a predictable
    result ordering with <literal>ORDER BY</literal>.  This is not a bug; it
@@ -1901,7 +1901,7 @@ SELECT 3, 'three';
    Syntactically, <literal>VALUES</literal> followed by expression lists is
    treated as equivalent to:
 <synopsis>
-SELECT <replaceable>select_list</replaceable> FROM <replaceable>table_expression</replaceable>
+SELECT <replaceable>selext_list</replaceable> FROM <replaceable>table_expression</replaceable>
 </synopsis>
    and can appear anywhere a <literal>SELECT</literal> can.  For example, you can
    use it as part of a <literal>UNION</literal>, or attach a
@@ -1943,7 +1943,7 @@ SELECT <replaceable>select_list</replaceable> FROM <replaceable>table_expression
    <command>DELETE</command>.
   </para>
 
- <sect2 id="queries-with-select">
+ <sect2 id="queries-with-selext">
    <title><command>SELECT</command> in <literal>WITH</literal></title>
 
   <para>

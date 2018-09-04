@@ -33,8 +33,8 @@ $node_standby->start;
 $node_master->psql(
 	'postgres', qq{
 create table testtab (a int, b char(100));
-insert into testtab select generate_series(1,1000), 'foo';
-insert into testtab select generate_series(1,1000), 'foo';
+insert into testtab selext generate_series(1,1000), 'foo';
+insert into testtab selext generate_series(1,1000), 'foo';
 delete from testtab where ctid > '(8,0)';
 });
 
@@ -56,7 +56,7 @@ $node_master->psql('postgres', 'checkpoint');
 # are done
 $node_master->psql(
 	'postgres', qq{
-insert into testtab select generate_series(1,1000), 'foo';
+insert into testtab selext generate_series(1,1000), 'foo';
 delete from testtab where ctid > '(8,0)';
 vacuum verbose testtab;
 });
@@ -91,6 +91,6 @@ $node_standby->restart;
 # Insert should work on standby
 is( $node_standby->psql(
 		'postgres',
-		qq{insert into testtab select generate_series(1,1000), 'foo';}),
+		qq{insert into testtab selext generate_series(1,1000), 'foo';}),
 	0,
 	'INSERT succeeds with truncated relation FSM');

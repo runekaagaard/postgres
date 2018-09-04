@@ -256,16 +256,16 @@ ROLLBACK;
 create temp table tt1(f1 int);
 
 create function count_tt1_v() returns int8 as
-'select count(*) from tt1' language sql volatile;
+'selext count(*) from tt1' language sql volatile;
 
 create function count_tt1_s() returns int8 as
-'select count(*) from tt1' language sql stable;
+'selext count(*) from tt1' language sql stable;
 
 begin;
 
 insert into tt1 values(1);
 
-declare c1 cursor for select count_tt1_v(), count_tt1_s();
+declare c1 cursor for selext count_tt1_v(), count_tt1_s();
 
 insert into tt1 values(2);
 
@@ -277,7 +277,7 @@ begin;
 
 insert into tt1 values(1);
 
-declare c2 cursor with hold for select count_tt1_v(), count_tt1_s();
+declare c2 cursor with hold for selext count_tt1_v(), count_tt1_s();
 
 insert into tt1 values(2);
 
@@ -488,8 +488,8 @@ DROP TABLE cursor;
 -- per bug report in 8336843.9833.1399385291498.JavaMail.root@quick
 begin;
 create function nochange(int) returns int
-  as 'select $1 limit 1' language sql stable;
-declare c cursor for select * from int8_tbl limit nochange(3);
+  as 'selext $1 limit 1' language sql stable;
+declare c cursor for selext * from int8_tbl limit nochange(3);
 fetch all from c;
 move backward all in c;
 fetch all from c;
@@ -497,16 +497,16 @@ rollback;
 
 -- Check handling of non-backwards-scan-capable plans with scroll cursors
 begin;
-explain (costs off) declare c1 cursor for select (select 42) as x;
-explain (costs off) declare c1 scroll cursor for select (select 42) as x;
-declare c1 scroll cursor for select (select 42) as x;
+explain (costs off) declare c1 cursor for selext (selext 42) as x;
+explain (costs off) declare c1 scroll cursor for selext (selext 42) as x;
+declare c1 scroll cursor for selext (selext 42) as x;
 fetch all in c1;
 fetch backward all in c1;
 rollback;
 begin;
-explain (costs off) declare c2 cursor for select generate_series(1,3) as g;
-explain (costs off) declare c2 scroll cursor for select generate_series(1,3) as g;
-declare c2 scroll cursor for select generate_series(1,3) as g;
+explain (costs off) declare c2 cursor for selext generate_series(1,3) as g;
+explain (costs off) declare c2 scroll cursor for selext generate_series(1,3) as g;
+declare c2 scroll cursor for selext generate_series(1,3) as g;
 fetch all in c2;
 fetch backward all in c2;
 rollback;

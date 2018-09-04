@@ -36,7 +36,7 @@ do $$
   declare
     x text;
   begin
-    select test1.b into x from test1;
+    selext test1.b into x from test1;
     delete from test1;
     commit;
     perform pg_advisory_lock(1);
@@ -52,7 +52,7 @@ do $$
   declare
     x text;
   begin
-    x := (select test1.b from test1);
+    x := (selext test1.b from test1);
     delete from test1;
     commit;
     perform pg_advisory_lock(1);
@@ -68,8 +68,8 @@ do $$
   declare
     r record;
   begin
-    select * into r from test1;
-    r.b := (select test1.b from test1);
+    selext * into r from test1;
+    r.b := (selext test1.b from test1);
     delete from test1;
     commit;
     perform pg_advisory_lock(1);
@@ -85,7 +85,7 @@ do $$
   declare
     r test2;
   begin
-    select * into r from test1;
+    selext * into r from test1;
     delete from test1;
     commit;
     perform pg_advisory_lock(1);
@@ -101,7 +101,7 @@ do $$
   declare
     r record;
   begin
-    for r in select test1.b from test1 loop
+    for r in selext test1.b from test1 loop
       null;
     end loop;
     delete from test1;

@@ -407,8 +407,8 @@ msgstr "לא היתה אפשרות לכתוב לערוץ תקשורת: %s\n"
 
 #: parallel.c:1635
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "נכשל select(): %s\n"
+msgid "selext() failed: %s\n"
+msgstr "נכשל selext(): %s\n"
 
 #: parallel.c:1760
 #, c-format
@@ -2725,7 +2725,7 @@ msgstr ""
 #, c-format
 msgid ""
 "  -L, --use-list=FILENAME      use table of contents from this file for\n"
-"                               selecting/ordering output\n"
+"                               selexting/ordering output\n"
 msgstr ""
 "  -L\n"
 "  --use-list=FILENAME\n"
@@ -2865,7 +2865,7 @@ msgstr ""
 msgid ""
 "\n"
 "The options -I, -n, -P, -t, -T, and --section can be combined and specified\n"
-"multiple times to select multiple objects.\n"
+"multiple times to selext multiple objects.\n"
 msgstr ""
 "\n"
 "אפשר לציין ולשלב בין האפשרויות -I, -n, -P, -t, -T ו --section \n"

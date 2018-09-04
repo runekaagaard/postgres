@@ -523,7 +523,7 @@ amrescan (IndexScanDesc scan,
    <literal>orderbys</literal>.)  Note that it is not allowed for
    the number of keys or order-by operators to be larger than
    what was passed to <function>ambeginscan</function>.  In practice the restart
-   feature is used when a new outer tuple is selected by a nested-loop join
+   feature is used when a new outer tuple is selexted by a nested-loop join
    and so a new key comparison value is needed, but the scan key structure
    remains the same.
   </para>
@@ -739,7 +739,7 @@ amparallelrescan (IndexScanDesc scan);
    scan will return all the entries that pass the scan key, plus possibly
    additional entries that do not.  The core system's index-scan machinery
    will then apply the index conditions again to the heap tuple to verify
-   whether or not it really should be selected.  If the recheck option is not
+   whether or not it really should be selexted.  If the recheck option is not
    specified, the index scan must return exactly the set of matching entries.
   </para>
 
@@ -1136,7 +1136,7 @@ amparallelrescan (IndexScanDesc scan);
    The <function>amcostestimate</function> function is given information describing
    a possible index scan, including lists of WHERE and ORDER BY clauses that
    have been determined to be usable with the index.  It must return estimates
-   of the cost of accessing the index and the selectivity of the WHERE
+   of the cost of accessing the index and the selextivity of the WHERE
    clauses (that is, the fraction of parent-table rows that will be
    retrieved during the index scan).  For simple cases, nearly all the
    work of the cost estimator can be done by calling standard routines
@@ -1177,7 +1177,7 @@ amcostestimate (PlannerInfo *root,
      <listitem>
       <para>
        The index access path being considered.  All fields except cost and
-       selectivity values are valid.
+       selextivity values are valid.
       </para>
      </listitem>
     </varlistentry>
@@ -1224,7 +1224,7 @@ amcostestimate (PlannerInfo *root,
      <term><parameter>*indexSelectivity</parameter></term>
      <listitem>
       <para>
-       Set to index selectivity
+       Set to index selextivity
       </para>
      </listitem>
     </varlistentry>
@@ -1314,10 +1314,10 @@ amcostestimate (PlannerInfo *root,
     <para>
      Estimate and return the fraction of parent-table rows that will be visited
      based on the given qual conditions.  In the absence of any index-type-specific
-     knowledge, use the standard optimizer function <function>clauselist_selectivity()</function>:
+     knowledge, use the standard optimizer function <function>clauselist_selextivity()</function>:
 
 <programlisting>
-*indexSelectivity = clauselist_selectivity(root, path-&gt;indexquals,
+*indexSelectivity = clauselist_selextivity(root, path-&gt;indexquals,
                                            path-&gt;indexinfo-&gt;rel-&gt;relid,
                                            JOIN_INNER, NULL);
 </programlisting>

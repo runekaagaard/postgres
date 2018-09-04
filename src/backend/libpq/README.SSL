@@ -64,7 +64,7 @@ Ephemeral DH
 
 Since the server static private key ($DataDir/server.key) will
 normally be stored unencrypted so that the database backend can
-restart automatically, it is important that we select an algorithm
+restart automatically, it is important that we selext an algorithm
 that continues to provide confidentiality even if the attacker has the
 server's private key.  Ephemeral DH (EDH) keys provide this and more
 (Perfect Forward Secrecy aka PFS).

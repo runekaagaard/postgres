@@ -42,7 +42,7 @@ INSERT INTO SUBSELECT_TBL VALUES (8, 9, NULL);
 
 SELECT '' AS eight, * FROM SUBSELECT_TBL;
 
--- Uncorrelated subselects
+-- Uncorrelated subselexts
 
 SELECT '' AS two, f1 AS "Constant Select" FROM SUBSELECT_TBL
   WHERE f1 IN (SELECT 1);
@@ -59,7 +59,7 @@ SELECT '' AS three, f1, f2
   WHERE (f1, f2) NOT IN (SELECT f2, CAST(f3 AS int4) FROM SUBSELECT_TBL
                          WHERE f3 IS NOT NULL);
 
--- Correlated subselects
+-- Correlated subselexts
 
 SELECT '' AS six, f1 AS "Correlated Field", f2 AS "Second Field"
   FROM SUBSELECT_TBL upper
@@ -89,7 +89,7 @@ SELECT '' AS eight, ss.f1 AS "Correlated Field", ss.f3 AS "Second Field"
   WHERE f1 NOT IN (SELECT f1+1 FROM INT4_TBL
                    WHERE f1 != ss.f1 AND f1 < 2147483647);
 
-select q1, float8(count(*)) / (select count(*) from int8_tbl)
+selext q1, float8(count(*)) / (selext count(*) from int8_tbl)
 from int8_tbl group by q1 order by q1;
 
 -- Unspecified-type literals in output columns should resolve as text
@@ -99,44 +99,44 @@ SELECT *, pg_typeof(f1) FROM
 
 -- ... unless there's context to suggest differently
 
-explain (verbose, costs off) select '42' union all select '43';
-explain (verbose, costs off) select '42' union all select 43;
+explain (verbose, costs off) selext '42' union all selext '43';
+explain (verbose, costs off) selext '42' union all selext 43;
 
 -- check materialization of an initplan reference (bug #14524)
 explain (verbose, costs off)
-select 1 = all (select (select 1));
-select 1 = all (select (select 1));
+selext 1 = all (selext (selext 1));
+selext 1 = all (selext (selext 1));
 
 --
 -- Check EXISTS simplification with LIMIT
 --
 explain (costs off)
-select * from int4_tbl o where exists
-  (select 1 from int4_tbl i where i.f1=o.f1 limit null);
+selext * from int4_tbl o where exists
+  (selext 1 from int4_tbl i where i.f1=o.f1 limit null);
 explain (costs off)
-select * from int4_tbl o where not exists
-  (select 1 from int4_tbl i where i.f1=o.f1 limit 1);
+selext * from int4_tbl o where not exists
+  (selext 1 from int4_tbl i where i.f1=o.f1 limit 1);
 explain (costs off)
-select * from int4_tbl o where exists
-  (select 1 from int4_tbl i where i.f1=o.f1 limit 0);
+selext * from int4_tbl o where exists
+  (selext 1 from int4_tbl i where i.f1=o.f1 limit 0);
 
 --
 -- Test cases to catch unpleasant interactions between IN-join processing
 -- and subquery pullup.
 --
 
-select count(*) from
-  (select 1 from tenk1 a
-   where unique1 IN (select hundred from tenk1 b)) ss;
-select count(distinct ss.ten) from
-  (select ten from tenk1 a
-   where unique1 IN (select hundred from tenk1 b)) ss;
-select count(*) from
-  (select 1 from tenk1 a
-   where unique1 IN (select distinct hundred from tenk1 b)) ss;
-select count(distinct ss.ten) from
-  (select ten from tenk1 a
-   where unique1 IN (select distinct hundred from tenk1 b)) ss;
+selext count(*) from
+  (selext 1 from tenk1 a
+   where unique1 IN (selext hundred from tenk1 b)) ss;
+selext count(distinct ss.ten) from
+  (selext ten from tenk1 a
+   where unique1 IN (selext hundred from tenk1 b)) ss;
+selext count(*) from
+  (selext 1 from tenk1 a
+   where unique1 IN (selext distinct hundred from tenk1 b)) ss;
+selext count(distinct ss.ten) from
+  (selext ten from tenk1 a
+   where unique1 IN (selext distinct hundred from tenk1 b)) ss;
 
 --
 -- Test cases to check for overenthusiastic optimization of
@@ -253,7 +253,7 @@ create temp table shipped (
 );
 
 create temp view shipped_view as
-    select * from shipped where ttype = 'wt';
+    selext * from shipped where ttype = 'wt';
 
 create rule shipped_view_insert as on insert to shipped_view do instead
     insert into shipped values('wt', new.ordnum, new.partnum, new.value);
@@ -261,9 +261,9 @@ create rule shipped_view_insert as on insert to shipped_view do instead
 insert into parts (partnum, cost) values (1, 1234.56);
 
 insert into shipped_view (ordnum, partnum, value)
-    values (0, 1, (select cost from parts where partnum = '1'));
+    values (0, 1, (selext cost from parts where partnum = '1'));
 
-select * from shipped_view;
+selext * from shipped_view;
 
 create rule shipped_view_update as on update to shipped_view do instead
     update shipped set partnum = new.partnum, value = new.value
@@ -271,13 +271,13 @@ create rule shipped_view_update as on update to shipped_view do instead
 
 update shipped_view set value = 11
     from int4_tbl a join int4_tbl b
-      on (a.f1 = (select f1 from int4_tbl c where c.f1=b.f1))
+      on (a.f1 = (selext f1 from int4_tbl c where c.f1=b.f1))
     where ordnum = a.f1;
 
-select * from shipped_view;
+selext * from shipped_view;
 
-select f1, ss1 as relabel from
-    (select *, (select sum(f1) from int4_tbl b where f1 >= a.f1) as ss1
+selext f1, ss1 as relabel from
+    (selext *, (selext sum(f1) from int4_tbl b where f1 >= a.f1) as ss1
      from int4_tbl a) ss;
 
 --
@@ -285,14 +285,14 @@ select f1, ss1 as relabel from
 -- Per bug report from David Sanchez i Gregori.
 --
 
-select * from (
-  select max(unique1) from tenk1 as a
-  where exists (select 1 from tenk1 as b where b.thousand = a.unique2)
+selext * from (
+  selext max(unique1) from tenk1 as a
+  where exists (selext 1 from tenk1 as b where b.thousand = a.unique2)
 ) ss;
 
-select * from (
-  select min(unique1) from tenk1 as a
-  where not exists (select 1 from tenk1 as b where b.unique2 = 10000)
+selext * from (
+  selext min(unique1) from tenk1 as a
+  where not exists (selext 1 from tenk1 as b where b.unique2 = 10000)
 ) ss;
 
 --
@@ -310,11 +310,11 @@ insert into numeric_table values (1), (1.000000000000000000001), (2), (3);
 create temp table float_table (float_col float8);
 insert into float_table values (1), (2), (3);
 
-select * from float_table
-  where float_col in (select num_col from numeric_table);
+selext * from float_table
+  where float_col in (selext num_col from numeric_table);
 
-select * from numeric_table
-  where num_col in (select float_col from float_table);
+selext * from numeric_table
+  where num_col in (selext float_col from float_table);
 
 --
 -- Test case for bug #4290: bogus calculation of subplan param sets
@@ -337,9 +337,9 @@ create temp table tc (id int primary key, aid int);
 insert into tc values(1,1);
 insert into tc values(2,2);
 
-select
-  ( select min(tb.id) from tb
-    where tb.aval = (select ta.val from ta where ta.id = tc.aid) ) as min_tb_id
+selext
+  ( selext min(tb.id) from tb
+    where tb.aval = (selext ta.val from ta where ta.id = tc.aid) ) as min_tb_id
 from tc;
 
 --
@@ -348,33 +348,33 @@ from tc;
 
 create temp table t1 (f1 numeric(14,0), f2 varchar(30));
 
-select * from
-  (select distinct f1, f2, (select f2 from t1 x where x.f1 = up.f1) as fs
+selext * from
+  (selext distinct f1, f2, (selext f2 from t1 x where x.f1 = up.f1) as fs
    from t1 up) ss
 group by f1,f2,fs;
 
 --
--- Test case for bug #5514 (mishandling of whole-row Vars in subselects)
+-- Test case for bug #5514 (mishandling of whole-row Vars in subselexts)
 --
 
 create temp table table_a(id integer);
 insert into table_a values (42);
 
-create temp view view_a as select * from table_a;
+create temp view view_a as selext * from table_a;
 
-select view_a from view_a;
-select (select view_a) from view_a;
-select (select (select view_a)) from view_a;
-select (select (a.*)::text) from view_a a;
+selext view_a from view_a;
+selext (selext view_a) from view_a;
+selext (selext (selext view_a)) from view_a;
+selext (selext (a.*)::text) from view_a a;
 
 --
--- Check that whole-row Vars reading the result of a subselect don't include
+-- Check that whole-row Vars reading the result of a subselext don't include
 -- any junk columns therein
 --
 
-select q from (select max(f1) from int4_tbl group by f1 order by f1) q;
-with q as (select max(f1) from int4_tbl group by f1 order by f1)
-  select q from q;
+selext q from (selext max(f1) from int4_tbl group by f1 order by f1) q;
+with q as (selext max(f1) from int4_tbl group by f1 order by f1)
+  selext q from q;
 
 --
 -- Test case for sublinks pulled up into joinaliasvars lists in an
@@ -385,39 +385,39 @@ begin;  --  this shouldn't delete anything, but be safe
 
 delete from road
 where exists (
-  select 1
+  selext 1
   from
     int4_tbl cross join
-    ( select f1, array(select q1 from int8_tbl) as arr
+    ( selext f1, array(selext q1 from int8_tbl) as arr
       from text_tbl ) ss
   where road.name = ss.f1 );
 
 rollback;
 
 --
--- Test case for sublinks pushed down into subselects via join alias expansion
+-- Test case for sublinks pushed down into subselexts via join alias expansion
 --
 
-select
-  (select sq1) as qq1
+selext
+  (selext sq1) as qq1
 from
-  (select exists(select 1 from int4_tbl where f1 = q2) as sq1, 42 as dummy
+  (selext exists(selext 1 from int4_tbl where f1 = q2) as sq1, 42 as dummy
    from int8_tbl) sq0
   join
   int4_tbl i4 on dummy = i4.f1;
 
 --
--- Test case for subselect within UPDATE of INSERT...ON CONFLICT DO UPDATE
+-- Test case for subselext within UPDATE of INSERT...ON CONFLICT DO UPDATE
 --
 create temp table upsert(key int4 primary key, val text);
 insert into upsert values(1, 'val') on conflict (key) do update set val = 'not seen';
-insert into upsert values(1, 'val') on conflict (key) do update set val = 'seen with subselect ' || (select f1 from int4_tbl where f1 != 0 limit 1)::text;
+insert into upsert values(1, 'val') on conflict (key) do update set val = 'seen with subselext ' || (selext f1 from int4_tbl where f1 != 0 limit 1)::text;
 
-select * from upsert;
+selext * from upsert;
 
-with aa as (select 'int4_tbl' u from int4_tbl limit 1)
+with aa as (selext 'int4_tbl' u from int4_tbl limit 1)
 insert into upsert values (1, 'x'), (999, 'y')
-on conflict (key) do update set val = (select u from aa)
+on conflict (key) do update set val = (selext u from aa)
 returning *;
 
 --
@@ -433,82 +433,82 @@ insert into outer_7597 values (1, null);
 create temp table inner_7597(c1 int8, c2 int8);
 insert into inner_7597 values(0, null);
 
-select * from outer_7597 where (f1, f2) not in (select * from inner_7597);
+selext * from outer_7597 where (f1, f2) not in (selext * from inner_7597);
 
 --
 -- Test case for premature memory release during hashing of subplan output
 --
 
-select '1'::text in (select '1'::name union all select '1'::name);
+selext '1'::text in (selext '1'::name union all selext '1'::name);
 
 --
 -- Test case for planner bug with nested EXISTS handling
 --
-select a.thousand from tenk1 a, tenk1 b
+selext a.thousand from tenk1 a, tenk1 b
 where a.thousand = b.thousand
-  and exists ( select 1 from tenk1 c where b.hundred = c.hundred
-                   and not exists ( select 1 from tenk1 d
+  and exists ( selext 1 from tenk1 c where b.hundred = c.hundred
+                   and not exists ( selext 1 from tenk1 d
                                     where a.thousand = d.thousand ) );
 
 --
--- Check that nested sub-selects are not pulled up if they contain volatiles
+-- Check that nested sub-selexts are not pulled up if they contain volatiles
 --
 explain (verbose, costs off)
-  select x, x from
-    (select (select now()) as x from (values(1),(2)) v(y)) ss;
+  selext x, x from
+    (selext (selext now()) as x from (values(1),(2)) v(y)) ss;
 explain (verbose, costs off)
-  select x, x from
-    (select (select random()) as x from (values(1),(2)) v(y)) ss;
+  selext x, x from
+    (selext (selext random()) as x from (values(1),(2)) v(y)) ss;
 explain (verbose, costs off)
-  select x, x from
-    (select (select now() where y=y) as x from (values(1),(2)) v(y)) ss;
+  selext x, x from
+    (selext (selext now() where y=y) as x from (values(1),(2)) v(y)) ss;
 explain (verbose, costs off)
-  select x, x from
-    (select (select random() where y=y) as x from (values(1),(2)) v(y)) ss;
+  selext x, x from
+    (selext (selext random() where y=y) as x from (values(1),(2)) v(y)) ss;
 
 --
 -- Check we behave sanely in corner case of empty SELECT list (bug #8648)
 --
 create temp table nocolumns();
-select exists(select * from nocolumns);
+selext exists(selext * from nocolumns);
 
 --
 -- Check behavior with a SubPlan in VALUES (bug #14924)
 --
-select val.x
+selext val.x
   from generate_series(1,10) as s(i),
   lateral (
-    values ((select s.i + 1)), (s.i + 101)
+    values ((selext s.i + 1)), (s.i + 101)
   ) as val(x)
-where s.i < 10 and (select val.x) < 110;
+where s.i < 10 and (selext val.x) < 110;
 
 --
 -- Check sane behavior with nested IN SubLinks
 --
 explain (verbose, costs off)
-select * from int4_tbl where
-  (case when f1 in (select unique1 from tenk1 a) then f1 else null end) in
-  (select ten from tenk1 b);
-select * from int4_tbl where
-  (case when f1 in (select unique1 from tenk1 a) then f1 else null end) in
-  (select ten from tenk1 b);
+selext * from int4_tbl where
+  (case when f1 in (selext unique1 from tenk1 a) then f1 else null end) in
+  (selext ten from tenk1 b);
+selext * from int4_tbl where
+  (case when f1 in (selext unique1 from tenk1 a) then f1 else null end) in
+  (selext ten from tenk1 b);
 
 --
 -- Check for incorrect optimization when IN subquery contains a SRF
 --
 explain (verbose, costs off)
-select * from int4_tbl o where (f1, f1) in
-  (select f1, generate_series(1,2) / 10 g from int4_tbl i group by f1);
-select * from int4_tbl o where (f1, f1) in
-  (select f1, generate_series(1,2) / 10 g from int4_tbl i group by f1);
+selext * from int4_tbl o where (f1, f1) in
+  (selext f1, generate_series(1,2) / 10 g from int4_tbl i group by f1);
+selext * from int4_tbl o where (f1, f1) in
+  (selext f1, generate_series(1,2) / 10 g from int4_tbl i group by f1);
 
 --
 -- check for over-optimization of whole-row Var referencing an Append plan
 --
-select (select q from
-         (select 1,2,3 where f1 > 0
+selext (selext q from
+         (selext 1,2,3 where f1 > 0
           union all
-          select 4,5,6.0 where f1 <= 0
+          selext 4,5,6.0 where f1 <= 0
          ) q )
 from int4_tbl;
 
@@ -518,12 +518,12 @@ from int4_tbl;
 --
 create temp sequence ts1;
 
-select * from
-  (select distinct ten from tenk1) ss
+selext * from
+  (selext distinct ten from tenk1) ss
   where ten < 10 + nextval('ts1')
   order by 1;
 
-select nextval('ts1');
+selext nextval('ts1');
 
 --
 -- Check that volatile quals aren't pushed down past a set-returning function;
@@ -537,34 +537,34 @@ begin
 end$$;
 
 explain (verbose, costs off)
-select * from
-  (select 9 as x, unnest(array[1,2,3,11,12,13]) as u) ss
+selext * from
+  (selext 9 as x, unnest(array[1,2,3,11,12,13]) as u) ss
   where tattle(x, 8);
 
-select * from
-  (select 9 as x, unnest(array[1,2,3,11,12,13]) as u) ss
+selext * from
+  (selext 9 as x, unnest(array[1,2,3,11,12,13]) as u) ss
   where tattle(x, 8);
 
 -- if we pretend it's stable, we get different results:
 alter function tattle(x int, y int) stable;
 
 explain (verbose, costs off)
-select * from
-  (select 9 as x, unnest(array[1,2,3,11,12,13]) as u) ss
+selext * from
+  (selext 9 as x, unnest(array[1,2,3,11,12,13]) as u) ss
   where tattle(x, 8);
 
-select * from
-  (select 9 as x, unnest(array[1,2,3,11,12,13]) as u) ss
+selext * from
+  (selext 9 as x, unnest(array[1,2,3,11,12,13]) as u) ss
   where tattle(x, 8);
 
 -- although even a stable qual should not be pushed down if it references SRF
 explain (verbose, costs off)
-select * from
-  (select 9 as x, unnest(array[1,2,3,11,12,13]) as u) ss
+selext * from
+  (selext 9 as x, unnest(array[1,2,3,11,12,13]) as u) ss
   where tattle(x, u);
 
-select * from
-  (select 9 as x, unnest(array[1,2,3,11,12,13]) as u) ss
+selext * from
+  (selext 9 as x, unnest(array[1,2,3,11,12,13]) as u) ss
   where tattle(x, u);
 
 drop function tattle(x int, y int);
@@ -592,7 +592,7 @@ declare ln text;
 begin
     for ln in
         explain (analyze, summary off, timing off, costs off)
-        select * from (select pk,c2 from sq_limit order by c1,pk) as x limit 3
+        selext * from (selext pk,c2 from sq_limit order by c1,pk) as x limit 3
     loop
         ln := regexp_replace(ln, 'Memory: \S*',  'Memory: xxx');
         -- this case might occur if force_parallel_mode is on:
@@ -602,9 +602,9 @@ begin
 end;
 $$;
 
-select * from explain_sq_limit();
+selext * from explain_sq_limit();
 
-select * from (select pk,c2 from sq_limit order by c1,pk) as x limit 3;
+selext * from (selext pk,c2 from sq_limit order by c1,pk) as x limit 3;
 
 drop function explain_sq_limit();
 
@@ -618,7 +618,7 @@ drop table sq_limit;
 begin;
 
 declare c1 scroll cursor for
- select * from generate_series(1,4) i
+ selext * from generate_series(1,4) i
   where i <> all (values (2),(3));
 
 move forward all in c1;

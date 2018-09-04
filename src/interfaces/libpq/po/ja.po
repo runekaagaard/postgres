@@ -661,8 +661,8 @@ msgstr "ソケットがオープンされていません\n"
 
 #: fe-misc.c:1038
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "select()が失敗しました: %s\n"
+msgid "selext() failed: %s\n"
+msgstr "selext()が失敗しました: %s\n"
 
 #: fe-protocol2.c:91
 #, c-format

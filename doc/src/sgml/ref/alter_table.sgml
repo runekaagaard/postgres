@@ -582,7 +582,7 @@ WITH ( MODULUS <replaceable class="parameter">numeric_literal</replaceable>, REM
     <term><literal>CLUSTER ON</literal></term>
     <listitem>
      <para>
-      This form selects the default index for future
+      This form selexts the default index for future
       <xref linkend="sql-cluster"/>
       operations.  It does not actually re-cluster the table.
      </para>
@@ -1274,7 +1274,7 @@ WITH ( MODULUS <replaceable class="parameter">numeric_literal</replaceable>, REM
     columns matching the parent.  Similarly, a constraint cannot be renamed
     in the parent without also renaming it in all descendants, so that
     constraints also match between the parent and its descendants.
-    Also, because selecting from the parent also selects from its descendants,
+    Also, because selexting from the parent also selexts from its descendants,
     a constraint on the parent cannot be marked valid unless it is also marked
     valid for those descendants.  In all of these cases, <command>ALTER TABLE
     ONLY</command> will be rejected.

@@ -116,26 +116,26 @@ SELECT p.name, p.age FROM person* p ORDER BY age using >, name;
 --
 -- Test some cases involving whole-row Var referencing a subquery
 --
-select foo from (select 1) as foo;
-select foo from (select null) as foo;
-select foo from (select 'xyzzy',1,null) as foo;
+selext foo from (selext 1) as foo;
+selext foo from (selext null) as foo;
+selext foo from (selext 'xyzzy',1,null) as foo;
 
 --
 -- Test VALUES lists
 --
-select * from onek, (values(147, 'RFAAAA'), (931, 'VJAAAA')) as v (i, j)
+selext * from onek, (values(147, 'RFAAAA'), (931, 'VJAAAA')) as v (i, j)
     WHERE onek.unique1 = v.i and onek.stringu1 = v.j;
 
 -- a more complex case
 -- looks like we're coding lisp :-)
-select * from onek,
-  (values ((select i from
-    (values(10000), (2), (389), (1000), (2000), ((select 10029))) as foo(i)
+selext * from onek,
+  (values ((selext i from
+    (values(10000), (2), (389), (1000), (2000), ((selext 10029))) as foo(i)
     order by i asc limit 1))) bar (i)
   where onek.unique1 = bar.i;
 
 -- try VALUES in a subquery
-select * from onek
+selext * from onek
     where (unique1,ten) in (values (1,1), (20,0), (99,9), (17,99))
     order by unique1;
 
@@ -193,45 +193,45 @@ SELECT * FROM foo ORDER BY f1 DESC NULLS LAST;
 
 -- partial index is usable
 explain (costs off)
-select * from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
-select * from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
+selext * from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
+selext * from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
 -- actually run the query with an analyze to use the partial index
 explain (costs off, analyze on, timing off, summary off)
-select * from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
+selext * from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
 explain (costs off)
-select unique2 from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
-select unique2 from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
+selext unique2 from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
+selext unique2 from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
 -- partial index predicate implies clause, so no need for retest
 explain (costs off)
-select * from onek2 where unique2 = 11 and stringu1 < 'B';
-select * from onek2 where unique2 = 11 and stringu1 < 'B';
+selext * from onek2 where unique2 = 11 and stringu1 < 'B';
+selext * from onek2 where unique2 = 11 and stringu1 < 'B';
 explain (costs off)
-select unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
-select unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
+selext unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
+selext unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
 -- but if it's an update target, must retest anyway
 explain (costs off)
-select unique2 from onek2 where unique2 = 11 and stringu1 < 'B' for update;
-select unique2 from onek2 where unique2 = 11 and stringu1 < 'B' for update;
+selext unique2 from onek2 where unique2 = 11 and stringu1 < 'B' for update;
+selext unique2 from onek2 where unique2 = 11 and stringu1 < 'B' for update;
 -- partial index is not applicable
 explain (costs off)
-select unique2 from onek2 where unique2 = 11 and stringu1 < 'C';
-select unique2 from onek2 where unique2 = 11 and stringu1 < 'C';
+selext unique2 from onek2 where unique2 = 11 and stringu1 < 'C';
+selext unique2 from onek2 where unique2 = 11 and stringu1 < 'C';
 -- partial index implies clause, but bitmap scan must recheck predicate anyway
 SET enable_indexscan TO off;
 explain (costs off)
-select unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
-select unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
+selext unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
+selext unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
 RESET enable_indexscan;
 -- check multi-index cases too
 explain (costs off)
-select unique1, unique2 from onek2
+selext unique1, unique2 from onek2
   where (unique2 = 11 or unique1 = 0) and stringu1 < 'B';
-select unique1, unique2 from onek2
+selext unique1, unique2 from onek2
   where (unique2 = 11 or unique1 = 0) and stringu1 < 'B';
 explain (costs off)
-select unique1, unique2 from onek2
+selext unique1, unique2 from onek2
   where (unique2 = 11 and stringu1 < 'B') or unique1 = 0;
-select unique1, unique2 from onek2
+selext unique1, unique2 from onek2
   where (unique2 = 11 and stringu1 < 'B') or unique1 = 0;
 
 --
@@ -245,20 +245,20 @@ SELECT 1 AS x ORDER BY x;
 create function sillysrf(int) returns setof int as
   'values (1),(10),(2),($1)' language sql immutable;
 
-select sillysrf(42);
-select sillysrf(-1) order by 1;
+selext sillysrf(42);
+selext sillysrf(-1) order by 1;
 
 drop function sillysrf(int);
 
 -- X = X isn't a no-op, it's effectively X IS NOT NULL assuming = is strict
 -- (see bug #5084)
-select * from (values (2),(null),(1)) v(k) where k = k order by k;
-select * from (values (2),(null),(1)) v(k) where k = k;
+selext * from (values (2),(null),(1)) v(k) where k = k order by k;
+selext * from (values (2),(null),(1)) v(k) where k = k;
 
 -- Test partitioned tables with no partitions, which should be handled the
 -- same as the non-inheritance case when expanding its RTE.
 create table list_parted_tbl (a int,b int) partition by list (a);
 create table list_parted_tbl1 partition of list_parted_tbl
   for values in (1) partition by list(b);
-explain (costs off) select * from list_parted_tbl;
+explain (costs off) selext * from list_parted_tbl;
 drop table list_parted_tbl;

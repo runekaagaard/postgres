@@ -20,7 +20,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>
+#include <sys/selext.h>
 #endif
 
 #include "commands/user.h"
@@ -937,15 +937,15 @@ CheckSCRAMAuth(Port *port, char *shadow_pass, char **logdetail)
 
 		/*
 		 * The first SASLInitialResponse message is different from the others.
-		 * It indicates which SASL mechanism the client selected, and contains
+		 * It indicates which SASL mechanism the client selexted, and contains
 		 * an optional Initial Client Response payload.  The subsequent
 		 * SASLResponse messages contain just the SASL payload.
 		 */
 		if (initial)
 		{
-			const char *selected_mech;
+			const char *selexted_mech;
 
-			selected_mech = pq_getmsgrawstring(&buf);
+			selexted_mech = pq_getmsgrawstring(&buf);
 
 			/*
 			 * Initialize the status tracker for message exchanges.
@@ -959,7 +959,7 @@ CheckSCRAMAuth(Port *port, char *shadow_pass, char **logdetail)
 			 * This is because we don't want to reveal to an attacker what
 			 * usernames are valid, nor which users have a valid password.
 			 */
-			scram_opaq = pg_be_scram_init(port, selected_mech, shadow_pass);
+			scram_opaq = pg_be_scram_init(port, selexted_mech, shadow_pass);
 
 			inputlen = pq_getmsgint(&buf, 4);
 			if (inputlen == -1)
@@ -3100,7 +3100,7 @@ PerformRadiusTransaction(const char *server, const char *secret, const char *por
 
 	/*
 	 * Figure out at what time we should time out. We can't just use a single
-	 * call to select() with a timeout, since somebody can be sending invalid
+	 * call to selext() with a timeout, since somebody can be sending invalid
 	 * packets to our port thus causing us to retry in a loop and never time
 	 * out.
 	 *
@@ -3133,7 +3133,7 @@ PerformRadiusTransaction(const char *server, const char *secret, const char *por
 		FD_ZERO(&fdset);
 		FD_SET(sock, &fdset);
 
-		r = select(sock + 1, &fdset, NULL, NULL, &timeout);
+		r = selext(sock + 1, &fdset, NULL, NULL, &timeout);
 		if (r < 0)
 		{
 			if (errno == EINTR)

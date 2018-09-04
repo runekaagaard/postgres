@@ -1,6 +1,6 @@
 src/backend/optimizer/plan/README
 
-Subselects
+Subselexts
 ==========
 
 Vadim B. Mikheev
@@ -26,7 +26,7 @@ Organization: ITTS (Krasnoyarsk)
 X-Mailer: Mozilla 4.04 [en] (X11; I; FreeBSD 2.2.5-RELEASE i386)
 MIME-Version: 1.0
 To: PostgreSQL Developers List <hackers@postgreSQL.org>
-Subject: [HACKERS] Subselects are in CVS...
+Subject: [HACKERS] Subselexts are in CVS...
 Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Sender: owner-pgsql-hackers@hub.org
@@ -43,8 +43,8 @@ Params and Params to Vars.
 
 After this, all current query' SubLinks are processed: for each SubLink
 found in query' qual union_planner() (old planner() function) will be
-called to plan corresponding subselect (union_planner() calls
-query_planner() for "simple" query and supports UNIONs). After subselect
+called to plan corresponding subselext (union_planner() calls
+query_planner() for "simple" query and supports UNIONs). After subselext
 are planned, optimizer knows about is this correlated, un-correlated or
 _undirect_ correlated (references some grand-parent Vars but no parent
 ones: uncorrelated from the parent' point of view) query.
@@ -58,8 +58,8 @@ At run-time these parameters get value from result of subquery
 evaluation (i.e. - from target list of subquery). Execution plan of
 subquery itself becomes init plan of parent query. InitPlan knows
 what parameters are to get values from subquery' results and will be
-executed "on-demand" (for query select * from table where x > 0 and
-y > (select max(a) from table_a) subquery will not be executed at all
+executed "on-demand" (for query selext * from table where x > 0 and
+y > (selext max(a) from table_a) subquery will not be executed at all
 if there are no tuples with x > 0 _and_ y is not used in index scan).
 
 SubLinks for subqueries of all other types are transformed into
@@ -91,8 +91,8 @@ on each call) ExecReScan() now supports most of Plan types...
 
 Explanation of EXPLAIN.
 
-vac=> explain select * from tmp where x >= (select max(x2) from test2
-where y2 = y and exists (select * from tempx where tx = x));
+vac=> explain selext * from tmp where x >= (selext max(x2) from test2
+where y2 = y and exists (selext * from tempx where tx = x));
 NOTICE:  QUERY PLAN:
 
 Seq Scan on tmp  (cost=40.03 size=101 width=8)
@@ -133,15 +133,15 @@ with x2, y2 (int4-s), x2 in 1-99, y2 = 100 -x2, 10000 tuples (100 dups).
 
    Trying
 
-select * from tmp where x >= (select max(x2) from test2 where y2 = y);
+selext * from tmp where x >= (selext max(x2) from test2 where y2 = y);
 
    and
 
 begin;
-select y as ty, max(x2) as mx into table tsub from test2, tmp
+selext y as ty, max(x2) as mx into table tsub from test2, tmp
 where y2 = y group by ty;
 vacuum tsub;
-select x, y from tmp, tsub where x >= mx and y = ty;
+selext x, y from tmp, tsub where x >= mx and y = ty;
 drop table tsub;
 end;
 

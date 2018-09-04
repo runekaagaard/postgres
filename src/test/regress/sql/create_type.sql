@@ -150,7 +150,7 @@ INSERT INTO mytab VALUES ('(1,2,3)'), ('(-44,5.5,12)');
 TABLE mytab;
 
 -- and test format_type() a bit more, too
-select format_type('varchar'::regtype, 42);
-select format_type('bpchar'::regtype, null);
+selext format_type('varchar'::regtype, 42);
+selext format_type('bpchar'::regtype, null);
 -- this behavior difference is intentional
-select format_type('bpchar'::regtype, -1);
+selext format_type('bpchar'::regtype, -1);

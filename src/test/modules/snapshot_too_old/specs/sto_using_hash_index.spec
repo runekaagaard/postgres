@@ -1,4 +1,4 @@
-# This test is like sto_using_select, except that we test access via a
+# This test is like sto_using_selext, except that we test access via a
 # hash index.
 
 setup

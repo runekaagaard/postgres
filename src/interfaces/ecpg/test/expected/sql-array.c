@@ -275,7 +275,7 @@ if (sqlca.sqlcode < 0) sqlprint();}
 #line 75 "array.pgc"
 
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select f , text from test where i = 1", ECPGt_EOIT, 
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext f , text from test where i = 1", ECPGt_EOIT, 
 	ECPGt_double,&(f),(long)1,(long)1,sizeof(double), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,(text),(long)25,(long)1,(25)*sizeof(char), 
@@ -289,7 +289,7 @@ if (sqlca.sqlcode < 0) sqlprint();}
 	printf("Found f=%f text=%10.10s\n", f, text);
 
 	f=140787;
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select a , text , ts , n , d , inter from test where f = $1 ", 
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext a , text , ts , n , d , inter from test where f = $1 ", 
 	ECPGt_double,&(f),(long)1,(long)1,sizeof(double), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, 
 	ECPGt_short,(a),(long)1,(long)10,sizeof(short), 
@@ -315,7 +315,7 @@ if (sqlca.sqlcode < 0) sqlprint();}
 
 	printf("Found text=%10.10s\n", t);
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select a from test where f = $1 ", 
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext a from test where f = $1 ", 
 	ECPGt_double,&(f),(long)1,(long)1,sizeof(double), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, 
 	ECPGt_char,(text),(long)25,(long)1,(25)*sizeof(char), 

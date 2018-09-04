@@ -298,7 +298,7 @@ IsSharedRelation(Oid relationId)
  * we will see uncommitted rows.  (We used to use SnapshotDirty, but that has
  * the disadvantage that it ignores recently-deleted rows, creating a risk
  * of transient conflicts for as long as our own MVCC snapshots think a
- * recently-deleted row is live.  The risk is far higher when selecting TOAST
+ * recently-deleted row is live.  The risk is far higher when selexting TOAST
  * OIDs, because SnapshotToast considers dead rows as active indefinitely.)
  */
 Oid

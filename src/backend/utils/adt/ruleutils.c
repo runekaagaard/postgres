@@ -196,7 +196,7 @@ typedef struct
  * traversal of the query's jointree.  When descending through a JOIN with
  * USING, we preassign the USING column names to the child columns, overriding
  * other rules for column alias assignment.  We also mark each RTE with a list
- * of all USING column names selected for joins containing that RTE, so that
+ * of all USING column names selexted for joins containing that RTE, so that
  * when we assign other columns' aliases later, we can avoid conflicts.
  *
  * Another problem is that if a JOIN's input tables have had columns added or
@@ -263,7 +263,7 @@ typedef struct
 	 * USING/NATURAL JOIN, both leftattnos[i] and rightattnos[i] are nonzero.
 	 * Also, if the column has been dropped, both are zero.
 	 *
-	 * If it's a JOIN USING, usingNames holds the alias names selected for the
+	 * If it's a JOIN USING, usingNames holds the alias names selexted for the
 	 * merged columns (these might be different from the original USING list,
 	 * if we had to modify names to achieve uniqueness).
 	 */
@@ -375,7 +375,7 @@ static void get_query_def(Query *query, StringInfo buf, List *parentnamespace,
 			  int prettyFlags, int wrapColumn, int startIndent);
 static void get_values_def(List *values_lists, deparse_context *context);
 static void get_with_clause(Query *query, deparse_context *context);
-static void get_select_query_def(Query *query, deparse_context *context,
+static void get_selext_query_def(Query *query, deparse_context *context,
 					 TupleDesc resultDesc);
 static void get_insert_query_def(Query *query, deparse_context *context);
 static void get_update_query_def(Query *query, deparse_context *context);
@@ -384,7 +384,7 @@ static void get_update_query_targetlist_def(Query *query, List *targetList,
 								RangeTblEntry *rte);
 static void get_delete_query_def(Query *query, deparse_context *context);
 static void get_utility_query_def(Query *query, deparse_context *context);
-static void get_basic_select_query(Query *query, deparse_context *context,
+static void get_basic_selext_query(Query *query, deparse_context *context,
 					   TupleDesc resultDesc);
 static void get_target_list(List *targetList, deparse_context *context,
 				TupleDesc resultDesc);
@@ -1361,7 +1361,7 @@ pg_get_indexdef_worker(Oid indexrelid, int colno,
 			keycolcollation = exprCollation(indexkey);
 		}
 
-		/* Print additional decoration for (selected) key columns */
+		/* Print additional decoration for (selexted) key columns */
 		if (!attrsOnly && keyno < idxrec->indnkeyatts &&
 			(!colno || colno == keyno + 1))
 		{
@@ -3233,7 +3233,7 @@ deparse_context_for(const char *aliasname, Oid relid)
  * is not usable until set_deparse_context_planstate() is applied to it.)
  *
  * In addition to the plan's rangetable list, pass the per-RTE alias names
- * assigned by a previous call to select_rtable_names_for_explain.
+ * assigned by a previous call to selext_rtable_names_for_explain.
  */
 List *
 deparse_context_for_plan_rtable(List *rtable, List *rtable_names)
@@ -3304,14 +3304,14 @@ set_deparse_context_planstate(List *dpcontext,
 }
 
 /*
- * select_rtable_names_for_explain	- Select RTE aliases for EXPLAIN
+ * selext_rtable_names_for_explain	- Select RTE aliases for EXPLAIN
  *
  * Determine the relation aliases we'll use during an EXPLAIN operation.
  * This is just a frontend to set_rtable_names.  We have to expose the aliases
  * to EXPLAIN because EXPLAIN needs to know the right alias names to print.
  */
 List *
-select_rtable_names_for_explain(List *rtable, Bitmapset *rels_used)
+selext_rtable_names_for_explain(List *rtable, Bitmapset *rels_used)
 {
 	deparse_namespace dpns;
 
@@ -3325,7 +3325,7 @@ select_rtable_names_for_explain(List *rtable, Bitmapset *rels_used)
 }
 
 /*
- * set_rtable_names: select RTE aliases to be used in printing a query
+ * set_rtable_names: selext RTE aliases to be used in printing a query
  *
  * We fill in dpns->rtable_names with a list of names that is one-for-one with
  * the already-filled dpns->rtable list.  Each RTE name is unique among those
@@ -3423,7 +3423,7 @@ set_rtable_names(deparse_namespace *dpns, List *parent_namespaces,
 		}
 
 		/*
-		 * If the selected name isn't unique, append digits to make it so, and
+		 * If the selexted name isn't unique, append digits to make it so, and
 		 * make a new hash entry for it once we've got a unique name.  For a
 		 * very long input name, we might have to truncate to stay within
 		 * NAMEDATALEN.
@@ -3646,7 +3646,7 @@ has_dangerous_join_using(deparse_namespace *dpns, Node *jtnode)
 }
 
 /*
- * set_using_names: select column aliases to be used for merged USING columns
+ * set_using_names: selext column aliases to be used for merged USING columns
  *
  * We do this during a recursive descent of the query jointree.
  * dpns->unique_using must already be set to determine the global strategy.
@@ -3724,7 +3724,7 @@ set_using_names(deparse_namespace *dpns, Node *jtnode, List *parentUsing)
 		}
 
 		/*
-		 * If there's a USING clause, select the USING column names and push
+		 * If there's a USING clause, selext the USING column names and push
 		 * those names down to the children.  We have two strategies:
 		 *
 		 * If dpns->unique_using is true, we force all USING names to be
@@ -3763,7 +3763,7 @@ set_using_names(deparse_namespace *dpns, Node *jtnode, List *parentUsing)
 				/* Assert it's a merged column */
 				Assert(leftattnos[i] != 0 && rightattnos[i] != 0);
 
-				/* Adopt passed-down name if any, else select unique name */
+				/* Adopt passed-down name if any, else selext unique name */
 				if (colinfo->colnames[i] != NULL)
 					colname = colinfo->colnames[i];
 				else
@@ -3780,7 +3780,7 @@ set_using_names(deparse_namespace *dpns, Node *jtnode, List *parentUsing)
 					colinfo->colnames[i] = colname;
 				}
 
-				/* Remember selected names for use later */
+				/* Remember selexted names for use later */
 				colinfo->usingNames = lappend(colinfo->usingNames, colname);
 				parentUsing = lappend(parentUsing, colname);
 
@@ -3816,7 +3816,7 @@ set_using_names(deparse_namespace *dpns, Node *jtnode, List *parentUsing)
 }
 
 /*
- * set_relation_column_names: select column aliases for a non-join RTE
+ * set_relation_column_names: selext column aliases for a non-join RTE
  *
  * Column alias info is saved in *colinfo, which is assumed to be pre-zeroed.
  * If any colnames entries are already filled in, those override local
@@ -3908,7 +3908,7 @@ set_relation_column_names(deparse_namespace *dpns, RangeTblEntry *rte,
 	colinfo->is_new_col = (bool *) palloc(ncolumns * sizeof(bool));
 
 	/*
-	 * Scan the columns, select a unique alias for each one, and store it in
+	 * Scan the columns, selext a unique alias for each one, and store it in
 	 * colinfo->colnames and colinfo->new_colnames.  The former array has NULL
 	 * entries for dropped columns, the latter omits them.  Also mark
 	 * new_colnames entries as to whether they are new since parse time; this
@@ -3986,12 +3986,12 @@ set_relation_column_names(deparse_namespace *dpns, RangeTblEntry *rte,
 }
 
 /*
- * set_join_column_names: select column aliases for a join RTE
+ * set_join_column_names: selext column aliases for a join RTE
  *
  * Column alias info is saved in *colinfo, which is assumed to be pre-zeroed.
  * If any colnames entries are already filled in, those override local
  * choices.  Also, names for USING columns were already chosen by
- * set_using_names().  We further expect that column alias selection has been
+ * set_using_names().  We further expect that column alias selextion has been
  * completed for both input RTEs.
  */
 static void
@@ -4026,9 +4026,9 @@ set_join_column_names(deparse_namespace *dpns, RangeTblEntry *rte,
 	Assert(colinfo->num_cols == noldcolumns);
 
 	/*
-	 * Scan the join output columns, select an alias for each one, and store
+	 * Scan the join output columns, selext an alias for each one, and store
 	 * it in colinfo->colnames.  If there are USING columns, set_using_names()
-	 * already selected their names, so we can start the loop at the first
+	 * already selexted their names, so we can start the loop at the first
 	 * non-merged column.
 	 */
 	changed_any = false;
@@ -4311,7 +4311,7 @@ make_colname_unique(char *colname, deparse_namespace *dpns,
 					deparse_columns *colinfo)
 {
 	/*
-	 * If the selected name isn't unique, append digits to make it so.  For a
+	 * If the selexted name isn't unique, append digits to make it so.  For a
 	 * very long input name, we might have to truncate to stay within
 	 * NAMEDATALEN.
 	 */
@@ -4659,7 +4659,7 @@ push_child_plan(deparse_namespace *dpns, PlanState *ps,
 	/* Link current plan node into ancestors list */
 	dpns->ancestors = lcons(dpns->planstate, dpns->ancestors);
 
-	/* Set attention on selected child */
+	/* Set attention on selexted child */
 	set_deparse_planstate(dpns, ps);
 }
 
@@ -4712,7 +4712,7 @@ push_ancestor_plan(deparse_namespace *dpns, ListCell *ancestor_cell,
 		ancestors = lappend(ancestors, lfirst(ancestor_cell));
 	dpns->ancestors = ancestors;
 
-	/* Set attention on selected ancestor */
+	/* Set attention on selexted ancestor */
 	set_deparse_planstate(dpns, ps);
 }
 
@@ -5041,7 +5041,7 @@ get_query_def(Query *query, StringInfo buf, List *parentnamespace,
 	switch (query->commandType)
 	{
 		case CMD_SELECT:
-			get_select_query_def(query, &context, resultDesc);
+			get_selext_query_def(query, &context, resultDesc);
 			break;
 
 		case CMD_UPDATE:
@@ -5183,11 +5183,11 @@ get_with_clause(Query *query, deparse_context *context)
 }
 
 /* ----------
- * get_select_query_def			- Parse back a SELECT parsetree
+ * get_selext_query_def			- Parse back a SELECT parsetree
  * ----------
  */
 static void
-get_select_query_def(Query *query, deparse_context *context,
+get_selext_query_def(Query *query, deparse_context *context,
 					 TupleDesc resultDesc)
 {
 	StringInfo	buf = context->buf;
@@ -5218,7 +5218,7 @@ get_select_query_def(Query *query, deparse_context *context,
 	}
 	else
 	{
-		get_basic_select_query(query, context, resultDesc);
+		get_basic_selext_query(query, context, resultDesc);
 		force_colno = false;
 	}
 
@@ -5360,7 +5360,7 @@ get_simple_values_rte(Query *query)
 }
 
 static void
-get_basic_select_query(Query *query, deparse_context *context,
+get_basic_selext_query(Query *query, deparse_context *context,
 					   TupleDesc resultDesc)
 {
 	StringInfo	buf = context->buf;
@@ -5413,7 +5413,7 @@ get_basic_select_query(Query *query, deparse_context *context,
 			appendStringInfoString(buf, " DISTINCT");
 	}
 
-	/* Then we tell what to select (the targetlist) */
+	/* Then we tell what to selext (the targetlist) */
 	get_target_list(query->targetList, context, resultDesc);
 
 	/* Add the FROM clause if needed */
@@ -6069,7 +6069,7 @@ static void
 get_insert_query_def(Query *query, deparse_context *context)
 {
 	StringInfo	buf = context->buf;
-	RangeTblEntry *select_rte = NULL;
+	RangeTblEntry *selext_rte = NULL;
 	RangeTblEntry *values_rte = NULL;
 	RangeTblEntry *rte;
 	char	   *sep;
@@ -6089,9 +6089,9 @@ get_insert_query_def(Query *query, deparse_context *context)
 
 		if (rte->rtekind == RTE_SUBQUERY)
 		{
-			if (select_rte)
+			if (selext_rte)
 				elog(ERROR, "too many subquery RTEs in INSERT");
-			select_rte = rte;
+			selext_rte = rte;
 		}
 
 		if (rte->rtekind == RTE_VALUES)
@@ -6101,7 +6101,7 @@ get_insert_query_def(Query *query, deparse_context *context)
 			values_rte = rte;
 		}
 	}
-	if (select_rte && values_rte)
+	if (selext_rte && values_rte)
 		elog(ERROR, "both subquery and values RTEs in INSERT");
 
 	/*
@@ -6172,10 +6172,10 @@ get_insert_query_def(Query *query, deparse_context *context)
 			appendStringInfoString(buf, "OVERRIDING USER VALUE ");
 	}
 
-	if (select_rte)
+	if (selext_rte)
 	{
 		/* Add the SELECT */
-		get_query_def(select_rte->subquery, buf, NIL, NULL,
+		get_query_def(selext_rte->subquery, buf, NIL, NULL,
 					  context->prettyFlags, context->wrapColumn,
 					  context->indentLevel);
 	}
@@ -6438,7 +6438,7 @@ get_update_query_targetlist_def(Query *query, List *targetList,
 				cur_ma_sublink = (SubLink *) lfirst(next_ma_cell);
 				next_ma_cell = lnext(next_ma_cell);
 				remaining_ma_columns = count_nonjunk_tlist_entries(
-																   ((Query *) cur_ma_sublink->subselect)->targetList);
+																   ((Query *) cur_ma_sublink->subselext)->targetList);
 				Assert(((Param *) expr)->paramid ==
 					   ((cur_ma_sublink->subLinkId << 16) | 1));
 				appendStringInfoChar(buf, '(');
@@ -6988,7 +6988,7 @@ get_name_for_var_field(Var *var, int fieldno,
 
 	if (attnum == InvalidAttrNumber)
 	{
-		/* Var is whole-row reference to RTE, so select the right field */
+		/* Var is whole-row reference to RTE, so selext the right field */
 		return get_rte_attribute_name(rte, fieldno);
 	}
 
@@ -7014,7 +7014,7 @@ get_name_for_var_field(Var *var, int fieldno,
 			 */
 			break;
 		case RTE_SUBQUERY:
-			/* Subselect-in-FROM: examine sub-select's output expr */
+			/* Subselext-in-FROM: examine sub-selext's output expr */
 			{
 				if (rte->subquery)
 				{
@@ -7028,10 +7028,10 @@ get_name_for_var_field(Var *var, int fieldno,
 					if (IsA(expr, Var))
 					{
 						/*
-						 * Recurse into the sub-select to see what its Var
+						 * Recurse into the sub-selext to see what its Var
 						 * refers to. We have to build an additional level of
 						 * namespace to keep in step with varlevelsup in the
-						 * subselect.
+						 * subselext.
 						 */
 						deparse_namespace mydpns;
 						const char *result;
@@ -7853,7 +7853,7 @@ get_rule_expr(Node *node, deparse_context *context,
 
 					/*
 					 * Use processIndirection to print this node's subscripts
-					 * as well as any additional field selections or
+					 * as well as any additional field selextions or
 					 * subscripting in immediate descendants.  It returns the
 					 * RHS expr that is actually being "assigned".
 					 */
@@ -8055,9 +8055,9 @@ get_rule_expr(Node *node, deparse_context *context,
 
 		case T_FieldSelect:
 			{
-				FieldSelect *fselect = (FieldSelect *) node;
-				Node	   *arg = (Node *) fselect->arg;
-				int			fno = fselect->fieldnum;
+				FieldSelect *fselext = (FieldSelect *) node;
+				Node	   *arg = (Node *) fselext->arg;
+				int			fno = fselext->fieldnum;
 				const char *fieldname;
 				bool		need_parens;
 
@@ -9604,7 +9604,7 @@ static void
 get_sublink_expr(SubLink *sublink, deparse_context *context)
 {
 	StringInfo	buf = context->buf;
-	Query	   *query = (Query *) (sublink->subselect);
+	Query	   *query = (Query *) (sublink->subselext);
 	char	   *opname = NULL;
 	bool		need_paren;
 
@@ -10299,7 +10299,7 @@ get_column_alias_list(deparse_columns *colinfo, deparse_context *context)
  * relation's column alias list), use column names from colinfo.  But when
  * printing a coldeflist embedded inside ROWS FROM(), we prefer to use the
  * original coldeflist's names, which are available in rtfunc->funccolnames.
- * Pass NULL for colinfo to select the latter behavior.
+ * Pass NULL for colinfo to selext the latter behavior.
  *
  * The coldeflist is appended immediately (no space) to buf.  Caller is
  * responsible for ensuring that an alias or AS is present before it.
@@ -10956,7 +10956,7 @@ generate_operator_name(Oid operid, Oid arg1, Oid arg2)
  * requirement is to append "leftop op rightop" to buf, where leftop and
  * rightop are given as strings and are assumed to yield types leftoptype
  * and rightoptype; the operator is identified by OID.  The complexity
- * comes from needing to be sure that the parser will select the desired
+ * comes from needing to be sure that the parser will selext the desired
  * operator when the query is parsed.  We always name the operator using
  * OPERATOR(schema.op) syntax, so as to avoid search-path uncertainties.
  * We have to emit casts too, if either input isn't already the input type

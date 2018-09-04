@@ -168,7 +168,7 @@ if (sqlca.sqlcode < 0) sqlprint();}
 
 	for (i = 1; i <= REPEATS; ++i)
 	{
-		{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select relname from pg_class where relname = 'pg_class'", ECPGt_EOIT, 
+		{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext relname from pg_class where relname = 'pg_class'", ECPGt_EOIT, 
 	ECPGt_char,&(r),(long)0,(long)0,(1)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);
 #line 58 "alloc.pgc"

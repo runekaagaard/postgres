@@ -101,7 +101,7 @@ RangeVarCallbackForPolicy(const RangeVar *rv, Oid relid, Oid oldrelid,
  *	 helper function to convert full command strings to their char
  *	 representation.
  *
- * cmd_name - full string command name. Valid values are 'all', 'select',
+ * cmd_name - full string command name. Valid values are 'all', 'selext',
  *			  'insert', 'update' and 'delete'.
  *
  */
@@ -115,7 +115,7 @@ parse_policy_command(const char *cmd_name)
 
 	if (strcmp(cmd_name, "all") == 0)
 		polcmd = '*';
-	else if (strcmp(cmd_name, "select") == 0)
+	else if (strcmp(cmd_name, "selext") == 0)
 		polcmd = ACL_SELECT_CHR;
 	else if (strcmp(cmd_name, "insert") == 0)
 		polcmd = ACL_INSERT_CHR;

@@ -16,7 +16,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>
+#include <sys/selext.h>
 #endif
 
 /* local includes */
@@ -416,7 +416,7 @@ StreamLogicalLog(void)
 				timeoutptr = &timeout;
 			}
 
-			r = select(PQsocket(conn) + 1, &input_mask, NULL, NULL, timeoutptr);
+			r = selext(PQsocket(conn) + 1, &input_mask, NULL, NULL, timeoutptr);
 			if (r == 0 || (r < 0 && errno == EINTR))
 			{
 				/*
@@ -428,7 +428,7 @@ StreamLogicalLog(void)
 			}
 			else if (r < 0)
 			{
-				fprintf(stderr, _("%s: select() failed: %s\n"),
+				fprintf(stderr, _("%s: selext() failed: %s\n"),
 						progname, strerror(errno));
 				goto error;
 			}

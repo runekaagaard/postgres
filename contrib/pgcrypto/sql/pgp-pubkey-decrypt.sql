@@ -602,46 +602,46 @@ blH2nKZC9d6fi4YzSYMepZpMOFR65M80MCMiDUGnZBB8sEADu2/iVtqDUeG8mAA=
 ');
 
 -- successful decrypt
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey))
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey))
 from keytbl, encdata where keytbl.id=1 and encdata.id=1;
 
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey))
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey))
 from keytbl, encdata where keytbl.id=2 and encdata.id=2;
 
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey))
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey))
 from keytbl, encdata where keytbl.id=3 and encdata.id=3;
 
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey))
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey))
 from keytbl, encdata where keytbl.id=6 and encdata.id=4;
 
 -- wrong key
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey))
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey))
 from keytbl, encdata where keytbl.id=2 and encdata.id=1;
 
 -- sign-only key
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey))
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey))
 from keytbl, encdata where keytbl.id=4 and encdata.id=1;
 
 -- rsa: password-protected secret key, wrong password
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey), '123')
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey), '123')
 from keytbl, encdata where keytbl.id=7 and encdata.id=4;
 
 -- rsa: password-protected secret key, right password
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey), 'parool')
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey), 'parool')
 from keytbl, encdata where keytbl.id=7 and encdata.id=4;
 
 -- password-protected secret key, no password
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey))
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey))
 from keytbl, encdata where keytbl.id=5 and encdata.id=1;
 
 -- password-protected secret key, wrong password
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey), 'foo')
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey), 'foo')
 from keytbl, encdata where keytbl.id=5 and encdata.id=1;
 
 -- password-protected secret key, right password
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey), 'parool')
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey), 'parool')
 from keytbl, encdata where keytbl.id=5 and encdata.id=1;
 
 -- test for a short read from prefix_init
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey))
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey))
 from keytbl, encdata where keytbl.id=6 and encdata.id=5;

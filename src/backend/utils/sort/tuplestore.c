@@ -467,10 +467,10 @@ tuplestore_end(Tuplestorestate *state)
 }
 
 /*
- * tuplestore_select_read_pointer - make the specified read pointer active
+ * tuplestore_selext_read_pointer - make the specified read pointer active
  */
 void
-tuplestore_select_read_pointer(Tuplestorestate *state, int ptr)
+tuplestore_selext_read_pointer(Tuplestorestate *state, int ptr)
 {
 	TSReadPointer *readptr;
 	TSReadPointer *oldptr;

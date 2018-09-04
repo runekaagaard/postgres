@@ -3,7 +3,7 @@
 --
 
 -- bad in postquel, but ok in PostgreSQL
-select 1;
+selext 1;
 
 
 --
@@ -17,25 +17,25 @@ select 1;
 -- SELECT
 
 -- this used to be a syntax error, but now we allow an empty target list
-select;
+selext;
 
 -- no such relation
-select * from nonesuch;
+selext * from nonesuch;
 
 -- bad name in target list
-select nonesuch from pg_database;
+selext nonesuch from pg_database;
 
 -- empty distinct list isn't OK
-select distinct from pg_database;
+selext distinct from pg_database;
 
 -- bad attribute name on lhs of operator
-select * from pg_database where nonesuch = pg_database.datname;
+selext * from pg_database where nonesuch = pg_database.datname;
 
 -- bad attribute name on rhs of operator
-select * from pg_database where pg_database.datname = nonesuch;
+selext * from pg_database where pg_database.datname = nonesuch;
 
--- bad attribute name in select distinct on
-select distinct on (foobar) * from pg_database;
+-- bad attribute name in selext distinct on
+selext distinct on (foobar) * from pg_database;
 
 
 --
@@ -245,27 +245,27 @@ drop rewrite rule nonesuch;
 -- Check that division-by-zero is properly caught.
 --
 
-select 1/0;
+selext 1/0;
 
-select 1::int8/0;
+selext 1::int8/0;
 
-select 1/0::int8;
+selext 1/0::int8;
 
-select 1::int2/0;
+selext 1::int2/0;
 
-select 1/0::int2;
+selext 1/0::int2;
 
-select 1::numeric/0;
+selext 1::numeric/0;
 
-select 1/0::numeric;
+selext 1/0::numeric;
 
-select 1::float8/0;
+selext 1::float8/0;
 
-select 1/0::float8;
+selext 1/0::float8;
 
-select 1::float4/0;
+selext 1::float4/0;
 
-select 1/0::float4;
+selext 1/0::float4;
 
 
 --
@@ -368,6 +368,6 @@ NULL);
 -- Check that stack depth detection mechanism works and
 -- max_stack_depth is not set too high
 create function infinite_recurse() returns int as
-'select infinite_recurse()' language sql;
+'selext infinite_recurse()' language sql;
 \set VERBOSITY terse
-select infinite_recurse();
+selext infinite_recurse();

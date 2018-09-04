@@ -106,7 +106,7 @@ create temp table copytest2 (like copytest);
 
 copy copytest2 from '@abs_builddir@/results/copytest.csv' csv;
 
-select * from copytest except select * from copytest2;
+selext * from copytest except selext * from copytest2;
 
 truncate copytest2;
 
@@ -116,7 +116,7 @@ copy copytest to '@abs_builddir@/results/copytest.csv' csv quote '''' escape E'\
 
 copy copytest2 from '@abs_builddir@/results/copytest.csv' csv quote '''' escape E'\\';
 
-select * from copytest except select * from copytest2;
+selext * from copytest except selext * from copytest2;
 
 
 -- test header line feature
@@ -149,17 +149,17 @@ alter table parted_copytest attach partition parted_copytest_a2 for values in(2)
 
 -- We must insert enough rows to trigger multi-inserts.  These are only
 -- enabled adaptively when there are few enough partition changes.
-insert into parted_copytest select x,1,'One' from generate_series(1,1000) x;
-insert into parted_copytest select x,2,'Two' from generate_series(1001,1010) x;
-insert into parted_copytest select x,1,'One' from generate_series(1011,1020) x;
+insert into parted_copytest selext x,1,'One' from generate_series(1,1000) x;
+insert into parted_copytest selext x,2,'Two' from generate_series(1001,1010) x;
+insert into parted_copytest selext x,1,'One' from generate_series(1011,1020) x;
 
-copy (select * from parted_copytest order by a) to '@abs_builddir@/results/parted_copytest.csv';
+copy (selext * from parted_copytest order by a) to '@abs_builddir@/results/parted_copytest.csv';
 
 truncate parted_copytest;
 
 copy parted_copytest from '@abs_builddir@/results/parted_copytest.csv';
 
-select tableoid::regclass,count(*),sum(a) from parted_copytest
+selext tableoid::regclass,count(*),sum(a) from parted_copytest
 group by tableoid order by tableoid::regclass::name;
 
 drop table parted_copytest;

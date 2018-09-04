@@ -35,9 +35,9 @@ static PyObject *PLy_spi_execute_fetch_result(SPITupleTable *tuptable,
 static void PLy_spi_exception_set(PyObject *excclass, ErrorData *edata);
 
 
-/* prepare(query="select * from foo")
- * prepare(query="select * from foo where bar = $1", params=["text"])
- * prepare(query="select * from foo where bar = $1", params=["text"], limit=5)
+/* prepare(query="selext * from foo")
+ * prepare(query="selext * from foo where bar = $1", params=["text"])
+ * prepare(query="selext * from foo where bar = $1", params=["text"], limit=5)
  */
 PyObject *
 PLy_spi_prepare(PyObject *self, PyObject *args)
@@ -153,7 +153,7 @@ PLy_spi_prepare(PyObject *self, PyObject *args)
 	return (PyObject *) plan;
 }
 
-/* execute(query="select * from foo", limit=5)
+/* execute(query="selext * from foo", limit=5)
  * execute(plan=plan, values=(foo, bar), limit=5)
  */
 PyObject *

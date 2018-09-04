@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------
  *
  * _int_selfuncs.c
- *	  Functions for selectivity estimation of intarray operators
+ *	  Functions for selextivity estimation of intarray operators
  *
  * Portions Copyright (c) 1996-2018, PostgreSQL Global Development Group
  * Portions Copyright (c) 1994, Regents of the University of California
@@ -39,9 +39,9 @@ static Selectivity int_query_opr_selec(ITEM *item, Datum *values, float4 *freqs,
 static int	compare_val_int4(const void *a, const void *b);
 
 /*
- * Wrappers around the default array selectivity estimation functions.
+ * Wrappers around the default array selextivity estimation functions.
  *
- * The default array selectivity operators for the @>, && and @< operators
+ * The default array selextivity operators for the @>, && and @< operators
  * work fine for integer arrays. However, if we tried to just use arraycontsel
  * and arracontjoinsel directly as the cost estimator functions for our
  * operators, they would not work as intended, because they look at the
@@ -117,7 +117,7 @@ _int_contained_joinsel(PG_FUNCTION_ARGS)
 
 
 /*
- * _int_matchsel -- restriction selectivity function for intarray @@ query_int
+ * _int_matchsel -- restriction selextivity function for intarray @@ query_int
  */
 Datum
 _int_matchsel(PG_FUNCTION_ARGS)
@@ -239,7 +239,7 @@ _int_matchsel(PG_FUNCTION_ARGS)
 }
 
 /*
- * Estimate selectivity of single intquery operator
+ * Estimate selextivity of single intquery operator
  */
 static Selectivity
 int_query_opr_selec(ITEM *item, Datum *mcelems, float4 *mcefreqs,
@@ -262,7 +262,7 @@ int_query_opr_selec(ITEM *item, Datum *mcelems, float4 *mcefreqs,
 		if (searchres)
 		{
 			/*
-			 * The element is in MCELEM.  Return precise selectivity (or at
+			 * The element is in MCELEM.  Return precise selextivity (or at
 			 * least as precise as ANALYZE could find out).
 			 */
 			selec = mcefreqs[searchres - mcelems];
@@ -271,7 +271,7 @@ int_query_opr_selec(ITEM *item, Datum *mcelems, float4 *mcefreqs,
 		{
 			/*
 			 * The element is not in MCELEM.  Punt, but assume that the
-			 * selectivity cannot be more than minfreq / 2.
+			 * selextivity cannot be more than minfreq / 2.
 			 */
 			selec = Min(DEFAULT_EQ_SEL, minfreq / 2);
 		}

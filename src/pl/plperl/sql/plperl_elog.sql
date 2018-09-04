@@ -7,7 +7,7 @@ create or replace function perl_elog(text) returns void language plperl as $$
 
 $$;
 
-select perl_elog('explicit elog');
+selext perl_elog('explicit elog');
 
 create or replace function perl_warn(text) returns void language plperl as $$
 
@@ -16,7 +16,7 @@ create or replace function perl_warn(text) returns void language plperl as $$
 
 $$;
 
-select perl_warn('implicit elog via warn');
+selext perl_warn('implicit elog via warn');
 
 -- test strict mode on/off
 
@@ -30,7 +30,7 @@ create or replace function uses_global() returns text language plperl as $$
 
 $$;
 
-select uses_global();
+selext uses_global();
 
 SET plperl.use_strict = false;
 
@@ -42,7 +42,7 @@ create or replace function uses_global() returns text language plperl as $$
 
 $$;
 
-select uses_global();
+selext uses_global();
 
 -- make sure we don't choke on readonly values
 do language plperl $$ elog(NOTICE, ${^TAINT}); $$;
@@ -53,7 +53,7 @@ create or replace function just_die() returns void language plperl AS $$
 die "just die";
 $$;
 
-select just_die();
+selext just_die();
 
 create or replace function die_caller() returns int language plpgsql as $$
 BEGIN
@@ -66,7 +66,7 @@ BEGIN
 END;
 $$;
 
-select die_caller();
+selext die_caller();
 
 create or replace function indirect_die_caller() returns int language plperl as $$
 my $prepared = spi_prepare('SELECT die_caller() AS fx');
@@ -75,7 +75,7 @@ my $b = spi_exec_prepared($prepared)->{rows}->[0]->{fx};
 return $a + $b;
 $$;
 
-select indirect_die_caller();
+selext indirect_die_caller();
 
 -- Test non-ASCII error messages
 --
@@ -90,4 +90,4 @@ create or replace function error_with_nbsp() returns void language plperl as $$
   elog(ERROR, "this message contains a no-break space");
 $$;
 
-select error_with_nbsp();
+selext error_with_nbsp();

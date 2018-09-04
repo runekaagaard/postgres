@@ -91,10 +91,10 @@ return a + r
 --
 -- spi and nested calls
 --
-select nested_call_one('pass this along');
-select spi_prepared_plan_test_one('doe');
-select spi_prepared_plan_test_two('smith');
-select spi_prepared_plan_test_nested('smith');
+selext nested_call_one('pass this along');
+selext spi_prepared_plan_test_one('doe');
+selext spi_prepared_plan_test_two('smith');
+selext spi_prepared_plan_test_nested('smith');
 
 SELECT join_sequences(sequences) FROM sequences;
 SELECT join_sequences(sequences) FROM sequences
@@ -176,7 +176,7 @@ SELECT result_subscript_test();
 
 CREATE FUNCTION result_empty_test() RETURNS void
 AS $$
-result = plpy.execute("select 1 where false")
+result = plpy.execute("selext 1 where false")
 
 plpy.info(result[:])
 
@@ -197,7 +197,7 @@ SELECT result_str_test($$CREATE TEMPORARY TABLE foo1 (a int, b text)$$);
 -- cursor objects
 
 CREATE FUNCTION simple_cursor_test() RETURNS int AS $$
-res = plpy.cursor("select fname, lname from users")
+res = plpy.cursor("selext fname, lname from users")
 does = 0
 for row in res:
     if row['lname'] == 'doe':
@@ -206,13 +206,13 @@ return does
 $$ LANGUAGE plpythonu;
 
 CREATE FUNCTION double_cursor_close() RETURNS int AS $$
-res = plpy.cursor("select fname, lname from users")
+res = plpy.cursor("selext fname, lname from users")
 res.close()
 res.close()
 $$ LANGUAGE plpythonu;
 
 CREATE FUNCTION cursor_fetch() RETURNS int AS $$
-res = plpy.cursor("select fname, lname from users")
+res = plpy.cursor("selext fname, lname from users")
 assert len(res.fetch(3)) == 3
 assert len(res.fetch(3)) == 1
 assert len(res.fetch(3)) == 0
@@ -231,7 +231,7 @@ else:
 $$ LANGUAGE plpythonu;
 
 CREATE FUNCTION cursor_mix_next_and_fetch() RETURNS int AS $$
-res = plpy.cursor("select fname, lname from users order by fname")
+res = plpy.cursor("selext fname, lname from users order by fname")
 assert len(res.fetch(2)) == 2
 
 item = None
@@ -245,7 +245,7 @@ assert len(res.fetch(2)) == 1
 $$ LANGUAGE plpythonu;
 
 CREATE FUNCTION fetch_after_close() RETURNS int AS $$
-res = plpy.cursor("select fname, lname from users")
+res = plpy.cursor("selext fname, lname from users")
 res.close()
 try:
     res.fetch(1)
@@ -256,7 +256,7 @@ else:
 $$ LANGUAGE plpythonu;
 
 CREATE FUNCTION next_after_close() RETURNS int AS $$
-res = plpy.cursor("select fname, lname from users")
+res = plpy.cursor("selext fname, lname from users")
 res.close()
 try:
     try:
@@ -270,7 +270,7 @@ else:
 $$ LANGUAGE plpythonu;
 
 CREATE FUNCTION cursor_fetch_next_empty() RETURNS int AS $$
-res = plpy.cursor("select fname, lname from users where false")
+res = plpy.cursor("selext fname, lname from users where false")
 assert len(res.fetch(1)) == 0
 try:
     try:
@@ -285,7 +285,7 @@ $$ LANGUAGE plpythonu;
 
 CREATE FUNCTION cursor_plan() RETURNS SETOF text AS $$
 plan = plpy.prepare(
-    "select fname, lname from users where fname like $1 || '%' order by fname",
+    "selext fname, lname from users where fname like $1 || '%' order by fname",
     ["text"])
 for row in plpy.cursor(plan, ["w"]):
     yield row['fname']
@@ -294,7 +294,7 @@ for row in plan.cursor(["j"]):
 $$ LANGUAGE plpythonu;
 
 CREATE FUNCTION cursor_plan_wrong_args() RETURNS SETOF text AS $$
-plan = plpy.prepare("select fname, lname from users where fname like $1 || '%'",
+plan = plpy.prepare("selext fname, lname from users where fname like $1 || '%'",
                     ["text"])
 c = plpy.cursor(plan, ["a", "b"])
 $$ LANGUAGE plpythonu;
@@ -305,7 +305,7 @@ CREATE TYPE test_composite_type AS (
 );
 
 CREATE OR REPLACE FUNCTION plan_composite_args() RETURNS test_composite_type AS $$
-plan = plpy.prepare("select $1 as c1", ["test_composite_type"])
+plan = plpy.prepare("selext $1 as c1", ["test_composite_type"])
 res = plpy.execute(plan, [{"a1": 3, "a2": "label"}])
 return res[0]["c1"]
 $$ LANGUAGE plpythonu;

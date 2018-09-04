@@ -45,7 +45,7 @@ UPDATE [ ONLY ] <replaceable class="parameter">table_name</replaceable> [ * ] [ 
 
   <para>
    There are two ways to modify a table using information contained in
-   other tables in the database: using sub-selects, or specifying
+   other tables in the database: using sub-selexts, or specifying
    additional tables in the <literal>FROM</literal> clause. Which
    technique is more appropriate depends on the specific
    circumstances.
@@ -81,7 +81,7 @@ UPDATE [ ONLY ] <replaceable class="parameter">table_name</replaceable> [ * ] [ 
      <para>
       The <literal>WITH</literal> clause allows you to specify one or more
       subqueries that can be referenced by name in the <command>UPDATE</command>
-      query. See <xref linkend="queries-with"/> and <xref linkend="sql-select"/>
+      query. See <xref linkend="queries-with"/> and <xref linkend="sql-selext"/>
       for details.
      </para>
     </listitem>
@@ -276,7 +276,7 @@ UPDATE <replaceable class="parameter">count</replaceable>
 
   <para>
    Because of this indeterminacy, referencing other tables only within
-   sub-selects is safer, though often harder to read and slower than
+   sub-selexts is safer, though often harder to read and slower than
    using a join.
   </para>
 
@@ -349,7 +349,7 @@ UPDATE employees SET sales_count = sales_count + 1 FROM accounts
   </para>
 
   <para>
-   Perform the same operation, using a sub-select in the
+   Perform the same operation, using a sub-selext in the
    <literal>WHERE</literal> clause:
 <programlisting>
 UPDATE employees SET sales_count = sales_count + 1 WHERE id =

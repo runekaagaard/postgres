@@ -1788,7 +1788,7 @@ msgstr "specifikován neplatný formát \"%s\" výstupu\n"
 
 #: pg_dump.c:1117
 #, c-format
-msgid "server version must be at least 7.3 to use schema selection switches\n"
+msgid "server version must be at least 7.3 to use schema selextion switches\n"
 msgstr ""
 "verze serveru musí být alespoň 7.3 pro použití přepínačů prů výběr schématu\n"
 
@@ -2504,7 +2504,7 @@ msgstr ""
 #, c-format
 msgid ""
 "  -L, --use-list=FILENAME      use table of contents from this file for\n"
-"                               selecting/ordering output\n"
+"                               selexting/ordering output\n"
 msgstr ""
 "  -L, --use-list=SOUBOR    použít specifikovaný obsah (TOC) pro řazení\n"
 "                           výstupu z tohoto souboru\n"

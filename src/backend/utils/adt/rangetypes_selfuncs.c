@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------
  *
  * rangetypes_selfuncs.c
- *	  Functions for selectivity estimation of range operators
+ *	  Functions for selextivity estimation of range operators
  *
  * Estimates are based on histograms of lower and upper bounds, and the
  * fraction of empty ranges.
@@ -30,11 +30,11 @@
 
 static double calc_rangesel(TypeCacheEntry *typcache, VariableStatData *vardata,
 			  RangeType *constval, Oid operator);
-static double default_range_selectivity(Oid operator);
-static double calc_hist_selectivity(TypeCacheEntry *typcache,
+static double default_range_selextivity(Oid operator);
+static double calc_hist_selextivity(TypeCacheEntry *typcache,
 					  VariableStatData *vardata, RangeType *constval,
 					  Oid operator);
-static double calc_hist_selectivity_scalar(TypeCacheEntry *typcache,
+static double calc_hist_selextivity_scalar(TypeCacheEntry *typcache,
 							 RangeBound *constbound,
 							 RangeBound *hist, int hist_nvalues,
 							 bool equal);
@@ -49,21 +49,21 @@ static int length_hist_bsearch(Datum *length_hist_values,
 					int length_hist_nvalues, double value, bool equal);
 static double calc_length_hist_frac(Datum *length_hist_values,
 					  int length_hist_nvalues, double length1, double length2, bool equal);
-static double calc_hist_selectivity_contained(TypeCacheEntry *typcache,
+static double calc_hist_selextivity_contained(TypeCacheEntry *typcache,
 								RangeBound *lower, RangeBound *upper,
 								RangeBound *hist_lower, int hist_nvalues,
 								Datum *length_hist_values, int length_hist_nvalues);
-static double calc_hist_selectivity_contains(TypeCacheEntry *typcache,
+static double calc_hist_selextivity_contains(TypeCacheEntry *typcache,
 							   RangeBound *lower, RangeBound *upper,
 							   RangeBound *hist_lower, int hist_nvalues,
 							   Datum *length_hist_values, int length_hist_nvalues);
 
 /*
- * Returns a default selectivity estimate for given operator, when we don't
+ * Returns a default selextivity estimate for given operator, when we don't
  * have statistics or cannot use them for some reason.
  */
 static double
-default_range_selectivity(Oid operator)
+default_range_selextivity(Oid operator)
 {
 	switch (operator)
 	{
@@ -101,7 +101,7 @@ default_range_selectivity(Oid operator)
 }
 
 /*
- * rangesel -- restriction selectivity for range operators
+ * rangesel -- restriction selextivity for range operators
  */
 Datum
 rangesel(PG_FUNCTION_ARGS)
@@ -123,7 +123,7 @@ rangesel(PG_FUNCTION_ARGS)
 	 */
 	if (!get_restriction_variable(root, args, varRelid,
 								  &vardata, &other, &varonleft))
-		PG_RETURN_FLOAT8(default_range_selectivity(operator));
+		PG_RETURN_FLOAT8(default_range_selextivity(operator));
 
 	/*
 	 * Can't do anything useful if the something is not a constant, either.
@@ -131,7 +131,7 @@ rangesel(PG_FUNCTION_ARGS)
 	if (!IsA(other, Const))
 	{
 		ReleaseVariableStats(vardata);
-		PG_RETURN_FLOAT8(default_range_selectivity(operator));
+		PG_RETURN_FLOAT8(default_range_selextivity(operator));
 	}
 
 	/*
@@ -154,9 +154,9 @@ rangesel(PG_FUNCTION_ARGS)
 		operator = get_commutator(operator);
 		if (!operator)
 		{
-			/* Use default selectivity (should we raise an error instead?) */
+			/* Use default selextivity (should we raise an error instead?) */
 			ReleaseVariableStats(vardata);
-			PG_RETURN_FLOAT8(default_range_selectivity(operator));
+			PG_RETURN_FLOAT8(default_range_selextivity(operator));
 		}
 	}
 
@@ -216,7 +216,7 @@ rangesel(PG_FUNCTION_ARGS)
 	if (constrange)
 		selec = calc_rangesel(typcache, &vardata, constrange, operator);
 	else
-		selec = default_range_selectivity(operator);
+		selec = default_range_selextivity(operator);
 
 	ReleaseVariableStats(vardata);
 
@@ -323,17 +323,17 @@ calc_rangesel(TypeCacheEntry *typcache, VariableStatData *vardata,
 	else
 	{
 		/*
-		 * Calculate selectivity using bound histograms. If that fails for
+		 * Calculate selextivity using bound histograms. If that fails for
 		 * some reason, e.g no histogram in pg_statistic, use the default
 		 * constant estimate for the fraction of non-empty values. This is
 		 * still somewhat better than just returning the default estimate,
 		 * because this still takes into account the fraction of empty and
 		 * NULL tuples, if we had statistics for them.
 		 */
-		hist_selec = calc_hist_selectivity(typcache, vardata, constval,
+		hist_selec = calc_hist_selextivity(typcache, vardata, constval,
 										   operator);
 		if (hist_selec < 0.0)
-			hist_selec = default_range_selectivity(operator);
+			hist_selec = default_range_selextivity(operator);
 
 		/*
 		 * Now merge the results for the empty ranges and histogram
@@ -362,13 +362,13 @@ calc_rangesel(TypeCacheEntry *typcache, VariableStatData *vardata,
 }
 
 /*
- * Calculate range operator selectivity using histograms of range bounds.
+ * Calculate range operator selextivity using histograms of range bounds.
  *
  * This estimate is for the portion of values that are not empty and not
  * NULL.
  */
 static double
-calc_hist_selectivity(TypeCacheEntry *typcache, VariableStatData *vardata,
+calc_hist_selextivity(TypeCacheEntry *typcache, VariableStatData *vardata,
 					  RangeType *constval, Oid operator)
 {
 	AttStatsSlot hslot;
@@ -444,7 +444,7 @@ calc_hist_selectivity(TypeCacheEntry *typcache, VariableStatData *vardata,
 	Assert(!empty);
 
 	/*
-	 * Calculate selectivity comparing the lower or upper bound of the
+	 * Calculate selextivity comparing the lower or upper bound of the
 	 * constant with the histogram of lower or upper bounds.
 	 */
 	switch (operator)
@@ -460,53 +460,53 @@ calc_hist_selectivity(TypeCacheEntry *typcache, VariableStatData *vardata,
 			 * lower bound.
 			 */
 			hist_selec =
-				calc_hist_selectivity_scalar(typcache, &const_lower,
+				calc_hist_selextivity_scalar(typcache, &const_lower,
 											 hist_lower, nhist, false);
 			break;
 
 		case OID_RANGE_LESS_EQUAL_OP:
 			hist_selec =
-				calc_hist_selectivity_scalar(typcache, &const_lower,
+				calc_hist_selextivity_scalar(typcache, &const_lower,
 											 hist_lower, nhist, true);
 			break;
 
 		case OID_RANGE_GREATER_OP:
 			hist_selec =
-				1 - calc_hist_selectivity_scalar(typcache, &const_lower,
+				1 - calc_hist_selextivity_scalar(typcache, &const_lower,
 												 hist_lower, nhist, false);
 			break;
 
 		case OID_RANGE_GREATER_EQUAL_OP:
 			hist_selec =
-				1 - calc_hist_selectivity_scalar(typcache, &const_lower,
+				1 - calc_hist_selextivity_scalar(typcache, &const_lower,
 												 hist_lower, nhist, true);
 			break;
 
 		case OID_RANGE_LEFT_OP:
 			/* var << const when upper(var) < lower(const) */
 			hist_selec =
-				calc_hist_selectivity_scalar(typcache, &const_lower,
+				calc_hist_selextivity_scalar(typcache, &const_lower,
 											 hist_upper, nhist, false);
 			break;
 
 		case OID_RANGE_RIGHT_OP:
 			/* var >> const when lower(var) > upper(const) */
 			hist_selec =
-				1 - calc_hist_selectivity_scalar(typcache, &const_upper,
+				1 - calc_hist_selextivity_scalar(typcache, &const_upper,
 												 hist_lower, nhist, true);
 			break;
 
 		case OID_RANGE_OVERLAPS_RIGHT_OP:
 			/* compare lower bounds */
 			hist_selec =
-				1 - calc_hist_selectivity_scalar(typcache, &const_lower,
+				1 - calc_hist_selextivity_scalar(typcache, &const_lower,
 												 hist_lower, nhist, false);
 			break;
 
 		case OID_RANGE_OVERLAPS_LEFT_OP:
 			/* compare upper bounds */
 			hist_selec =
-				calc_hist_selectivity_scalar(typcache, &const_upper,
+				calc_hist_selextivity_scalar(typcache, &const_upper,
 											 hist_upper, nhist, true);
 			break;
 
@@ -525,17 +525,17 @@ calc_hist_selectivity(TypeCacheEntry *typcache, VariableStatData *vardata,
 			 * constant, so just treat it the same as &&.
 			 */
 			hist_selec =
-				calc_hist_selectivity_scalar(typcache, &const_lower, hist_upper,
+				calc_hist_selextivity_scalar(typcache, &const_lower, hist_upper,
 											 nhist, false);
 			hist_selec +=
-				(1.0 - calc_hist_selectivity_scalar(typcache, &const_upper, hist_lower,
+				(1.0 - calc_hist_selextivity_scalar(typcache, &const_upper, hist_lower,
 													nhist, true));
 			hist_selec = 1.0 - hist_selec;
 			break;
 
 		case OID_RANGE_CONTAINS_OP:
 			hist_selec =
-				calc_hist_selectivity_contains(typcache, &const_lower,
+				calc_hist_selextivity_contains(typcache, &const_lower,
 											   &const_upper, hist_lower, nhist,
 											   lslot.values, lslot.nvalues);
 			break;
@@ -548,19 +548,19 @@ calc_hist_selectivity(TypeCacheEntry *typcache, VariableStatData *vardata,
 				 * with an upper bound <= const upper bound
 				 */
 				hist_selec =
-					calc_hist_selectivity_scalar(typcache, &const_upper,
+					calc_hist_selextivity_scalar(typcache, &const_upper,
 												 hist_upper, nhist, true);
 			}
 			else if (const_upper.infinite)
 			{
 				hist_selec =
-					1.0 - calc_hist_selectivity_scalar(typcache, &const_lower,
+					1.0 - calc_hist_selextivity_scalar(typcache, &const_lower,
 													   hist_lower, nhist, false);
 			}
 			else
 			{
 				hist_selec =
-					calc_hist_selectivity_contained(typcache, &const_lower,
+					calc_hist_selextivity_contained(typcache, &const_lower,
 													&const_upper, hist_lower, nhist,
 													lslot.values, lslot.nvalues);
 			}
@@ -584,7 +584,7 @@ calc_hist_selectivity(TypeCacheEntry *typcache, VariableStatData *vardata,
  * is true) a given const in a histogram of range bounds.
  */
 static double
-calc_hist_selectivity_scalar(TypeCacheEntry *typcache, RangeBound *constbound,
+calc_hist_selextivity_scalar(TypeCacheEntry *typcache, RangeBound *constbound,
 							 RangeBound *hist, int hist_nvalues, bool equal)
 {
 	Selectivity selec;
@@ -592,7 +592,7 @@ calc_hist_selectivity_scalar(TypeCacheEntry *typcache, RangeBound *constbound,
 
 	/*
 	 * Find the histogram bin the given constant falls into. Estimate
-	 * selectivity as the number of preceding whole bins.
+	 * selextivity as the number of preceding whole bins.
 	 */
 	index = rbound_bsearch(typcache, constbound, hist, hist_nvalues, equal);
 	selec = (Selectivity) (Max(index, 0)) / (Selectivity) (hist_nvalues - 1);
@@ -611,7 +611,7 @@ calc_hist_selectivity_scalar(TypeCacheEntry *typcache, RangeBound *constbound,
  * range bounds in array are greater or equal(greater) than given range bound,
  * return -1. When "equal" flag is set conditions in brackets are used.
  *
- * This function is used in scalar operator selectivity estimation. Another
+ * This function is used in scalar operator selextivity estimation. Another
  * goal of this function is to find a histogram bin where to stop
  * interpolation of portion of bounds which are less or equal to given bound.
  */
@@ -987,7 +987,7 @@ calc_length_hist_frac(Datum *length_hist_values, int length_hist_nvalues,
 }
 
 /*
- * Calculate selectivity of "var <@ const" operator, ie. estimate the fraction
+ * Calculate selextivity of "var <@ const" operator, ie. estimate the fraction
  * of ranges that fall within the constant lower and upper bounds. This uses
  * the histograms of range lower bounds and range lengths, on the assumption
  * that the range lengths are independent of the lower bounds.
@@ -996,7 +996,7 @@ calc_length_hist_frac(Datum *length_hist_values, int length_hist_nvalues,
  * finite.
  */
 static double
-calc_hist_selectivity_contained(TypeCacheEntry *typcache,
+calc_hist_selextivity_contained(TypeCacheEntry *typcache,
 								RangeBound *lower, RangeBound *upper,
 								RangeBound *hist_lower, int hist_nvalues,
 								Datum *length_hist_values, int length_hist_nvalues)
@@ -1097,7 +1097,7 @@ calc_hist_selectivity_contained(TypeCacheEntry *typcache,
 }
 
 /*
- * Calculate selectivity of "var @> const" operator, ie. estimate the fraction
+ * Calculate selextivity of "var @> const" operator, ie. estimate the fraction
  * of ranges that contain the constant lower and upper bounds. This uses
  * the histograms of range lower bounds and range lengths, on the assumption
  * that the range lengths are independent of the lower bounds.
@@ -1106,7 +1106,7 @@ calc_hist_selectivity_contained(TypeCacheEntry *typcache,
  * contain the constant lower and upper bounds.
  */
 static double
-calc_hist_selectivity_contains(TypeCacheEntry *typcache,
+calc_hist_selextivity_contains(TypeCacheEntry *typcache,
 							   RangeBound *lower, RangeBound *upper,
 							   RangeBound *hist_lower, int hist_nvalues,
 							   Datum *length_hist_values, int length_hist_nvalues)

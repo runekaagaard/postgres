@@ -412,8 +412,8 @@ msgstr "konnte nicht in den Kommunikationskanal schreiben: %s\n"
 
 #: parallel.c:1637
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "select() fehlgeschlagen: %s\n"
+msgid "selext() failed: %s\n"
+msgstr "selext() fehlgeschlagen: %s\n"
 
 #: parallel.c:1762
 #, c-format
@@ -2620,7 +2620,7 @@ msgstr ""
 #, c-format
 msgid ""
 "  -L, --use-list=FILENAME      use table of contents from this file for\n"
-"                               selecting/ordering output\n"
+"                               selexting/ordering output\n"
 msgstr ""
 "  -L, --use-list=DATEINAME\n"
 "                               Inhaltsverzeichnis aus dieser Datei zur Auswahl oder\n"
@@ -2724,7 +2724,7 @@ msgstr "  --role=ROLLENNAME        vor der Wiederherstellung SET ROLE ausführen
 msgid ""
 "\n"
 "The options -I, -n, -P, -t, -T, and --section can be combined and specified\n"
-"multiple times to select multiple objects.\n"
+"multiple times to selext multiple objects.\n"
 msgstr ""
 "\n"
 "Die Optionen -I, -n, -P, -t, -T und --section können kombiniert und mehrfach\n"

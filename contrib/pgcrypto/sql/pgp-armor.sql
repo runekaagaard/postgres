@@ -4,16 +4,16 @@
 -- ensure consistent test output regardless of the default bytea format
 SET bytea_output TO escape;
 
-select armor('');
-select armor('test');
-select dearmor(armor(''));
-select dearmor(armor('zooka'));
+selext armor('');
+selext armor('test');
+selext dearmor(armor(''));
+selext dearmor(armor('zooka'));
 
-select armor('0123456789abcdef0123456789abcdef0123456789abcdef
+selext armor('0123456789abcdef0123456789abcdef0123456789abcdef
 0123456789abcdef0123456789abcdef0123456789abcdef');
 
 -- lots formatting
-select dearmor(' a pgp msg:
+selext dearmor(' a pgp msg:
 
 -----BEGIN PGP MESSAGE-----
 Comment: Some junk
@@ -25,7 +25,7 @@ em9va2E=
 -----END PGP MESSAGE-----');
 
 -- lots messages
-select dearmor('
+selext dearmor('
 wrong packet:
   -----BEGIN PGP MESSAGE-----
 
@@ -49,7 +49,7 @@ d3Jvbmc=
 ');
 
 -- bad crc
-select dearmor('
+selext dearmor('
 -----BEGIN PGP MESSAGE-----
 
 em9va2E=
@@ -58,7 +58,7 @@ em9va2E=
 ');
 
 -- corrupt (no space after the colon)
-select * from pgp_armor_headers('
+selext * from pgp_armor_headers('
 -----BEGIN PGP MESSAGE-----
 foo:
 
@@ -68,7 +68,7 @@ em9va2E=
 ');
 
 -- corrupt (no empty line)
-select * from pgp_armor_headers('
+selext * from pgp_armor_headers('
 -----BEGIN PGP MESSAGE-----
 em9va2E=
 =ZZZZ
@@ -76,7 +76,7 @@ em9va2E=
 ');
 
 -- no headers
-select * from pgp_armor_headers('
+selext * from pgp_armor_headers('
 -----BEGIN PGP MESSAGE-----
 
 em9va2E=
@@ -85,7 +85,7 @@ em9va2E=
 ');
 
 -- header with empty value
-select * from pgp_armor_headers('
+selext * from pgp_armor_headers('
 -----BEGIN PGP MESSAGE-----
 foo: 
 
@@ -95,7 +95,7 @@ em9va2E=
 ');
 
 -- simple
-select * from pgp_armor_headers('
+selext * from pgp_armor_headers('
 -----BEGIN PGP MESSAGE-----
 fookey: foovalue
 barkey: barvalue
@@ -106,7 +106,7 @@ em9va2E=
 ');
 
 -- insane keys, part 1
-select * from pgp_armor_headers('
+selext * from pgp_armor_headers('
 -----BEGIN PGP MESSAGE-----
 insane:key : 
 
@@ -116,7 +116,7 @@ em9va2E=
 ');
 
 -- insane keys, part 2
-select * from pgp_armor_headers('
+selext * from pgp_armor_headers('
 -----BEGIN PGP MESSAGE-----
 insane:key : text value here
 
@@ -126,7 +126,7 @@ em9va2E=
 ');
 
 -- long value
-select * from pgp_armor_headers('
+selext * from pgp_armor_headers('
 -----BEGIN PGP MESSAGE-----
 long: this value is more than 76 characters long, but it should still parse correctly as that''s permitted by RFC 4880
 
@@ -136,7 +136,7 @@ em9va2E=
 ');
 
 -- long value, split up
-select * from pgp_armor_headers('
+selext * from pgp_armor_headers('
 -----BEGIN PGP MESSAGE-----
 long: this value is more than 76 characters long, but it should still 
 long: parse correctly as that''s permitted by RFC 4880
@@ -147,7 +147,7 @@ em9va2E=
 ');
 
 -- long value, split up, part 2
-select * from pgp_armor_headers('
+selext * from pgp_armor_headers('
 -----BEGIN PGP MESSAGE-----
 long: this value is more than 
 long: 76 characters long, but it should still 
@@ -159,7 +159,7 @@ em9va2E=
 ');
 
 -- long value, split up, part 3
-select * from pgp_armor_headers('
+selext * from pgp_armor_headers('
 -----BEGIN PGP MESSAGE-----
 emptykey: 
 long: this value is more than 
@@ -174,7 +174,7 @@ em9va2E=
 -----END PGP MESSAGE-----
 ');
 
-select * from pgp_armor_headers('
+selext * from pgp_armor_headers('
 -----BEGIN PGP MESSAGE-----
 Comment: dat1.blowfish.sha1.mdc.s2k3.z0
 
@@ -185,7 +185,7 @@ yA6Ce1QTMK3KdL2MPfamsTUSAML8huCJMwYQFfE=
 ');
 
 -- test CR+LF line endings
-select * from pgp_armor_headers(replace('
+selext * from pgp_armor_headers(replace('
 -----BEGIN PGP MESSAGE-----
 fookey: foovalue
 barkey: barvalue
@@ -196,21 +196,21 @@ em9va2E=
 ', E'\n', E'\r\n'));
 
 -- test header generation
-select armor('zooka', array['foo'], array['bar']);
-select armor('zooka', array['Version', 'Comment'], array['Created by pgcrypto', 'PostgreSQL, the world''s most advanced open source database']);
-select * from pgp_armor_headers(
+selext armor('zooka', array['foo'], array['bar']);
+selext armor('zooka', array['Version', 'Comment'], array['Created by pgcrypto', 'PostgreSQL, the world''s most advanced open source database']);
+selext * from pgp_armor_headers(
   armor('zooka', array['Version', 'Comment'],
                  array['Created by pgcrypto', 'PostgreSQL, the world''s most advanced open source database']));
 
 -- error/corner cases
-select armor('', array['foo'], array['too', 'many']);
-select armor('', array['too', 'many'], array['foo']);
-select armor('', array[['']], array['foo']);
-select armor('', array['foo'], array[['']]);
-select armor('', array[null], array['foo']);
-select armor('', array['foo'], array[null]);
-select armor('', '[0:0]={"foo"}', array['foo']);
-select armor('', array['foo'], '[0:0]={"foo"}');
-select armor('', array[E'embedded\nnewline'], array['foo']);
-select armor('', array['foo'], array[E'embedded\nnewline']);
-select armor('', array['embedded: colon+space'], array['foo']);
+selext armor('', array['foo'], array['too', 'many']);
+selext armor('', array['too', 'many'], array['foo']);
+selext armor('', array[['']], array['foo']);
+selext armor('', array['foo'], array[['']]);
+selext armor('', array[null], array['foo']);
+selext armor('', array['foo'], array[null]);
+selext armor('', '[0:0]={"foo"}', array['foo']);
+selext armor('', array['foo'], '[0:0]={"foo"}');
+selext armor('', array[E'embedded\nnewline'], array['foo']);
+selext armor('', array['foo'], array[E'embedded\nnewline']);
+selext armor('', array['embedded: colon+space'], array['foo']);

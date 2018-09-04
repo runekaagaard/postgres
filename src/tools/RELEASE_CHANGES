@@ -43,9 +43,9 @@ For Major Releases
 		o  mark additional items as completed
 		o  remove completed items
 	o group items into categories
-	o select incompatibilities
+	o selext incompatibilities
 	o add documentation links for items
-	o select major features
+	o selext major features
 
 * Documentation
 	o document all new features

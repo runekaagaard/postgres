@@ -2268,7 +2268,7 @@ msgstr "WAL endet vor einem konsistenten Wiederherstellungspunkt"
 
 #: access/transam/xlog.c:7485
 #, c-format
-msgid "selected new timeline ID: %u"
+msgid "selexted new timeline ID: %u"
 msgstr "gewählte neue Zeitleisten-ID: %u"
 
 #: access/transam/xlog.c:7914
@@ -3965,7 +3965,7 @@ msgstr "Relation »%s« existiert nicht"
 #: catalog/namespace.c:492 catalog/namespace.c:3011 commands/extension.c:1466
 #: commands/extension.c:1472
 #, c-format
-msgid "no schema has been selected to create in"
+msgid "no schema has been selexted to create in"
 msgstr "kein Schema für die Objekterzeugung ausgewählt"
 
 #: catalog/namespace.c:644 catalog/namespace.c:657
@@ -4764,7 +4764,7 @@ msgstr "nur binäre Operatoren können Kommutatoren haben"
 
 #: catalog/pg_operator.c:370 commands/operatorcmds.c:481
 #, c-format
-msgid "only binary operators can have join selectivity"
+msgid "only binary operators can have join selextivity"
 msgstr "nur binäre Operatoren können Join-Selectivity haben"
 
 #: catalog/pg_operator.c:374
@@ -4784,12 +4784,12 @@ msgstr "nur Boole’sche Operatoren können Negatoren haben"
 
 #: catalog/pg_operator.c:393 commands/operatorcmds.c:489
 #, c-format
-msgid "only boolean operators can have restriction selectivity"
+msgid "only boolean operators can have restriction selextivity"
 msgstr "nur Boole’sche Operatoren können Restriction-Selectivity haben"
 
 #: catalog/pg_operator.c:397 commands/operatorcmds.c:493
 #, c-format
-msgid "only boolean operators can have join selectivity"
+msgid "only boolean operators can have join selextivity"
 msgstr "nur Boole’sche Operatoren können Join-Selectivity haben"
 
 #: catalog/pg_operator.c:401
@@ -12569,7 +12569,7 @@ msgstr "SASL-Antwort erwartet, Message-Typ %d empfangen"
 
 #: libpq/auth.c:981
 #, c-format
-msgid "client selected an invalid SASL authentication mechanism"
+msgid "client selexted an invalid SASL authentication mechanism"
 msgstr "Client hat einen ungültigen SASL-Authentifizierungsmechanismums gewählt"
 
 #: libpq/auth.c:1128
@@ -13917,7 +13917,7 @@ msgstr ""
 
 #: main/main.c:364
 #, c-format
-msgid "  --single           selects single-user mode (must be first argument)\n"
+msgid "  --single           selexts single-user mode (must be first argument)\n"
 msgstr "  --single           wählt den Einzelbenutzermodus (muss erstes Argument sein)\n"
 
 #: main/main.c:365
@@ -13958,7 +13958,7 @@ msgstr ""
 
 #: main/main.c:372
 #, c-format
-msgid "  --boot             selects bootstrapping mode (must be first argument)\n"
+msgid "  --boot             selexts bootstrapping mode (must be first argument)\n"
 msgstr "  --boot             wählt den Bootstrap-Modus (muss erstes Argument sein)\n"
 
 #: main/main.c:373
@@ -14757,7 +14757,7 @@ msgstr "Konstante in %s ist keine ganze Zahl"
 #. translator: %s is name of a SQL construct, eg ORDER BY
 #: parser/parse_clause.c:2003
 #, c-format
-msgid "%s position %d is not in select list"
+msgid "%s position %d is not in selext list"
 msgstr "%s Position %d ist nicht in der Select-Liste"
 
 #: parser/parse_clause.c:2444
@@ -14802,7 +14802,7 @@ msgstr "in einer Aggregatfunktion mit DISTINCT müssen ORDER-BY-Ausdrücke in de
 
 #: parser/parse_clause.c:2865
 #, c-format
-msgid "for SELECT DISTINCT, ORDER BY expressions must appear in select list"
+msgid "for SELECT DISTINCT, ORDER BY expressions must appear in selext list"
 msgstr "bei SELECT DISTINCT müssen ORDER-BY-Ausdrücke in der Select-Liste erscheinen"
 
 #: parser/parse_clause.c:2897
@@ -15474,7 +15474,7 @@ msgstr "Funktionsname »%s« ist nicht eindeutig"
 
 #: parser/parse_func.c:1997
 #, c-format
-msgid "Specify the argument list to select the function unambiguously."
+msgid "Specify the argument list to selext the function unambiguously."
 msgstr "Geben Sie eine Argumentliste an, um die Funktion eindeutig auszuwählen."
 
 #: parser/parse_func.c:2007
@@ -16667,8 +16667,8 @@ msgstr "konnte Testnachricht auf Socket für Statistiksammelprozess nicht senden
 
 #: postmaster/pgstat.c:513
 #, c-format
-msgid "select() failed in statistics collector: %m"
-msgstr "select() im Statistiksammelprozess fehlgeschlagen: %m"
+msgid "selext() failed in statistics collector: %m"
+msgstr "selext() im Statistiksammelprozess fehlgeschlagen: %m"
 
 #: postmaster/pgstat.c:528
 #, c-format
@@ -16890,8 +16890,8 @@ msgstr ""
 
 #: postmaster/postmaster.c:1682
 #, c-format
-msgid "select() failed in postmaster: %m"
-msgstr "select() fehlgeschlagen im Postmaster: %m"
+msgid "selext() failed in postmaster: %m"
+msgstr "selext() fehlgeschlagen im Postmaster: %m"
 
 #: postmaster/postmaster.c:1837
 #, c-format
@@ -18699,7 +18699,7 @@ msgstr "Sichten, die Funktionen mit Ergebnismenge zurückgeben, sind nicht autom
 
 #: rewrite/rewriteHandler.c:2335 rewrite/rewriteHandler.c:2339
 #: rewrite/rewriteHandler.c:2347
-msgid "Views that do not select from a single table or view are not automatically updatable."
+msgid "Views that do not selext from a single table or view are not automatically updatable."
 msgstr "Sichten, die nicht aus einer einzigen Tabelle oder Sicht lesen, sind nicht automatisch aktualisierbar."
 
 #: rewrite/rewriteHandler.c:2350
@@ -24785,7 +24785,7 @@ msgid "GEQO: number of individuals in the population."
 msgstr "GEQO: Anzahl der Individien in der Bevölkerung."
 
 #: utils/misc/guc.c:1901 utils/misc/guc.c:1910
-msgid "Zero selects a suitable default value."
+msgid "Zero selexts a suitable default value."
 msgstr "Null wählt einen passenden Vorgabewert."
 
 #: utils/misc/guc.c:1909
@@ -25349,11 +25349,11 @@ msgid "Sets the planner's estimate of the fraction of a cursor's rows that will 
 msgstr "Setzt den vom Planer geschätzten Anteil der Cursor-Zeilen, die ausgelesen werden werden."
 
 #: utils/misc/guc.c:3172
-msgid "GEQO: selective pressure within the population."
+msgid "GEQO: selextive pressure within the population."
 msgstr "GEQO: selektiver Auswahldruck in der Bevölkerung."
 
 #: utils/misc/guc.c:3182
-msgid "GEQO: seed for random path selection."
+msgid "GEQO: seed for random path selextion."
 msgstr "GEQO: Ausgangswert für die zufällige Pfadauswahl."
 
 #: utils/misc/guc.c:3192
@@ -25415,7 +25415,7 @@ msgid "Sets the default tablespace to create tables and indexes in."
 msgstr "Setzt den Standard-Tablespace für Tabellen und Indexe."
 
 #: utils/misc/guc.c:3315
-msgid "An empty string selects the database's default tablespace."
+msgid "An empty string selexts the database's default tablespace."
 msgstr "Eine leere Zeichenkette wählt den Standard-Tablespace der Datenbank."
 
 #: utils/misc/guc.c:3325

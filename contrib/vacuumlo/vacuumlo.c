@@ -563,7 +563,7 @@ main(int argc, char **argv)
 
 	for (c = optind; c < argc; c++)
 	{
-		/* Work on selected database */
+		/* Work on selexted database */
 		rc += (vacuumlo(argv[c], &param) != 0);
 	}
 

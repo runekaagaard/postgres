@@ -1,13 +1,13 @@
 /*-------------------------------------------------------------------------
  *
- * subselect.c
- *	  Planning routines for subselects and parameters.
+ * subselext.c
+ *	  Planning routines for subselexts and parameters.
  *
  * Portions Copyright (c) 1996-2018, PostgreSQL Global Development Group
  * Portions Copyright (c) 1994, Regents of the University of California
  *
  * IDENTIFICATION
- *	  src/backend/optimizer/plan/subselect.c
+ *	  src/backend/optimizer/plan/subselext.c
  *
  *-------------------------------------------------------------------------
  */
@@ -26,7 +26,7 @@
 #include "optimizer/planmain.h"
 #include "optimizer/planner.h"
 #include "optimizer/prep.h"
-#include "optimizer/subselect.h"
+#include "optimizer/subselext.h"
 #include "optimizer/var.h"
 #include "parser/parse_relation.h"
 #include "rewrite/rewriteManip.h"
@@ -72,7 +72,7 @@ static bool subplan_is_hashable(Plan *plan);
 static bool testexpr_is_hashable(Node *testexpr);
 static bool hash_ok_operator(OpExpr *expr);
 static bool simplify_EXISTS_query(PlannerInfo *root, Query *query);
-static Query *convert_EXISTS_to_ANY(PlannerInfo *root, Query *subselect,
+static Query *convert_EXISTS_to_ANY(PlannerInfo *root, Query *subselext,
 					  Node **testexpr, List **paramIds);
 static Node *replace_correlation_vars_mutator(Node *node, PlannerInfo *root);
 static Node *process_sublinks_mutator(Node *node,
@@ -534,7 +534,7 @@ make_subplan(PlannerInfo *root, Query *orig_subquery,
 	 * we've made the subplan :-(.  (Determining whether it'll fit in work_mem
 	 * is the really hard part.)  Therefore, we don't want to be too
 	 * optimistic about the percentage of tuples retrieved, for fear of
-	 * selecting a plan that's bad for the materialization case.
+	 * selexting a plan that's bad for the materialization case.
 	 */
 	if (subLinkType == EXISTS_SUBLINK)
 		tuple_fraction = 1.0;	/* just like a LIMIT 1 */
@@ -910,7 +910,7 @@ build_subplan(PlannerInfo *root, Plan *plan, PlannerInfo *subroot,
 
 /*
  * generate_subquery_params: build a list of Params representing the output
- * columns of a sublink's sub-select, given the sub-select's targetlist.
+ * columns of a sublink's sub-selext, given the sub-selext's targetlist.
  *
  * We also return an integer list of the paramids of the Params.
  */
@@ -944,7 +944,7 @@ generate_subquery_params(PlannerInfo *root, List *tlist, List **paramIds)
 
 /*
  * generate_subquery_vars: build a list of Vars representing the output
- * columns of a sublink's sub-select, given the sub-select's targetlist.
+ * columns of a sublink's sub-selext, given the sub-selext's targetlist.
  * The Vars have the specified varno (RTE index).
  */
 static List *
@@ -972,7 +972,7 @@ generate_subquery_vars(PlannerInfo *root, List *tlist, Index varno)
 /*
  * convert_testexpr: convert the testexpr given by the parser into
  * actually executable form.  This entails replacing PARAM_SUBLINK Params
- * with Params or Vars representing the results of the sub-select.  The
+ * with Params or Vars representing the results of the sub-selext.  The
  * nodes to be substituted are passed in as the List result from
  * generate_subquery_params or generate_subquery_vars.
  */
@@ -1307,10 +1307,10 @@ SS_process_ctes(PlannerInfo *root)
  * On success, the caller is also responsible for recursively applying
  * pull_up_sublinks processing to the rarg and quals of the returned JoinExpr.
  * (On failure, there is no need to do anything, since pull_up_sublinks will
- * be applied when we recursively plan the sub-select.)
+ * be applied when we recursively plan the sub-selext.)
  *
  * Side effects of a successful conversion include adding the SubLink's
- * subselect to the query's rangetable, so that it can be referenced in
+ * subselext to the query's rangetable, so that it can be referenced in
  * the JoinExpr's rarg.
  */
 JoinExpr *
@@ -1319,7 +1319,7 @@ convert_ANY_sublink_to_join(PlannerInfo *root, SubLink *sublink,
 {
 	JoinExpr   *result;
 	Query	   *parse = root->parse;
-	Query	   *subselect = (Query *) sublink->subselect;
+	Query	   *subselext = (Query *) sublink->subselext;
 	Relids		upper_varnos;
 	int			rtindex;
 	RangeTblEntry *rte;
@@ -1331,10 +1331,10 @@ convert_ANY_sublink_to_join(PlannerInfo *root, SubLink *sublink,
 	Assert(sublink->subLinkType == ANY_SUBLINK);
 
 	/*
-	 * The sub-select must not refer to any Vars of the parent query. (Vars of
+	 * The sub-selext must not refer to any Vars of the parent query. (Vars of
 	 * higher levels should be okay, though.)
 	 */
-	if (contain_vars_of_level((Node *) subselect, 1))
+	if (contain_vars_of_level((Node *) subselext, 1))
 		return NULL;
 
 	/*
@@ -1362,7 +1362,7 @@ convert_ANY_sublink_to_join(PlannerInfo *root, SubLink *sublink,
 	pstate = make_parsestate(NULL);
 
 	/*
-	 * Okay, pull up the sub-select into upper range table.
+	 * Okay, pull up the sub-selext into upper range table.
 	 *
 	 * We rely here on the assumption that the outer query has no references
 	 * to the inner (necessarily true, other than the Vars that we build
@@ -1370,7 +1370,7 @@ convert_ANY_sublink_to_join(PlannerInfo *root, SubLink *sublink,
 	 * to go through.
 	 */
 	rte = addRangeTableEntryForSubquery(pstate,
-										subselect,
+										subselext,
 										makeAlias("ANY_subquery", NIL),
 										false,
 										false);
@@ -1378,16 +1378,16 @@ convert_ANY_sublink_to_join(PlannerInfo *root, SubLink *sublink,
 	rtindex = list_length(parse->rtable);
 
 	/*
-	 * Form a RangeTblRef for the pulled-up sub-select.
+	 * Form a RangeTblRef for the pulled-up sub-selext.
 	 */
 	rtr = makeNode(RangeTblRef);
 	rtr->rtindex = rtindex;
 
 	/*
-	 * Build a list of Vars representing the subselect outputs.
+	 * Build a list of Vars representing the subselext outputs.
 	 */
 	subquery_vars = generate_subquery_vars(root,
-										   subselect->targetList,
+										   subselext->targetList,
 										   rtindex);
 
 	/*
@@ -1424,7 +1424,7 @@ convert_EXISTS_sublink_to_join(PlannerInfo *root, SubLink *sublink,
 {
 	JoinExpr   *result;
 	Query	   *parse = root->parse;
-	Query	   *subselect = (Query *) sublink->subselect;
+	Query	   *subselext = (Query *) sublink->subselext;
 	Node	   *whereClause;
 	int			rtoffset;
 	int			varno;
@@ -1441,14 +1441,14 @@ convert_EXISTS_sublink_to_join(PlannerInfo *root, SubLink *sublink,
 	 * this case, since it just produces a subquery RTE that doesn't have to
 	 * get flattened into the parent query.
 	 */
-	if (subselect->cteList)
+	if (subselext->cteList)
 		return NULL;
 
 	/*
 	 * Copy the subquery so we can modify it safely (see comments in
 	 * make_subplan).
 	 */
-	subselect = copyObject(subselect);
+	subselext = copyObject(subselext);
 
 	/*
 	 * See if the subquery can be simplified based on the knowledge that it's
@@ -1456,13 +1456,13 @@ convert_EXISTS_sublink_to_join(PlannerInfo *root, SubLink *sublink,
 	 * targetlist, we have to fail, because the pullup operation leaves us
 	 * with noplace to evaluate the targetlist.
 	 */
-	if (!simplify_EXISTS_query(root, subselect))
+	if (!simplify_EXISTS_query(root, subselext))
 		return NULL;
 
 	/*
 	 * The subquery must have a nonempty jointree, else we won't have a join.
 	 */
-	if (subselect->jointree->fromlist == NIL)
+	if (subselext->jointree->fromlist == NIL)
 		return NULL;
 
 	/*
@@ -1470,14 +1470,14 @@ convert_EXISTS_sublink_to_join(PlannerInfo *root, SubLink *sublink,
 	 * top-level plain JOIN/ON clauses, but it's probably not worth the
 	 * trouble.)
 	 */
-	whereClause = subselect->jointree->quals;
-	subselect->jointree->quals = NULL;
+	whereClause = subselext->jointree->quals;
+	subselext->jointree->quals = NULL;
 
 	/*
-	 * The rest of the sub-select must not refer to any Vars of the parent
+	 * The rest of the sub-selext must not refer to any Vars of the parent
 	 * query.  (Vars of higher levels should be okay, though.)
 	 */
-	if (contain_vars_of_level((Node *) subselect, 1))
+	if (contain_vars_of_level((Node *) subselext, 1))
 		return NULL;
 
 	/*
@@ -1494,7 +1494,7 @@ convert_EXISTS_sublink_to_join(PlannerInfo *root, SubLink *sublink,
 		return NULL;
 
 	/*
-	 * Prepare to pull up the sub-select into top range table.
+	 * Prepare to pull up the sub-selext into top range table.
 	 *
 	 * We rely here on the assumption that the outer query has no references
 	 * to the inner (necessarily true). Therefore this is a lot easier than
@@ -1509,7 +1509,7 @@ convert_EXISTS_sublink_to_join(PlannerInfo *root, SubLink *sublink,
 	 * merger.
 	 */
 	rtoffset = list_length(parse->rtable);
-	OffsetVarNodes((Node *) subselect, rtoffset, 0);
+	OffsetVarNodes((Node *) subselext, rtoffset, 0);
 	OffsetVarNodes(whereClause, rtoffset, 0);
 
 	/*
@@ -1517,7 +1517,7 @@ convert_EXISTS_sublink_to_join(PlannerInfo *root, SubLink *sublink,
 	 * parent than before; in particular, anything that had been level 1
 	 * becomes level zero.
 	 */
-	IncrementVarSublevelsUp((Node *) subselect, -1, 1);
+	IncrementVarSublevelsUp((Node *) subselext, -1, 1);
 	IncrementVarSublevelsUp(whereClause, -1, 1);
 
 	/*
@@ -1544,7 +1544,7 @@ convert_EXISTS_sublink_to_join(PlannerInfo *root, SubLink *sublink,
 		return NULL;
 
 	/* Now we can attach the modified subquery rtable to the parent */
-	parse->rtable = list_concat(parse->rtable, subselect->rtable);
+	parse->rtable = list_concat(parse->rtable, subselext->rtable);
 
 	/*
 	 * And finally, build the JoinExpr node.
@@ -1554,10 +1554,10 @@ convert_EXISTS_sublink_to_join(PlannerInfo *root, SubLink *sublink,
 	result->isNatural = false;
 	result->larg = NULL;		/* caller must fill this in */
 	/* flatten out the FromExpr node if it's useless */
-	if (list_length(subselect->jointree->fromlist) == 1)
-		result->rarg = (Node *) linitial(subselect->jointree->fromlist);
+	if (list_length(subselext->jointree->fromlist) == 1)
+		result->rarg = (Node *) linitial(subselext->jointree->fromlist);
 	else
-		result->rarg = (Node *) subselect->jointree;
+		result->rarg = (Node *) subselext->jointree;
 	result->usingClause = NIL;
 	result->quals = whereClause;
 	result->alias = NULL;
@@ -1659,11 +1659,11 @@ simplify_EXISTS_query(PlannerInfo *root, Query *query)
 /*
  * convert_EXISTS_to_ANY: try to convert EXISTS to a hashable ANY sublink
  *
- * The subselect is expected to be a fresh copy that we can munge up,
+ * The subselext is expected to be a fresh copy that we can munge up,
  * and to have been successfully passed through simplify_EXISTS_query.
  *
- * On success, the modified subselect is returned, and we store a suitable
- * upper-level test expression at *testexpr, plus a list of the subselect's
+ * On success, the modified subselext is returned, and we store a suitable
+ * upper-level test expression at *testexpr, plus a list of the subselext's
  * output Params at *paramIds.  (The test expression is already Param-ified
  * and hence need not go through convert_testexpr, which is why we have to
  * deal with the Param IDs specially.)
@@ -1671,7 +1671,7 @@ simplify_EXISTS_query(PlannerInfo *root, Query *query)
  * On failure, returns NULL.
  */
 static Query *
-convert_EXISTS_to_ANY(PlannerInfo *root, Query *subselect,
+convert_EXISTS_to_ANY(PlannerInfo *root, Query *subselext,
 					  Node **testexpr, List **paramIds)
 {
 	Node	   *whereClause;
@@ -1693,25 +1693,25 @@ convert_EXISTS_to_ANY(PlannerInfo *root, Query *subselect,
 	 * Query must not require a targetlist, since we have to insert a new one.
 	 * Caller should have dealt with the case already.
 	 */
-	Assert(subselect->targetList == NIL);
+	Assert(subselext->targetList == NIL);
 
 	/*
 	 * Separate out the WHERE clause.  (We could theoretically also remove
 	 * top-level plain JOIN/ON clauses, but it's probably not worth the
 	 * trouble.)
 	 */
-	whereClause = subselect->jointree->quals;
-	subselect->jointree->quals = NULL;
+	whereClause = subselext->jointree->quals;
+	subselext->jointree->quals = NULL;
 
 	/*
-	 * The rest of the sub-select must not refer to any Vars of the parent
+	 * The rest of the sub-selext must not refer to any Vars of the parent
 	 * query.  (Vars of higher levels should be okay, though.)
 	 *
 	 * Note: we need not check for Aggrefs separately because we know the
-	 * sub-select is as yet unoptimized; any uplevel Aggref must therefore
+	 * sub-selext is as yet unoptimized; any uplevel Aggref must therefore
 	 * contain an uplevel Var reference.  This is not the case below ...
 	 */
-	if (contain_vars_of_level((Node *) subselect, 1))
+	if (contain_vars_of_level((Node *) subselext, 1))
 		return NULL;
 
 	/*
@@ -1842,7 +1842,7 @@ convert_EXISTS_to_ANY(PlannerInfo *root, Query *subselect,
 	 * Put back any child-level-only WHERE clauses.
 	 */
 	if (newWhere)
-		subselect->jointree->quals = (Node *) make_ands_explicit(newWhere);
+		subselext->jointree->quals = (Node *) make_ands_explicit(newWhere);
 
 	/*
 	 * Build a new targetlist for the child that emits the expressions we
@@ -1880,11 +1880,11 @@ convert_EXISTS_to_ANY(PlannerInfo *root, Query *subselect,
 	}
 
 	/* Put everything where it should go, and we're done */
-	subselect->targetList = tlist;
+	subselext->targetList = tlist;
 	*testexpr = (Node *) make_ands_explicit(testlist);
 	*paramIds = paramids;
 
-	return subselect;
+	return subselext;
 }
 
 
@@ -1992,7 +1992,7 @@ process_sublinks_mutator(Node *node, process_sublinks_context *context)
 		 * Now build the SubPlan node and make the expr to return.
 		 */
 		return make_subplan(context->root,
-							(Query *) sublink->subselect,
+							(Query *) sublink->subselext,
 							sublink->subLinkType,
 							sublink->subLinkId,
 							testexpr,
@@ -2156,14 +2156,14 @@ SS_identify_outer_params(PlannerInfo *root)
  * SS_charge_for_initplans - account for initplans in Path costs & parallelism
  *
  * If any initPlans have been created in the current query level, they will
- * get attached to the Plan tree created from whichever Path we select from
+ * get attached to the Plan tree created from whichever Path we selext from
  * the given rel.  Increment all that rel's Paths' costs to account for them,
  * and make sure the paths get marked as parallel-unsafe, since we can't
  * currently transmit initPlans to parallel workers.
  *
  * This is separate from SS_attach_initplans because we might conditionally
  * create more initPlans during create_plan(), depending on which Path we
- * select.  However, Paths that would generate such initPlans are expected
+ * selext.  However, Paths that would generate such initPlans are expected
  * to have included their cost already.
  */
 void

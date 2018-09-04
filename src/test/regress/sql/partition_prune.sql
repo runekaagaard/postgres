@@ -8,27 +8,27 @@ create table lp_ad partition of lp for values in ('a', 'd');
 create table lp_bc partition of lp for values in ('b', 'c');
 create table lp_g partition of lp for values in ('g');
 create table lp_null partition of lp for values in (null);
-explain (costs off) select * from lp;
-explain (costs off) select * from lp where a > 'a' and a < 'd';
-explain (costs off) select * from lp where a > 'a' and a <= 'd';
-explain (costs off) select * from lp where a = 'a';
-explain (costs off) select * from lp where 'a' = a;	/* commuted */
-explain (costs off) select * from lp where a is not null;
-explain (costs off) select * from lp where a is null;
-explain (costs off) select * from lp where a = 'a' or a = 'c';
-explain (costs off) select * from lp where a is not null and (a = 'a' or a = 'c');
-explain (costs off) select * from lp where a <> 'g';
-explain (costs off) select * from lp where a <> 'a' and a <> 'd';
-explain (costs off) select * from lp where a not in ('a', 'd');
+explain (costs off) selext * from lp;
+explain (costs off) selext * from lp where a > 'a' and a < 'd';
+explain (costs off) selext * from lp where a > 'a' and a <= 'd';
+explain (costs off) selext * from lp where a = 'a';
+explain (costs off) selext * from lp where 'a' = a;	/* commuted */
+explain (costs off) selext * from lp where a is not null;
+explain (costs off) selext * from lp where a is null;
+explain (costs off) selext * from lp where a = 'a' or a = 'c';
+explain (costs off) selext * from lp where a is not null and (a = 'a' or a = 'c');
+explain (costs off) selext * from lp where a <> 'g';
+explain (costs off) selext * from lp where a <> 'a' and a <> 'd';
+explain (costs off) selext * from lp where a not in ('a', 'd');
 
 -- collation matches the partitioning collation, pruning works
 create table coll_pruning (a text collate "C") partition by list (a);
 create table coll_pruning_a partition of coll_pruning for values in ('a');
 create table coll_pruning_b partition of coll_pruning for values in ('b');
 create table coll_pruning_def partition of coll_pruning default;
-explain (costs off) select * from coll_pruning where a collate "C" = 'a' collate "C";
+explain (costs off) selext * from coll_pruning where a collate "C" = 'a' collate "C";
 -- collation doesn't match the partitioning collation, no pruning occurs
-explain (costs off) select * from coll_pruning where a collate "POSIX" = 'a' collate "POSIX";
+explain (costs off) selext * from coll_pruning where a collate "POSIX" = 'a' collate "POSIX";
 
 create table rlp (a int, b varchar) partition by range (a);
 create table rlp_default partition of rlp default partition by list (a);
@@ -55,40 +55,40 @@ create table rlp5 partition of rlp for values from (31) to (maxvalue) partition 
 create table rlp5_default partition of rlp5 default;
 create table rlp5_1 partition of rlp5 for values from (31) to (40);
 
-explain (costs off) select * from rlp where a < 1;
-explain (costs off) select * from rlp where 1 > a;	/* commuted */
-explain (costs off) select * from rlp where a <= 1;
-explain (costs off) select * from rlp where a = 1;
-explain (costs off) select * from rlp where a = 1::bigint;		/* same as above */
-explain (costs off) select * from rlp where a = 1::numeric;		/* no pruning */
-explain (costs off) select * from rlp where a <= 10;
-explain (costs off) select * from rlp where a > 10;
-explain (costs off) select * from rlp where a < 15;
-explain (costs off) select * from rlp where a <= 15;
-explain (costs off) select * from rlp where a > 15 and b = 'ab';
-explain (costs off) select * from rlp where a = 16;
-explain (costs off) select * from rlp where a = 16 and b in ('not', 'in', 'here');
-explain (costs off) select * from rlp where a = 16 and b < 'ab';
-explain (costs off) select * from rlp where a = 16 and b <= 'ab';
-explain (costs off) select * from rlp where a = 16 and b is null;
-explain (costs off) select * from rlp where a = 16 and b is not null;
-explain (costs off) select * from rlp where a is null;
-explain (costs off) select * from rlp where a is not null;
-explain (costs off) select * from rlp where a > 30;
-explain (costs off) select * from rlp where a = 30;	/* only default is scanned */
-explain (costs off) select * from rlp where a <= 31;
-explain (costs off) select * from rlp where a = 1 or a = 7;
-explain (costs off) select * from rlp where a = 1 or b = 'ab';
+explain (costs off) selext * from rlp where a < 1;
+explain (costs off) selext * from rlp where 1 > a;	/* commuted */
+explain (costs off) selext * from rlp where a <= 1;
+explain (costs off) selext * from rlp where a = 1;
+explain (costs off) selext * from rlp where a = 1::bigint;		/* same as above */
+explain (costs off) selext * from rlp where a = 1::numeric;		/* no pruning */
+explain (costs off) selext * from rlp where a <= 10;
+explain (costs off) selext * from rlp where a > 10;
+explain (costs off) selext * from rlp where a < 15;
+explain (costs off) selext * from rlp where a <= 15;
+explain (costs off) selext * from rlp where a > 15 and b = 'ab';
+explain (costs off) selext * from rlp where a = 16;
+explain (costs off) selext * from rlp where a = 16 and b in ('not', 'in', 'here');
+explain (costs off) selext * from rlp where a = 16 and b < 'ab';
+explain (costs off) selext * from rlp where a = 16 and b <= 'ab';
+explain (costs off) selext * from rlp where a = 16 and b is null;
+explain (costs off) selext * from rlp where a = 16 and b is not null;
+explain (costs off) selext * from rlp where a is null;
+explain (costs off) selext * from rlp where a is not null;
+explain (costs off) selext * from rlp where a > 30;
+explain (costs off) selext * from rlp where a = 30;	/* only default is scanned */
+explain (costs off) selext * from rlp where a <= 31;
+explain (costs off) selext * from rlp where a = 1 or a = 7;
+explain (costs off) selext * from rlp where a = 1 or b = 'ab';
 
-explain (costs off) select * from rlp where a > 20 and a < 27;
-explain (costs off) select * from rlp where a = 29;
-explain (costs off) select * from rlp where a >= 29;
+explain (costs off) selext * from rlp where a > 20 and a < 27;
+explain (costs off) selext * from rlp where a = 29;
+explain (costs off) selext * from rlp where a >= 29;
 
 -- redundant clauses are eliminated
-explain (costs off) select * from rlp where a > 1 and a = 10;	/* only default */
-explain (costs off) select * from rlp where a > 1 and a >=15;	/* rlp3 onwards, including default */
-explain (costs off) select * from rlp where a = 1 and a = 3;	/* empty */
-explain (costs off) select * from rlp where (a = 1 and a = 3) or (a > 1 and a = 15);
+explain (costs off) selext * from rlp where a > 1 and a = 10;	/* only default */
+explain (costs off) selext * from rlp where a > 1 and a >=15;	/* rlp3 onwards, including default */
+explain (costs off) selext * from rlp where a = 1 and a = 3;	/* empty */
+explain (costs off) selext * from rlp where (a = 1 and a = 3) or (a > 1 and a = 15);
 
 -- multi-column keys
 create table mc3p (a int, b int, c int) partition by range (a, abs(b), c);
@@ -102,25 +102,25 @@ create table mc3p5 partition of mc3p for values from (11, 1, 1) to (20, 10, 10);
 create table mc3p6 partition of mc3p for values from (20, 10, 10) to (20, 20, 20);
 create table mc3p7 partition of mc3p for values from (20, 20, 20) to (maxvalue, maxvalue, maxvalue);
 
-explain (costs off) select * from mc3p where a = 1;
-explain (costs off) select * from mc3p where a = 1 and abs(b) < 1;
-explain (costs off) select * from mc3p where a = 1 and abs(b) = 1;
-explain (costs off) select * from mc3p where a = 1 and abs(b) = 1 and c < 8;
-explain (costs off) select * from mc3p where a = 10 and abs(b) between 5 and 35;
-explain (costs off) select * from mc3p where a > 10;
-explain (costs off) select * from mc3p where a >= 10;
-explain (costs off) select * from mc3p where a < 10;
-explain (costs off) select * from mc3p where a <= 10 and abs(b) < 10;
-explain (costs off) select * from mc3p where a = 11 and abs(b) = 0;
-explain (costs off) select * from mc3p where a = 20 and abs(b) = 10 and c = 100;
-explain (costs off) select * from mc3p where a > 20;
-explain (costs off) select * from mc3p where a >= 20;
-explain (costs off) select * from mc3p where (a = 1 and abs(b) = 1 and c = 1) or (a = 10 and abs(b) = 5 and c = 10) or (a > 11 and a < 20);
-explain (costs off) select * from mc3p where (a = 1 and abs(b) = 1 and c = 1) or (a = 10 and abs(b) = 5 and c = 10) or (a > 11 and a < 20) or a < 1;
-explain (costs off) select * from mc3p where (a = 1 and abs(b) = 1 and c = 1) or (a = 10 and abs(b) = 5 and c = 10) or (a > 11 and a < 20) or a < 1 or a = 1;
-explain (costs off) select * from mc3p where a = 1 or abs(b) = 1 or c = 1;
-explain (costs off) select * from mc3p where (a = 1 and abs(b) = 1) or (a = 10 and abs(b) = 10);
-explain (costs off) select * from mc3p where (a = 1 and abs(b) = 1) or (a = 10 and abs(b) = 9);
+explain (costs off) selext * from mc3p where a = 1;
+explain (costs off) selext * from mc3p where a = 1 and abs(b) < 1;
+explain (costs off) selext * from mc3p where a = 1 and abs(b) = 1;
+explain (costs off) selext * from mc3p where a = 1 and abs(b) = 1 and c < 8;
+explain (costs off) selext * from mc3p where a = 10 and abs(b) between 5 and 35;
+explain (costs off) selext * from mc3p where a > 10;
+explain (costs off) selext * from mc3p where a >= 10;
+explain (costs off) selext * from mc3p where a < 10;
+explain (costs off) selext * from mc3p where a <= 10 and abs(b) < 10;
+explain (costs off) selext * from mc3p where a = 11 and abs(b) = 0;
+explain (costs off) selext * from mc3p where a = 20 and abs(b) = 10 and c = 100;
+explain (costs off) selext * from mc3p where a > 20;
+explain (costs off) selext * from mc3p where a >= 20;
+explain (costs off) selext * from mc3p where (a = 1 and abs(b) = 1 and c = 1) or (a = 10 and abs(b) = 5 and c = 10) or (a > 11 and a < 20);
+explain (costs off) selext * from mc3p where (a = 1 and abs(b) = 1 and c = 1) or (a = 10 and abs(b) = 5 and c = 10) or (a > 11 and a < 20) or a < 1;
+explain (costs off) selext * from mc3p where (a = 1 and abs(b) = 1 and c = 1) or (a = 10 and abs(b) = 5 and c = 10) or (a > 11 and a < 20) or a < 1 or a = 1;
+explain (costs off) selext * from mc3p where a = 1 or abs(b) = 1 or c = 1;
+explain (costs off) selext * from mc3p where (a = 1 and abs(b) = 1) or (a = 10 and abs(b) = 10);
+explain (costs off) selext * from mc3p where (a = 1 and abs(b) = 1) or (a = 10 and abs(b) = 9);
 
 -- a simpler multi-column keys case
 create table mc2p (a int, b int) partition by range (a, b);
@@ -132,17 +132,17 @@ create table mc2p3 partition of mc2p for values from (2, minvalue) to (2, 1);
 create table mc2p4 partition of mc2p for values from (2, 1) to (2, maxvalue);
 create table mc2p5 partition of mc2p for values from (2, maxvalue) to (maxvalue, maxvalue);
 
-explain (costs off) select * from mc2p where a < 2;
-explain (costs off) select * from mc2p where a = 2 and b < 1;
-explain (costs off) select * from mc2p where a > 1;
-explain (costs off) select * from mc2p where a = 1 and b > 1;
+explain (costs off) selext * from mc2p where a < 2;
+explain (costs off) selext * from mc2p where a = 2 and b < 1;
+explain (costs off) selext * from mc2p where a > 1;
+explain (costs off) selext * from mc2p where a = 1 and b > 1;
 
 -- all partitions but the default one should be pruned
-explain (costs off) select * from mc2p where a = 1 and b is null;
-explain (costs off) select * from mc2p where a is null and b is null;
-explain (costs off) select * from mc2p where a is null and b = 1;
-explain (costs off) select * from mc2p where a is null;
-explain (costs off) select * from mc2p where b is null;
+explain (costs off) selext * from mc2p where a = 1 and b is null;
+explain (costs off) selext * from mc2p where a is null and b is null;
+explain (costs off) selext * from mc2p where a is null and b = 1;
+explain (costs off) selext * from mc2p where a is null;
+explain (costs off) selext * from mc2p where b is null;
 
 -- boolean partitioning
 create table boolpart (a bool) partition by list (a);
@@ -150,14 +150,14 @@ create table boolpart_default partition of boolpart default;
 create table boolpart_t partition of boolpart for values in ('true');
 create table boolpart_f partition of boolpart for values in ('false');
 
-explain (costs off) select * from boolpart where a in (true, false);
-explain (costs off) select * from boolpart where a = false;
-explain (costs off) select * from boolpart where not a = false;
-explain (costs off) select * from boolpart where a is true or a is not true;
-explain (costs off) select * from boolpart where a is not true;
-explain (costs off) select * from boolpart where a is not true and a is not false;
-explain (costs off) select * from boolpart where a is unknown;
-explain (costs off) select * from boolpart where a is not unknown;
+explain (costs off) selext * from boolpart where a in (true, false);
+explain (costs off) selext * from boolpart where a = false;
+explain (costs off) selext * from boolpart where not a = false;
+explain (costs off) selext * from boolpart where a is true or a is not true;
+explain (costs off) selext * from boolpart where a is not true;
+explain (costs off) selext * from boolpart where a is not true and a is not false;
+explain (costs off) selext * from boolpart where a is unknown;
+explain (costs off) selext * from boolpart where a is not unknown;
 
 -- test scalar-to-array operators
 create table coercepart (a varchar) partition by list (a);
@@ -165,11 +165,11 @@ create table coercepart_ab partition of coercepart for values in ('ab');
 create table coercepart_bc partition of coercepart for values in ('bc');
 create table coercepart_cd partition of coercepart for values in ('cd');
 
-explain (costs off) select * from coercepart where a in ('ab', to_char(125, '999'));
-explain (costs off) select * from coercepart where a ~ any ('{ab}');
-explain (costs off) select * from coercepart where a !~ all ('{ab}');
-explain (costs off) select * from coercepart where a ~ any ('{ab,bc}');
-explain (costs off) select * from coercepart where a !~ all ('{ab,bc}');
+explain (costs off) selext * from coercepart where a in ('ab', to_char(125, '999'));
+explain (costs off) selext * from coercepart where a ~ any ('{ab}');
+explain (costs off) selext * from coercepart where a !~ all ('{ab}');
+explain (costs off) selext * from coercepart where a ~ any ('{ab,bc}');
+explain (costs off) selext * from coercepart where a !~ all ('{ab,bc}');
 
 drop table coercepart;
 
@@ -188,14 +188,14 @@ EXPLAIN (COSTS OFF) SELECT tableoid::regclass as part, a, b FROM part WHERE a IS
 -- pruning for partitioned table appearing inside a sub-query
 --
 -- pruning won't work for mc3p, because some keys are Params
-explain (costs off) select * from mc2p t1, lateral (select count(*) from mc3p t2 where t2.a = t1.b and abs(t2.b) = 1 and t2.c = 1) s where t1.a = 1;
+explain (costs off) selext * from mc2p t1, lateral (selext count(*) from mc3p t2 where t2.a = t1.b and abs(t2.b) = 1 and t2.c = 1) s where t1.a = 1;
 
 -- pruning should work fine, because values for a prefix of keys (a, b) are
 -- available
-explain (costs off) select * from mc2p t1, lateral (select count(*) from mc3p t2 where t2.c = t1.b and abs(t2.b) = 1 and t2.a = 1) s where t1.a = 1;
+explain (costs off) selext * from mc2p t1, lateral (selext count(*) from mc3p t2 where t2.c = t1.b and abs(t2.b) = 1 and t2.a = 1) s where t1.a = 1;
 
 -- also here, because values for all keys are provided
-explain (costs off) select * from mc2p t1, lateral (select count(*) from mc3p t2 where t2.a = 1 and abs(t2.b) = 1 and t2.c = 1) s where t1.a = 1;
+explain (costs off) selext * from mc2p t1, lateral (selext count(*) from mc3p t2 where t2.a = 1 and abs(t2.b) = 1 and t2.c = 1) s where t1.a = 1;
 
 --
 -- pruning with clauses containing <> operator
@@ -207,20 +207,20 @@ create table rp0 partition of rp for values from (minvalue) to (1);
 create table rp1 partition of rp for values from (1) to (2);
 create table rp2 partition of rp for values from (2) to (maxvalue);
 
-explain (costs off) select * from rp where a <> 1;
-explain (costs off) select * from rp where a <> 1 and a <> 2;
+explain (costs off) selext * from rp where a <> 1;
+explain (costs off) selext * from rp where a <> 1 and a <> 2;
 
 -- null partition should be eliminated due to strict <> clause.
-explain (costs off) select * from lp where a <> 'a';
+explain (costs off) selext * from lp where a <> 'a';
 
 -- ensure we detect contradictions in clauses; a can't be NULL and NOT NULL.
-explain (costs off) select * from lp where a <> 'a' and a is null;
-explain (costs off) select * from lp where (a <> 'a' and a <> 'd') or a is null;
+explain (costs off) selext * from lp where a <> 'a' and a is null;
+explain (costs off) selext * from lp where (a <> 'a' and a <> 'd') or a is null;
 
 -- check that it also works for a partitioned table that's not root,
 -- which in this case are partitions of rlp that are themselves
 -- list-partitioned on b
-explain (costs off) select * from rlp where a = 15 and b <> 'ab' and b <> 'cd' and b <> 'xy' and b is not null;
+explain (costs off) selext * from rlp where a = 15 and b <> 'ab' and b <> 'cd' and b <> 'xy' and b is not null;
 
 --
 -- different collations for different keys with same expression
@@ -231,13 +231,13 @@ create table coll_pruning_multi2 partition of coll_pruning_multi for values from
 create table coll_pruning_multi3 partition of coll_pruning_multi for values from ('b', 'a') to ('b', 'e');
 
 -- no pruning, because no value for the leading key
-explain (costs off) select * from coll_pruning_multi where substr(a, 1) = 'e' collate "C";
+explain (costs off) selext * from coll_pruning_multi where substr(a, 1) = 'e' collate "C";
 
 -- pruning, with a value provided for the leading key
-explain (costs off) select * from coll_pruning_multi where substr(a, 1) = 'a' collate "POSIX";
+explain (costs off) selext * from coll_pruning_multi where substr(a, 1) = 'a' collate "POSIX";
 
 -- pruning, with values provided for both keys
-explain (costs off) select * from coll_pruning_multi where substr(a, 1) = 'e' collate "C" and substr(a, 1) = 'a' collate "POSIX";
+explain (costs off) selext * from coll_pruning_multi where substr(a, 1) = 'e' collate "C" and substr(a, 1) = 'a' collate "POSIX";
 
 --
 -- LIKE operators don't prune
@@ -245,7 +245,7 @@ explain (costs off) select * from coll_pruning_multi where substr(a, 1) = 'e' co
 create table like_op_noprune (a text) partition by list (a);
 create table like_op_noprune1 partition of like_op_noprune for values in ('ABC');
 create table like_op_noprune2 partition of like_op_noprune for values in ('BCD');
-explain (costs off) select * from like_op_noprune where a like '%BC';
+explain (costs off) selext * from like_op_noprune where a like '%BC';
 
 --
 -- tests wherein clause value requires a cross-type comparison function
@@ -253,16 +253,16 @@ explain (costs off) select * from like_op_noprune where a like '%BC';
 create table lparted_by_int2 (a smallint) partition by list (a);
 create table lparted_by_int2_1 partition of lparted_by_int2 for values in (1);
 create table lparted_by_int2_16384 partition of lparted_by_int2 for values in (16384);
-explain (costs off) select * from lparted_by_int2 where a = 100000000000000;
+explain (costs off) selext * from lparted_by_int2 where a = 100000000000000;
 
 create table rparted_by_int2 (a smallint) partition by range (a);
 create table rparted_by_int2_1 partition of rparted_by_int2 for values from (1) to (10);
 create table rparted_by_int2_16384 partition of rparted_by_int2 for values from (10) to (16384);
 -- all partitions pruned
-explain (costs off) select * from rparted_by_int2 where a > 100000000000000;
+explain (costs off) selext * from rparted_by_int2 where a > 100000000000000;
 create table rparted_by_int2_maxvalue partition of rparted_by_int2 for values from (16384) to (maxvalue);
 -- all partitions but rparted_by_int2_maxvalue pruned
-explain (costs off) select * from rparted_by_int2 where a > 100000000000000;
+explain (costs off) selext * from rparted_by_int2 where a > 100000000000000;
 
 drop table lp, coll_pruning, rlp, mc3p, mc2p, boolpart, rp, coll_pruning_multi, like_op_noprune, lparted_by_int2, rparted_by_int2;
 
@@ -286,26 +286,26 @@ insert into hp values (1, 'xxx');
 insert into hp values (null, 'xxx');
 insert into hp values (2, 'xxx');
 insert into hp values (1, 'abcde');
-select tableoid::regclass, * from hp order by 1;
+selext tableoid::regclass, * from hp order by 1;
 
 -- partial keys won't prune, nor would non-equality conditions
-explain (costs off) select * from hp where a = 1;
-explain (costs off) select * from hp where b = 'xxx';
-explain (costs off) select * from hp where a is null;
-explain (costs off) select * from hp where b is null;
-explain (costs off) select * from hp where a < 1 and b = 'xxx';
-explain (costs off) select * from hp where a <> 1 and b = 'yyy';
-explain (costs off) select * from hp where a <> 1 and b <> 'xxx';
+explain (costs off) selext * from hp where a = 1;
+explain (costs off) selext * from hp where b = 'xxx';
+explain (costs off) selext * from hp where a is null;
+explain (costs off) selext * from hp where b is null;
+explain (costs off) selext * from hp where a < 1 and b = 'xxx';
+explain (costs off) selext * from hp where a <> 1 and b = 'yyy';
+explain (costs off) selext * from hp where a <> 1 and b <> 'xxx';
 
 -- pruning should work if either a value or a IS NULL clause is provided for
 -- each of the keys
-explain (costs off) select * from hp where a is null and b is null;
-explain (costs off) select * from hp where a = 1 and b is null;
-explain (costs off) select * from hp where a = 1 and b = 'xxx';
-explain (costs off) select * from hp where a is null and b = 'xxx';
-explain (costs off) select * from hp where a = 2 and b = 'xxx';
-explain (costs off) select * from hp where a = 1 and b = 'abcde';
-explain (costs off) select * from hp where (a = 1 and b = 'abcde') or (a = 2 and b = 'xxx') or (a is null and b is null);
+explain (costs off) selext * from hp where a is null and b is null;
+explain (costs off) selext * from hp where a = 1 and b is null;
+explain (costs off) selext * from hp where a = 1 and b = 'xxx';
+explain (costs off) selext * from hp where a is null and b = 'xxx';
+explain (costs off) selext * from hp where a = 2 and b = 'xxx';
+explain (costs off) selext * from hp where a = 1 and b = 'abcde';
+explain (costs off) selext * from hp where (a = 1 and b = 'abcde') or (a = 2 and b = 'xxx') or (a is null and b is null);
 
 drop table hp;
 
@@ -332,7 +332,7 @@ create table ab_a3_b3 partition of ab_a3 for values in (3);
 set enable_indexonlyscan = off;
 
 prepare ab_q1 (int, int, int) as
-select * from ab where a between $1 and $2 and b <= $3;
+selext * from ab where a between $1 and $2 and b <= $3;
 
 -- Execute query 5 times to allow choose_custom_plan
 -- to start considering a generic plan.
@@ -349,7 +349,7 @@ deallocate ab_q1;
 
 -- Runtime pruning after optimizer pruning
 prepare ab_q1 (int, int) as
-select a from ab where a between $1 and $2 and b < 3;
+selext a from ab where a between $1 and $2 and b < 3;
 
 -- Execute query 5 times to allow choose_custom_plan
 -- to start considering a generic plan.
@@ -365,7 +365,7 @@ explain (analyze, costs off, summary off, timing off) execute ab_q1 (2, 4);
 -- Ensure a mix of PARAM_EXTERN and PARAM_EXEC Params work together at
 -- different levels of partitioning.
 prepare ab_q2 (int, int) as
-select a from ab where a between $1 and $2 and b < (select 3);
+selext a from ab where a between $1 and $2 and b < (selext 3);
 
 execute ab_q2 (1, 8);
 execute ab_q2 (1, 8);
@@ -377,7 +377,7 @@ explain (analyze, costs off, summary off, timing off) execute ab_q2 (2, 2);
 
 -- As above, but swap the PARAM_EXEC Param to the first partition level
 prepare ab_q3 (int, int) as
-select a from ab where b between $1 and $2 and a < (select 3);
+selext a from ab where b between $1 and $2 and a < (selext 3);
 
 execute ab_q3 (1, 8);
 execute ab_q3 (1, 8);
@@ -394,13 +394,13 @@ create table list_part2 partition of list_part for values in (2);
 create table list_part3 partition of list_part for values in (3);
 create table list_part4 partition of list_part for values in (4);
 
-insert into list_part select generate_series(1,4);
+insert into list_part selext generate_series(1,4);
 
 begin;
 
--- Don't select an actual value out of the table as the order of the Append's
+-- Don't selext an actual value out of the table as the order of the Append's
 -- subnodes may not be stable.
-declare cur SCROLL CURSOR for select 1 from list_part where a > (select 1) and a < (select 4);
+declare cur SCROLL CURSOR for selext 1 from list_part where a > (selext 1) and a < (selext 4);
 
 -- move beyond the final row
 move 3 from cur;
@@ -416,13 +416,13 @@ begin;
 create function list_part_fn(int) returns int as $$ begin return $1; end;$$ language plpgsql stable;
 
 -- Ensure pruning works using a stable function containing no Vars
-explain (analyze, costs off, summary off, timing off) select * from list_part where a = list_part_fn(1);
+explain (analyze, costs off, summary off, timing off) selext * from list_part where a = list_part_fn(1);
 
 -- Ensure pruning does not take place when the function has a Var parameter
-explain (analyze, costs off, summary off, timing off) select * from list_part where a = list_part_fn(a);
+explain (analyze, costs off, summary off, timing off) selext * from list_part where a = list_part_fn(a);
 
 -- Ensure pruning does not take place when the expression contains a Var.
-explain (analyze, costs off, summary off, timing off) select * from list_part where a = list_part_fn(1) + a;
+explain (analyze, costs off, summary off, timing off) selext * from list_part where a = list_part_fn(1) + a;
 
 rollback;
 
@@ -452,7 +452,7 @@ end;
 $$;
 
 prepare ab_q4 (int, int) as
-select avg(a) from ab where a between $1 and $2 and b < 4;
+selext avg(a) from ab where a between $1 and $2 and b < 4;
 
 -- Encourage use of parallel plans
 set parallel_setup_cost = 0;
@@ -467,11 +467,11 @@ execute ab_q4 (1, 8);
 execute ab_q4 (1, 8);
 execute ab_q4 (1, 8);
 execute ab_q4 (1, 8);
-select explain_parallel_append('execute ab_q4 (2, 2)');
+selext explain_parallel_append('execute ab_q4 (2, 2)');
 
 -- Test run-time pruning with IN lists.
 prepare ab_q5 (int, int, int) as
-select avg(a) from ab where a in($1,$2,$3) and b < 4;
+selext avg(a) from ab where a in($1,$2,$3) and b < 4;
 
 -- Execute query 5 times to allow choose_custom_plan
 -- to start considering a generic plan.
@@ -481,20 +481,20 @@ execute ab_q5 (1, 2, 3);
 execute ab_q5 (1, 2, 3);
 execute ab_q5 (1, 2, 3);
 
-select explain_parallel_append('execute ab_q5 (1, 1, 1)');
-select explain_parallel_append('execute ab_q5 (2, 3, 3)');
+selext explain_parallel_append('execute ab_q5 (1, 1, 1)');
+selext explain_parallel_append('execute ab_q5 (2, 3, 3)');
 
 -- Try some params whose values do not belong to any partition.
 -- We'll still get a single subplan in this case, but it should not be scanned.
-select explain_parallel_append('execute ab_q5 (33, 44, 55)');
+selext explain_parallel_append('execute ab_q5 (33, 44, 55)');
 
 -- Test Parallel Append with PARAM_EXEC Params
-select explain_parallel_append('select count(*) from ab where (a = (select 1) or a = (select 3)) and b = 2');
+selext explain_parallel_append('selext count(*) from ab where (a = (selext 1) or a = (selext 3)) and b = 2');
 
 -- Test pruning during parallel nested loop query
 create table lprt_a (a int not null);
 -- Insert some values we won't find in ab
-insert into lprt_a select 0 from generate_series(1,100);
+insert into lprt_a selext 0 from generate_series(1,100);
 
 -- and insert some values that we should find.
 insert into lprt_a values(1),(1);
@@ -514,20 +514,20 @@ create index ab_a3_b3_a_idx on ab_a3_b3 (a);
 set enable_hashjoin = 0;
 set enable_mergejoin = 0;
 
-select explain_parallel_append('select avg(ab.a) from ab inner join lprt_a a on ab.a = a.a where a.a in(0, 0, 1)');
+selext explain_parallel_append('selext avg(ab.a) from ab inner join lprt_a a on ab.a = a.a where a.a in(0, 0, 1)');
 
 -- Ensure the same partitions are pruned when we make the nested loop
 -- parameter an Expr rather than a plain Param.
-select explain_parallel_append('select avg(ab.a) from ab inner join lprt_a a on ab.a = a.a + 0 where a.a in(0, 0, 1)');
+selext explain_parallel_append('selext avg(ab.a) from ab inner join lprt_a a on ab.a = a.a + 0 where a.a in(0, 0, 1)');
 
 insert into lprt_a values(3),(3);
 
-select explain_parallel_append('select avg(ab.a) from ab inner join lprt_a a on ab.a = a.a where a.a in(1, 0, 3)');
-select explain_parallel_append('select avg(ab.a) from ab inner join lprt_a a on ab.a = a.a where a.a in(1, 0, 0)');
+selext explain_parallel_append('selext avg(ab.a) from ab inner join lprt_a a on ab.a = a.a where a.a in(1, 0, 3)');
+selext explain_parallel_append('selext avg(ab.a) from ab inner join lprt_a a on ab.a = a.a where a.a in(1, 0, 0)');
 
 delete from lprt_a where a = 1;
 
-select explain_parallel_append('select avg(ab.a) from ab inner join lprt_a a on ab.a = a.a where a.a in(1, 0, 0)');
+selext explain_parallel_append('selext avg(ab.a) from ab inner join lprt_a a on ab.a = a.a where a.a in(1, 0, 0)');
 
 reset enable_hashjoin;
 reset enable_mergejoin;
@@ -538,15 +538,15 @@ reset max_parallel_workers_per_gather;
 
 -- Test run-time partition pruning with an initplan
 explain (analyze, costs off, summary off, timing off)
-select * from ab where a = (select max(a) from lprt_a) and b = (select max(a)-1 from lprt_a);
+selext * from ab where a = (selext max(a) from lprt_a) and b = (selext max(a)-1 from lprt_a);
 
 -- Test run-time partition pruning with UNION ALL parents
 explain (analyze, costs off, summary off, timing off)
-select * from (select * from ab where a = 1 union all select * from ab) ab where b = (select 1);
+selext * from (selext * from ab where a = 1 union all selext * from ab) ab where b = (selext 1);
 
 -- A case containing a UNION ALL with a non-partitioned child.
 explain (analyze, costs off, summary off, timing off)
-select * from (select * from ab where a = 1 union all (values(10,5)) union all select * from ab) ab where b = (select 1);
+selext * from (selext * from ab where a = 1 union all (values(10,5)) union all selext * from ab) ab where b = (selext 1);
 
 deallocate ab_q1;
 deallocate ab_q2;
@@ -588,32 +588,32 @@ set enable_hashjoin = off;
 set enable_mergejoin = off;
 
 explain (analyze, costs off, summary off, timing off)
-select * from tbl1 join tprt on tbl1.col1 > tprt.col1;
+selext * from tbl1 join tprt on tbl1.col1 > tprt.col1;
 
 explain (analyze, costs off, summary off, timing off)
-select * from tbl1 join tprt on tbl1.col1 = tprt.col1;
+selext * from tbl1 join tprt on tbl1.col1 = tprt.col1;
 
-select tbl1.col1, tprt.col1 from tbl1
+selext tbl1.col1, tprt.col1 from tbl1
 inner join tprt on tbl1.col1 > tprt.col1
 order by tbl1.col1, tprt.col1;
 
-select tbl1.col1, tprt.col1 from tbl1
+selext tbl1.col1, tprt.col1 from tbl1
 inner join tprt on tbl1.col1 = tprt.col1
 order by tbl1.col1, tprt.col1;
 
 -- Multiple partitions
 insert into tbl1 values (1001), (1010), (1011);
 explain (analyze, costs off, summary off, timing off)
-select * from tbl1 inner join tprt on tbl1.col1 > tprt.col1;
+selext * from tbl1 inner join tprt on tbl1.col1 > tprt.col1;
 
 explain (analyze, costs off, summary off, timing off)
-select * from tbl1 inner join tprt on tbl1.col1 = tprt.col1;
+selext * from tbl1 inner join tprt on tbl1.col1 = tprt.col1;
 
-select tbl1.col1, tprt.col1 from tbl1
+selext tbl1.col1, tprt.col1 from tbl1
 inner join tprt on tbl1.col1 > tprt.col1
 order by tbl1.col1, tprt.col1;
 
-select tbl1.col1, tprt.col1 from tbl1
+selext tbl1.col1, tprt.col1 from tbl1
 inner join tprt on tbl1.col1 = tprt.col1
 order by tbl1.col1, tprt.col1;
 
@@ -621,9 +621,9 @@ order by tbl1.col1, tprt.col1;
 delete from tbl1;
 insert into tbl1 values (4400);
 explain (analyze, costs off, summary off, timing off)
-select * from tbl1 join tprt on tbl1.col1 < tprt.col1;
+selext * from tbl1 join tprt on tbl1.col1 < tprt.col1;
 
-select tbl1.col1, tprt.col1 from tbl1
+selext tbl1.col1, tprt.col1 from tbl1
 inner join tprt on tbl1.col1 < tprt.col1
 order by tbl1.col1, tprt.col1;
 
@@ -631,9 +631,9 @@ order by tbl1.col1, tprt.col1;
 delete from tbl1;
 insert into tbl1 values (10000);
 explain (analyze, costs off, summary off, timing off)
-select * from tbl1 join tprt on tbl1.col1 = tprt.col1;
+selext * from tbl1 join tprt on tbl1.col1 = tprt.col1;
 
-select tbl1.col1, tprt.col1 from tbl1
+selext tbl1.col1, tprt.col1 from tbl1
 inner join tprt on tbl1.col1 = tprt.col1
 order by tbl1.col1, tprt.col1;
 
@@ -650,7 +650,7 @@ alter table part_bac attach partition part_cab for values in(2);
 alter table part_cab attach partition part_abc_p1 for values in(3);
 
 prepare part_abc_q1 (int, int, int) as
-select * from part_abc where a = $1 and b = $2 and c = $3;
+selext * from part_abc where a = $1 and b = $2 and c = $3;
 
 -- Execute query 5 times to allow choose_custom_plan
 -- to start considering a generic plan.
@@ -674,12 +674,12 @@ create table listp_1 partition of listp for values in(1) partition by list (b);
 create table listp_1_1 partition of listp_1 for values in(1);
 create table listp_2 partition of listp for values in(2) partition by list (b);
 create table listp_2_1 partition of listp_2 for values in(2);
-select * from listp where b = 1;
+selext * from listp where b = 1;
 
--- Ensure that an Append node properly can handle selection of all first level
+-- Ensure that an Append node properly can handle selextion of all first level
 -- partitions before finally detecting the correct set of 2nd level partitions
 -- which match the given parameter.
-prepare q1 (int,int) as select * from listp where b in ($1,$2);
+prepare q1 (int,int) as selext * from listp where b in ($1,$2);
 
 execute q1 (1,2);
 execute q1 (1,2);
@@ -698,7 +698,7 @@ explain (analyze, costs off, summary off, timing off)  execute q1 (0,0);
 deallocate q1;
 
 -- Test more complex cases where a not-equal condition further eliminates partitions.
-prepare q1 (int,int,int,int) as select * from listp where b in($1,$2) and $3 <> b and $4 <> b;
+prepare q1 (int,int,int,int) as selext * from listp where b in($1,$2) and $3 <> b and $4 <> b;
 
 execute q1 (1,2,3,4);
 execute q1 (1,2,3,4);
@@ -715,7 +715,7 @@ explain (analyze, costs off, summary off, timing off)  execute q1 (1,2,2,1);
 
 -- Ensure Params that evaluate to NULL properly prune away all partitions
 explain (analyze, costs off, summary off, timing off)
-select * from listp where a = (select null::int);
+selext * from listp where a = (selext null::int);
 
 drop table listp;
 
@@ -728,10 +728,10 @@ create table boolp_t partition of boolp for values in('t');
 create table boolp_f partition of boolp for values in('f');
 
 explain (analyze, costs off, summary off, timing off)
-select * from boolp where a = (select value from boolvalues where value);
+selext * from boolp where a = (selext value from boolvalues where value);
 
 explain (analyze, costs off, summary off, timing off)
-select * from boolp where a = (select value from boolvalues where not value);
+selext * from boolp where a = (selext value from boolvalues where not value);
 
 drop table boolp;
 
@@ -744,11 +744,11 @@ create table ma_test (a int) partition by range (a);
 create table ma_test_p1 partition of ma_test for values from (0) to (10);
 create table ma_test_p2 partition of ma_test for values from (10) to (20);
 create table ma_test_p3 partition of ma_test for values from (20) to (30);
-insert into ma_test select x from generate_series(0,29) t(x);
+insert into ma_test selext x from generate_series(0,29) t(x);
 create index on ma_test (a);
 
 analyze ma_test;
-prepare mt_q1 (int) as select * from ma_test where a >= $1 and a % 10 = 5 order by a;
+prepare mt_q1 (int) as selext * from ma_test where a >= $1 and a % 10 = 5 order by a;
 
 -- Execute query 5 times to allow choose_custom_plan
 -- to start considering a generic plan.
@@ -769,7 +769,7 @@ execute mt_q1(35);
 deallocate mt_q1;
 
 -- ensure initplan params properly prune partitions
-explain (analyze, costs off, summary off, timing off) select * from ma_test where a >= (select min(a) from ma_test_p2) order by a;
+explain (analyze, costs off, summary off, timing off) selext * from ma_test where a >= (selext min(a) from ma_test_p2) order by a;
 
 reset enable_seqscan;
 reset enable_sort;
@@ -787,9 +787,9 @@ reset enable_indexonlyscan;
 create table pp_arrpart (a int[]) partition by list (a);
 create table pp_arrpart1 partition of pp_arrpart for values in ('{1}');
 create table pp_arrpart2 partition of pp_arrpart for values in ('{2, 3}', '{4, 5}');
-explain (costs off) select * from pp_arrpart where a = '{1}';
-explain (costs off) select * from pp_arrpart where a = '{1, 2}';
-explain (costs off) select * from pp_arrpart where a in ('{4, 5}', '{1}');
+explain (costs off) selext * from pp_arrpart where a = '{1}';
+explain (costs off) selext * from pp_arrpart where a = '{1, 2}';
+explain (costs off) selext * from pp_arrpart where a in ('{4, 5}', '{1}');
 explain (costs off) update pp_arrpart set a = a where a = '{1}';
 explain (costs off) delete from pp_arrpart where a = '{1}';
 drop table pp_arrpart;
@@ -799,10 +799,10 @@ create table pph_arrpart (a int[]) partition by hash (a);
 create table pph_arrpart1 partition of pph_arrpart for values with (modulus 2, remainder 0);
 create table pph_arrpart2 partition of pph_arrpart for values with (modulus 2, remainder 1);
 insert into pph_arrpart values ('{1}'), ('{1, 2}'), ('{4, 5}');
-select tableoid::regclass, * from pph_arrpart order by 1;
-explain (costs off) select * from pph_arrpart where a = '{1}';
-explain (costs off) select * from pph_arrpart where a = '{1, 2}';
-explain (costs off) select * from pph_arrpart where a in ('{4, 5}', '{1}');
+selext tableoid::regclass, * from pph_arrpart order by 1;
+explain (costs off) selext * from pph_arrpart where a = '{1}';
+explain (costs off) selext * from pph_arrpart where a = '{1, 2}';
+explain (costs off) selext * from pph_arrpart where a in ('{4, 5}', '{1}');
 drop table pph_arrpart;
 
 -- enum type list partition key
@@ -810,8 +810,8 @@ create type pp_colors as enum ('green', 'blue', 'black');
 create table pp_enumpart (a pp_colors) partition by list (a);
 create table pp_enumpart_green partition of pp_enumpart for values in ('green');
 create table pp_enumpart_blue partition of pp_enumpart for values in ('blue');
-explain (costs off) select * from pp_enumpart where a = 'blue';
-explain (costs off) select * from pp_enumpart where a = 'black';
+explain (costs off) selext * from pp_enumpart where a = 'blue';
+explain (costs off) selext * from pp_enumpart where a = 'black';
 drop table pp_enumpart;
 drop type pp_colors;
 
@@ -820,8 +820,8 @@ create type pp_rectype as (a int, b int);
 create table pp_recpart (a pp_rectype) partition by list (a);
 create table pp_recpart_11 partition of pp_recpart for values in ('(1,1)');
 create table pp_recpart_23 partition of pp_recpart for values in ('(2,3)');
-explain (costs off) select * from pp_recpart where a = '(1,1)'::pp_rectype;
-explain (costs off) select * from pp_recpart where a = '(1,2)'::pp_rectype;
+explain (costs off) selext * from pp_recpart where a = '(1,1)'::pp_rectype;
+explain (costs off) selext * from pp_recpart where a = '(1,2)'::pp_rectype;
 drop table pp_recpart;
 drop type pp_rectype;
 
@@ -829,8 +829,8 @@ drop type pp_rectype;
 create table pp_intrangepart (a int4range) partition by list (a);
 create table pp_intrangepart12 partition of pp_intrangepart for values in ('[1,2]');
 create table pp_intrangepart2inf partition of pp_intrangepart for values in ('[2,)');
-explain (costs off) select * from pp_intrangepart where a = '[1,2]'::int4range;
-explain (costs off) select * from pp_intrangepart where a = '(1,2)'::int4range;
+explain (costs off) selext * from pp_intrangepart where a = '[1,2]'::int4range;
+explain (costs off) selext * from pp_intrangepart where a = '(1,2)'::int4range;
 drop table pp_intrangepart;
 
 --
@@ -841,7 +841,7 @@ create table pp_lp (a int, value int) partition by list (a);
 create table pp_lp1 partition of pp_lp for values in(1);
 create table pp_lp2 partition of pp_lp for values in(2);
 
-explain (costs off) select * from pp_lp where a = 1;
+explain (costs off) selext * from pp_lp where a = 1;
 explain (costs off) update pp_lp set value = 10 where a = 1;
 explain (costs off) delete from pp_lp where a = 1;
 
@@ -849,13 +849,13 @@ set enable_partition_pruning = off;
 
 set constraint_exclusion = 'partition'; -- this should not affect the result.
 
-explain (costs off) select * from pp_lp where a = 1;
+explain (costs off) selext * from pp_lp where a = 1;
 explain (costs off) update pp_lp set value = 10 where a = 1;
 explain (costs off) delete from pp_lp where a = 1;
 
 set constraint_exclusion = 'off'; -- this should not affect the result.
 
-explain (costs off) select * from pp_lp where a = 1;
+explain (costs off) selext * from pp_lp where a = 1;
 explain (costs off) update pp_lp set value = 10 where a = 1;
 explain (costs off) delete from pp_lp where a = 1;
 
@@ -870,7 +870,7 @@ create table inh_lp2 (a int, value int, check(a = 2)) inherits (inh_lp);
 set constraint_exclusion = 'partition';
 
 -- inh_lp2 should be removed in the following 3 cases.
-explain (costs off) select * from inh_lp where a = 1;
+explain (costs off) selext * from inh_lp where a = 1;
 explain (costs off) update inh_lp set value = 10 where a = 1;
 explain (costs off) delete from inh_lp where a = 1;
 
@@ -889,8 +889,8 @@ reset constraint_exclusion;
 create temp table pp_temp_parent (a int) partition by list (a);
 create temp table pp_temp_part_1 partition of pp_temp_parent for values in (1);
 create temp table pp_temp_part_def partition of pp_temp_parent default;
-explain (costs off) select * from pp_temp_parent where true;
-explain (costs off) select * from pp_temp_parent where a = 2;
+explain (costs off) selext * from pp_temp_parent where true;
+explain (costs off) selext * from pp_temp_parent where a = 2;
 drop table pp_temp_parent;
 
 -- Stress run-time partition pruning a bit more, per bug reports
@@ -908,36 +908,36 @@ create temp table q22 partition of q2 for values in (2);
 insert into q22 values (2, 2, 3);
 
 explain (costs off)
-select *
+selext *
 from (
-      select * from p
+      selext * from p
       union all
-      select * from q1
+      selext * from q1
       union all
-      select 1, 1, 1
+      selext 1, 1, 1
      ) s(a, b, c)
-where s.a = 1 and s.b = 1 and s.c = (select 1);
+where s.a = 1 and s.b = 1 and s.c = (selext 1);
 
-select *
+selext *
 from (
-      select * from p
+      selext * from p
       union all
-      select * from q1
+      selext * from q1
       union all
-      select 1, 1, 1
+      selext 1, 1, 1
      ) s(a, b, c)
-where s.a = 1 and s.b = 1 and s.c = (select 1);
+where s.a = 1 and s.b = 1 and s.c = (selext 1);
 
 prepare q (int, int) as
-select *
+selext *
 from (
-      select * from p
+      selext * from p
       union all
-      select * from q1
+      selext * from q1
       union all
-      select 1, 1, 1
+      selext 1, 1, 1
      ) s(a, b, c)
-where s.a = $1 and s.b = $2 and s.c = (select 1);
+where s.a = $1 and s.b = $2 and s.c = (selext 1);
 
 set plan_cache_mode to force_generic_plan;
 
@@ -955,6 +955,6 @@ create table listp2 partition of listp for values in(2) partition by list(b);
 create table listp2_10 partition of listp2 for values in (10);
 
 explain (analyze, costs off, summary off, timing off)
-select * from listp where a = (select 2) and b <> 10;
+selext * from listp where a = (selext 2) and b <> 10;
 
 drop table listp;

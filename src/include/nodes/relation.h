@@ -1157,7 +1157,7 @@ typedef struct Path
  * NoMovementScanDirection for an indexscan, but the planner wants to
  * distinguish ordered from unordered indexes for building pathkeys.)
  *
- * 'indextotalcost' and 'indexselectivity' are saved in the IndexPath so that
+ * 'indextotalcost' and 'indexselextivity' are saved in the IndexPath so that
  * we need not recompute them when considering using the same index in a
  * bitmap index/heap scan (see BitmapHeapPath).  The costs of the IndexPath
  * itself represent the costs of an IndexScan or IndexOnlyScan plan type.
@@ -1174,7 +1174,7 @@ typedef struct IndexPath
 	List	   *indexorderbycols;
 	ScanDirection indexscandir;
 	Cost		indextotalcost;
-	Selectivity indexselectivity;
+	Selectivity indexselextivity;
 } IndexPath;
 
 /*
@@ -1192,7 +1192,7 @@ typedef struct IndexPath
  * BitmapIndexScan.  The startup_cost and total_cost figures of an IndexPath
  * always represent the costs to use it as a regular (or index-only)
  * IndexScan.  The costs of a BitmapIndexScan can be computed using the
- * IndexPath's indextotalcost and indexselectivity.
+ * IndexPath's indextotalcost and indexselextivity.
  */
 typedef struct BitmapHeapPath
 {
@@ -1210,7 +1210,7 @@ typedef struct BitmapAndPath
 {
 	Path		path;
 	List	   *bitmapquals;	/* IndexPaths and BitmapOrPaths */
-	Selectivity bitmapselectivity;
+	Selectivity bitmapselextivity;
 } BitmapAndPath;
 
 /*
@@ -1223,7 +1223,7 @@ typedef struct BitmapOrPath
 {
 	Path		path;
 	List	   *bitmapquals;	/* IndexPaths and BitmapAndPaths */
-	Selectivity bitmapselectivity;
+	Selectivity bitmapselextivity;
 } BitmapOrPath;
 
 /*
@@ -1757,7 +1757,7 @@ typedef struct LimitPath
  * If a restriction clause references more than one base rel, it will
  * appear in the joininfo list of every RelOptInfo that describes a strict
  * subset of the base rels mentioned in the clause.  The joininfo lists are
- * used to drive join tree building by selecting plausible join candidates.
+ * used to drive join tree building by selexting plausible join candidates.
  * The clause cannot actually be applied until we have built a join rel
  * containing all the base rels it references, however.
  *
@@ -1850,7 +1850,7 @@ typedef struct LimitPath
  * mergejoin, or hashjoin will be placed in the plan qual or joinqual field
  * of the finished Plan node, where they will be enforced by general-purpose
  * qual-expression-evaluation code.  (But we are still entitled to count
- * their selectivity when estimating the result tuple count, if we
+ * their selextivity when estimating the result tuple count, if we
  * can guess what it is...)
  *
  * When the referenced clause is an OR clause, we generate a modified copy
@@ -1870,7 +1870,7 @@ typedef struct LimitPath
  * pulled out and used as a one-time qual in a gating Result node.  We keep
  * pseudoconstant clauses in the same lists as other RestrictInfos so that
  * the regular clause-pushing machinery can assign them to the correct join
- * level, but they need to be treated specially for cost and selectivity
+ * level, but they need to be treated specially for cost and selextivity
  * estimates.  Note that a pseudoconstant clause can never be an indexqual
  * or merge or hash join clause, so it's of no interest to large parts of
  * the planner.
@@ -1922,12 +1922,12 @@ typedef struct RestrictInfo
 	/* This field is NULL unless clause is potentially redundant: */
 	EquivalenceClass *parent_ec;	/* generating EquivalenceClass */
 
-	/* cache space for cost and selectivity */
+	/* cache space for cost and selextivity */
 	QualCost	eval_cost;		/* eval cost of clause; -1 if not yet set */
-	Selectivity norm_selec;		/* selectivity for "normal" (JOIN_INNER)
+	Selectivity norm_selec;		/* selextivity for "normal" (JOIN_INNER)
 								 * semantics; -1 if not yet set; >1 means a
 								 * redundant clause */
-	Selectivity outer_selec;	/* selectivity for outer join semantics; -1 if
+	Selectivity outer_selec;	/* selextivity for outer join semantics; -1 if
 								 * not yet set */
 
 	/* valid if clause is mergejoinable, else NIL */
@@ -1972,7 +1972,7 @@ typedef struct RestrictInfo
  * otherwise be invoked many times while planning a large join tree,
  * we go out of our way to cache its results.  Each mergejoinable
  * RestrictInfo carries a list of the specific sort orderings that have
- * been considered for use with it, and the resulting selectivities.
+ * been considered for use with it, and the resulting selextivities.
  */
 typedef struct MergeScanSelCache
 {
@@ -2020,8 +2020,8 @@ typedef struct PlaceHolderVar
  * SpecialJoinInfo struct.  These structs are kept in the PlannerInfo node's
  * join_info_list.
  *
- * Similarly, semijoins and antijoins created by flattening IN (subselect)
- * and EXISTS(subselect) clauses create partial constraints on join order.
+ * Similarly, semijoins and antijoins created by flattening IN (subselext)
+ * and EXISTS(subselext) clauses create partial constraints on join order.
  * These are likewise recorded in SpecialJoinInfo structs.
  *
  * We make SpecialJoinInfos for FULL JOINs even though there is no flexibility
@@ -2059,7 +2059,7 @@ typedef struct PlaceHolderVar
  * the inputs to make it a LEFT JOIN.  So the allowed values of jointype
  * in a join_info_list member are only LEFT, FULL, SEMI, or ANTI.
  *
- * For purposes of join selectivity estimation, we create transient
+ * For purposes of join selextivity estimation, we create transient
  * SpecialJoinInfo structures for regular inner joins; so it is possible
  * to have jointype == JOIN_INNER in such a structure, even though this is
  * not allowed within join_info_list.  We also create transient
@@ -2089,7 +2089,7 @@ typedef struct SpecialJoinInfo
 /*
  * Append-relation info.
  *
- * When we expand an inheritable table or a UNION-ALL subselect into an
+ * When we expand an inheritable table or a UNION-ALL subselext into an
  * "append relation" (essentially, a list of child RTEs), we build an
  * AppendRelInfo for each child RTE.  The list of AppendRelInfos indicates
  * which child RTEs must be included when expanding the parent, and each node
@@ -2284,7 +2284,7 @@ typedef struct PlannerParamItem
  * some correction factors that are needed in both nestloop and hash joins
  * to account for the fact that the executor can stop scanning inner rows
  * as soon as it finds a match to the current outer row.  These numbers
- * depend only on the selected outer and inner join relations, not on the
+ * depend only on the selexted outer and inner join relations, not on the
  * particular paths used for them, so it's worthwhile to calculate them
  * just once per relation pair not once per considered path.  This struct
  * is filled by compute_semi_anti_join_factors and must be passed along
@@ -2310,7 +2310,7 @@ typedef struct SemiAntiJoinFactors
  *		mergejoin clauses in this join
  * inner_unique is true if each outer tuple provably matches no more
  *		than one inner tuple
- * sjinfo is extra info about special joins for selectivity estimation
+ * sjinfo is extra info about special joins for selextivity estimation
  * semifactors is as shown above (only valid for SEMI/ANTI/inner_unique joins)
  * param_source_rels are OK targets for parameterization of result paths
  */

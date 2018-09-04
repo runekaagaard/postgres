@@ -71,7 +71,7 @@ static void consider_parallel_mergejoin(PlannerInfo *root,
 static void hash_inner_and_outer(PlannerInfo *root, RelOptInfo *joinrel,
 					 RelOptInfo *outerrel, RelOptInfo *innerrel,
 					 JoinType jointype, JoinPathExtraData *extra);
-static List *select_mergejoin_clauses(PlannerInfo *root,
+static List *selext_mergejoin_clauses(PlannerInfo *root,
 						 RelOptInfo *joinrel,
 						 RelOptInfo *outerrel,
 						 RelOptInfo *innerrel,
@@ -196,7 +196,7 @@ add_paths_to_joinrel(PlannerInfo *root,
 	 * it's a full join.
 	 */
 	if (enable_mergejoin || jointype == JOIN_FULL)
-		extra.mergeclause_list = select_mergejoin_clauses(root,
+		extra.mergeclause_list = selext_mergejoin_clauses(root,
 														  joinrel,
 														  outerrel,
 														  innerrel,
@@ -986,11 +986,11 @@ sort_inner_and_outer(PlannerInfo *root,
 	 * than two or three mergeclauses, so expending a huge amount of thought
 	 * on that is probably not worth it.)
 	 *
-	 * The pathkey order returned by select_outer_pathkeys_for_merge() has
+	 * The pathkey order returned by selext_outer_pathkeys_for_merge() has
 	 * some heuristics behind it (see that function), so be sure to try it
 	 * exactly as-is as well as making variants.
 	 */
-	all_pathkeys = select_outer_pathkeys_for_merge(root,
+	all_pathkeys = selext_outer_pathkeys_for_merge(root,
 												   extra->mergeclause_list,
 												   joinrel);
 
@@ -1904,7 +1904,7 @@ hash_inner_and_outer(PlannerInfo *root,
 }
 
 /*
- * select_mergejoin_clauses
+ * selext_mergejoin_clauses
  *	  Select mergejoin clauses that are usable for a particular join.
  *	  Returns a list of RestrictInfo nodes for those clauses.
  *
@@ -1917,7 +1917,7 @@ hash_inner_and_outer(PlannerInfo *root,
  * Simply returning NIL is therefore not enough to distinguish safe from
  * unsafe cases.)
  *
- * We also mark each selected RestrictInfo to show which side is currently
+ * We also mark each selexted RestrictInfo to show which side is currently
  * being considered as outer.  These are transient markings that are only
  * good for the duration of the current add_paths_to_joinrel() call!
  *
@@ -1926,7 +1926,7 @@ hash_inner_and_outer(PlannerInfo *root,
  * currently of interest.
  */
 static List *
-select_mergejoin_clauses(PlannerInfo *root,
+selext_mergejoin_clauses(PlannerInfo *root,
 						 RelOptInfo *joinrel,
 						 RelOptInfo *outerrel,
 						 RelOptInfo *innerrel,

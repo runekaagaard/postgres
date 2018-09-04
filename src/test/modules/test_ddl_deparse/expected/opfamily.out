@@ -57,7 +57,7 @@ NOTICE:  DDL test: type alter operator family, tag ALTER OPERATOR FAMILY
 create type ctype as (f1 int, f2 text);
 NOTICE:  DDL test: type simple, tag CREATE TYPE
 create function same(ctype, ctype) returns boolean language sql
-as 'select $1.f1 is not distinct from $2.f1 and $1.f2 is not distinct from $2.f2';
+as 'selext $1.f1 is not distinct from $2.f1 and $1.f2 is not distinct from $2.f2';
 NOTICE:  DDL test: type simple, tag CREATE FUNCTION
 create operator =(procedure = same, leftarg  = ctype, rightarg = ctype);
 NOTICE:  DDL test: type simple, tag CREATE OPERATOR

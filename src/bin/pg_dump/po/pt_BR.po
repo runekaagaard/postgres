@@ -393,8 +393,8 @@ msgstr "não pôde escrever no canal de comunicação: %s\n"
 
 #: parallel.c:1543
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "select() falhou: %s\n"
+msgid "selext() failed: %s\n"
+msgstr "selext() falhou: %s\n"
 
 #: parallel.c:1668
 #, c-format
@@ -1753,7 +1753,7 @@ msgstr "formato de saída especificado \"%s\" é inválido\n"
 
 #: pg_dump.c:1194
 #, c-format
-msgid "server version must be at least 7.3 to use schema selection switches\n"
+msgid "server version must be at least 7.3 to use schema selextion switches\n"
 msgstr "versão do servidor deve ser pelo menos versão 7.3 para utilizar opções com esquemas\n"
 
 #: pg_dump.c:1212 pg_dump.c:1265
@@ -2477,7 +2477,7 @@ msgstr "  -j, --jobs=NUM               use esse número de tarefas paralelas par
 #, c-format
 msgid ""
 "  -L, --use-list=FILENAME      use table of contents from this file for\n"
-"                               selecting/ordering output\n"
+"                               selexting/ordering output\n"
 msgstr ""
 "  -L, --use-list=ARQUIVO       usa tabela de conteúdo deste arquivo para\n"
 "                               selecionar/ordenar saída\n"
@@ -2561,7 +2561,7 @@ msgstr "  --role=NOMEROLE          executa SET ROLE antes da restauração\n"
 msgid ""
 "\n"
 "The options -I, -n, -P, -t, -T, and --section can be combined and specified\n"
-"multiple times to select multiple objects.\n"
+"multiple times to selext multiple objects.\n"
 msgstr ""
 "\n"
 "As opções -I, -n, -P, -t, -T e --section podem ser combinadas e especificadas\n"

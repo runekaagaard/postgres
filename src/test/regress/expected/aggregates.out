@@ -138,61 +138,61 @@ SELECT stddev_pop(3.0::numeric), stddev_samp(4.0::numeric);
 (1 row)
 
 -- verify correct results for null and NaN inputs
-select sum(null::int4) from generate_series(1,3);
+selext sum(null::int4) from generate_series(1,3);
  sum 
 -----
     
 (1 row)
 
-select sum(null::int8) from generate_series(1,3);
+selext sum(null::int8) from generate_series(1,3);
  sum 
 -----
     
 (1 row)
 
-select sum(null::numeric) from generate_series(1,3);
+selext sum(null::numeric) from generate_series(1,3);
  sum 
 -----
     
 (1 row)
 
-select sum(null::float8) from generate_series(1,3);
+selext sum(null::float8) from generate_series(1,3);
  sum 
 -----
     
 (1 row)
 
-select avg(null::int4) from generate_series(1,3);
+selext avg(null::int4) from generate_series(1,3);
  avg 
 -----
     
 (1 row)
 
-select avg(null::int8) from generate_series(1,3);
+selext avg(null::int8) from generate_series(1,3);
  avg 
 -----
     
 (1 row)
 
-select avg(null::numeric) from generate_series(1,3);
+selext avg(null::numeric) from generate_series(1,3);
  avg 
 -----
     
 (1 row)
 
-select avg(null::float8) from generate_series(1,3);
+selext avg(null::float8) from generate_series(1,3);
  avg 
 -----
     
 (1 row)
 
-select sum('NaN'::numeric) from generate_series(1,3);
+selext sum('NaN'::numeric) from generate_series(1,3);
  sum 
 -----
  NaN
 (1 row)
 
-select avg('NaN'::numeric) from generate_series(1,3);
+selext avg('NaN'::numeric) from generate_series(1,3);
  avg 
 -----
  NaN
@@ -265,7 +265,7 @@ SELECT count(DISTINCT four) AS cnt_4 FROM onek;
      4
 (1 row)
 
-select ten, count(*), sum(four) from onek
+selext ten, count(*), sum(four) from onek
 group by ten order by ten;
  ten | count | sum 
 -----+-------+-----
@@ -281,7 +281,7 @@ group by ten order by ten;
    9 |   100 | 200
 (10 rows)
 
-select ten, count(four), sum(DISTINCT four) from onek
+selext ten, count(four), sum(DISTINCT four) from onek
 group by ten order by ten;
  ten | count | sum 
 -----+-------+-----
@@ -336,9 +336,9 @@ SELECT sum2(q1,q2) FROM int8_tbl;
 
 -- test for outer-level aggregates
 -- this should work
-select ten, sum(distinct four) from onek a
+selext ten, sum(distinct four) from onek a
 group by ten
-having exists (select 1 from onek b where sum(distinct a.four) = b.four);
+having exists (selext 1 from onek b where sum(distinct a.four) = b.four);
  ten | sum 
 -----+-----
    0 |   2
@@ -349,17 +349,17 @@ having exists (select 1 from onek b where sum(distinct a.four) = b.four);
 (5 rows)
 
 -- this should fail because subquery has an agg of its own in WHERE
-select ten, sum(distinct four) from onek a
+selext ten, sum(distinct four) from onek a
 group by ten
-having exists (select 1 from onek b
+having exists (selext 1 from onek b
                where sum(distinct a.four + b.four) = b.four);
 ERROR:  aggregate functions are not allowed in WHERE
 LINE 4:                where sum(distinct a.four + b.four) = b.four)...
                              ^
 -- Test handling of sublinks within outer-level aggregates.
 -- Per bug report from Daniel Grace.
-select
-  (select max((select i.unique2 from tenk1 i where i.unique1 = o.unique1)))
+selext
+  (selext max((selext i.unique2 from tenk1 i where i.unique1 = o.unique1)))
 from tenk1 o;
  max  
 ------
@@ -369,9 +369,9 @@ from tenk1 o;
 -- Test handling of Params within aggregate arguments in hashed aggregation.
 -- Per bug report from Jeevan Chalke.
 explain (verbose, costs off)
-select s1, s2, sm
+selext s1, s2, sm
 from generate_series(1, 3) s1,
-     lateral (select s2, sum(s1 + s2) sm
+     lateral (selext s2, sum(s1 + s2) sm
               from generate_series(1, 3) s2 group by s2) ss
 order by 1, 2;
                             QUERY PLAN                            
@@ -392,9 +392,9 @@ order by 1, 2;
                      Function Call: generate_series(1, 3)
 (14 rows)
 
-select s1, s2, sm
+selext s1, s2, sm
 from generate_series(1, 3) s1,
-     lateral (select s2, sum(s1 + s2) sm
+     lateral (selext s2, sum(s1 + s2) sm
               from generate_series(1, 3) s2 group by s2) ss
 order by 1, 2;
  s1 | s2 | sm 
@@ -411,7 +411,7 @@ order by 1, 2;
 (9 rows)
 
 explain (verbose, costs off)
-select array(select sum(x+y) s
+selext array(selext sum(x+y) s
             from generate_series(1,3) y group by y order by s)
   from generate_series(1,3) x;
                             QUERY PLAN                             
@@ -431,7 +431,7 @@ select array(select sum(x+y) s
                        Function Call: generate_series(1, 3)
 (13 rows)
 
-select array(select sum(x+y) s
+selext array(selext sum(x+y) s
             from generate_series(1,3) y group by y order by s)
   from generate_series(1,3) x;
   array  
@@ -583,7 +583,7 @@ FROM bool_test;
 --
 -- Basic cases
 explain (costs off)
-  select min(unique1) from tenk1;
+  selext min(unique1) from tenk1;
                          QUERY PLAN                         
 ------------------------------------------------------------
  Result
@@ -593,14 +593,14 @@ explain (costs off)
                  Index Cond: (unique1 IS NOT NULL)
 (5 rows)
 
-select min(unique1) from tenk1;
+selext min(unique1) from tenk1;
  min 
 -----
    0
 (1 row)
 
 explain (costs off)
-  select max(unique1) from tenk1;
+  selext max(unique1) from tenk1;
                              QUERY PLAN                              
 ---------------------------------------------------------------------
  Result
@@ -610,14 +610,14 @@ explain (costs off)
                  Index Cond: (unique1 IS NOT NULL)
 (5 rows)
 
-select max(unique1) from tenk1;
+selext max(unique1) from tenk1;
  max  
 ------
  9999
 (1 row)
 
 explain (costs off)
-  select max(unique1) from tenk1 where unique1 < 42;
+  selext max(unique1) from tenk1 where unique1 < 42;
                                QUERY PLAN                               
 ------------------------------------------------------------------------
  Result
@@ -627,14 +627,14 @@ explain (costs off)
                  Index Cond: ((unique1 IS NOT NULL) AND (unique1 < 42))
 (5 rows)
 
-select max(unique1) from tenk1 where unique1 < 42;
+selext max(unique1) from tenk1 where unique1 < 42;
  max 
 -----
   41
 (1 row)
 
 explain (costs off)
-  select max(unique1) from tenk1 where unique1 > 42;
+  selext max(unique1) from tenk1 where unique1 > 42;
                                QUERY PLAN                               
 ------------------------------------------------------------------------
  Result
@@ -644,7 +644,7 @@ explain (costs off)
                  Index Cond: ((unique1 IS NOT NULL) AND (unique1 > 42))
 (5 rows)
 
-select max(unique1) from tenk1 where unique1 > 42;
+selext max(unique1) from tenk1 where unique1 > 42;
  max  
 ------
  9999
@@ -657,7 +657,7 @@ select max(unique1) from tenk1 where unique1 > 42;
 begin;
 set local max_parallel_workers_per_gather = 0;
 explain (costs off)
-  select max(unique1) from tenk1 where unique1 > 42000;
+  selext max(unique1) from tenk1 where unique1 > 42000;
                                 QUERY PLAN                                 
 ---------------------------------------------------------------------------
  Result
@@ -667,7 +667,7 @@ explain (costs off)
                  Index Cond: ((unique1 IS NOT NULL) AND (unique1 > 42000))
 (5 rows)
 
-select max(unique1) from tenk1 where unique1 > 42000;
+selext max(unique1) from tenk1 where unique1 > 42000;
  max 
 -----
     
@@ -676,7 +676,7 @@ select max(unique1) from tenk1 where unique1 > 42000;
 rollback;
 -- multi-column index (uses tenk1_thous_tenthous)
 explain (costs off)
-  select max(tenthous) from tenk1 where thousand = 33;
+  selext max(tenthous) from tenk1 where thousand = 33;
                                  QUERY PLAN                                 
 ----------------------------------------------------------------------------
  Result
@@ -686,14 +686,14 @@ explain (costs off)
                  Index Cond: ((thousand = 33) AND (tenthous IS NOT NULL))
 (5 rows)
 
-select max(tenthous) from tenk1 where thousand = 33;
+selext max(tenthous) from tenk1 where thousand = 33;
  max  
 ------
  9033
 (1 row)
 
 explain (costs off)
-  select min(tenthous) from tenk1 where thousand = 33;
+  selext min(tenthous) from tenk1 where thousand = 33;
                                 QUERY PLAN                                
 --------------------------------------------------------------------------
  Result
@@ -703,7 +703,7 @@ explain (costs off)
                  Index Cond: ((thousand = 33) AND (tenthous IS NOT NULL))
 (5 rows)
 
-select min(tenthous) from tenk1 where thousand = 33;
+selext min(tenthous) from tenk1 where thousand = 33;
  min 
 -----
   33
@@ -711,7 +711,7 @@ select min(tenthous) from tenk1 where thousand = 33;
 
 -- check parameter propagation into an indexscan subquery
 explain (costs off)
-  select f1, (select min(unique1) from tenk1 where unique1 > f1) AS gt
+  selext f1, (selext min(unique1) from tenk1 where unique1 > f1) AS gt
     from int4_tbl;
                                        QUERY PLAN                                        
 -----------------------------------------------------------------------------------------
@@ -724,7 +724,7 @@ explain (costs off)
                          Index Cond: ((unique1 IS NOT NULL) AND (unique1 > int4_tbl.f1))
 (7 rows)
 
-select f1, (select min(unique1) from tenk1 where unique1 > f1) AS gt
+selext f1, (selext min(unique1) from tenk1 where unique1 > f1) AS gt
   from int4_tbl;
      f1      | gt 
 -------------+----
@@ -737,7 +737,7 @@ select f1, (select min(unique1) from tenk1 where unique1 > f1) AS gt
 
 -- check some cases that were handled incorrectly in 8.3.0
 explain (costs off)
-  select distinct max(unique2) from tenk1;
+  selext distinct max(unique2) from tenk1;
                              QUERY PLAN                              
 ---------------------------------------------------------------------
  HashAggregate
@@ -749,14 +749,14 @@ explain (costs off)
    ->  Result
 (7 rows)
 
-select distinct max(unique2) from tenk1;
+selext distinct max(unique2) from tenk1;
  max  
 ------
  9999
 (1 row)
 
 explain (costs off)
-  select max(unique2) from tenk1 order by 1;
+  selext max(unique2) from tenk1 order by 1;
                              QUERY PLAN                              
 ---------------------------------------------------------------------
  Sort
@@ -768,14 +768,14 @@ explain (costs off)
    ->  Result
 (7 rows)
 
-select max(unique2) from tenk1 order by 1;
+selext max(unique2) from tenk1 order by 1;
  max  
 ------
  9999
 (1 row)
 
 explain (costs off)
-  select max(unique2) from tenk1 order by max(unique2);
+  selext max(unique2) from tenk1 order by max(unique2);
                              QUERY PLAN                              
 ---------------------------------------------------------------------
  Sort
@@ -787,14 +787,14 @@ explain (costs off)
    ->  Result
 (7 rows)
 
-select max(unique2) from tenk1 order by max(unique2);
+selext max(unique2) from tenk1 order by max(unique2);
  max  
 ------
  9999
 (1 row)
 
 explain (costs off)
-  select max(unique2) from tenk1 order by max(unique2)+1;
+  selext max(unique2) from tenk1 order by max(unique2)+1;
                              QUERY PLAN                              
 ---------------------------------------------------------------------
  Sort
@@ -806,14 +806,14 @@ explain (costs off)
    ->  Result
 (7 rows)
 
-select max(unique2) from tenk1 order by max(unique2)+1;
+selext max(unique2) from tenk1 order by max(unique2)+1;
  max  
 ------
  9999
 (1 row)
 
 explain (costs off)
-  select max(unique2), generate_series(1,3) as g from tenk1 order by g desc;
+  selext max(unique2), generate_series(1,3) as g from tenk1 order by g desc;
                              QUERY PLAN                              
 ---------------------------------------------------------------------
  Sort
@@ -826,7 +826,7 @@ explain (costs off)
          ->  Result
 (8 rows)
 
-select max(unique2), generate_series(1,3) as g from tenk1 order by g desc;
+selext max(unique2), generate_series(1,3) as g from tenk1 order by g desc;
  max  | g 
 ------+---
  9999 | 3
@@ -836,7 +836,7 @@ select max(unique2), generate_series(1,3) as g from tenk1 order by g desc;
 
 -- interesting corner case: constant gets optimized into a seqscan
 explain (costs off)
-  select max(100) from tenk1;
+  selext max(100) from tenk1;
                      QUERY PLAN                     
 ----------------------------------------------------
  Result
@@ -847,7 +847,7 @@ explain (costs off)
                  ->  Seq Scan on tenk1
 (6 rows)
 
-select max(100) from tenk1;
+selext max(100) from tenk1;
  max 
 -----
  100
@@ -867,7 +867,7 @@ insert into minmaxtest1 values(13), (14);
 insert into minmaxtest2 values(15), (16);
 insert into minmaxtest3 values(17), (18);
 explain (costs off)
-  select min(f1), max(f1) from minmaxtest;
+  selext min(f1), max(f1) from minmaxtest;
                                           QUERY PLAN                                          
 ----------------------------------------------------------------------------------------------
  Result
@@ -895,7 +895,7 @@ explain (costs off)
                  ->  Index Only Scan Backward using minmaxtest3i on minmaxtest3 minmaxtest3_1
 (23 rows)
 
-select min(f1), max(f1) from minmaxtest;
+selext min(f1), max(f1) from minmaxtest;
  min | max 
 -----+-----
   11 |  18
@@ -903,7 +903,7 @@ select min(f1), max(f1) from minmaxtest;
 
 -- DISTINCT doesn't do anything useful here, but it shouldn't fail
 explain (costs off)
-  select distinct min(f1), max(f1) from minmaxtest;
+  selext distinct min(f1), max(f1) from minmaxtest;
                                           QUERY PLAN                                          
 ----------------------------------------------------------------------------------------------
  Unique
@@ -934,7 +934,7 @@ explain (costs off)
          ->  Result
 (26 rows)
 
-select distinct min(f1), max(f1) from minmaxtest;
+selext distinct min(f1), max(f1) from minmaxtest;
  min | max 
 -----+-----
   11 |  18
@@ -946,13 +946,13 @@ DETAIL:  drop cascades to table minmaxtest1
 drop cascades to table minmaxtest2
 drop cascades to table minmaxtest3
 -- check for correct detection of nested-aggregate errors
-select max(min(unique1)) from tenk1;
+selext max(min(unique1)) from tenk1;
 ERROR:  aggregate function calls cannot be nested
-LINE 1: select max(min(unique1)) from tenk1;
+LINE 1: selext max(min(unique1)) from tenk1;
                    ^
-select (select max(min(unique1)) from int8_tbl) from tenk1;
+selext (selext max(min(unique1)) from int8_tbl) from tenk1;
 ERROR:  aggregate function calls cannot be nested
-LINE 1: select (select max(min(unique1)) from int8_tbl) from tenk1;
+LINE 1: selext (selext max(min(unique1)) from int8_tbl) from tenk1;
                            ^
 --
 -- Test removal of redundant GROUP BY columns
@@ -961,7 +961,7 @@ create temp table t1 (a int, b int, c int, d int, primary key (a, b));
 create temp table t2 (x int, y int, z int, primary key (x, y));
 create temp table t3 (a int, b int, c int, primary key(a, b) deferrable);
 -- Non-primary-key columns can be removed from GROUP BY
-explain (costs off) select * from t1 group by a,b,c,d;
+explain (costs off) selext * from t1 group by a,b,c,d;
       QUERY PLAN      
 ----------------------
  HashAggregate
@@ -970,7 +970,7 @@ explain (costs off) select * from t1 group by a,b,c,d;
 (3 rows)
 
 -- No removal can happen if the complete PK is not present in GROUP BY
-explain (costs off) select a,c from t1 group by a,c,d;
+explain (costs off) selext a,c from t1 group by a,c,d;
       QUERY PLAN      
 ----------------------
  HashAggregate
@@ -979,7 +979,7 @@ explain (costs off) select a,c from t1 group by a,c,d;
 (3 rows)
 
 -- Test removal across multiple relations
-explain (costs off) select *
+explain (costs off) selext *
 from t1 inner join t2 on t1.a = t2.x and t1.b = t2.y
 group by t1.a,t1.b,t1.c,t1.d,t2.x,t2.y,t2.z;
                       QUERY PLAN                      
@@ -994,7 +994,7 @@ group by t1.a,t1.b,t1.c,t1.d,t2.x,t2.y,t2.z;
 (7 rows)
 
 -- Test case where t1 can be optimized but not t2
-explain (costs off) select t1.*,t2.x,t2.z
+explain (costs off) selext t1.*,t2.x,t2.z
 from t1 inner join t2 on t1.a = t2.x and t1.b = t2.y
 group by t1.a,t1.b,t1.c,t1.d,t2.x,t2.z;
                       QUERY PLAN                      
@@ -1009,7 +1009,7 @@ group by t1.a,t1.b,t1.c,t1.d,t2.x,t2.z;
 (7 rows)
 
 -- Cannot optimize when PK is deferrable
-explain (costs off) select * from t3 group by a,b,c;
+explain (costs off) selext * from t3 group by a,b,c;
       QUERY PLAN      
 ----------------------
  HashAggregate
@@ -1023,56 +1023,56 @@ drop table t3;
 --
 -- Test combinations of DISTINCT and/or ORDER BY
 --
-select array_agg(a order by b)
+selext array_agg(a order by b)
   from (values (1,4),(2,3),(3,1),(4,2)) v(a,b);
  array_agg 
 -----------
  {3,4,2,1}
 (1 row)
 
-select array_agg(a order by a)
+selext array_agg(a order by a)
   from (values (1,4),(2,3),(3,1),(4,2)) v(a,b);
  array_agg 
 -----------
  {1,2,3,4}
 (1 row)
 
-select array_agg(a order by a desc)
+selext array_agg(a order by a desc)
   from (values (1,4),(2,3),(3,1),(4,2)) v(a,b);
  array_agg 
 -----------
  {4,3,2,1}
 (1 row)
 
-select array_agg(b order by a desc)
+selext array_agg(b order by a desc)
   from (values (1,4),(2,3),(3,1),(4,2)) v(a,b);
  array_agg 
 -----------
  {2,1,3,4}
 (1 row)
 
-select array_agg(distinct a)
+selext array_agg(distinct a)
   from (values (1),(2),(1),(3),(null),(2)) v(a);
   array_agg   
 --------------
  {1,2,3,NULL}
 (1 row)
 
-select array_agg(distinct a order by a)
+selext array_agg(distinct a order by a)
   from (values (1),(2),(1),(3),(null),(2)) v(a);
   array_agg   
 --------------
  {1,2,3,NULL}
 (1 row)
 
-select array_agg(distinct a order by a desc)
+selext array_agg(distinct a order by a desc)
   from (values (1),(2),(1),(3),(null),(2)) v(a);
   array_agg   
 --------------
  {NULL,3,2,1}
 (1 row)
 
-select array_agg(distinct a order by a desc nulls last)
+selext array_agg(distinct a order by a desc nulls last)
   from (values (1),(2),(1),(3),(null),(2)) v(a);
   array_agg   
 --------------
@@ -1080,21 +1080,21 @@ select array_agg(distinct a order by a desc nulls last)
 (1 row)
 
 -- multi-arg aggs, strict/nonstrict, distinct/order by
-select aggfstr(a,b,c)
+selext aggfstr(a,b,c)
   from (values (1,3,'foo'),(0,null,null),(2,2,'bar'),(3,1,'baz')) v(a,b,c);
                 aggfstr                
 ---------------------------------------
  {"(1,3,foo)","(2,2,bar)","(3,1,baz)"}
 (1 row)
 
-select aggfns(a,b,c)
+selext aggfns(a,b,c)
   from (values (1,3,'foo'),(0,null,null),(2,2,'bar'),(3,1,'baz')) v(a,b,c);
                     aggfns                     
 -----------------------------------------------
  {"(1,3,foo)","(0,,)","(2,2,bar)","(3,1,baz)"}
 (1 row)
 
-select aggfstr(distinct a,b,c)
+selext aggfstr(distinct a,b,c)
   from (values (1,3,'foo'),(0,null,null),(2,2,'bar'),(3,1,'baz')) v(a,b,c),
        generate_series(1,3) i;
                 aggfstr                
@@ -1102,7 +1102,7 @@ select aggfstr(distinct a,b,c)
  {"(1,3,foo)","(2,2,bar)","(3,1,baz)"}
 (1 row)
 
-select aggfns(distinct a,b,c)
+selext aggfns(distinct a,b,c)
   from (values (1,3,'foo'),(0,null,null),(2,2,'bar'),(3,1,'baz')) v(a,b,c),
        generate_series(1,3) i;
                     aggfns                     
@@ -1110,7 +1110,7 @@ select aggfns(distinct a,b,c)
  {"(0,,)","(1,3,foo)","(2,2,bar)","(3,1,baz)"}
 (1 row)
 
-select aggfstr(distinct a,b,c order by b)
+selext aggfstr(distinct a,b,c order by b)
   from (values (1,3,'foo'),(0,null,null),(2,2,'bar'),(3,1,'baz')) v(a,b,c),
        generate_series(1,3) i;
                 aggfstr                
@@ -1118,7 +1118,7 @@ select aggfstr(distinct a,b,c order by b)
  {"(3,1,baz)","(2,2,bar)","(1,3,foo)"}
 (1 row)
 
-select aggfns(distinct a,b,c order by b)
+selext aggfns(distinct a,b,c order by b)
   from (values (1,3,'foo'),(0,null,null),(2,2,'bar'),(3,1,'baz')) v(a,b,c),
        generate_series(1,3) i;
                     aggfns                     
@@ -1127,7 +1127,7 @@ select aggfns(distinct a,b,c order by b)
 (1 row)
 
 -- test specific code paths
-select aggfns(distinct a,a,c order by c using ~<~,a)
+selext aggfns(distinct a,a,c order by c using ~<~,a)
   from (values (1,3,'foo'),(0,null,null),(2,2,'bar'),(3,1,'baz')) v(a,b,c),
        generate_series(1,2) i;
                      aggfns                     
@@ -1135,7 +1135,7 @@ select aggfns(distinct a,a,c order by c using ~<~,a)
  {"(2,2,bar)","(3,3,baz)","(1,1,foo)","(0,0,)"}
 (1 row)
 
-select aggfns(distinct a,a,c order by c using ~<~)
+selext aggfns(distinct a,a,c order by c using ~<~)
   from (values (1,3,'foo'),(0,null,null),(2,2,'bar'),(3,1,'baz')) v(a,b,c),
        generate_series(1,2) i;
                      aggfns                     
@@ -1143,7 +1143,7 @@ select aggfns(distinct a,a,c order by c using ~<~)
  {"(2,2,bar)","(3,3,baz)","(1,1,foo)","(0,0,)"}
 (1 row)
 
-select aggfns(distinct a,a,c order by a)
+selext aggfns(distinct a,a,c order by a)
   from (values (1,3,'foo'),(0,null,null),(2,2,'bar'),(3,1,'baz')) v(a,b,c),
        generate_series(1,2) i;
                      aggfns                     
@@ -1151,7 +1151,7 @@ select aggfns(distinct a,a,c order by a)
  {"(0,0,)","(1,1,foo)","(2,2,bar)","(3,3,baz)"}
 (1 row)
 
-select aggfns(distinct a,b,c order by a,c using ~<~,b)
+selext aggfns(distinct a,b,c order by a,c using ~<~,b)
   from (values (1,3,'foo'),(0,null,null),(2,2,'bar'),(3,1,'baz')) v(a,b,c),
        generate_series(1,2) i;
                     aggfns                     
@@ -1161,15 +1161,15 @@ select aggfns(distinct a,b,c order by a,c using ~<~,b)
 
 -- check node I/O via view creation and usage, also deparsing logic
 create view agg_view1 as
-  select aggfns(a,b,c)
+  selext aggfns(a,b,c)
     from (values (1,3,'foo'),(0,null,null),(2,2,'bar'),(3,1,'baz')) v(a,b,c);
-select * from agg_view1;
+selext * from agg_view1;
                     aggfns                     
 -----------------------------------------------
  {"(1,3,foo)","(0,,)","(2,2,bar)","(3,1,baz)"}
 (1 row)
 
-select pg_get_viewdef('agg_view1'::regclass);
+selext pg_get_viewdef('agg_view1'::regclass);
                                                    pg_get_viewdef                                                    
 ---------------------------------------------------------------------------------------------------------------------
   SELECT aggfns(v.a, v.b, v.c) AS aggfns                                                                            +
@@ -1177,16 +1177,16 @@ select pg_get_viewdef('agg_view1'::regclass);
 (1 row)
 
 create or replace view agg_view1 as
-  select aggfns(distinct a,b,c)
+  selext aggfns(distinct a,b,c)
     from (values (1,3,'foo'),(0,null,null),(2,2,'bar'),(3,1,'baz')) v(a,b,c),
          generate_series(1,3) i;
-select * from agg_view1;
+selext * from agg_view1;
                     aggfns                     
 -----------------------------------------------
  {"(0,,)","(1,3,foo)","(2,2,bar)","(3,1,baz)"}
 (1 row)
 
-select pg_get_viewdef('agg_view1'::regclass);
+selext pg_get_viewdef('agg_view1'::regclass);
                                                    pg_get_viewdef                                                    
 ---------------------------------------------------------------------------------------------------------------------
   SELECT aggfns(DISTINCT v.a, v.b, v.c) AS aggfns                                                                   +
@@ -1195,16 +1195,16 @@ select pg_get_viewdef('agg_view1'::regclass);
 (1 row)
 
 create or replace view agg_view1 as
-  select aggfns(distinct a,b,c order by b)
+  selext aggfns(distinct a,b,c order by b)
     from (values (1,3,'foo'),(0,null,null),(2,2,'bar'),(3,1,'baz')) v(a,b,c),
          generate_series(1,3) i;
-select * from agg_view1;
+selext * from agg_view1;
                     aggfns                     
 -----------------------------------------------
  {"(3,1,baz)","(2,2,bar)","(1,3,foo)","(0,,)"}
 (1 row)
 
-select pg_get_viewdef('agg_view1'::regclass);
+selext pg_get_viewdef('agg_view1'::regclass);
                                                    pg_get_viewdef                                                    
 ---------------------------------------------------------------------------------------------------------------------
   SELECT aggfns(DISTINCT v.a, v.b, v.c ORDER BY v.b) AS aggfns                                                      +
@@ -1213,15 +1213,15 @@ select pg_get_viewdef('agg_view1'::regclass);
 (1 row)
 
 create or replace view agg_view1 as
-  select aggfns(a,b,c order by b+1)
+  selext aggfns(a,b,c order by b+1)
     from (values (1,3,'foo'),(0,null,null),(2,2,'bar'),(3,1,'baz')) v(a,b,c);
-select * from agg_view1;
+selext * from agg_view1;
                     aggfns                     
 -----------------------------------------------
  {"(3,1,baz)","(2,2,bar)","(1,3,foo)","(0,,)"}
 (1 row)
 
-select pg_get_viewdef('agg_view1'::regclass);
+selext pg_get_viewdef('agg_view1'::regclass);
                                                    pg_get_viewdef                                                    
 ---------------------------------------------------------------------------------------------------------------------
   SELECT aggfns(v.a, v.b, v.c ORDER BY (v.b + 1)) AS aggfns                                                         +
@@ -1229,15 +1229,15 @@ select pg_get_viewdef('agg_view1'::regclass);
 (1 row)
 
 create or replace view agg_view1 as
-  select aggfns(a,a,c order by b)
+  selext aggfns(a,a,c order by b)
     from (values (1,3,'foo'),(0,null,null),(2,2,'bar'),(3,1,'baz')) v(a,b,c);
-select * from agg_view1;
+selext * from agg_view1;
                      aggfns                     
 ------------------------------------------------
  {"(3,3,baz)","(2,2,bar)","(1,1,foo)","(0,0,)"}
 (1 row)
 
-select pg_get_viewdef('agg_view1'::regclass);
+selext pg_get_viewdef('agg_view1'::regclass);
                                                    pg_get_viewdef                                                    
 ---------------------------------------------------------------------------------------------------------------------
   SELECT aggfns(v.a, v.a, v.c ORDER BY v.b) AS aggfns                                                               +
@@ -1245,15 +1245,15 @@ select pg_get_viewdef('agg_view1'::regclass);
 (1 row)
 
 create or replace view agg_view1 as
-  select aggfns(a,b,c order by c using ~<~)
+  selext aggfns(a,b,c order by c using ~<~)
     from (values (1,3,'foo'),(0,null,null),(2,2,'bar'),(3,1,'baz')) v(a,b,c);
-select * from agg_view1;
+selext * from agg_view1;
                     aggfns                     
 -----------------------------------------------
  {"(2,2,bar)","(3,1,baz)","(1,3,foo)","(0,,)"}
 (1 row)
 
-select pg_get_viewdef('agg_view1'::regclass);
+selext pg_get_viewdef('agg_view1'::regclass);
                                                    pg_get_viewdef                                                    
 ---------------------------------------------------------------------------------------------------------------------
   SELECT aggfns(v.a, v.b, v.c ORDER BY v.c USING ~<~ NULLS LAST) AS aggfns                                          +
@@ -1261,16 +1261,16 @@ select pg_get_viewdef('agg_view1'::regclass);
 (1 row)
 
 create or replace view agg_view1 as
-  select aggfns(distinct a,b,c order by a,c using ~<~,b)
+  selext aggfns(distinct a,b,c order by a,c using ~<~,b)
     from (values (1,3,'foo'),(0,null,null),(2,2,'bar'),(3,1,'baz')) v(a,b,c),
          generate_series(1,2) i;
-select * from agg_view1;
+selext * from agg_view1;
                     aggfns                     
 -----------------------------------------------
  {"(0,,)","(1,3,foo)","(2,2,bar)","(3,1,baz)"}
 (1 row)
 
-select pg_get_viewdef('agg_view1'::regclass);
+selext pg_get_viewdef('agg_view1'::regclass);
                                                    pg_get_viewdef                                                    
 ---------------------------------------------------------------------------------------------------------------------
   SELECT aggfns(DISTINCT v.a, v.b, v.c ORDER BY v.a, v.c USING ~<~ NULLS LAST, v.b) AS aggfns                       +
@@ -1280,67 +1280,67 @@ select pg_get_viewdef('agg_view1'::regclass);
 
 drop view agg_view1;
 -- incorrect DISTINCT usage errors
-select aggfns(distinct a,b,c order by i)
+selext aggfns(distinct a,b,c order by i)
   from (values (1,1,'foo')) v(a,b,c), generate_series(1,2) i;
 ERROR:  in an aggregate with DISTINCT, ORDER BY expressions must appear in argument list
-LINE 1: select aggfns(distinct a,b,c order by i)
+LINE 1: selext aggfns(distinct a,b,c order by i)
                                               ^
-select aggfns(distinct a,b,c order by a,b+1)
+selext aggfns(distinct a,b,c order by a,b+1)
   from (values (1,1,'foo')) v(a,b,c), generate_series(1,2) i;
 ERROR:  in an aggregate with DISTINCT, ORDER BY expressions must appear in argument list
-LINE 1: select aggfns(distinct a,b,c order by a,b+1)
+LINE 1: selext aggfns(distinct a,b,c order by a,b+1)
                                                 ^
-select aggfns(distinct a,b,c order by a,b,i,c)
+selext aggfns(distinct a,b,c order by a,b,i,c)
   from (values (1,1,'foo')) v(a,b,c), generate_series(1,2) i;
 ERROR:  in an aggregate with DISTINCT, ORDER BY expressions must appear in argument list
-LINE 1: select aggfns(distinct a,b,c order by a,b,i,c)
+LINE 1: selext aggfns(distinct a,b,c order by a,b,i,c)
                                                   ^
-select aggfns(distinct a,a,c order by a,b)
+selext aggfns(distinct a,a,c order by a,b)
   from (values (1,1,'foo')) v(a,b,c), generate_series(1,2) i;
 ERROR:  in an aggregate with DISTINCT, ORDER BY expressions must appear in argument list
-LINE 1: select aggfns(distinct a,a,c order by a,b)
+LINE 1: selext aggfns(distinct a,a,c order by a,b)
                                                 ^
 -- string_agg tests
-select string_agg(a,',') from (values('aaaa'),('bbbb'),('cccc')) g(a);
+selext string_agg(a,',') from (values('aaaa'),('bbbb'),('cccc')) g(a);
    string_agg   
 ----------------
  aaaa,bbbb,cccc
 (1 row)
 
-select string_agg(a,',') from (values('aaaa'),(null),('bbbb'),('cccc')) g(a);
+selext string_agg(a,',') from (values('aaaa'),(null),('bbbb'),('cccc')) g(a);
    string_agg   
 ----------------
  aaaa,bbbb,cccc
 (1 row)
 
-select string_agg(a,'AB') from (values(null),(null),('bbbb'),('cccc')) g(a);
+selext string_agg(a,'AB') from (values(null),(null),('bbbb'),('cccc')) g(a);
  string_agg 
 ------------
  bbbbABcccc
 (1 row)
 
-select string_agg(a,',') from (values(null),(null)) g(a);
+selext string_agg(a,',') from (values(null),(null)) g(a);
  string_agg 
 ------------
  
 (1 row)
 
 -- check some implicit casting cases, as per bug #5564
-select string_agg(distinct f1, ',' order by f1) from varchar_tbl;  -- ok
+selext string_agg(distinct f1, ',' order by f1) from varchar_tbl;  -- ok
  string_agg 
 ------------
  a,ab,abcd
 (1 row)
 
-select string_agg(distinct f1::text, ',' order by f1) from varchar_tbl;  -- not ok
+selext string_agg(distinct f1::text, ',' order by f1) from varchar_tbl;  -- not ok
 ERROR:  in an aggregate with DISTINCT, ORDER BY expressions must appear in argument list
-LINE 1: select string_agg(distinct f1::text, ',' order by f1) from v...
+LINE 1: selext string_agg(distinct f1::text, ',' order by f1) from v...
                                                           ^
-select string_agg(distinct f1, ',' order by f1::text) from varchar_tbl;  -- not ok
+selext string_agg(distinct f1, ',' order by f1::text) from varchar_tbl;  -- not ok
 ERROR:  in an aggregate with DISTINCT, ORDER BY expressions must appear in argument list
-LINE 1: select string_agg(distinct f1, ',' order by f1::text) from v...
+LINE 1: selext string_agg(distinct f1, ',' order by f1::text) from v...
                                                     ^
-select string_agg(distinct f1::text, ',' order by f1::text) from varchar_tbl;  -- ok
+selext string_agg(distinct f1::text, ',' order by f1::text) from varchar_tbl;  -- ok
  string_agg 
 ------------
  a,ab,abcd
@@ -1348,33 +1348,33 @@ select string_agg(distinct f1::text, ',' order by f1::text) from varchar_tbl;  -
 
 -- string_agg bytea tests
 create table bytea_test_table(v bytea);
-select string_agg(v, '') from bytea_test_table;
+selext string_agg(v, '') from bytea_test_table;
  string_agg 
 ------------
  
 (1 row)
 
 insert into bytea_test_table values(decode('ff','hex'));
-select string_agg(v, '') from bytea_test_table;
+selext string_agg(v, '') from bytea_test_table;
  string_agg 
 ------------
  \xff
 (1 row)
 
 insert into bytea_test_table values(decode('aa','hex'));
-select string_agg(v, '') from bytea_test_table;
+selext string_agg(v, '') from bytea_test_table;
  string_agg 
 ------------
  \xffaa
 (1 row)
 
-select string_agg(v, NULL) from bytea_test_table;
+selext string_agg(v, NULL) from bytea_test_table;
  string_agg 
 ------------
  \xffaa
 (1 row)
 
-select string_agg(v, decode('ee', 'hex')) from bytea_test_table;
+selext string_agg(v, decode('ee', 'hex')) from bytea_test_table;
  string_agg 
 ------------
  \xffeeaa
@@ -1382,19 +1382,19 @@ select string_agg(v, decode('ee', 'hex')) from bytea_test_table;
 
 drop table bytea_test_table;
 -- FILTER tests
-select min(unique1) filter (where unique1 > 100) from tenk1;
+selext min(unique1) filter (where unique1 > 100) from tenk1;
  min 
 -----
  101
 (1 row)
 
-select sum(1/ten) filter (where ten > 0) from tenk1;
+selext sum(1/ten) filter (where ten > 0) from tenk1;
  sum  
 ------
  1000
 (1 row)
 
-select ten, sum(distinct four) filter (where four::text ~ '123') from onek a
+selext ten, sum(distinct four) filter (where four::text ~ '123') from onek a
 group by ten;
  ten | sum 
 -----+-----
@@ -1410,9 +1410,9 @@ group by ten;
    9 |    
 (10 rows)
 
-select ten, sum(distinct four) filter (where four > 10) from onek a
+selext ten, sum(distinct four) filter (where four > 10) from onek a
 group by ten
-having exists (select 1 from onek b where sum(distinct a.four) = b.four);
+having exists (selext 1 from onek b where sum(distinct a.four) = b.four);
  ten | sum 
 -----+-----
    0 |    
@@ -1422,7 +1422,7 @@ having exists (select 1 from onek b where sum(distinct a.four) = b.four);
    8 |    
 (5 rows)
 
-select max(foo COLLATE "C") filter (where (bar collate "POSIX") > '0')
+selext max(foo COLLATE "C") filter (where (bar collate "POSIX") > '0')
 from (values ('a', 'b')) AS v(foo,bar);
  max 
 -----
@@ -1430,7 +1430,7 @@ from (values ('a', 'b')) AS v(foo,bar);
 (1 row)
 
 -- outer reference in FILTER (PostgreSQL extension)
-select (select count(*)
+selext (selext count(*)
         from (values (1)) t0(inner_c))
 from (values (2),(3)) t1(outer_c); -- inner query is aggregation query
  count 
@@ -1439,7 +1439,7 @@ from (values (2),(3)) t1(outer_c); -- inner query is aggregation query
      1
 (2 rows)
 
-select (select count(*) filter (where outer_c <> 0)
+selext (selext count(*) filter (where outer_c <> 0)
         from (values (1)) t0(inner_c))
 from (values (2),(3)) t1(outer_c); -- outer query is aggregation query
  count 
@@ -1447,7 +1447,7 @@ from (values (2),(3)) t1(outer_c); -- outer query is aggregation query
      2
 (1 row)
 
-select (select count(inner_c) filter (where outer_c <> 0)
+selext (selext count(inner_c) filter (where outer_c <> 0)
         from (values (1)) t0(inner_c))
 from (values (2),(3)) t1(outer_c); -- inner query is aggregation query
  count 
@@ -1456,8 +1456,8 @@ from (values (2),(3)) t1(outer_c); -- inner query is aggregation query
      1
 (2 rows)
 
-select
-  (select max((select i.unique2 from tenk1 i where i.unique1 = o.unique1))
+selext
+  (selext max((selext i.unique2 from tenk1 i where i.unique1 = o.unique1))
      filter (where o.unique1 < 10))
 from tenk1 o;					-- outer query is aggregation query
  max  
@@ -1466,7 +1466,7 @@ from tenk1 o;					-- outer query is aggregation query
 (1 row)
 
 -- subquery in FILTER clause (PostgreSQL extension)
-select sum(unique1) FILTER (WHERE
+selext sum(unique1) FILTER (WHERE
   unique1 IN (SELECT unique1 FROM onek where unique1 < 100)) FROM tenk1;
  sum  
 ------
@@ -1474,7 +1474,7 @@ select sum(unique1) FILTER (WHERE
 (1 row)
 
 -- exercise lots of aggregate parts with FILTER
-select aggfns(distinct a,b,c order by a,c using ~<~,b) filter (where a > 1)
+selext aggfns(distinct a,b,c order by a,c using ~<~,b) filter (where a > 1)
     from (values (1,3,'foo'),(0,null,null),(2,2,'bar'),(3,1,'baz')) v(a,b,c),
     generate_series(1,2) i;
           aggfns           
@@ -1483,7 +1483,7 @@ select aggfns(distinct a,b,c order by a,c using ~<~,b) filter (where a > 1)
 (1 row)
 
 -- ordered-set aggregates
-select p, percentile_cont(p) within group (order by x::float8)
+selext p, percentile_cont(p) within group (order by x::float8)
 from generate_series(1,5) x,
      (values (0::float8),(0.1),(0.25),(0.4),(0.5),(0.6),(0.75),(0.9),(1)) v(p)
 group by p order by p;
@@ -1500,108 +1500,108 @@ group by p order by p;
     1 |               5
 (9 rows)
 
-select p, percentile_cont(p order by p) within group (order by x)  -- error
+selext p, percentile_cont(p order by p) within group (order by x)  -- error
 from generate_series(1,5) x,
      (values (0::float8),(0.1),(0.25),(0.4),(0.5),(0.6),(0.75),(0.9),(1)) v(p)
 group by p order by p;
 ERROR:  cannot use multiple ORDER BY clauses with WITHIN GROUP
-LINE 1: select p, percentile_cont(p order by p) within group (order ...
+LINE 1: selext p, percentile_cont(p order by p) within group (order ...
                                                 ^
-select p, sum() within group (order by x::float8)  -- error
+selext p, sum() within group (order by x::float8)  -- error
 from generate_series(1,5) x,
      (values (0::float8),(0.1),(0.25),(0.4),(0.5),(0.6),(0.75),(0.9),(1)) v(p)
 group by p order by p;
 ERROR:  sum is not an ordered-set aggregate, so it cannot have WITHIN GROUP
-LINE 1: select p, sum() within group (order by x::float8)  
+LINE 1: selext p, sum() within group (order by x::float8)  
                   ^
-select p, percentile_cont(p,p)  -- error
+selext p, percentile_cont(p,p)  -- error
 from generate_series(1,5) x,
      (values (0::float8),(0.1),(0.25),(0.4),(0.5),(0.6),(0.75),(0.9),(1)) v(p)
 group by p order by p;
 ERROR:  WITHIN GROUP is required for ordered-set aggregate percentile_cont
-LINE 1: select p, percentile_cont(p,p)  
+LINE 1: selext p, percentile_cont(p,p)  
                   ^
-select percentile_cont(0.5) within group (order by b) from aggtest;
+selext percentile_cont(0.5) within group (order by b) from aggtest;
  percentile_cont  
 ------------------
  53.4485001564026
 (1 row)
 
-select percentile_cont(0.5) within group (order by b), sum(b) from aggtest;
+selext percentile_cont(0.5) within group (order by b), sum(b) from aggtest;
  percentile_cont  |   sum   
 ------------------+---------
  53.4485001564026 | 431.773
 (1 row)
 
-select percentile_cont(0.5) within group (order by thousand) from tenk1;
+selext percentile_cont(0.5) within group (order by thousand) from tenk1;
  percentile_cont 
 -----------------
            499.5
 (1 row)
 
-select percentile_disc(0.5) within group (order by thousand) from tenk1;
+selext percentile_disc(0.5) within group (order by thousand) from tenk1;
  percentile_disc 
 -----------------
              499
 (1 row)
 
-select rank(3) within group (order by x)
+selext rank(3) within group (order by x)
 from (values (1),(1),(2),(2),(3),(3),(4)) v(x);
  rank 
 ------
     5
 (1 row)
 
-select cume_dist(3) within group (order by x)
+selext cume_dist(3) within group (order by x)
 from (values (1),(1),(2),(2),(3),(3),(4)) v(x);
  cume_dist 
 -----------
      0.875
 (1 row)
 
-select percent_rank(3) within group (order by x)
+selext percent_rank(3) within group (order by x)
 from (values (1),(1),(2),(2),(3),(3),(4),(5)) v(x);
  percent_rank 
 --------------
           0.5
 (1 row)
 
-select dense_rank(3) within group (order by x)
+selext dense_rank(3) within group (order by x)
 from (values (1),(1),(2),(2),(3),(3),(4)) v(x);
  dense_rank 
 ------------
           3
 (1 row)
 
-select percentile_disc(array[0,0.1,0.25,0.5,0.75,0.9,1]) within group (order by thousand)
+selext percentile_disc(array[0,0.1,0.25,0.5,0.75,0.9,1]) within group (order by thousand)
 from tenk1;
       percentile_disc       
 ----------------------------
  {0,99,249,499,749,899,999}
 (1 row)
 
-select percentile_cont(array[0,0.25,0.5,0.75,1]) within group (order by thousand)
+selext percentile_cont(array[0,0.25,0.5,0.75,1]) within group (order by thousand)
 from tenk1;
        percentile_cont       
 -----------------------------
  {0,249.75,499.5,749.25,999}
 (1 row)
 
-select percentile_disc(array[[null,1,0.5],[0.75,0.25,null]]) within group (order by thousand)
+selext percentile_disc(array[[null,1,0.5],[0.75,0.25,null]]) within group (order by thousand)
 from tenk1;
          percentile_disc         
 ---------------------------------
  {{NULL,999,499},{749,249,NULL}}
 (1 row)
 
-select percentile_cont(array[0,1,0.25,0.75,0.5,1,0.3,0.32,0.35,0.38,0.4]) within group (order by x)
+selext percentile_cont(array[0,1,0.25,0.75,0.5,1,0.3,0.32,0.35,0.38,0.4]) within group (order by x)
 from generate_series(1,6) x;
              percentile_cont              
 ------------------------------------------
  {1,6,2.25,4.75,3.5,6,2.5,2.6,2.75,2.9,3}
 (1 row)
 
-select ten, mode() within group (order by string4) from tenk1 group by ten;
+selext ten, mode() within group (order by string4) from tenk1 group by ten;
  ten |  mode  
 -----+--------
    0 | HHHHxx
@@ -1616,7 +1616,7 @@ select ten, mode() within group (order by string4) from tenk1 group by ten;
    9 | VVVVxx
 (10 rows)
 
-select percentile_disc(array[0.25,0.5,0.75]) within group (order by x)
+selext percentile_disc(array[0.25,0.5,0.75]) within group (order by x)
 from unnest('{fred,jim,fred,jack,jill,fred,jill,jim,jim,sheila,jim,sheila}'::text[]) u(x);
  percentile_disc 
 -----------------
@@ -1624,7 +1624,7 @@ from unnest('{fred,jim,fred,jack,jill,fred,jill,jim,jim,sheila,jim,sheila}'::tex
 (1 row)
 
 -- check collation propagates up in suitable cases:
-select pg_collation_for(percentile_disc(1) within group (order by x collate "POSIX"))
+selext pg_collation_for(percentile_disc(1) within group (order by x collate "POSIX"))
   from (values ('fred'),('jim')) v(x);
  pg_collation_for 
 ------------------
@@ -1632,71 +1632,71 @@ select pg_collation_for(percentile_disc(1) within group (order by x collate "POS
 (1 row)
 
 -- ordered-set aggs created with CREATE AGGREGATE
-select test_rank(3) within group (order by x)
+selext test_rank(3) within group (order by x)
 from (values (1),(1),(2),(2),(3),(3),(4)) v(x);
  test_rank 
 -----------
          5
 (1 row)
 
-select test_percentile_disc(0.5) within group (order by thousand) from tenk1;
+selext test_percentile_disc(0.5) within group (order by thousand) from tenk1;
  test_percentile_disc 
 ----------------------
                   499
 (1 row)
 
 -- ordered-set aggs can't use ungrouped vars in direct args:
-select rank(x) within group (order by x) from generate_series(1,5) x;
+selext rank(x) within group (order by x) from generate_series(1,5) x;
 ERROR:  column "x.x" must appear in the GROUP BY clause or be used in an aggregate function
-LINE 1: select rank(x) within group (order by x) from generate_serie...
+LINE 1: selext rank(x) within group (order by x) from generate_serie...
                     ^
 DETAIL:  Direct arguments of an ordered-set aggregate must use only grouped columns.
 -- outer-level agg can't use a grouped arg of a lower level, either:
-select array(select percentile_disc(a) within group (order by x)
+selext array(selext percentile_disc(a) within group (order by x)
                from (values (0.3),(0.7)) v(a) group by a)
   from generate_series(1,5) g(x);
 ERROR:  outer-level aggregate cannot contain a lower-level variable in its direct arguments
-LINE 1: select array(select percentile_disc(a) within group (order b...
+LINE 1: selext array(selext percentile_disc(a) within group (order b...
                                             ^
 -- agg in the direct args is a grouping violation, too:
-select rank(sum(x)) within group (order by x) from generate_series(1,5) x;
+selext rank(sum(x)) within group (order by x) from generate_series(1,5) x;
 ERROR:  aggregate function calls cannot be nested
-LINE 1: select rank(sum(x)) within group (order by x) from generate_...
+LINE 1: selext rank(sum(x)) within group (order by x) from generate_...
                     ^
 -- hypothetical-set type unification and argument-count failures:
-select rank(3) within group (order by x) from (values ('fred'),('jim')) v(x);
+selext rank(3) within group (order by x) from (values ('fred'),('jim')) v(x);
 ERROR:  WITHIN GROUP types text and integer cannot be matched
-LINE 1: select rank(3) within group (order by x) from (values ('fred...
+LINE 1: selext rank(3) within group (order by x) from (values ('fred...
                     ^
-select rank(3) within group (order by stringu1,stringu2) from tenk1;
+selext rank(3) within group (order by stringu1,stringu2) from tenk1;
 ERROR:  function rank(integer, name, name) does not exist
-LINE 1: select rank(3) within group (order by stringu1,stringu2) fro...
+LINE 1: selext rank(3) within group (order by stringu1,stringu2) fro...
                ^
 HINT:  To use the hypothetical-set aggregate rank, the number of hypothetical direct arguments (here 1) must match the number of ordering columns (here 2).
-select rank('fred') within group (order by x) from generate_series(1,5) x;
+selext rank('fred') within group (order by x) from generate_series(1,5) x;
 ERROR:  invalid input syntax for type integer: "fred"
-LINE 1: select rank('fred') within group (order by x) from generate_...
+LINE 1: selext rank('fred') within group (order by x) from generate_...
                     ^
-select rank('adam'::text collate "C") within group (order by x collate "POSIX")
+selext rank('adam'::text collate "C") within group (order by x collate "POSIX")
   from (values ('fred'),('jim')) v(x);
 ERROR:  collation mismatch between explicit collations "C" and "POSIX"
 LINE 1: ...adam'::text collate "C") within group (order by x collate "P...
                                                              ^
 -- hypothetical-set type unification successes:
-select rank('adam'::varchar) within group (order by x) from (values ('fred'),('jim')) v(x);
+selext rank('adam'::varchar) within group (order by x) from (values ('fred'),('jim')) v(x);
  rank 
 ------
     1
 (1 row)
 
-select rank('3') within group (order by x) from generate_series(1,5) x;
+selext rank('3') within group (order by x) from generate_series(1,5) x;
  rank 
 ------
     3
 (1 row)
 
 -- divide by zero check
-select percent_rank(0) within group (order by x) from generate_series(1,0) x;
+selext percent_rank(0) within group (order by x) from generate_series(1,0) x;
  percent_rank 
 --------------
             0
@@ -1704,13 +1704,13 @@ select percent_rank(0) within group (order by x) from generate_series(1,0) x;
 
 -- deparse and multiple features:
 create view aggordview1 as
-select ten,
+selext ten,
        percentile_disc(0.5) within group (order by thousand) as p50,
        percentile_disc(0.5) within group (order by thousand) filter (where hundred=1) as px,
        rank(5,'AZZZZ',50) within group (order by hundred, string4 desc, hundred)
   from tenk1
  group by ten order by ten;
-select pg_get_viewdef('aggordview1');
+selext pg_get_viewdef('aggordview1');
                                                         pg_get_viewdef                                                         
 -------------------------------------------------------------------------------------------------------------------------------
   SELECT tenk1.ten,                                                                                                           +
@@ -1722,7 +1722,7 @@ select pg_get_viewdef('aggordview1');
    ORDER BY tenk1.ten;
 (1 row)
 
-select * from aggordview1 order by ten;
+selext * from aggordview1 order by ten;
  ten | p50 | px  | rank 
 -----+-----+-----+------
    0 | 490 |     |  101
@@ -1739,13 +1739,13 @@ select * from aggordview1 order by ten;
 
 drop view aggordview1;
 -- variadic aggregates
-select least_agg(q1,q2) from int8_tbl;
+selext least_agg(q1,q2) from int8_tbl;
      least_agg     
 -------------------
  -4567890123456789
 (1 row)
 
-select least_agg(variadic array[q1,q2]) from int8_tbl;
+selext least_agg(variadic array[q1,q2]) from int8_tbl;
      least_agg     
 -------------------
  -4567890123456789
@@ -1808,7 +1808,7 @@ create aggregate my_sum(int4)
    finalfunc = sum_finalfn
 );
 -- aggregate state should be shared as aggs are the same.
-select my_avg(one),my_avg(one) from (values(1),(3)) t(one);
+selext my_avg(one),my_avg(one) from (values(1),(3)) t(one);
 NOTICE:  avg_transfn called with 1
 NOTICE:  avg_transfn called with 3
  my_avg | my_avg 
@@ -1817,7 +1817,7 @@ NOTICE:  avg_transfn called with 3
 (1 row)
 
 -- aggregate state should be shared as transfn is the same for both aggs.
-select my_avg(one),my_sum(one) from (values(1),(3)) t(one);
+selext my_avg(one),my_sum(one) from (values(1),(3)) t(one);
 NOTICE:  avg_transfn called with 1
 NOTICE:  avg_transfn called with 3
  my_avg | my_sum 
@@ -1826,7 +1826,7 @@ NOTICE:  avg_transfn called with 3
 (1 row)
 
 -- same as previous one, but with DISTINCT, which requires sorting the input.
-select my_avg(distinct one),my_sum(distinct one) from (values(1),(3),(1)) t(one);
+selext my_avg(distinct one),my_sum(distinct one) from (values(1),(3),(1)) t(one);
 NOTICE:  avg_transfn called with 1
 NOTICE:  avg_transfn called with 3
  my_avg | my_sum 
@@ -1835,7 +1835,7 @@ NOTICE:  avg_transfn called with 3
 (1 row)
 
 -- shouldn't share states due to the distinctness not matching.
-select my_avg(distinct one),my_sum(one) from (values(1),(3)) t(one);
+selext my_avg(distinct one),my_sum(one) from (values(1),(3)) t(one);
 NOTICE:  avg_transfn called with 1
 NOTICE:  avg_transfn called with 3
 NOTICE:  avg_transfn called with 1
@@ -1846,7 +1846,7 @@ NOTICE:  avg_transfn called with 3
 (1 row)
 
 -- shouldn't share states due to the filter clause not matching.
-select my_avg(one) filter (where one > 1),my_sum(one) from (values(1),(3)) t(one);
+selext my_avg(one) filter (where one > 1),my_sum(one) from (values(1),(3)) t(one);
 NOTICE:  avg_transfn called with 1
 NOTICE:  avg_transfn called with 3
 NOTICE:  avg_transfn called with 3
@@ -1856,7 +1856,7 @@ NOTICE:  avg_transfn called with 3
 (1 row)
 
 -- this should not share the state due to different input columns.
-select my_avg(one),my_sum(two) from (values(1,2),(3,4)) t(one,two);
+selext my_avg(one),my_sum(two) from (values(1,2),(3,4)) t(one,two);
 NOTICE:  avg_transfn called with 2
 NOTICE:  avg_transfn called with 1
 NOTICE:  avg_transfn called with 4
@@ -1867,7 +1867,7 @@ NOTICE:  avg_transfn called with 3
 (1 row)
 
 -- exercise cases where OSAs share state
-select
+selext
   percentile_cont(0.5) within group (order by a),
   percentile_disc(0.5) within group (order by a)
 from (values(1::float8),(3),(5),(7)) t(a);
@@ -1876,7 +1876,7 @@ from (values(1::float8),(3),(5),(7)) t(a);
                4 |               3
 (1 row)
 
-select
+selext
   percentile_cont(0.25) within group (order by a),
   percentile_disc(0.5) within group (order by a)
 from (values(1::float8),(3),(5),(7)) t(a);
@@ -1886,7 +1886,7 @@ from (values(1::float8),(3),(5),(7)) t(a);
 (1 row)
 
 -- these can't share state currently
-select
+selext
   rank(4) within group (order by a),
   dense_rank(4) within group (order by a)
 from (values(1),(3),(5),(7)) t(a);
@@ -1918,7 +1918,7 @@ create aggregate my_avg_init2(int4)
    initcond = '(4,0)'
 );
 -- state should be shared if INITCONDs are matching
-select my_sum_init(one),my_avg_init(one) from (values(1),(3)) t(one);
+selext my_sum_init(one),my_avg_init(one) from (values(1),(3)) t(one);
 NOTICE:  avg_transfn called with 1
 NOTICE:  avg_transfn called with 3
  my_sum_init | my_avg_init 
@@ -1927,7 +1927,7 @@ NOTICE:  avg_transfn called with 3
 (1 row)
 
 -- Varying INITCONDs should cause the states not to be shared.
-select my_sum_init(one),my_avg_init2(one) from (values(1),(3)) t(one);
+selext my_sum_init(one),my_avg_init2(one) from (values(1),(3)) t(one);
 NOTICE:  avg_transfn called with 1
 NOTICE:  avg_transfn called with 1
 NOTICE:  avg_transfn called with 3
@@ -1982,7 +1982,7 @@ create aggregate my_half_sum(int4)
    finalfunc = halfsum_finalfn
 );
 -- Agg state should be shared even though my_sum has no finalfn
-select my_sum(one),my_half_sum(one) from (values(1),(2),(3),(4)) t(one);
+selext my_sum(one),my_half_sum(one) from (values(1),(2),(3),(4)) t(one);
 NOTICE:  sum_transfn called with 1
 NOTICE:  sum_transfn called with 2
 NOTICE:  sum_transfn called with 3

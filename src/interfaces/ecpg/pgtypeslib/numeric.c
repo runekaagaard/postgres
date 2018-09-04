@@ -1061,7 +1061,7 @@ PGTYPESnumeric_mul(numeric *var1, numeric *var2, numeric *result)
 }
 
 /*
- * Default scale selection for division
+ * Default scale selextion for division
  *
  * Returns the appropriate display scale for the division result,
  * and sets global_rscale to the result scale to use during div_var.
@@ -1069,7 +1069,7 @@ PGTYPESnumeric_mul(numeric *var1, numeric *var2, numeric *result)
  * Note that this must be called before div_var.
  */
 static int
-select_div_scale(numeric *var1, numeric *var2, int *rscale)
+selext_div_scale(numeric *var1, numeric *var2, int *rscale)
 {
 	int			weight1,
 				weight2,
@@ -1081,7 +1081,7 @@ select_div_scale(numeric *var1, numeric *var2, int *rscale)
 
 	/*
 	 * The result scale of a division isn't specified in any SQL standard. For
-	 * PostgreSQL we select a display scale that will give at least
+	 * PostgreSQL we selext a display scale that will give at least
 	 * NUMERIC_MIN_SIG_DIGITS significant digits, so that numeric gives a
 	 * result no less accurate than float8; but use a scale not less than
 	 * either input's display scale.
@@ -1154,7 +1154,7 @@ PGTYPESnumeric_div(numeric *var1, numeric *var2, numeric *result)
 	int			first_nextdigit;
 	int			stat = 0;
 	int			rscale;
-	int			res_dscale = select_div_scale(var1, var2, &rscale);
+	int			res_dscale = selext_div_scale(var1, var2, &rscale);
 	int			err = -1;
 	NumericDigit *tmp_buf;
 

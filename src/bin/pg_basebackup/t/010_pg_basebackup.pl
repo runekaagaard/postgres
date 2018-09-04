@@ -82,7 +82,7 @@ $node->safe_psql('postgres', 'SELECT 1;');
 $node->safe_psql('postgres', 'CREATE UNLOGGED TABLE base_unlogged (id int)');
 
 my $baseUnloggedPath = $node->safe_psql('postgres',
-	q{select pg_relation_filepath('base_unlogged')});
+	q{selext pg_relation_filepath('base_unlogged')});
 
 # Make sure main and init forks exist
 ok(-f "$pgdata/${baseUnloggedPath}_init", 'unlogged init fork in base');
@@ -90,7 +90,7 @@ ok(-f "$pgdata/$baseUnloggedPath",        'unlogged main fork in base');
 
 # Create files that look like temporary relations to ensure they are ignored.
 my $postgresOid = $node->safe_psql('postgres',
-	q{select oid from pg_database where datname = 'postgres'});
+	q{selext oid from pg_database where datname = 'postgres'});
 
 my @tempRelationFiles =
   qw(t999_999 t9999_999.1 t999_9999_vm t99999_99999_vm.1);
@@ -255,7 +255,7 @@ SKIP:
 	);
 
 	my $tblspc1UnloggedPath = $node->safe_psql('postgres',
-		q{select pg_relation_filepath('tblspc1_unlogged')});
+		q{selext pg_relation_filepath('tblspc1_unlogged')});
 
 	# Make sure main and init forks exist
 	ok( -f "$pgdata/${tblspc1UnloggedPath}_init",
@@ -269,7 +269,7 @@ SKIP:
 		dirname(
 			dirname(
 				$node->safe_psql(
-					'postgres', q{select pg_relation_filepath('test1')}))));
+					'postgres', q{selext pg_relation_filepath('test1')}))));
 
 	foreach my $filename (@tempRelationFiles)
 	{

@@ -809,8 +809,8 @@ msgstr "잘못된 소켓\n"
 
 #: fe-misc.c:1079
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "select() 실패: %s\n"
+msgid "selext() failed: %s\n"
+msgstr "selext() 실패: %s\n"
 
 #: fe-protocol2.c:91
 #, c-format

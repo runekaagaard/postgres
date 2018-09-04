@@ -1529,7 +1529,7 @@ ExecOnConflictUpdate(ModifyTableState *mtstate,
 	 * this session, after the above heap_lock_tuple. We choose to not error
 	 * out in that case, in line with ExecUpdate's treatment of similar cases.
 	 * This can happen if an UPDATE is triggered from within ExecQual(),
-	 * ExecWithCheckOptions() or ExecProject() above, e.g. by selecting from a
+	 * ExecWithCheckOptions() or ExecProject() above, e.g. by selexting from a
 	 * wCTE in the ON CONFLICT's SET.
 	 */
 
@@ -1717,7 +1717,7 @@ ExecPrepareTupleRouting(ModifyTableState *mtstate,
 	Assert(partidx >= 0 && partidx < proute->num_partitions);
 
 	/*
-	 * Get the ResultRelInfo corresponding to the selected partition; if not
+	 * Get the ResultRelInfo corresponding to the selexted partition; if not
 	 * yet there, initialize it.
 	 */
 	partrel = proute->partitions[partidx];
@@ -2543,7 +2543,7 @@ ExecInitModifyTable(ModifyTable *node, EState *estate, int eflags)
 		}
 	}
 
-	/* select first subplan */
+	/* selext first subplan */
 	mtstate->mt_whichplan = 0;
 	subplan = (Plan *) linitial(node->plans);
 	EvalPlanQualSetPlan(&mtstate->mt_epqstate, subplan,

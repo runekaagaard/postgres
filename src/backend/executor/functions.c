@@ -826,7 +826,7 @@ postquel_start(execution_state *es, SQLFunctionCachePtr fcache)
 		 * In lazyEval mode, do not let the executor set up an AfterTrigger
 		 * context.  This is necessary not just an optimization, because we
 		 * mustn't exit from the function execution with a stacked
-		 * AfterTrigger level still active.  We are careful not to select
+		 * AfterTrigger level still active.  We are careful not to selext
 		 * lazyEval mode for any statement that could possibly queue triggers.
 		 */
 		int			eflags;

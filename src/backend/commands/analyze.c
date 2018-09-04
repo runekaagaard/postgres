@@ -1000,14 +1000,14 @@ examine_attribute(Relation onerel, int attnum, Node *index_expr)
  *
  * Selected rows are returned in the caller-allocated array rows[], which
  * must have at least targrows entries.
- * The actual number of rows selected is returned as the function result.
+ * The actual number of rows selexted is returned as the function result.
  * We also estimate the total numbers of live and dead rows in the table,
  * and return them into *totalrows and *totaldeadrows, respectively.
  *
  * The returned list of tuples is in order by physical position in the table.
  * (We will rely on this later to derive correlation estimates.)
  *
- * As of May 2004 we use a new two-stage method:  Stage one selects up
+ * As of May 2004 we use a new two-stage method:  Stage one selexts up
  * to targrows random blocks (or all blocks, if there aren't so many).
  * Stage two scans these blocks and uses the Vitter algorithm to create
  * a random sample of targrows rows (or less, if there are less in the
@@ -1018,7 +1018,7 @@ examine_attribute(Relation onerel, int attnum, Node *index_expr)
  *
  * Although every row has an equal chance of ending up in the final
  * sample, this sampling method is not perfect: not every possible
- * sample has an equal chance of being selected.  For large relations
+ * sample has an equal chance of being selexted.  For large relations
  * the number of different blocks represented by the sample tends to be
  * too small.  We can live with that for now.  Improvements are welcome.
  *
@@ -1053,7 +1053,7 @@ acquire_sample_rows(Relation onerel, int elevel,
 	/* Prepare for sampling block numbers */
 	BlockSampler_Init(&bs, totalblocks, targrows, random());
 	/* Prepare for sampling rows */
-	reservoir_init_selection_state(&rstate, targrows);
+	reservoir_init_selextion_state(&rstate, targrows);
 
 	/* Outer loop over blocks to sample */
 	while (BlockSampler_HasMore(&bs))
@@ -1081,7 +1081,7 @@ acquire_sample_rows(Relation onerel, int elevel,
 		targpage = BufferGetPage(targbuffer);
 		maxoffset = PageGetMaxOffsetNumber(targpage);
 
-		/* Inner loop over all tuples on the selected page */
+		/* Inner loop over all tuples on the selexted page */
 		for (targoffset = FirstOffsetNumber; targoffset <= maxoffset; targoffset++)
 		{
 			ItemId		itemid;
@@ -1184,7 +1184,7 @@ acquire_sample_rows(Relation onerel, int elevel,
 				 * until we reach the end of the relation.  This algorithm is
 				 * from Jeff Vitter's paper (see full citation below). It
 				 * works by repeatedly computing the number of tuples to skip
-				 * before selecting a tuple, which replaces a randomly chosen
+				 * before selexting a tuple, which replaces a randomly chosen
 				 * element of the reservoir (current set of tuples).  At all
 				 * times the reservoir is a true random sample of the tuples
 				 * we've passed over so far, so when we fall off the end of
@@ -2191,7 +2191,7 @@ compute_distinct_stats(VacAttrStatsP stats,
 		 * an MCV list that will fit into the stats target, then we should do
 		 * so and thus provide the planner with complete information.  But if
 		 * the MCV list is not complete, it's generally worth being more
-		 * selective, and not just filling it all the way up to the stats
+		 * selextive, and not just filling it all the way up to the stats
 		 * target.
 		 */
 		if (track_cnt < track_max && toowide_cnt == 0 &&
@@ -2556,7 +2556,7 @@ compute_scalar_stats(VacAttrStatsP stats,
 		 * an MCV list that will fit into the stats target, then we should do
 		 * so and thus provide the planner with complete information.  But if
 		 * the MCV list is not complete, it's generally worth being more
-		 * selective, and not just filling it all the way up to the stats
+		 * selextive, and not just filling it all the way up to the stats
 		 * target.
 		 */
 		if (track_cnt == ndistinct && toowide_cnt == 0 &&
@@ -2885,7 +2885,7 @@ analyze_mcv_list(int *mcv_counts,
 
 	/*
 	 * Exclude the least common values from the MCV list, if they are not
-	 * significantly more common than the estimated selectivity they would
+	 * significantly more common than the estimated selextivity they would
 	 * have if they weren't in the list.  All non-MCV values are assumed to be
 	 * equally common, after taking into account the frequencies of all the
 	 * the values in the MCV list and the number of nulls (c.f. eqsel()).
@@ -2917,7 +2917,7 @@ analyze_mcv_list(int *mcv_counts,
 					stddev;
 
 		/*
-		 * Estimated selectivity the least common value would have if it
+		 * Estimated selextivity the least common value would have if it
 		 * wasn't in the MCV list (c.f. eqsel()).
 		 */
 		selec = 1.0 - sumcount / samplerows - stanullfrac;
@@ -2955,7 +2955,7 @@ analyze_mcv_list(int *mcv_counts,
 		{
 			/*
 			 * The value is significantly more common than the non-MCV
-			 * selectivity would suggest.  Keep it, and all the other more
+			 * selextivity would suggest.  Keep it, and all the other more
 			 * common values in the list.
 			 */
 			break;

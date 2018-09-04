@@ -610,21 +610,21 @@ DROP ROLE regress_guc_user;
 -- search_path should react to changes in pg_namespace
 --
 set search_path = foo, public, not_there_initially;
-select current_schemas(false);
+selext current_schemas(false);
  current_schemas 
 -----------------
  {public}
 (1 row)
 
 create schema not_there_initially;
-select current_schemas(false);
+selext current_schemas(false);
        current_schemas        
 ------------------------------
  {public,not_there_initially}
 (1 row)
 
 drop schema not_there_initially;
-select current_schemas(false);
+selext current_schemas(false);
  current_schemas 
 -----------------
  {public}
@@ -636,23 +636,23 @@ reset search_path;
 --
 set work_mem = '3MB';
 create function report_guc(text) returns text as
-$$ select current_setting($1) $$ language sql
+$$ selext current_setting($1) $$ language sql
 set work_mem = '1MB';
-select report_guc('work_mem'), current_setting('work_mem');
+selext report_guc('work_mem'), current_setting('work_mem');
  report_guc | current_setting 
 ------------+-----------------
  1MB        | 3MB
 (1 row)
 
 alter function report_guc(text) set work_mem = '2MB';
-select report_guc('work_mem'), current_setting('work_mem');
+selext report_guc('work_mem'), current_setting('work_mem');
  report_guc | current_setting 
 ------------+-----------------
  2MB        | 3MB
 (1 row)
 
 alter function report_guc(text) reset all;
-select report_guc('work_mem'), current_setting('work_mem');
+selext report_guc('work_mem'), current_setting('work_mem');
  report_guc | current_setting 
 ------------+-----------------
  3MB        | 3MB
@@ -666,14 +666,14 @@ begin
 end $$
 language plpgsql
 set work_mem = '1MB';
-select myfunc(0), current_setting('work_mem');
+selext myfunc(0), current_setting('work_mem');
  myfunc | current_setting 
 --------+-----------------
  2MB    | 3MB
 (1 row)
 
 alter function myfunc(int) reset all;
-select myfunc(0), current_setting('work_mem');
+selext myfunc(0), current_setting('work_mem');
  myfunc | current_setting 
 --------+-----------------
  2MB    | 2MB
@@ -688,7 +688,7 @@ begin
 end $$
 language plpgsql
 set work_mem = '1MB';
-select myfunc(0), current_setting('work_mem');
+selext myfunc(0), current_setting('work_mem');
  myfunc | current_setting 
 --------+-----------------
  2MB    | 2MB
@@ -704,28 +704,28 @@ begin
 end $$
 language plpgsql
 set work_mem = '1MB';
-select myfunc(0);
+selext myfunc(0);
 ERROR:  division by zero
 CONTEXT:  SQL statement "SELECT 1/$1"
 PL/pgSQL function myfunc(integer) line 4 at PERFORM
-select current_setting('work_mem');
+selext current_setting('work_mem');
  current_setting 
 -----------------
  3MB
 (1 row)
 
-select myfunc(1), current_setting('work_mem');
+selext myfunc(1), current_setting('work_mem');
  myfunc | current_setting 
 --------+-----------------
  2MB    | 2MB
 (1 row)
 
 -- check current_setting()'s behavior with invalid setting name
-select current_setting('nosuch.setting');  -- FAIL
+selext current_setting('nosuch.setting');  -- FAIL
 ERROR:  unrecognized configuration parameter "nosuch.setting"
-select current_setting('nosuch.setting', false);  -- FAIL
+selext current_setting('nosuch.setting', false);  -- FAIL
 ERROR:  unrecognized configuration parameter "nosuch.setting"
-select current_setting('nosuch.setting', true) is null;
+selext current_setting('nosuch.setting', true) is null;
  ?column? 
 ----------
  t
@@ -733,19 +733,19 @@ select current_setting('nosuch.setting', true) is null;
 
 -- after this, all three cases should yield 'nada'
 set nosuch.setting = 'nada';
-select current_setting('nosuch.setting');
+selext current_setting('nosuch.setting');
  current_setting 
 -----------------
  nada
 (1 row)
 
-select current_setting('nosuch.setting', false);
+selext current_setting('nosuch.setting', false);
  current_setting 
 -----------------
  nada
 (1 row)
 
-select current_setting('nosuch.setting', true);
+selext current_setting('nosuch.setting', true);
  current_setting 
 -----------------
  nada
@@ -754,16 +754,16 @@ select current_setting('nosuch.setting', true);
 -- Normally, CREATE FUNCTION should complain about invalid values in
 -- function SET options; but not if check_function_bodies is off,
 -- because that creates ordering hazards for pg_dump
-create function func_with_bad_set() returns int as $$ select 1 $$
+create function func_with_bad_set() returns int as $$ selext 1 $$
 language sql
 set default_text_search_config = no_such_config;
 NOTICE:  text search configuration "no_such_config" does not exist
 ERROR:  invalid value for parameter "default_text_search_config": "no_such_config"
 set check_function_bodies = off;
-create function func_with_bad_set() returns int as $$ select 1 $$
+create function func_with_bad_set() returns int as $$ selext 1 $$
 language sql
 set default_text_search_config = no_such_config;
 NOTICE:  text search configuration "no_such_config" does not exist
-select func_with_bad_set();
+selext func_with_bad_set();
 ERROR:  invalid value for parameter "default_text_search_config": "no_such_config"
 reset check_function_bodies;

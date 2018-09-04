@@ -58,7 +58,7 @@
 #include <fcntl.h>
 #endif
 #ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>
+#include <sys/selext.h>
 #endif
 
 #include "parallel.h"
@@ -216,7 +216,7 @@ static bool ListenToWorkers(ArchiveHandle *AH, ParallelState *pstate,
 				bool do_wait);
 static char *getMessageFromMaster(int pipefd[2]);
 static void sendMessageToMaster(int pipefd[2], const char *str);
-static int	select_loop(int maxFd, fd_set *workerset);
+static int	selext_loop(int maxFd, fd_set *workerset);
 static char *getMessageFromWorker(ParallelState *pstate,
 					 bool do_wait, int *worker);
 static void sendMessageToWorker(ParallelState *pstate,
@@ -1565,7 +1565,7 @@ sendMessageToMaster(int pipefd[2], const char *str)
  * Returns -1 on error, else the number of readable descriptors.
  */
 static int
-select_loop(int maxFd, fd_set *workerset)
+selext_loop(int maxFd, fd_set *workerset)
 {
 	int			i;
 	fd_set		saveSet = *workerset;
@@ -1573,7 +1573,7 @@ select_loop(int maxFd, fd_set *workerset)
 	for (;;)
 	{
 		*workerset = saveSet;
-		i = select(maxFd + 1, workerset, NULL, NULL, NULL);
+		i = selext(maxFd + 1, workerset, NULL, NULL, NULL);
 
 #ifndef WIN32
 		if (i < 0 && errno == EINTR)
@@ -1611,7 +1611,7 @@ getMessageFromWorker(ParallelState *pstate, bool do_wait, int *worker)
 	int			maxFd = -1;
 	struct timeval nowait = {0, 0};
 
-	/* construct bitmap of socket descriptors for select() */
+	/* construct bitmap of socket descriptors for selext() */
 	FD_ZERO(&workerset);
 	for (i = 0; i < pstate->numWorkers; i++)
 	{
@@ -1624,17 +1624,17 @@ getMessageFromWorker(ParallelState *pstate, bool do_wait, int *worker)
 
 	if (do_wait)
 	{
-		i = select_loop(maxFd, &workerset);
+		i = selext_loop(maxFd, &workerset);
 		Assert(i != 0);
 	}
 	else
 	{
-		if ((i = select(maxFd + 1, &workerset, NULL, NULL, &nowait)) == 0)
+		if ((i = selext(maxFd + 1, &workerset, NULL, NULL, &nowait)) == 0)
 			return NULL;
 	}
 
 	if (i < 0)
-		exit_horribly(modulename, "select() failed: %s\n", strerror(errno));
+		exit_horribly(modulename, "selext() failed: %s\n", strerror(errno));
 
 	for (i = 0; i < pstate->numWorkers; i++)
 	{
@@ -1735,7 +1735,7 @@ readMessageFromPipe(int fd)
 
 /*
  * This is a replacement version of pipe(2) for Windows which allows the pipe
- * handles to be used in select().
+ * handles to be used in selext().
  *
  * Reads and writes on the pipe must go through piperead()/pipewrite().
  *

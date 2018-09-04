@@ -64,8 +64,8 @@ CREATE unique index message_section_map_key2 on message_section_map ( sid, mid )
 CREATE INDEX message_rdtree_idx on message using gist ( sections gist__int_ops );
 VACUUM ANALYZE;
 
-select count(*) from message;
-select count(*) from message_section_map;
+selext count(*) from message;
+selext count(*) from message_section_map;
 
 
 

@@ -791,8 +791,8 @@ msgstr "ogiltigt uttag\n"
 
 #: fe-misc.c:1077
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "select() misslyckades: %s\n"
+msgid "selext() failed: %s\n"
+msgstr "selext() misslyckades: %s\n"
 
 #: fe-protocol2.c:90
 #, c-format

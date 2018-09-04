@@ -44,7 +44,7 @@ CteScanNext(CteScanState *node)
 	dir = estate->es_direction;
 	forward = ScanDirectionIsForward(dir);
 	tuplestorestate = node->leader->cte_table;
-	tuplestore_select_read_pointer(tuplestorestate, node->readptr);
+	tuplestore_selext_read_pointer(tuplestorestate, node->readptr);
 	slot = node->ss.ss_ScanTupleSlot;
 
 	/*
@@ -109,10 +109,10 @@ CteScanNext(CteScanState *node)
 
 		/*
 		 * There are corner cases where the subplan could change which
-		 * tuplestore read pointer is active, so be sure to reselect ours
+		 * tuplestore read pointer is active, so be sure to reselext ours
 		 * before storing the tuple we got.
 		 */
-		tuplestore_select_read_pointer(tuplestorestate, node->readptr);
+		tuplestore_selext_read_pointer(tuplestorestate, node->readptr);
 
 		/*
 		 * Append a copy of the returned tuple to tuplestore.  NOTE: because
@@ -243,7 +243,7 @@ ExecInitCteScan(CteScan *node, EState *estate, int eflags)
 		scanstate->readptr =
 			tuplestore_alloc_read_pointer(scanstate->leader->cte_table,
 										  scanstate->eflags);
-		tuplestore_select_read_pointer(scanstate->leader->cte_table,
+		tuplestore_selext_read_pointer(scanstate->leader->cte_table,
 									   scanstate->readptr);
 		tuplestore_rescan(scanstate->leader->cte_table);
 	}
@@ -342,7 +342,7 @@ ExecReScanCteScan(CteScanState *node)
 		 * doesn't need a rescan (and we can re-read what's in the tuplestore
 		 * now), or somebody else already took care of it.
 		 */
-		tuplestore_select_read_pointer(tuplestorestate, node->readptr);
+		tuplestore_selext_read_pointer(tuplestorestate, node->readptr);
 		tuplestore_rescan(tuplestorestate);
 	}
 }

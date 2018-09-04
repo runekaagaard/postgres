@@ -375,7 +375,7 @@ heapgetpage(HeapScanDesc scan, BlockNumber page)
 	 */
 	CHECK_FOR_INTERRUPTS();
 
-	/* read page using selected strategy */
+	/* read page using selexted strategy */
 	scan->rs_cbuf = ReadBufferExtended(scan->rs_rd, MAIN_FORKNUM, page,
 									   RBM_NORMAL, scan->rs_strategy);
 	scan->rs_cblock = page;
@@ -1546,7 +1546,7 @@ heap_rescan(HeapScanDesc scan,
  * This call allows changing the buffer strategy, syncscan, and pagemode
  * options before starting a fresh scan.  Note that although the actual use
  * of syncscan might change (effectively, enabling or disabling reporting),
- * the previously selected startblock will be kept.
+ * the previously selexted startblock will be kept.
  * ----------------
  */
 void

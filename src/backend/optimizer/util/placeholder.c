@@ -242,7 +242,7 @@ find_placeholders_in_expr(PlannerInfo *root, Node *expr)
  *		Adjust the target evaluation levels for placeholders
  *
  * The initial eval_at level set by find_placeholder_info was the set of
- * rels used in the placeholder's expression (or the whole subselect below
+ * rels used in the placeholder's expression (or the whole subselext below
  * the placeholder's syntactic location, if the expr is variable-free).
  * If the query contains any outer joins that can null any of those rels,
  * we must delay evaluation to above those joins.
@@ -298,7 +298,7 @@ update_placeholder_eval_levels(PlannerInfo *root, SpecialJoinInfo *new_sjinfo)
 			{
 				SpecialJoinInfo *sjinfo = (SpecialJoinInfo *) lfirst(lc2);
 
-				/* disregard joins not within the PHV's sub-select */
+				/* disregard joins not within the PHV's sub-selext */
 				if (!bms_is_subset(sjinfo->syn_lefthand, syn_level) ||
 					!bms_is_subset(sjinfo->syn_righthand, syn_level))
 					continue;

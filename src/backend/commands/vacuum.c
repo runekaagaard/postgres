@@ -329,7 +329,7 @@ vacuum(int options, List *relations, VacuumParams *params,
 		VacuumPageDirty = 0;
 
 		/*
-		 * Loop to process each selected relation.
+		 * Loop to process each selexted relation.
 		 */
 		foreach(cur, relations)
 		{

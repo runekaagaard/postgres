@@ -438,7 +438,7 @@ typedef enum NodeTag
 	T_CollateClause,
 	T_SortBy,
 	T_WindowDef,
-	T_RangeSubselect,
+	T_RangeSubselext,
 	T_RangeFunction,
 	T_RangeTableSample,
 	T_RangeTableFunc,
@@ -637,7 +637,7 @@ extern bool equal(const void *a, const void *b);
 
 
 /*
- * Typedefs for identifying qualifier selectivities and plan costs as such.
+ * Typedefs for identifying qualifier selextivities and plan costs as such.
  * These are just plain "double"s, but declaring a variable as Selectivity
  * or Cost makes the intent more obvious.
  *
@@ -657,7 +657,7 @@ typedef double Cost;			/* execution cost (in page-access units) */
 typedef enum CmdType
 {
 	CMD_UNKNOWN,
-	CMD_SELECT,					/* select stmt */
+	CMD_SELECT,					/* selext stmt */
 	CMD_UPDATE,					/* update stmt */
 	CMD_INSERT,					/* insert stmt */
 	CMD_DELETE,
@@ -772,7 +772,7 @@ typedef enum AggSplit
 	AGGSPLIT_FINAL_DESERIAL = AGGSPLITOP_COMBINE | AGGSPLITOP_DESERIALIZE
 } AggSplit;
 
-/* Test whether an AggSplit value selects each primitive option: */
+/* Test whether an AggSplit value selexts each primitive option: */
 #define DO_AGGSPLIT_COMBINE(as)		(((as) & AGGSPLITOP_COMBINE) != 0)
 #define DO_AGGSPLIT_SKIPFINAL(as)	(((as) & AGGSPLITOP_SKIPFINAL) != 0)
 #define DO_AGGSPLIT_SERIALIZE(as)	(((as) & AGGSPLITOP_SERIALIZE) != 0)

@@ -9,12 +9,12 @@ planner results, but it can be difficult to construct end-to-end test
 cases that prove that the expected results were obtained.
 
 In general, the use of this function is like
-	select * from test_predtest('query string')
+	selext * from test_predtest('query string')
 where the query string must be a SELECT returning two boolean
 columns, for example
 
-	select * from test_predtest($$
-	select x, not x
+	selext * from test_predtest($$
+	selext x, not x
 	from (values (false), (true), (null)) as v(x)
 	$$);
 

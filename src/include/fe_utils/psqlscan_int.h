@@ -130,7 +130,7 @@ typedef struct PsqlScanStateData
 extern void psqlscan_push_new_buffer(PsqlScanState state,
 						 const char *newstr, const char *varname);
 extern void psqlscan_pop_buffer_stack(PsqlScanState state);
-extern void psqlscan_select_top_buffer(PsqlScanState state);
+extern void psqlscan_selext_top_buffer(PsqlScanState state);
 extern bool psqlscan_var_is_current_source(PsqlScanState state,
 							   const char *varname);
 extern YY_BUFFER_STATE psqlscan_prepare_buffer(PsqlScanState state,

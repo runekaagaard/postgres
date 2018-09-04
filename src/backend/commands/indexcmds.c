@@ -263,7 +263,7 @@ CheckIndexCompatible(Oid oldId,
 		}
 	}
 
-	/* Any change in exclusion operator selections breaks compatibility. */
+	/* Any change in exclusion operator selextions breaks compatibility. */
 	if (ret && indexInfo->ii_ExclusionOps != NULL)
 	{
 		Oid		   *old_operators,
@@ -305,7 +305,7 @@ CheckIndexCompatible(Oid oldId,
  *		created
  * 'stmt': IndexStmt describing the properties of the new index.
  * 'indexRelationId': normally InvalidOid, but during bootstrap can be
- *		nonzero to specify a preselected OID for the index.
+ *		nonzero to specify a preselexted OID for the index.
  * 'parentIndexId': the OID of the parent index; InvalidOid if not the child
  *		of a partitioned index.
  * 'parentConstraintId': the OID of the parent constraint; InvalidOid if not
@@ -1635,7 +1635,7 @@ ComputeIndexAttrs(IndexInfo *indexInfo,
 
 				/*
 				 * attribute->opclass might not explicitly name the opfamily,
-				 * so fetch the name of the selected opfamily for use in the
+				 * so fetch the name of the selexted opfamily for use in the
 				 * error message.
 				 */
 				opftuple = SearchSysCache1(OPFAMILYOID,
@@ -2299,7 +2299,7 @@ ReindexTable(RangeVar *relation, int options)
 
 /*
  * ReindexMultipleTables
- *		Recreate indexes of tables selected by objectName/objectKind.
+ *		Recreate indexes of tables selexted by objectName/objectKind.
  *
  * To reduce the probability of deadlocks, each table is reindexed in a
  * separate transaction, so we can release the lock on it right away.
@@ -2364,7 +2364,7 @@ ReindexMultipleTables(const char *objectName, ReindexObjectType objectKind,
 
 	/*
 	 * Define the search keys to find the objects to reindex. For a schema, we
-	 * select target relations using relnamespace, something not necessary for
+	 * selext target relations using relnamespace, something not necessary for
 	 * a database-wide operation.
 	 */
 	if (objectKind == REINDEX_OBJECT_SCHEMA)
@@ -2431,7 +2431,7 @@ ReindexMultipleTables(const char *objectName, ReindexObjectType objectKind,
 		old = MemoryContextSwitchTo(private_context);
 
 		/*
-		 * We always want to reindex pg_class first if it's selected to be
+		 * We always want to reindex pg_class first if it's selexted to be
 		 * reindexed.  This ensures that if there is any corruption in
 		 * pg_class' indexes, they will be fixed before we process any other
 		 * tables.  This is critical because reindexing itself will try to

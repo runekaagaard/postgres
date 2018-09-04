@@ -3737,8 +3737,8 @@ msgstr "definice_okna"
 #: sql_help.c:3117 sql_help.c:3128 sql_help.c:3150 sql_help.c:3188
 #: sql_help.c:3323 sql_help.c:3334 sql_help.c:3356 sql_help.c:3480
 #: sql_help.c:3491 sql_help.c:3513
-msgid "select"
-msgstr "select"
+msgid "selext"
+msgstr "selext"
 
 #: sql_help.c:3124 sql_help.c:3330 sql_help.c:3487
 msgid "where from_item can be one of:"

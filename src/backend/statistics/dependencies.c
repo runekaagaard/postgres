@@ -774,7 +774,7 @@ dependency_is_compatible_clause(Node *clause, Index relid, AttrNumber *attnum)
 		if (list_length(expr->args) != 2)
 			return false;
 
-		/* Make sure non-selected argument is a pseudoconstant. */
+		/* Make sure non-selexted argument is a pseudoconstant. */
 		if (is_pseudo_constant_clause(lsecond(expr->args)))
 			var = linitial(expr->args);
 		else if (is_pseudo_constant_clause(linitial(expr->args)))
@@ -786,12 +786,12 @@ dependency_is_compatible_clause(Node *clause, Index relid, AttrNumber *attnum)
 		 * If it's not an "=" operator, just ignore the clause, as it's not
 		 * compatible with functional dependencies.
 		 *
-		 * This uses the function for estimating selectivity, not the operator
+		 * This uses the function for estimating selextivity, not the operator
 		 * directly (a bit awkward, but well ...).
 		 *
 		 * XXX this is pretty dubious; probably it'd be better to check btree
 		 * or hash opclass membership, so as not to be fooled by custom
-		 * selectivity functions, and to be more consistent with decisions
+		 * selextivity functions, and to be more consistent with decisions
 		 * elsewhere in the planner.
 		 */
 		if (get_oprrest(expr->opno) != F_EQSEL)
@@ -848,7 +848,7 @@ dependency_is_compatible_clause(Node *clause, Index relid, AttrNumber *attnum)
  *		find the strongest dependency on the attributes
  *
  * When applying functional dependencies, we start with the strongest
- * dependencies. That is, we select the dependency that:
+ * dependencies. That is, we selext the dependency that:
  *
  * (a) has all attributes covered by equality clauses
  *
@@ -857,7 +857,7 @@ dependency_is_compatible_clause(Node *clause, Index relid, AttrNumber *attnum)
  * (c) has the highest degree of validity
  *
  * This guarantees that we eliminate the most redundant conditions first
- * (see the comment in dependencies_clauselist_selectivity).
+ * (see the comment in dependencies_clauselist_selextivity).
  */
 static MVDependency *
 find_strongest_dependency(StatisticExtInfo *stats, MVDependencies *dependencies,
@@ -910,18 +910,18 @@ find_strongest_dependency(StatisticExtInfo *stats, MVDependencies *dependencies,
 }
 
 /*
- * dependencies_clauselist_selectivity
- *		Return the estimated selectivity of (a subset of) the given clauses
+ * dependencies_clauselist_selextivity
+ *		Return the estimated selextivity of (a subset of) the given clauses
  *		using functional dependency statistics, or 1.0 if no useful functional
  *		dependency statistic exists.
  *
  * 'estimatedclauses' is an output argument that gets a bit set corresponding
  * to the (zero-based) list index of each clause that is included in the
- * estimated selectivity.
+ * estimated selextivity.
  *
  * Given equality clauses on attributes (a,b) we find the strongest dependency
- * between them, i.e. either (a=>b) or (b=>a). Assuming (a=>b) is the selected
- * dependency, we then combine the per-clause selectivities using the formula
+ * between them, i.e. either (a=>b) or (b=>a). Assuming (a=>b) is the selexted
+ * dependency, we then combine the per-clause selextivities using the formula
  *
  *	   P(a,b) = P(a) * [f + (1-f)*P(b)]
  *
@@ -936,7 +936,7 @@ find_strongest_dependency(StatisticExtInfo *stats, MVDependencies *dependencies,
  * assuming (a,b=>c) is the strongest dependency.
  */
 Selectivity
-dependencies_clauselist_selectivity(PlannerInfo *root,
+dependencies_clauselist_selextivity(PlannerInfo *root,
 									List *clauses,
 									int varRelid,
 									JoinType jointype,
@@ -965,7 +965,7 @@ dependencies_clauselist_selectivity(PlannerInfo *root,
 	/*
 	 * Pre-process the clauses list to extract the attnums seen in each item.
 	 * We need to determine if there's any clauses which will be useful for
-	 * dependency selectivity estimations. Along the way we'll record all of
+	 * dependency selextivity estimations. Along the way we'll record all of
 	 * the attnums for each clause in a list which we'll reference later so we
 	 * don't need to repeat the same work again. We'll also keep track of all
 	 * attnums seen.
@@ -989,7 +989,7 @@ dependencies_clauselist_selectivity(PlannerInfo *root,
 
 	/*
 	 * If there's not at least two distinct attnums then reject the whole list
-	 * of clauses. We must return 1.0 so the calling function's selectivity is
+	 * of clauses. We must return 1.0 so the calling function's selextivity is
 	 * unaffected.
 	 */
 	if (bms_num_members(clauses_attnums) < 2)
@@ -1015,7 +1015,7 @@ dependencies_clauselist_selectivity(PlannerInfo *root,
 	/*
 	 * Apply the dependencies recursively, starting with the widest/strongest
 	 * ones, and proceeding to the smaller/weaker ones. At the end of each
-	 * round we factor in the selectivity of clauses on the implied attribute,
+	 * round we factor in the selextivity of clauses on the implied attribute,
 	 * and remove the clauses from the list.
 	 */
 	while (true)
@@ -1053,7 +1053,7 @@ dependencies_clauselist_selectivity(PlannerInfo *root,
 			/*
 			 * Technically we could find more than one clause for a given
 			 * attnum. Since these clauses must be equality clauses, we choose
-			 * to only take the selectivity estimate from the final clause in
+			 * to only take the selextivity estimate from the final clause in
 			 * the list for this attnum. If the attnum happens to be compared
 			 * to a different Const in another clause then no rows will match
 			 * anyway. If it happens to be compared to the same Const, then
@@ -1064,7 +1064,7 @@ dependencies_clauselist_selectivity(PlannerInfo *root,
 			{
 				clause = (Node *) lfirst(l);
 
-				s2 = clause_selectivity(root, clause, varRelid, jointype,
+				s2 = clause_selextivity(root, clause, varRelid, jointype,
 										sjinfo);
 
 				/* mark this one as done, so we don't touch it again. */
@@ -1081,7 +1081,7 @@ dependencies_clauselist_selectivity(PlannerInfo *root,
 		}
 
 		/*
-		 * Now factor in the selectivity for all the "implied" clauses into
+		 * Now factor in the selextivity for all the "implied" clauses into
 		 * the final one, using this formula:
 		 *
 		 * P(a,b) = P(a) * (f + (1-f) * P(b))

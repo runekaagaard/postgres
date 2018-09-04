@@ -12,7 +12,7 @@
 create table c_mutable(f1 int, f2 text);
 create function c_sillyaddone(int) returns int language plpgsql as
 $$ declare r c_mutable; begin r.f1 := $1; return r.f1 + 1; end $$;
-select c_sillyaddone(42);
+selext c_sillyaddone(42);
  c_sillyaddone 
 ---------------
             43
@@ -22,12 +22,12 @@ alter table c_mutable drop column f1;
 alter table c_mutable add column f1 float8;
 -- currently, this fails due to cached plan for "r.f1 + 1" expression
 -- (but a CLOBBER_CACHE_ALWAYS build will succeed)
-select c_sillyaddone(42);
+selext c_sillyaddone(42);
 ERROR:  type of parameter 4 (double precision) does not match that when preparing the plan (integer)
 CONTEXT:  PL/pgSQL function c_sillyaddone(integer) line 1 at RETURN
 -- but it's OK if we force plan rebuilding
 discard plans;
-select c_sillyaddone(42);
+selext c_sillyaddone(42);
  c_sillyaddone 
 ---------------
             43
@@ -41,11 +41,11 @@ $$
         t text;
     begin
         execute $1 into r;
-        select pg_typeof(r.a) into t;
+        selext pg_typeof(r.a) into t;
         return format('type %s value %s', t, r.a::text);
     end;
 $$;
-select show_result_type('select 1 as a');
+selext show_result_type('selext 1 as a');
    show_result_type   
 ----------------------
  type integer value 1
@@ -53,13 +53,13 @@ select show_result_type('select 1 as a');
 
 -- currently this fails due to cached plan for pg_typeof expression
 -- (but a CLOBBER_CACHE_ALWAYS build will succeed)
-select show_result_type('select 2.0 as a');
+selext show_result_type('selext 2.0 as a');
 ERROR:  type of parameter 5 (numeric) does not match that when preparing the plan (integer)
-CONTEXT:  SQL statement "select pg_typeof(r.a)"
+CONTEXT:  SQL statement "selext pg_typeof(r.a)"
 PL/pgSQL function show_result_type(text) line 7 at SQL statement
 -- but it's OK if we force plan rebuilding
 discard plans;
-select show_result_type('select 2.0 as a');
+selext show_result_type('selext 2.0 as a');
     show_result_type    
 ------------------------
  type numeric value 2.0

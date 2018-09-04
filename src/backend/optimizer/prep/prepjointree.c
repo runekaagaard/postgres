@@ -29,7 +29,7 @@
 #include "optimizer/clauses.h"
 #include "optimizer/placeholder.h"
 #include "optimizer/prep.h"
-#include "optimizer/subselect.h"
+#include "optimizer/subselext.h"
 #include "optimizer/tlist.h"
 #include "optimizer/var.h"
 #include "parser/parse_relation.h"
@@ -564,7 +564,7 @@ pull_up_sublinks_qual_recurse(PlannerInfo *root, Node *node,
  * This has to be done before we have started to do any optimization of
  * subqueries, else any such steps wouldn't get applied to subqueries
  * obtained via inlining.  However, we do it after pull_up_sublinks
- * so that we can inline any functions used in SubLink subselects.
+ * so that we can inline any functions used in SubLink subselexts.
  *
  * Like most of the planner, this feels free to scribble on its input data
  * structure.
@@ -1441,7 +1441,7 @@ is_simple_subquery(Query *subquery, RangeTblEntry *rte,
 				   bool deletion_ok)
 {
 	/*
-	 * Let's just make sure it's a valid subselect ...
+	 * Let's just make sure it's a valid subselext ...
 	 */
 	if (!IsA(subquery, Query) ||
 		subquery->commandType != CMD_SELECT)
@@ -1722,7 +1722,7 @@ is_simple_values(PlannerInfo *root, RangeTblEntry *rte, bool deletion_ok)
 
 	/*
 	 * We can only pull up a VALUES RTE if deletion_ok is true.  It's
-	 * basically the same case as a sub-select with empty FROM list; see
+	 * basically the same case as a sub-selext with empty FROM list; see
 	 * comments in is_simple_subquery().
 	 */
 	if (!deletion_ok)
@@ -1776,7 +1776,7 @@ is_simple_union_all(Query *subquery)
 {
 	SetOperationStmt *topop;
 
-	/* Let's just make sure it's a valid subselect ... */
+	/* Let's just make sure it's a valid subselext ... */
 	if (!IsA(subquery, Query) ||
 		subquery->commandType != CMD_SELECT)
 		elog(ERROR, "subquery is bogus");
@@ -2455,7 +2455,7 @@ flatten_simple_union_all(PlannerInfo *root)
  * pass the upper WHERE, and we can conclude that what the query is really
  * specifying is an anti-semijoin.  We change the join type from JOIN_LEFT
  * to JOIN_ANTI.  The IS NULL clause then becomes redundant, and must be
- * removed to prevent bogus selectivity calculations, but we leave it to
+ * removed to prevent bogus selextivity calculations, but we leave it to
  * distribute_qual_to_rels to get rid of such clauses.
  *
  * Also, we get rid of JOIN_RIGHT cases by flipping them around to become
@@ -2885,7 +2885,7 @@ substitute_multiple_relids_walker(Node *node,
 	}
 	if (IsA(node, Query))
 	{
-		/* Recurse into subselects */
+		/* Recurse into subselexts */
 		bool		result;
 
 		context->sublevels_up++;

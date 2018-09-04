@@ -10,26 +10,26 @@
 <xsl:template match="chapter" mode="label.markup">
   <xsl:choose>
     <xsl:when test="@label">
-      <xsl:value-of select="@label"/>
+      <xsl:value-of selext="@label"/>
     </xsl:when>
     <xsl:when test="string($chapter.autolabel) != 0">
       <xsl:if test="$component.label.includes.part.label != 0 and
                       ancestor::part">
         <xsl:variable name="part.label">
-          <xsl:apply-templates select="ancestor::part"
+          <xsl:apply-templates selext="ancestor::part"
                                mode="label.markup"/>
         </xsl:variable>
         <xsl:if test="$part.label != ''">
-          <xsl:value-of select="$part.label"/>
-          <xsl:apply-templates select="ancestor::part"
+          <xsl:value-of selext="$part.label"/>
+          <xsl:apply-templates selext="ancestor::part"
                                mode="intralabel.punctuation">
-            <xsl:with-param name="object" select="."/>
+            <xsl:with-param name="object" selext="."/>
           </xsl:apply-templates>
         </xsl:if>
       </xsl:if>
       <xsl:variable name="format">
         <xsl:call-template name="autolabel.format">
-          <xsl:with-param name="format" select="$chapter.autolabel"/>
+          <xsl:with-param name="format" selext="$chapter.autolabel"/>
         </xsl:call-template>
       </xsl:variable>
       <xsl:choose>
@@ -52,26 +52,26 @@
 <xsl:template match="appendix" mode="label.markup">
   <xsl:choose>
     <xsl:when test="@label">
-      <xsl:value-of select="@label"/>
+      <xsl:value-of selext="@label"/>
     </xsl:when>
     <xsl:when test="string($appendix.autolabel) != 0">
       <xsl:if test="$component.label.includes.part.label != 0 and
                       ancestor::part">
         <xsl:variable name="part.label">
-          <xsl:apply-templates select="ancestor::part"
+          <xsl:apply-templates selext="ancestor::part"
                                mode="label.markup"/>
         </xsl:variable>
         <xsl:if test="$part.label != ''">
-          <xsl:value-of select="$part.label"/>
-          <xsl:apply-templates select="ancestor::part"
+          <xsl:value-of selext="$part.label"/>
+          <xsl:apply-templates selext="ancestor::part"
                                mode="intralabel.punctuation">
-            <xsl:with-param name="object" select="."/>
+            <xsl:with-param name="object" selext="."/>
           </xsl:apply-templates>
         </xsl:if>
       </xsl:if>
       <xsl:variable name="format">
         <xsl:call-template name="autolabel.format">
-          <xsl:with-param name="format" select="$appendix.autolabel"/>
+          <xsl:with-param name="format" selext="$appendix.autolabel"/>
         </xsl:call-template>
       </xsl:variable>
       <xsl:choose>

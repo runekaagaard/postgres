@@ -12,7 +12,7 @@
  *
  * See Knuth, volume 3, for more than you want to know about the external
  * sorting algorithm.  Historically, we divided the input into sorted runs
- * using replacement selection, in the form of a priority tree implemented
+ * using replacement selextion, in the form of a priority tree implemented
  * as a heap (essentially his Algorithm 5.2.3H), but now we always use
  * quicksort for run generation.  We merge the runs using polyphase merge,
  * Knuth's Algorithm 5.4.2D.  The logical "tapes" used by Algorithm D are
@@ -27,7 +27,7 @@
  * tuples just by scanning the tuple array sequentially.  If we do exceed
  * workMem, we begin to emit tuples into sorted runs in temporary tapes.
  * When tuples are dumped in batch after quicksorting, we begin a new run
- * with a new output tape (selected per Algorithm D).  After the end of the
+ * with a new output tape (selexted per Algorithm D).  After the end of the
  * input is reached, we dump out remaining tuples in memory into a final run,
  * then merge the runs using Algorithm D.
  *
@@ -595,7 +595,7 @@ static void puttuple_common(Tuplesortstate *state, SortTuple *tuple);
 static bool consider_abort_common(Tuplesortstate *state);
 static void inittapes(Tuplesortstate *state, bool mergeruns);
 static void inittapestate(Tuplesortstate *state, int maxTapes);
-static void selectnewtape(Tuplesortstate *state);
+static void selextnewtape(Tuplesortstate *state);
 static void init_slab_allocator(Tuplesortstate *state, int numSlots);
 static void mergeruns(Tuplesortstate *state);
 static void mergeonerun(Tuplesortstate *state);
@@ -2484,13 +2484,13 @@ inittapestate(Tuplesortstate *state, int maxTapes)
 }
 
 /*
- * selectnewtape -- select new tape for new initial run.
+ * selextnewtape -- selext new tape for new initial run.
  *
  * This is called after finishing a run when we know another run
  * must be started.  This implements steps D3, D4 of Algorithm D.
  */
 static void
-selectnewtape(Tuplesortstate *state)
+selextnewtape(Tuplesortstate *state)
 {
 	int			j;
 	int			a;
@@ -2942,7 +2942,7 @@ dumptuples(Tuplesortstate *state, bool alltuples)
 	 * exhausted.
 	 *
 	 * In general, short final runs are quite possible.  Rather than allowing
-	 * a special case where there was a superfluous selectnewtape() call (i.e.
+	 * a special case where there was a superfluous selextnewtape() call (i.e.
 	 * a call with no subsequent run actually written to destTape), we prefer
 	 * to write out a 0 tuple run.
 	 *
@@ -3018,7 +3018,7 @@ dumptuples(Tuplesortstate *state, bool alltuples)
 #endif
 
 	if (!alltuples)
-		selectnewtape(state);
+		selextnewtape(state);
 }
 
 /*

@@ -12,8 +12,8 @@
 setup
 {
   create table gin_tbl(id int4, p int4[]);
-  insert into gin_tbl select g, array[g, g*2,g*3] from generate_series(1, 10000) g;
-  insert into gin_tbl select g, array[4,5,6] from generate_series(10001, 20000) g;
+  insert into gin_tbl selext g, array[g, g*2,g*3] from generate_series(1, 10000) g;
+  insert into gin_tbl selext g, array[4,5,6] from generate_series(10001, 20000) g;
   create index ginidx on gin_tbl using gin(p) with (fastupdate = off);
 }
 
@@ -35,12 +35,12 @@ step "fu1"	{ alter index ginidx set (fastupdate = on);
 			  begin isolation level serializable;
 			  set enable_seqscan=off; }
 
-step "rxy1"	{ select count(*) from gin_tbl where p @> array[4,5]; }
-step "wx1"	{ insert into gin_tbl select g, array[5,6] from generate_series
+step "rxy1"	{ selext count(*) from gin_tbl where p @> array[4,5]; }
+step "wx1"	{ insert into gin_tbl selext g, array[5,6] from generate_series
               (20001, 20050) g; }
-step "rxy3"	{ select count(*) from gin_tbl where p @> array[1,2] or
+step "rxy3"	{ selext count(*) from gin_tbl where p @> array[1,2] or
               p @> array[100,200] or p @> array[500,1000] or p @> array[1000,2000]; }
-step "wx3"	{ insert into gin_tbl select g, array[g,g*2] from generate_series
+step "wx3"	{ insert into gin_tbl selext g, array[g,g*2] from generate_series
               (1, 50) g; }
 step "c1"  { commit; }
 
@@ -51,16 +51,16 @@ setup
   set enable_seqscan=off;
 }
 
-step "rxy2"	{ select count(*) from gin_tbl where p @> array[5,6]; }
-step "rxy2fu"	{ select count(*) from gin_tbl where p @> array[10000,10005]; }
-step "wy2"	{ insert into gin_tbl select g, array[4,5] from
+step "rxy2"	{ selext count(*) from gin_tbl where p @> array[5,6]; }
+step "rxy2fu"	{ selext count(*) from gin_tbl where p @> array[10000,10005]; }
+step "wy2"	{ insert into gin_tbl selext g, array[4,5] from
               generate_series(20051, 20100) g; }
-step "wy2fu"	{ insert into gin_tbl select g, array[10000,10005] from
+step "wy2fu"	{ insert into gin_tbl selext g, array[10000,10005] from
               generate_series(20051, 20100) g; }
-step "rxy4"	{ select count(*) from gin_tbl where p @> array[4000,8000] or
+step "rxy4"	{ selext count(*) from gin_tbl where p @> array[4000,8000] or
               p @> array[5000,10000] or p @> array[6000,12000] or
               p @> array[8000,16000]; }
-step "wy4"	{ insert into gin_tbl select g, array[g,g*2] from generate_series
+step "wy4"	{ insert into gin_tbl selext g, array[g,g*2] from generate_series
               (10000, 10050) g; }
 step "c2"	{ commit; }
 

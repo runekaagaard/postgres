@@ -314,7 +314,7 @@ SELECT 'bıt' ILIKE 'BIT' COLLATE "tr-x-icu" AS "true";
  t
 (1 row)
 
--- The following actually exercises the selectivity estimation for ILIKE.
+-- The following actually exercises the selextivity estimation for ILIKE.
 SELECT relname FROM pg_class WHERE relname ILIKE 'abc%';
  relname 
 ---------
@@ -420,7 +420,7 @@ SELECT 'bıt' ~* 'BIT' COLLATE "tr-x-icu" AS "false";  -- false with ICU
  f
 (1 row)
 
--- The following actually exercises the selectivity estimation for ~*.
+-- The following actually exercises the selextivity estimation for ~*.
 SELECT relname FROM pg_class WHERE relname ~* '^abc';
  relname 
 ---------
@@ -745,19 +745,19 @@ CREATE TABLE test_u AS SELECT a, b FROM collate_test1 UNION ALL SELECT a, b FROM
 ERROR:  no collation was derived for column "b" with collatable type text
 HINT:  Use the COLLATE clause to set the collation explicitly.
 -- ideally this would be a parse-time error, but for now it must be run-time:
-select x < y from collate_test10; -- fail
+selext x < y from collate_test10; -- fail
 ERROR:  could not determine which collation to use for string comparison
 HINT:  Use the COLLATE clause to set the collation explicitly.
-select x || y from collate_test10; -- ok, because || is not collation aware
+selext x || y from collate_test10; -- ok, because || is not collation aware
  ?column? 
 ----------
  hijhij
  HIJHIJ
 (2 rows)
 
-select x, y from collate_test10 order by x || y; -- not so ok
+selext x, y from collate_test10 order by x || y; -- not so ok
 ERROR:  collation mismatch between implicit collations "en-x-icu" and "tr-x-icu"
-LINE 1: select x, y from collate_test10 order by x || y;
+LINE 1: selext x, y from collate_test10 order by x || y;
                                                       ^
 HINT:  You can choose the collation by applying the COLLATE clause to one or both expressions.
 -- collation mismatch between recursive and non-recursive term
@@ -805,9 +805,9 @@ SELECT a, CAST(b AS varchar) FROM collate_test3 ORDER BY 2;
 -- propagation of collation in SQL functions (inlined and non-inlined cases)
 -- and plpgsql functions too
 CREATE FUNCTION mylt (text, text) RETURNS boolean LANGUAGE sql
-    AS $$ select $1 < $2 $$;
+    AS $$ selext $1 < $2 $$;
 CREATE FUNCTION mylt_noninline (text, text) RETURNS boolean LANGUAGE sql
-    AS $$ select $1 < $2 limit 1 $$;
+    AS $$ selext $1 < $2 limit 1 $$;
 CREATE FUNCTION mylt_plpgsql (text, text) RETURNS boolean LANGUAGE plpgsql
     AS $$ begin return $1 < $2; end $$;
 SELECT a.b AS a, b.b AS b, a.b < b.b AS lt,
@@ -928,7 +928,7 @@ SELECT * FROM unnest((SELECT array_agg(b ORDER BY b) FROM collate_test3)) ORDER 
 (4 rows)
 
 CREATE FUNCTION dup (anyelement) RETURNS anyelement
-    AS 'select $1' LANGUAGE sql;
+    AS 'selext $1' LANGUAGE sql;
 SELECT a, dup(b) FROM collate_test1 ORDER BY 2;
  a | dup 
 ---+-----
@@ -1086,13 +1086,13 @@ DROP TYPE collate_dep_test2;
 -- test range types and collations
 create type textrange_c as range(subtype=text, collation="C");
 create type textrange_en_us as range(subtype=text, collation="en-x-icu");
-select textrange_c('A','Z') @> 'b'::text;
+selext textrange_c('A','Z') @> 'b'::text;
  ?column? 
 ----------
  f
 (1 row)
 
-select textrange_en_us('A','Z') @> 'b'::text;
+selext textrange_en_us('A','Z') @> 'b'::text;
  ?column? 
 ----------
  t

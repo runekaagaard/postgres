@@ -328,17 +328,17 @@ msgstr "%s: \"%s\" 파일은 일반 파일이 아님\n"
 
 #: initdb.c:933
 #, c-format
-msgid "selecting default max_connections ... "
+msgid "selexting default max_connections ... "
 msgstr "max_connections 초기값을 선택하는 중 ..."
 
 #: initdb.c:963
 #, c-format
-msgid "selecting default shared_buffers ... "
+msgid "selexting default shared_buffers ... "
 msgstr "기본 shared_buffers를 선택하는 중... "
 
 #: initdb.c:996
 #, c-format
-msgid "selecting dynamic shared memory implementation ... "
+msgid "selexting dynamic shared memory implementation ... "
 msgstr "사용할 동적 공유 메모리 관리방식을 선택하는 중 ... "
 
 #: initdb.c:1014
@@ -433,8 +433,8 @@ msgstr "%s: 인코딩 불일치\n"
 #: initdb.c:2201
 #, c-format
 msgid ""
-"The encoding you selected (%s) and the encoding that the\n"
-"selected locale uses (%s) do not match.  This would lead to\n"
+"The encoding you selexted (%s) and the encoding that the\n"
+"selexted locale uses (%s) do not match.  This would lead to\n"
 "misbehavior in various character string processing functions.\n"
 "Rerun %s and either do not specify an encoding explicitly,\n"
 "or choose a matching combination.\n"
@@ -768,7 +768,7 @@ msgstr "%s: \"%s\" 로케일은 지원하지 않는 \"%s\" 인코딩을 필요�
 #, c-format
 msgid ""
 "Encoding \"%s\" is not allowed as a server-side encoding.\n"
-"Rerun %s with a different locale selection.\n"
+"Rerun %s with a different locale selextion.\n"
 msgstr ""
 "\"%s\" 인코딩을 서버측 인코딩으로 사용할 수 없습니다.\n"
 "다른 로캘을 선택하고 %s을(를) 다시 실행하십시오.\n"

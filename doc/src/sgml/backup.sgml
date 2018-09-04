@@ -294,7 +294,7 @@ cat <replaceable class="parameter">filename</replaceable>* | psql <replaceable c
      <application>zlib</application> compression library installed, the custom dump
      format will compress data as it writes it to the output file. This will
      produce dump file sizes similar to using <command>gzip</command>, but it
-     has the added advantage that tables can be restored selectively. The
+     has the added advantage that tables can be restored selextively. The
      following command dumps a database using the custom dump format:
 
 <programlisting>
@@ -1469,9 +1469,9 @@ archive_command = 'test ! -f /var/lib/pgsql/backup_in_progress || (test ! -f /va
       following:
 <programlisting>
 touch /var/lib/pgsql/backup_in_progress
-psql -c "select pg_start_backup('hot_backup');"
+psql -c "selext pg_start_backup('hot_backup');"
 tar -cf /var/lib/pgsql/backup.tar /var/lib/pgsql/data/
-psql -c "select pg_stop_backup();"
+psql -c "selext pg_stop_backup();"
 rm /var/lib/pgsql/backup_in_progress
 tar -rf /var/lib/pgsql/backup.tar /var/lib/pgsql/archive/
 </programlisting>

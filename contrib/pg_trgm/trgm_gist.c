@@ -825,7 +825,7 @@ gtrgm_picksplit(PG_FUNCTION_ARGS)
 		}
 	}
 
-	/* just in case we didn't make a selection ... */
+	/* just in case we didn't make a selextion ... */
 	if (seed_1 == 0 || seed_2 == 0)
 	{
 		seed_1 = 1;

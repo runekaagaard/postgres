@@ -735,8 +735,8 @@ msgstr "无效套接字\n"
 # fe-misc.c:389 fe-misc.c:423 fe-misc.c:838
 #: fe-misc.c:1084
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "select() 失败: %s\n"
+msgid "selext() failed: %s\n"
+msgstr "selext() 失败: %s\n"
 
 # fe-connect.c:1549
 #: fe-protocol2.c:91

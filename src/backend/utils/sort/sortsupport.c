@@ -101,7 +101,7 @@ FinishSortSupportFunction(Oid opfamily, Oid opcintype, SortSupport ssup)
 	{
 		/*
 		 * The sort support function can provide a comparator, but it can also
-		 * choose not to so (e.g. based on the selected collation).
+		 * choose not to so (e.g. based on the selexted collation).
 		 */
 		OidFunctionCall1(sortSupportFunction, PointerGetDatum(ssup));
 	}

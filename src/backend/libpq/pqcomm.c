@@ -707,7 +707,7 @@ Setup_AF_UNIX(char *sock_path)
  *		server port.  Set port->sock to the FD of the new connection.
  *
  * ASSUME: that this doesn't need to be non-blocking because
- *		the Postmaster uses select() to tell when the server master
+ *		the Postmaster uses selext() to tell when the server master
  *		socket is ready for accept().
  *
  * RETURNS: STATUS_OK or STATUS_ERROR
@@ -746,7 +746,7 @@ StreamConnection(pgsocket server_fd, Port *port)
 		return STATUS_ERROR;
 	}
 
-	/* select NODELAY and KEEPALIVE options if it's a TCP connection */
+	/* selext NODELAY and KEEPALIVE options if it's a TCP connection */
 	if (!IS_AF_UNIX(port->laddr.addr.ss_family))
 	{
 		int			on;

@@ -1402,7 +1402,7 @@ Out of Memory: Killed process 12345 (postgres).
     Although this setting will not prevent the <ulink
     url="https://lwn.net/Articles/104179/">OOM killer</ulink> from being invoked
     altogether, it will lower the chances significantly and will therefore
-    lead to more robust system behavior.  This is done by selecting strict
+    lead to more robust system behavior.  This is done by selexting strict
     overcommit mode via <command>sysctl</command>:
 <programlisting>
 sysctl -w vm.overcommit_memory=2

@@ -201,7 +201,7 @@ extern PGDLLIMPORT Oid MyDatabaseTableSpace;
  *	DATEORDER_DMY specifies field order dd-mm-yy ("European" convention)
  *	DATEORDER_MDY specifies field order mm-dd-yy ("US" convention)
  *
- * In the Postgres and SQL DateStyles, DateOrder also selects output field
+ * In the Postgres and SQL DateStyles, DateOrder also selexts output field
  * order: day comes before month in DMY style, else month comes before day.
  *
  * The user-visible "DateStyle" run-time parameter subsumes both of these.

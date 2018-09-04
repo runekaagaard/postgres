@@ -21,13 +21,13 @@
  */
 
 /*----------
- * Operator selectivity estimation functions are called to estimate the
- * selectivity of WHERE clauses whose top-level operator is their operator.
+ * Operator selextivity estimation functions are called to estimate the
+ * selextivity of WHERE clauses whose top-level operator is their operator.
  * We divide the problem into two cases:
  *		Restriction clause estimation: the clause involves vars of just
  *			one relation.
  *		Join clause estimation: the clause involves vars of multiple rels.
- * Join selectivity estimation is far more difficult and usually less accurate
+ * Join selextivity estimation is far more difficult and usually less accurate
  * than restriction estimation.
  *
  * When dealing with the inner scan of a nestloop join, we consider the
@@ -55,7 +55,7 @@
  *
  *		float8 oprrest (internal, oid, internal, int4);
  *
- * The result is a selectivity, that is, a fraction (0 to 1) of the rows
+ * The result is a selextivity, that is, a fraction (0 to 1) of the rows
  * of the relation that are expected to produce a TRUE result for the
  * given operator.
  *
@@ -74,13 +74,13 @@
  * (Before Postgres 8.4, join estimators had only the first four of these
  * parameters.  That signature is still allowed, but deprecated.)  The
  * relationship between jointype and sjinfo is explained in the comments for
- * clause_selectivity() --- the short version is that jointype is usually
+ * clause_selextivity() --- the short version is that jointype is usually
  * best ignored in favor of examining sjinfo.
  *
- * Join selectivity for regular inner and outer joins is defined as the
+ * Join selextivity for regular inner and outer joins is defined as the
  * fraction (0 to 1) of the cross product of the relations that is expected
  * to produce a TRUE result for the given operator.  For both semi and anti
- * joins, however, the selectivity is defined as the fraction of the left-hand
+ * joins, however, the selextivity is defined as the fraction of the left-hand
  * side relation's rows that are expected to have a match (ie, at least one
  * row with a TRUE result) in the right-hand side.
  *
@@ -161,7 +161,7 @@ static double var_eq_const(VariableStatData *vardata, Oid operator,
 static double var_eq_non_const(VariableStatData *vardata, Oid operator,
 				 Node *other,
 				 bool varonleft, bool negate);
-static double ineq_histogram_selectivity(PlannerInfo *root,
+static double ineq_histogram_selextivity(PlannerInfo *root,
 						   VariableStatData *vardata,
 						   FmgrInfo *opproc, bool isgt, bool iseq,
 						   Datum constval, Oid consttype);
@@ -204,12 +204,12 @@ static bool get_actual_variable_range(PlannerInfo *root,
 						  Oid sortop,
 						  Datum *min, Datum *max);
 static RelOptInfo *find_join_input_rel(PlannerInfo *root, Relids relids);
-static Selectivity prefix_selectivity(PlannerInfo *root,
+static Selectivity prefix_selextivity(PlannerInfo *root,
 				   VariableStatData *vardata,
 				   Oid vartype, Oid opfamily, Const *prefixcon);
-static Selectivity like_selectivity(const char *patt, int pattlen,
+static Selectivity like_selextivity(const char *patt, int pattlen,
 				 bool case_insensitive);
-static Selectivity regex_selectivity(const char *patt, int pattlen,
+static Selectivity regex_selextivity(const char *patt, int pattlen,
 				  bool case_insensitive,
 				  int fixed_prefix_len);
 static Datum string_to_datum(const char *str, Oid datatype);
@@ -221,8 +221,8 @@ static List *add_predicate_to_quals(IndexOptInfo *index, List *indexQuals);
 /*
  *		eqsel			- Selectivity of "=" for any data types.
  *
- * Note: this routine is also used to estimate selectivity for some
- * operators that are not "=" but have comparable selectivity behavior,
+ * Note: this routine is also used to estimate selextivity for some
+ * operators that are not "=" but have comparable selextivity behavior,
  * such as "~=" (geometric approximate-match).  Even for "=", we must
  * keep in mind that the left and right datatypes may differ.
  */
@@ -249,14 +249,14 @@ eqsel_internal(PG_FUNCTION_ARGS, bool negate)
 
 	/*
 	 * When asked about <>, we do the estimation using the corresponding =
-	 * operator, then convert to <> via "1.0 - eq_selectivity - nullfrac".
+	 * operator, then convert to <> via "1.0 - eq_selextivity - nullfrac".
 	 */
 	if (negate)
 	{
 		operator = get_negator(operator);
 		if (!OidIsValid(operator))
 		{
-			/* Use default selectivity (should we raise an error instead?) */
+			/* Use default selextivity (should we raise an error instead?) */
 			return 1.0 - DEFAULT_EQ_SEL;
 		}
 	}
@@ -382,7 +382,7 @@ var_eq_const(VariableStatData *vardata, Oid operator,
 		if (match)
 		{
 			/*
-			 * Constant is "=" to this common value.  We know selectivity
+			 * Constant is "=" to this common value.  We know selextivity
 			 * exactly (or as exactly as ANALYZE could calculate it, anyway).
 			 */
 			selec = sslot.numbers[i];
@@ -391,7 +391,7 @@ var_eq_const(VariableStatData *vardata, Oid operator,
 		{
 			/*
 			 * Comparison is against a constant that is neither NULL nor any
-			 * of the common values.  Its selectivity cannot be more than
+			 * of the common values.  Its selextivity cannot be more than
 			 * this:
 			 */
 			double		sumcommon = 0.0;
@@ -413,7 +413,7 @@ var_eq_const(VariableStatData *vardata, Oid operator,
 				selec /= otherdistinct;
 
 			/*
-			 * Another cross-check: selectivity shouldn't be estimated as more
+			 * Another cross-check: selextivity shouldn't be estimated as more
 			 * than the least common "most common value".
 			 */
 			if (sslot.nnumbers > 0 && selec > sslot.numbers[sslot.nnumbers - 1])
@@ -483,7 +483,7 @@ var_eq_non_const(VariableStatData *vardata, Oid operator,
 
 		/*
 		 * Search is for a value that we do not know a priori, but we will
-		 * assume it is not NULL.  Estimate the selectivity as non-null
+		 * assume it is not NULL.  Estimate the selextivity as non-null
 		 * fraction divided by number of distinct values, so that we get a
 		 * result averaged over all possible values whether common or
 		 * uncommon.  (Essentially, we are assuming that the not-yet-known
@@ -497,7 +497,7 @@ var_eq_non_const(VariableStatData *vardata, Oid operator,
 			selec /= ndistinct;
 
 		/*
-		 * Cross-check: selectivity should never be estimated as more than the
+		 * Cross-check: selextivity should never be estimated as more than the
 		 * most common value's.
 		 */
 		if (get_attstatsslot(&sslot, vardata->statsTuple,
@@ -533,7 +533,7 @@ var_eq_non_const(VariableStatData *vardata, Oid operator,
  *		neqsel			- Selectivity of "!=" for any data types.
  *
  * This routine is also used for some operators that are not "!="
- * but have comparable selectivity behavior.  See above comments
+ * but have comparable selextivity behavior.  See above comments
  * for eqsel().
  */
 Datum
@@ -582,17 +582,17 @@ scalarineqsel(PlannerInfo *root, Oid operator, bool isgt, bool iseq,
 	/*
 	 * If we have most-common-values info, add up the fractions of the MCV
 	 * entries that satisfy MCV OP CONST.  These fractions contribute directly
-	 * to the result selectivity.  Also add up the total fraction represented
+	 * to the result selextivity.  Also add up the total fraction represented
 	 * by MCV entries.
 	 */
-	mcv_selec = mcv_selectivity(vardata, &opproc, constval, true,
+	mcv_selec = mcv_selextivity(vardata, &opproc, constval, true,
 								&sumcommon);
 
 	/*
 	 * If there is a histogram, determine which bin the constant falls in, and
-	 * compute the resulting contribution to selectivity.
+	 * compute the resulting contribution to selextivity.
 	 */
-	hist_selec = ineq_histogram_selectivity(root, vardata,
+	hist_selec = ineq_histogram_selextivity(root, vardata,
 											&opproc, isgt, iseq,
 											constval, consttype);
 
@@ -623,19 +623,19 @@ scalarineqsel(PlannerInfo *root, Oid operator, bool isgt, bool iseq,
 }
 
 /*
- *	mcv_selectivity			- Examine the MCV list for selectivity estimates
+ *	mcv_selextivity			- Examine the MCV list for selextivity estimates
  *
  * Determine the fraction of the variable's MCV population that satisfies
  * the predicate (VAR OP CONST), or (CONST OP VAR) if !varonleft.  Also
  * compute the fraction of the total column population represented by the MCV
  * list.  This code will work for any boolean-returning predicate operator.
  *
- * The function result is the MCV selectivity, and the fraction of the
+ * The function result is the MCV selextivity, and the fraction of the
  * total population is returned into *sumcommonp.  Zeroes are returned
  * if there is no MCV list.
  */
 double
-mcv_selectivity(VariableStatData *vardata, FmgrInfo *opproc,
+mcv_selextivity(VariableStatData *vardata, FmgrInfo *opproc,
 				Datum constval, bool varonleft,
 				double *sumcommonp)
 {
@@ -675,7 +675,7 @@ mcv_selectivity(VariableStatData *vardata, FmgrInfo *opproc,
 }
 
 /*
- *	histogram_selectivity	- Examine the histogram for selectivity estimates
+ *	histogram_selextivity	- Examine the histogram for selextivity estimates
  *
  * Determine the fraction of the variable's histogram entries that satisfy
  * the predicate (VAR OP CONST), or (CONST OP VAR) if !varonleft.
@@ -694,7 +694,7 @@ mcv_selectivity(VariableStatData *vardata, FmgrInfo *opproc,
  * they are outliers and hence not very representative.  Typical values for
  * these parameters are 10 and 1.
  *
- * The function result is the selectivity, or -1 if there is no histogram
+ * The function result is the selextivity, or -1 if there is no histogram
  * or it's smaller than min_hist_size.
  *
  * The output parameter *hist_size receives the actual histogram size,
@@ -707,7 +707,7 @@ mcv_selectivity(VariableStatData *vardata, FmgrInfo *opproc,
  * prudent to clamp the result range, ie, disbelieve exact 0 or 1 outputs.
  */
 double
-histogram_selectivity(VariableStatData *vardata, FmgrInfo *opproc,
+histogram_selextivity(VariableStatData *vardata, FmgrInfo *opproc,
 					  Datum constval, bool varonleft,
 					  int min_hist_size, int n_skip,
 					  int *hist_size)
@@ -760,7 +760,7 @@ histogram_selectivity(VariableStatData *vardata, FmgrInfo *opproc,
 }
 
 /*
- *	ineq_histogram_selectivity	- Examine the histogram for scalarineqsel
+ *	ineq_histogram_selextivity	- Examine the histogram for scalarineqsel
  *
  * Determine the fraction of the variable's histogram population that
  * satisfies the inequality condition, ie, VAR < (or <=, >, >=) CONST.
@@ -773,7 +773,7 @@ histogram_selectivity(VariableStatData *vardata, FmgrInfo *opproc,
  * statistics for those portions of the column population.
  */
 static double
-ineq_histogram_selectivity(PlannerInfo *root,
+ineq_histogram_selextivity(PlannerInfo *root,
 						   VariableStatData *vardata,
 						   FmgrInfo *opproc, bool isgt, bool iseq,
 						   Datum constval, Oid consttype)
@@ -906,7 +906,7 @@ ineq_histogram_selectivity(PlannerInfo *root,
 
 				/*
 				 * In the cases where we'll need it below, obtain an estimate
-				 * of the selectivity of "x = constval".  We use a calculation
+				 * of the selextivity of "x = constval".  We use a calculation
 				 * similar to what var_eq_const() does for a non-MCV constant,
 				 * ie, estimate that all distinct non-MCV values occur equally
 				 * often.  But multiplication by "1.0 - sumcommon - nullfrac"
@@ -983,7 +983,7 @@ ineq_histogram_selectivity(PlannerInfo *root,
 					/*
 					 * Ideally we'd produce an error here, on the grounds that
 					 * the given operator shouldn't have scalarXXsel
-					 * registered as its selectivity func unless we can deal
+					 * registered as its selextivity func unless we can deal
 					 * with its operand types.  But currently, all manner of
 					 * stuff is invoking scalarXXsel, so give a default
 					 * estimate until that can be fixed.
@@ -992,7 +992,7 @@ ineq_histogram_selectivity(PlannerInfo *root,
 				}
 
 				/*
-				 * Now, compute the overall selectivity across the values
+				 * Now, compute the overall selextivity across the values
 				 * represented by the histogram.  We have i-1 full bins and
 				 * binfrac partial bin below the constant.
 				 */
@@ -1017,7 +1017,7 @@ ineq_histogram_selectivity(PlannerInfo *root,
 				 * The fact that the estimate corresponds to "x <= constval"
 				 * and not "x < constval" is because of the way that ANALYZE
 				 * constructs the histogram: each entry is, effectively, the
-				 * rightmost value in its sample bucket.  So selectivity
+				 * rightmost value in its sample bucket.  So selextivity
 				 * values that are exact multiples of 1/(histogram_size-1)
 				 * should be understood as estimates including a histogram
 				 * entry plus everything to its left.
@@ -1052,7 +1052,7 @@ ineq_histogram_selectivity(PlannerInfo *root,
 			/*
 			 * The histogram boundaries are only approximate to begin with,
 			 * and may well be out of date anyway.  Therefore, don't believe
-			 * extremely small or large selectivity estimates --- unless we
+			 * extremely small or large selextivity estimates --- unless we
 			 * got actual current endpoint values from the table, in which
 			 * case just do the usual sanity clamp.  Somewhat arbitrarily, we
 			 * set the cutoff for other cases at a hundredth of the histogram
@@ -1078,7 +1078,7 @@ ineq_histogram_selectivity(PlannerInfo *root,
 }
 
 /*
- * Common wrapper function for the selectivity estimators that simply
+ * Common wrapper function for the selextivity estimators that simply
  * invoke scalarineqsel().
  */
 static Datum
@@ -1132,7 +1132,7 @@ scalarineqsel_wrapper(PG_FUNCTION_ARGS, bool isgt, bool iseq)
 		operator = get_commutator(operator);
 		if (!operator)
 		{
-			/* Use default selectivity (should we raise an error instead?) */
+			/* Use default selextivity (should we raise an error instead?) */
 			ReleaseVariableStats(vardata);
 			PG_RETURN_FLOAT8(DEFAULT_INEQ_SEL);
 		}
@@ -1185,7 +1185,7 @@ scalargesel(PG_FUNCTION_ARGS)
 }
 
 /*
- * patternsel			- Generic code for pattern-match selectivity.
+ * patternsel			- Generic code for pattern-match selextivity.
  */
 static double
 patternsel(PG_FUNCTION_ARGS, Pattern_Type ptype, bool negate)
@@ -1308,10 +1308,10 @@ patternsel(PG_FUNCTION_ARGS, Pattern_Type ptype, bool negate)
 
 	/*
 	 * Pull out any fixed prefix implied by the pattern, and estimate the
-	 * fractional selectivity of the remainder of the pattern.  Unlike many of
+	 * fractional selextivity of the remainder of the pattern.  Unlike many of
 	 * the other functions in this file, we use the pattern operator's actual
 	 * collation for this step.  This is not because we expect the collation
-	 * to make a big difference in the selectivity estimate (it seldom would),
+	 * to make a big difference in the selextivity estimate (it seldom would),
 	 * but because we want to be sure we cache compiled regexps under the
 	 * right cache key, so that they can be re-used at runtime.
 	 */
@@ -1362,11 +1362,11 @@ patternsel(PG_FUNCTION_ARGS, Pattern_Type ptype, bool negate)
 	{
 		/*
 		 * Not exact-match pattern.  If we have a sufficiently large
-		 * histogram, estimate selectivity for the histogram part of the
+		 * histogram, estimate selextivity for the histogram part of the
 		 * population by counting matches in the histogram.  If not, estimate
-		 * selectivity of the fixed prefix and remainder of pattern
+		 * selextivity of the fixed prefix and remainder of pattern
 		 * separately, then combine the two to get an estimate of the
-		 * selectivity for the part of the column population represented by
+		 * selextivity for the part of the column population represented by
 		 * the histogram.  (For small histograms, we combine these
 		 * approaches.)
 		 *
@@ -1382,10 +1382,10 @@ patternsel(PG_FUNCTION_ARGS, Pattern_Type ptype, bool negate)
 		double		mcv_selec,
 					sumcommon;
 
-		/* Try to use the histogram entries to get selectivity */
+		/* Try to use the histogram entries to get selextivity */
 		fmgr_info(get_opcode(operator), &opproc);
 
-		selec = histogram_selectivity(&vardata, &opproc, constval, true,
+		selec = histogram_selextivity(&vardata, &opproc, constval, true,
 									  10, 1, &hist_size);
 
 		/* If not at least 100 entries, use the heuristic method */
@@ -1395,7 +1395,7 @@ patternsel(PG_FUNCTION_ARGS, Pattern_Type ptype, bool negate)
 			Selectivity prefixsel;
 
 			if (pstatus == Pattern_Prefix_Partial)
-				prefixsel = prefix_selectivity(root, &vardata, vartype,
+				prefixsel = prefix_selextivity(root, &vardata, vartype,
 											   opfamily, prefix);
 			else
 				prefixsel = 1.0;
@@ -1407,7 +1407,7 @@ patternsel(PG_FUNCTION_ARGS, Pattern_Type ptype, bool negate)
 			{
 				/*
 				 * For histogram sizes from 10 to 100, we combine the
-				 * histogram and heuristic selectivities, putting increasingly
+				 * histogram and heuristic selextivities, putting increasingly
 				 * more trust in the histogram for larger sizes.
 				 */
 				double		hist_weight = hist_size / 100.0;
@@ -1425,10 +1425,10 @@ patternsel(PG_FUNCTION_ARGS, Pattern_Type ptype, bool negate)
 		/*
 		 * If we have most-common-values info, add up the fractions of the MCV
 		 * entries that satisfy MCV OP PATTERN.  These fractions contribute
-		 * directly to the result selectivity.  Also add up the total fraction
+		 * directly to the result selextivity.  Also add up the total fraction
 		 * represented by MCV entries.
 		 */
-		mcv_selec = mcv_selectivity(&vardata, &opproc, constval, true,
+		mcv_selec = mcv_selextivity(&vardata, &opproc, constval, true,
 									&sumcommon);
 
 		/*
@@ -1487,7 +1487,7 @@ likesel(PG_FUNCTION_ARGS)
 }
 
 /*
- *		prefixsel			- selectivity of prefix operator
+ *		prefixsel			- selextivity of prefix operator
  */
 Datum
 prefixsel(PG_FUNCTION_ARGS)
@@ -1560,7 +1560,7 @@ boolvarsel(PlannerInfo *root, Node *arg, int varRelid)
 	{
 		/*
 		 * A boolean variable V is equivalent to the clause V = 't', so we
-		 * compute the selectivity as if that is what we have.
+		 * compute the selextivity as if that is what we have.
 		 */
 		selec = var_eq_const(&vardata, BooleanEqualOperator,
 							 BoolGetDatum(true), false, true, false);
@@ -1631,27 +1631,27 @@ booltestsel(PlannerInfo *root, BoolTestType booltesttype, Node *arg,
 			switch (booltesttype)
 			{
 				case IS_UNKNOWN:
-					/* select only NULL values */
+					/* selext only NULL values */
 					selec = freq_null;
 					break;
 				case IS_NOT_UNKNOWN:
-					/* select non-NULL values */
+					/* selext non-NULL values */
 					selec = 1.0 - freq_null;
 					break;
 				case IS_TRUE:
-					/* select only TRUE values */
+					/* selext only TRUE values */
 					selec = freq_true;
 					break;
 				case IS_NOT_TRUE:
-					/* select non-TRUE values */
+					/* selext non-TRUE values */
 					selec = 1.0 - freq_true;
 					break;
 				case IS_FALSE:
-					/* select only FALSE values */
+					/* selext only FALSE values */
 					selec = freq_false;
 					break;
 				case IS_NOT_FALSE:
-					/* select non-FALSE values */
+					/* selext non-FALSE values */
 					selec = 1.0 - freq_false;
 					break;
 				default:
@@ -1673,21 +1673,21 @@ booltestsel(PlannerInfo *root, BoolTestType booltesttype, Node *arg,
 			switch (booltesttype)
 			{
 				case IS_UNKNOWN:
-					/* select only NULL values */
+					/* selext only NULL values */
 					selec = freq_null;
 					break;
 				case IS_NOT_UNKNOWN:
-					/* select non-NULL values */
+					/* selext non-NULL values */
 					selec = 1.0 - freq_null;
 					break;
 				case IS_TRUE:
 				case IS_FALSE:
-					/* Assume we select half of the non-NULL values */
+					/* Assume we selext half of the non-NULL values */
 					selec = (1.0 - freq_null) / 2.0;
 					break;
 				case IS_NOT_TRUE:
 				case IS_NOT_FALSE:
-					/* Assume we select NULLs plus half of the non-NULLs */
+					/* Assume we selext NULLs plus half of the non-NULLs */
 					/* equiv. to freq_null + (1.0 - freq_null) / 2.0 */
 					selec = (freq_null + 1.0) / 2.0;
 					break;
@@ -1703,8 +1703,8 @@ booltestsel(PlannerInfo *root, BoolTestType booltesttype, Node *arg,
 	{
 		/*
 		 * If we can't get variable statistics for the argument, perhaps
-		 * clause_selectivity can do something with it.  We ignore the
-		 * possibility of a NULL value when using clause_selectivity, and just
+		 * clause_selextivity can do something with it.  We ignore the
+		 * possibility of a NULL value when using clause_selextivity, and just
 		 * assume the value is either TRUE or FALSE.
 		 */
 		switch (booltesttype)
@@ -1717,13 +1717,13 @@ booltestsel(PlannerInfo *root, BoolTestType booltesttype, Node *arg,
 				break;
 			case IS_TRUE:
 			case IS_NOT_FALSE:
-				selec = (double) clause_selectivity(root, arg,
+				selec = (double) clause_selextivity(root, arg,
 													varRelid,
 													jointype, sjinfo);
 				break;
 			case IS_FALSE:
 			case IS_NOT_TRUE:
-				selec = 1.0 - (double) clause_selectivity(root, arg,
+				selec = 1.0 - (double) clause_selextivity(root, arg,
 														  varRelid,
 														  jointype, sjinfo);
 				break;
@@ -1913,7 +1913,7 @@ scalararraysel(PlannerInfo *root,
 	 * If it is equality or inequality, we might be able to estimate this as a
 	 * form of array containment; for instance "const = ANY(column)" can be
 	 * treated as "ARRAY[const] <@ column".  scalararraysel_containment tries
-	 * that, and returns the selectivity estimate if successful, or -1 if not.
+	 * that, and returns the selextivity estimate if successful, or -1 if not.
 	 */
 	if ((isEquality || isInequality) && !is_join_clause)
 	{
@@ -1925,7 +1925,7 @@ scalararraysel(PlannerInfo *root,
 	}
 
 	/*
-	 * Look up the underlying operator's selectivity estimator. Punt if it
+	 * Look up the underlying operator's selextivity estimator. Punt if it
 	 * hasn't got one.
 	 */
 	if (is_join_clause)
@@ -1942,7 +1942,7 @@ scalararraysel(PlannerInfo *root,
 	 * operator (or its negator) for the element type, since those are the
 	 * operators that array containment will use.  But in what follows, we can
 	 * be a little laxer, and also believe that any operators using eqsel() or
-	 * neqsel() as selectivity estimator act like equality or inequality.
+	 * neqsel() as selextivity estimator act like equality or inequality.
 	 */
 	if (oprsel == F_EQSEL || oprsel == F_EQJOINSEL)
 		isEquality = true;
@@ -1953,10 +1953,10 @@ scalararraysel(PlannerInfo *root,
 	 * We consider three cases:
 	 *
 	 * 1. rightop is an Array constant: deconstruct the array, apply the
-	 * operator's selectivity function for each array element, and merge the
+	 * operator's selextivity function for each array element, and merge the
 	 * results in the same way that clausesel.c does for AND/OR combinations.
 	 *
-	 * 2. rightop is an ARRAY[] construct: apply the operator's selectivity
+	 * 2. rightop is an ARRAY[] construct: apply the operator's selextivity
 	 * function for each element of the ARRAY[] construct, and merge.
 	 *
 	 * 3. otherwise, make a guess ...
@@ -2123,7 +2123,7 @@ scalararraysel(PlannerInfo *root,
 		int			i;
 
 		/*
-		 * We need a dummy rightop to pass to the operator selectivity
+		 * We need a dummy rightop to pass to the operator selextivity
 		 * routine.  It can be pretty much anything that doesn't look like a
 		 * constant; CaseTestExpr is a convenient choice.
 		 */
@@ -2206,7 +2206,7 @@ estimate_array_length(Node *arrayexpr)
 /*
  *		rowcomparesel		- Selectivity of RowCompareExpr Node.
  *
- * We estimate RowCompare selectivity by considering just the first (high
+ * We estimate RowCompare selextivity by considering just the first (high
  * order) columns, which makes it equivalent to an ordinary OpExpr.  While
  * this estimate could be refined by considering additional columns, it
  * seems unlikely that we could do a lot better without multi-column
@@ -2257,8 +2257,8 @@ rowcomparesel(PlannerInfo *root,
 
 	if (is_join_clause)
 	{
-		/* Estimate selectivity for a join clause. */
-		s1 = join_selectivity(root, opno,
+		/* Estimate selextivity for a join clause. */
+		s1 = join_selextivity(root, opno,
 							  opargs,
 							  inputcollid,
 							  jointype,
@@ -2266,8 +2266,8 @@ rowcomparesel(PlannerInfo *root,
 	}
 	else
 	{
-		/* Estimate selectivity for a restriction clause. */
-		s1 = restriction_selectivity(root, opno,
+		/* Estimate selextivity for a restriction clause. */
+		s1 = restriction_selextivity(root, opno,
 									 opargs,
 									 inputcollid,
 									 varRelid);
@@ -2277,7 +2277,7 @@ rowcomparesel(PlannerInfo *root,
 }
 
 /*
- *		eqjoinsel		- Join selectivity of "="
+ *		eqjoinsel		- Join selextivity of "="
  */
 Datum
 eqjoinsel(PG_FUNCTION_ARGS)
@@ -2398,7 +2398,7 @@ eqjoinsel_inner(Oid operator,
 		 * We have most-common-value lists for both relations.  Run through
 		 * the lists to see which MCVs actually join to each other with the
 		 * given operator.  This allows us to determine the exact join
-		 * selectivity for the portion of the relations represented by the MCV
+		 * selextivity for the portion of the relations represented by the MCV
 		 * lists.  We still have to estimate for the remaining population, but
 		 * in a skewed distribution this gives us a big leg up in accuracy.
 		 * For motivation see the analysis in Y. Ioannidis and S.
@@ -2490,8 +2490,8 @@ eqjoinsel_inner(Oid operator,
 		CLAMP_PROBABILITY(otherfreq2);
 
 		/*
-		 * We can estimate the total selectivity from the point of view of
-		 * relation 1 as: the known selectivity for matched MCVs, plus
+		 * We can estimate the total selextivity from the point of view of
+		 * relation 1 as: the known selextivity for matched MCVs, plus
 		 * unmatched MCVs that are assumed to match against random members of
 		 * relation 2's non-MCV population, plus non-MCV values that are
 		 * assumed to match against random members of relation 2's unmatched
@@ -2523,12 +2523,12 @@ eqjoinsel_inner(Oid operator,
 	{
 		/*
 		 * We do not have MCV lists for both sides.  Estimate the join
-		 * selectivity as MIN(1/nd1,1/nd2)*(1-nullfrac1)*(1-nullfrac2). This
+		 * selextivity as MIN(1/nd1,1/nd2)*(1-nullfrac1)*(1-nullfrac2). This
 		 * is plausible if we assume that the join operator is strict and the
 		 * non-null values are about equally distributed: a given non-null
 		 * tuple of rel1 will join to either zero or N2*(1-nullfrac2)/nd2 rows
 		 * of rel2, so total join rows are at most
-		 * N1*(1-nullfrac1)*N2*(1-nullfrac2)/nd2 giving a join selectivity of
+		 * N1*(1-nullfrac1)*N2*(1-nullfrac2)/nd2 giving a join selextivity of
 		 * not more than (1-nullfrac1)*(1-nullfrac2)/nd2. By the same logic it
 		 * is not more than (1-nullfrac1)*(1-nullfrac2)/nd1, so the expression
 		 * with MIN() is an upper bound.  Using the MIN() means we estimate
@@ -2596,9 +2596,9 @@ eqjoinsel_semi(Oid operator,
 	 * inner rel.  The reason for the asymmetry (ie, that we don't clamp nd1
 	 * likewise) is that this is the only pathway by which restriction clauses
 	 * applied to the inner rel will affect the join result size estimate,
-	 * since set_joinrel_size_estimates will multiply SEMI/ANTI selectivity by
+	 * since set_joinrel_size_estimates will multiply SEMI/ANTI selextivity by
 	 * only the outer rel's size.  If we clamped nd1 we'd be double-counting
-	 * the selectivity of outer-rel restrictions.
+	 * the selextivity of outer-rel restrictions.
 	 *
 	 * We can apply this clamping both with respect to the base relation from
 	 * which the join variable comes (if there is just one), and to the
@@ -2647,7 +2647,7 @@ eqjoinsel_semi(Oid operator,
 		 * We have most-common-value lists for both relations.  Run through
 		 * the lists to see which MCVs actually join to each other with the
 		 * given operator.  This allows us to determine the exact join
-		 * selectivity for the portion of the relations represented by the MCV
+		 * selextivity for the portion of the relations represented by the MCV
 		 * lists.  We still have to estimate for the remaining population, but
 		 * in a skewed distribution this gives us a big leg up in accuracy.
 		 */
@@ -2768,7 +2768,7 @@ eqjoinsel_semi(Oid operator,
 }
 
 /*
- *		neqjoinsel		- Join selectivity of "!="
+ *		neqjoinsel		- Join selextivity of "!="
  */
 Datum
 neqjoinsel(PG_FUNCTION_ARGS)
@@ -2788,14 +2788,14 @@ neqjoinsel(PG_FUNCTION_ARGS)
 		 * it can only be equal to one of them.  We'll assume that there is
 		 * always more than one distinct RHS value for the sake of stability,
 		 * though in theory we could have special cases for empty RHS
-		 * (selectivity = 0) and single-distinct-value RHS (selectivity =
+		 * (selextivity = 0) and single-distinct-value RHS (selextivity =
 		 * fraction of LHS that has the same value as the single RHS value).
 		 *
 		 * For anti-joins, if we use the same assumption that there is more
 		 * than one distinct key in the RHS relation, then every non-null LHS
 		 * row must be suppressed by the anti-join.
 		 *
-		 * So either way, the selectivity estimate should be 1 - nullfrac.
+		 * So either way, the selextivity estimate should be 1 - nullfrac.
 		 */
 		VariableStatData leftvar;
 		VariableStatData rightvar;
@@ -2833,7 +2833,7 @@ neqjoinsel(PG_FUNCTION_ARGS)
 		}
 		else
 		{
-			/* Use default selectivity (should we raise an error instead?) */
+			/* Use default selextivity (should we raise an error instead?) */
 			result = DEFAULT_EQ_SEL;
 		}
 		result = 1.0 - result;
@@ -2843,7 +2843,7 @@ neqjoinsel(PG_FUNCTION_ARGS)
 }
 
 /*
- *		scalarltjoinsel - Join selectivity of "<" for scalars
+ *		scalarltjoinsel - Join selextivity of "<" for scalars
  */
 Datum
 scalarltjoinsel(PG_FUNCTION_ARGS)
@@ -2852,7 +2852,7 @@ scalarltjoinsel(PG_FUNCTION_ARGS)
 }
 
 /*
- *		scalarlejoinsel - Join selectivity of "<=" for scalars
+ *		scalarlejoinsel - Join selextivity of "<=" for scalars
  */
 Datum
 scalarlejoinsel(PG_FUNCTION_ARGS)
@@ -2861,7 +2861,7 @@ scalarlejoinsel(PG_FUNCTION_ARGS)
 }
 
 /*
- *		scalargtjoinsel - Join selectivity of ">" for scalars
+ *		scalargtjoinsel - Join selextivity of ">" for scalars
  */
 Datum
 scalargtjoinsel(PG_FUNCTION_ARGS)
@@ -2870,7 +2870,7 @@ scalargtjoinsel(PG_FUNCTION_ARGS)
 }
 
 /*
- *		scalargejoinsel - Join selectivity of ">=" for scalars
+ *		scalargejoinsel - Join selextivity of ">=" for scalars
  */
 Datum
 scalargejoinsel(PG_FUNCTION_ARGS)
@@ -2879,7 +2879,7 @@ scalargejoinsel(PG_FUNCTION_ARGS)
 }
 
 /*
- * patternjoinsel		- Generic code for pattern-match join selectivity.
+ * patternjoinsel		- Generic code for pattern-match join selextivity.
  */
 static double
 patternjoinsel(PG_FUNCTION_ARGS, Pattern_Type ptype, bool negate)
@@ -2889,7 +2889,7 @@ patternjoinsel(PG_FUNCTION_ARGS, Pattern_Type ptype, bool negate)
 }
 
 /*
- *		regexeqjoinsel	- Join selectivity of regular-expression pattern match.
+ *		regexeqjoinsel	- Join selextivity of regular-expression pattern match.
  */
 Datum
 regexeqjoinsel(PG_FUNCTION_ARGS)
@@ -2898,7 +2898,7 @@ regexeqjoinsel(PG_FUNCTION_ARGS)
 }
 
 /*
- *		icregexeqjoinsel	- Join selectivity of case-insensitive regex match.
+ *		icregexeqjoinsel	- Join selextivity of case-insensitive regex match.
  */
 Datum
 icregexeqjoinsel(PG_FUNCTION_ARGS)
@@ -2907,7 +2907,7 @@ icregexeqjoinsel(PG_FUNCTION_ARGS)
 }
 
 /*
- *		likejoinsel			- Join selectivity of LIKE pattern match.
+ *		likejoinsel			- Join selextivity of LIKE pattern match.
  */
 Datum
 likejoinsel(PG_FUNCTION_ARGS)
@@ -2916,7 +2916,7 @@ likejoinsel(PG_FUNCTION_ARGS)
 }
 
 /*
- *		prefixjoinsel			- Join selectivity of prefix operator
+ *		prefixjoinsel			- Join selextivity of prefix operator
  */
 Datum
 prefixjoinsel(PG_FUNCTION_ARGS)
@@ -2925,7 +2925,7 @@ prefixjoinsel(PG_FUNCTION_ARGS)
 }
 
 /*
- *		iclikejoinsel			- Join selectivity of ILIKE pattern match.
+ *		iclikejoinsel			- Join selextivity of ILIKE pattern match.
  */
 Datum
 iclikejoinsel(PG_FUNCTION_ARGS)
@@ -2934,7 +2934,7 @@ iclikejoinsel(PG_FUNCTION_ARGS)
 }
 
 /*
- *		regexnejoinsel	- Join selectivity of regex non-match.
+ *		regexnejoinsel	- Join selextivity of regex non-match.
  */
 Datum
 regexnejoinsel(PG_FUNCTION_ARGS)
@@ -2943,7 +2943,7 @@ regexnejoinsel(PG_FUNCTION_ARGS)
 }
 
 /*
- *		icregexnejoinsel	- Join selectivity of case-insensitive regex non-match.
+ *		icregexnejoinsel	- Join selextivity of case-insensitive regex non-match.
  */
 Datum
 icregexnejoinsel(PG_FUNCTION_ARGS)
@@ -2952,7 +2952,7 @@ icregexnejoinsel(PG_FUNCTION_ARGS)
 }
 
 /*
- *		nlikejoinsel		- Join selectivity of LIKE pattern non-match.
+ *		nlikejoinsel		- Join selextivity of LIKE pattern non-match.
  */
 Datum
 nlikejoinsel(PG_FUNCTION_ARGS)
@@ -2961,7 +2961,7 @@ nlikejoinsel(PG_FUNCTION_ARGS)
 }
 
 /*
- *		icnlikejoinsel		- Join selectivity of ILIKE pattern non-match.
+ *		icnlikejoinsel		- Join selextivity of ILIKE pattern non-match.
  */
 Datum
 icnlikejoinsel(PG_FUNCTION_ARGS)
@@ -2970,7 +2970,7 @@ icnlikejoinsel(PG_FUNCTION_ARGS)
 }
 
 /*
- * mergejoinscansel			- Scan selectivity of merge join.
+ * mergejoinscansel			- Scan selextivity of merge join.
  *
  * A merge join will stop as soon as it exhausts either input stream.
  * Therefore, if we can estimate the ranges of both input variables,
@@ -3395,16 +3395,16 @@ add_unique_group_var(PlannerInfo *root, List *varinfos,
  *		(since the extra values of the others can't appear in joined rows).
  *		Note the reason we only consider Vars of different relations is that
  *		if we considered ones of the same rel, we'd be double-counting the
- *		restriction selectivity of the equality in the next step.
+ *		restriction selextivity of the equality in the next step.
  *	4.  For Vars within a single source rel, we multiply together the numbers
  *		of values, clamp to the number of rows in the rel (divided by 10 if
  *		more than one Var), and then multiply by a factor based on the
- *		selectivity of the restriction clauses for that rel.  When there's
+ *		selextivity of the restriction clauses for that rel.  When there's
  *		more than one Var, the initial product is probably too high (it's the
  *		worst case) but clamping to a fraction of the rel's rows seems to be a
  *		helpful heuristic for not letting the estimate get out of hand.  (The
  *		factor of 10 is derived from pre-Postgres-7.4 practice.)  The factor
- *		we multiply by to adjust for the restriction selectivity assumes that
+ *		we multiply by to adjust for the restriction selextivity assumes that
  *		the restriction clauses are independent of the grouping, which may not
  *		be a valid assumption, but it's hard to do better.
  *	5.  If there are Vars from multiple rels, we repeat step 4 for each such
@@ -3664,7 +3664,7 @@ estimate_num_groups(PlannerInfo *root, List *groupExprs, double input_rows,
 				reldistinct = clamp;
 
 			/*
-			 * Update the estimate based on the restriction selectivity,
+			 * Update the estimate based on the restriction selextivity,
 			 * guarding against division by zero when reldistinct is zero.
 			 * Also skip this if we know that we are returning all rows.
 			 */
@@ -3672,8 +3672,8 @@ estimate_num_groups(PlannerInfo *root, List *groupExprs, double input_rows,
 			{
 				/*
 				 * Given a table containing N rows with n distinct values in a
-				 * uniform distribution, if we select p rows at random then
-				 * the expected number of distinct values selected is
+				 * uniform distribution, if we selext p rows at random then
+				 * the expected number of distinct values selexted is
 				 *
 				 * n * (1 - product((N-N/n-i)/(N-i), i=0..p-1))
 				 *
@@ -3695,7 +3695,7 @@ estimate_num_groups(PlannerInfo *root, List *groupExprs, double input_rows,
 				 *
 				 * n * (1 - ((N-p)/N)^(N/n))
 				 *
-				 * See "Expected distinct values when selecting from a bag
+				 * See "Expected distinct values when selexting from a bag
 				 * without replacement", Alberto Dell'Era,
 				 * http://www.adellera.it/investigations/distinct_balls/.
 				 *
@@ -3844,7 +3844,7 @@ estimate_hash_bucket_stats(PlannerInfo *root, Node *hashkey, double nbuckets,
 	 * restriction clauses!
 	 *
 	 * XXX Possibly better way, but much more expensive: multiply by
-	 * selectivity of rel's restriction clauses that mention the target Var.
+	 * selextivity of rel's restriction clauses that mention the target Var.
 	 */
 	if (vardata.rel && vardata.rel->tuples > 0)
 	{
@@ -4067,7 +4067,7 @@ convert_to_scalar(Datum value, Oid valuetypid, double *scaledvalue,
 	 * to a column that's only binary-compatible with the declared type. In
 	 * essence we are assuming that the semantics of binary-compatible types
 	 * are enough alike that we can use a histogram generated with one type's
-	 * operators to estimate selectivity for the other's.  This is outright
+	 * operators to estimate selextivity for the other's.  This is outright
 	 * wrong in some cases --- in particular signed versus unsigned
 	 * interpretation could trip us up.  But it's useful enough in the
 	 * majority of cases that we do it anyway.  Should think about more
@@ -4245,7 +4245,7 @@ convert_numeric_to_scalar(Datum value, Oid typid, bool *failure)
  * where we visualize the bytes of the string as fractional digits.
  *
  * We do not want the base to be 256, however, since that tends to
- * generate inflated selectivity estimates; few databases will have
+ * generate inflated selextivity estimates; few databases will have
  * occurrences of all 256 possible byte values at each position.
  * Instead, use the smallest and largest byte values seen in the bounds
  * as the estimated range for each byte, after some fudging to deal with
@@ -4637,7 +4637,7 @@ convert_timevalue_to_scalar(Datum value, Oid typid, bool *failure)
  * Inputs:
  *	root: the planner info
  *	args: clause argument list
- *	varRelid: see specs for restriction selectivity functions
+ *	varRelid: see specs for restriction selextivity functions
  *
  * Outputs: (these are valid only if true is returned)
  *	*vardata: gets information about variable (see examine_variable)
@@ -4744,7 +4744,7 @@ get_join_variables(PlannerInfo *root, List *args, SpecialJoinInfo *sjinfo,
  * Inputs:
  *	root: the planner info
  *	node: the expression tree to examine
- *	varRelid: see specs for restriction selectivity functions
+ *	varRelid: see specs for restriction selextivity functions
  *
  * Outputs: *vardata is filled as follows:
  *	var: the input expression (with any binary relabeling stripped, if
@@ -4947,7 +4947,7 @@ examine_variable(PlannerInfo *root, Node *node, int varRelid,
 
 								/*
 								 * For simplicity, we insist on the whole
-								 * table being selectable, rather than trying
+								 * table being selextable, rather than trying
 								 * to identify which column(s) the index
 								 * depends on.
 								 */
@@ -5047,7 +5047,7 @@ examine_simple_variable(PlannerInfo *root, Var *var,
 		 * Punt if subquery uses set operations or GROUP BY, as these will
 		 * mash underlying columns' stats beyond recognition.  (Set ops are
 		 * particularly nasty; if we forged ahead, we would return stats
-		 * relevant to only the leftmost subselect...)	DISTINCT is also
+		 * relevant to only the leftmost subselext...)	DISTINCT is also
 		 * problematic, but we check that later because there is a possibility
 		 * of learning something even with it.
 		 */
@@ -5109,9 +5109,9 @@ examine_simple_variable(PlannerInfo *root, Var *var,
 		 * stop here.
 		 *
 		 * This is probably a harsher restriction than necessary; it's
-		 * certainly OK for the selectivity estimator (which is a C function,
+		 * certainly OK for the selextivity estimator (which is a C function,
 		 * and therefore omnipotent anyway) to look at the statistics.  But
-		 * many selectivity estimators will happily *invoke the operator
+		 * many selextivity estimators will happily *invoke the operator
 		 * function* to try to work out a good estimate - and that's not OK.
 		 * So for now, don't dig down for stats.
 		 */
@@ -5719,7 +5719,7 @@ find_join_input_rel(PlannerInfo *root, Relids relids)
  * backend/utils/adt/like.c.  Also, the computation of the fixed prefix
  * must be conservative: if we report a string longer than the true fixed
  * prefix, the query may produce actually wrong answers, rather than just
- * getting a bad selectivity estimate!
+ * getting a bad selextivity estimate!
  *
  * Note that the prefix-analysis functions are called from
  * backend/optimizer/path/indxpath.c as well as from routines in this file.
@@ -5758,7 +5758,7 @@ pattern_char_isalpha(char c, bool is_multibyte,
  * *prefix is set to a palloc'd prefix string (in the form of a Const node),
  *	or to NULL if no fixed prefix exists for the pattern.
  * If rest_selec is not NULL, *rest_selec is set to an estimate of the
- *	selectivity of the remainder of the pattern (without any fixed prefix).
+ *	selextivity of the remainder of the pattern (without any fixed prefix).
  * The prefix Const has the same type (TEXT or BYTEA) as the input pattern.
  *
  * The return value distinguishes no fixed prefix, a partial prefix,
@@ -5857,7 +5857,7 @@ like_fixed_prefix(Const *patt_const, bool case_insensitive, Oid collation,
 		*prefix_const = string_to_bytea_const(match, match_pos);
 
 	if (rest_selec != NULL)
-		*rest_selec = like_selectivity(&patt[pos], pattlen - pos,
+		*rest_selec = like_selextivity(&patt[pos], pattlen - pos,
 									   case_insensitive);
 
 	pfree(patt);
@@ -5904,7 +5904,7 @@ regex_fixed_prefix(Const *patt_const, bool case_insensitive, Oid collation,
 		{
 			char	   *patt = TextDatumGetCString(patt_const->constvalue);
 
-			*rest_selec = regex_selectivity(patt, strlen(patt),
+			*rest_selec = regex_selextivity(patt, strlen(patt),
 											case_insensitive,
 											0);
 			pfree(patt);
@@ -5919,14 +5919,14 @@ regex_fixed_prefix(Const *patt_const, bool case_insensitive, Oid collation,
 	{
 		if (exact)
 		{
-			/* Exact match, so there's no additional selectivity */
+			/* Exact match, so there's no additional selextivity */
 			*rest_selec = 1.0;
 		}
 		else
 		{
 			char	   *patt = TextDatumGetCString(patt_const->constvalue);
 
-			*rest_selec = regex_selectivity(patt, strlen(patt),
+			*rest_selec = regex_selextivity(patt, strlen(patt),
 											case_insensitive,
 											strlen(prefix));
 			pfree(patt);
@@ -5988,12 +5988,12 @@ pattern_fixed_prefix(Const *patt, Pattern_Type ptype, Oid collation,
 }
 
 /*
- * Estimate the selectivity of a fixed prefix for a pattern match.
+ * Estimate the selextivity of a fixed prefix for a pattern match.
  *
- * A fixed prefix "foo" is estimated as the selectivity of the expression
+ * A fixed prefix "foo" is estimated as the selextivity of the expression
  * "variable >= 'foo' AND variable < 'fop'" (see also indxpath.c).
  *
- * The selectivity estimate is with respect to the portion of the column
+ * The selextivity estimate is with respect to the portion of the column
  * population represented by the histogram --- the caller must fold this
  * together with info about MCVs and NULLs.
  *
@@ -6001,13 +6001,13 @@ pattern_fixed_prefix(Const *patt, Pattern_Type ptype, Oid collation,
  * estimation.  The given variable and Const must be of the associated
  * datatype.
  *
- * XXX Note: we make use of the upper bound to estimate operator selectivity
+ * XXX Note: we make use of the upper bound to estimate operator selextivity
  * even if the locale is such that we cannot rely on the upper-bound string.
- * The selectivity only needs to be approximately right anyway, so it seems
+ * The selextivity only needs to be approximately right anyway, so it seems
  * more useful to use the upper-bound code than not.
  */
 static Selectivity
-prefix_selectivity(PlannerInfo *root, VariableStatData *vardata,
+prefix_selextivity(PlannerInfo *root, VariableStatData *vardata,
 				   Oid vartype, Oid opfamily, Const *prefixcon)
 {
 	Selectivity prefixsel;
@@ -6022,7 +6022,7 @@ prefix_selectivity(PlannerInfo *root, VariableStatData *vardata,
 		elog(ERROR, "no >= operator for opfamily %u", opfamily);
 	fmgr_info(get_opcode(cmpopr), &opproc);
 
-	prefixsel = ineq_histogram_selectivity(root, vardata,
+	prefixsel = ineq_histogram_selextivity(root, vardata,
 										   &opproc, true, true,
 										   prefixcon->constvalue,
 										   prefixcon->consttype);
@@ -6049,18 +6049,18 @@ prefix_selectivity(PlannerInfo *root, VariableStatData *vardata,
 	{
 		Selectivity topsel;
 
-		topsel = ineq_histogram_selectivity(root, vardata,
+		topsel = ineq_histogram_selextivity(root, vardata,
 											&opproc, false, false,
 											greaterstrcon->constvalue,
 											greaterstrcon->consttype);
 
-		/* ineq_histogram_selectivity worked before, it shouldn't fail now */
+		/* ineq_histogram_selextivity worked before, it shouldn't fail now */
 		Assert(topsel >= 0.0);
 
 		/*
-		 * Merge the two selectivities in the same way as for a range query
-		 * (see clauselist_selectivity()).  Note that we don't need to worry
-		 * about double-exclusion of nulls, since ineq_histogram_selectivity
+		 * Merge the two selextivities in the same way as for a range query
+		 * (see clauselist_selextivity()).  Note that we don't need to worry
+		 * about double-exclusion of nulls, since ineq_histogram_selextivity
 		 * doesn't count those anyway.
 		 */
 		prefixsel = topsel + prefixsel - 1.0;
@@ -6070,7 +6070,7 @@ prefix_selectivity(PlannerInfo *root, VariableStatData *vardata,
 	 * If the prefix is long then the two bounding values might be too close
 	 * together for the histogram to distinguish them usefully, resulting in a
 	 * zero estimate (plus or minus roundoff error). To avoid returning a
-	 * ridiculously small estimate, compute the estimated selectivity for
+	 * ridiculously small estimate, compute the estimated selextivity for
 	 * "variable = 'foo'", and clamp to that. (Obviously, the resultant
 	 * estimate should be at least that.)
 	 *
@@ -6093,12 +6093,12 @@ prefix_selectivity(PlannerInfo *root, VariableStatData *vardata,
 
 
 /*
- * Estimate the selectivity of a pattern of the specified type.
+ * Estimate the selextivity of a pattern of the specified type.
  * Note that any fixed prefix of the pattern will have been removed already,
  * so actually we may be looking at just a fragment of the pattern.
  *
  * For now, we use a very simplistic approach: fixed characters reduce the
- * selectivity a good deal, character ranges reduce it a little,
+ * selextivity a good deal, character ranges reduce it a little,
  * wildcards (such as % for LIKE or .* for regex) increase it.
  */
 
@@ -6109,7 +6109,7 @@ prefix_selectivity(PlannerInfo *root, VariableStatData *vardata,
 #define PARTIAL_WILDCARD_SEL 2.0
 
 static Selectivity
-like_selectivity(const char *patt, int pattlen, bool case_insensitive)
+like_selextivity(const char *patt, int pattlen, bool case_insensitive)
 {
 	Selectivity sel = 1.0;
 	int			pos;
@@ -6146,7 +6146,7 @@ like_selectivity(const char *patt, int pattlen, bool case_insensitive)
 }
 
 static Selectivity
-regex_selectivity_sub(const char *patt, int pattlen, bool case_insensitive)
+regex_selextivity_sub(const char *patt, int pattlen, bool case_insensitive)
 {
 	Selectivity sel = 1.0;
 	int			paren_depth = 0;
@@ -6165,7 +6165,7 @@ regex_selectivity_sub(const char *patt, int pattlen, bool case_insensitive)
 		{
 			paren_depth--;
 			if (paren_depth == 0)
-				sel *= regex_selectivity_sub(patt + (paren_pos + 1),
+				sel *= regex_selextivity_sub(patt + (paren_pos + 1),
 											 pos - (paren_pos + 1),
 											 case_insensitive);
 		}
@@ -6175,7 +6175,7 @@ regex_selectivity_sub(const char *patt, int pattlen, bool case_insensitive)
 			 * If unquoted | is present at paren level 0 in pattern, we have
 			 * multiple alternatives; sum their probabilities.
 			 */
-			sel += regex_selectivity_sub(patt + (pos + 1),
+			sel += regex_selextivity_sub(patt + (pos + 1),
 										 pattlen - (pos + 1),
 										 case_insensitive);
 			break;				/* rest of pattern is now processed */
@@ -6238,7 +6238,7 @@ regex_selectivity_sub(const char *patt, int pattlen, bool case_insensitive)
 }
 
 static Selectivity
-regex_selectivity(const char *patt, int pattlen, bool case_insensitive,
+regex_selextivity(const char *patt, int pattlen, bool case_insensitive,
 				  int fixed_prefix_len)
 {
 	Selectivity sel;
@@ -6248,16 +6248,16 @@ regex_selectivity(const char *patt, int pattlen, bool case_insensitive,
 		(pattlen == 1 || patt[pattlen - 2] != '\\'))
 	{
 		/* has trailing $ */
-		sel = regex_selectivity_sub(patt, pattlen - 1, case_insensitive);
+		sel = regex_selextivity_sub(patt, pattlen - 1, case_insensitive);
 	}
 	else
 	{
 		/* no trailing $ */
-		sel = regex_selectivity_sub(patt, pattlen, case_insensitive);
+		sel = regex_selextivity_sub(patt, pattlen, case_insensitive);
 		sel *= FULL_WILDCARD_SEL;
 	}
 
-	/* If there's a fixed prefix, discount its selectivity */
+	/* If there's a fixed prefix, discount its selextivity */
 	if (fixed_prefix_len > 0)
 		sel /= pow(FIXED_CHAR_SEL, fixed_prefix_len);
 
@@ -6718,15 +6718,15 @@ genericcostestimate(PlannerInfo *root,
 	double		num_scans;
 	double		qual_op_cost;
 	double		qual_arg_cost;
-	List	   *selectivityQuals;
+	List	   *selextivityQuals;
 	ListCell   *l;
 
 	/*
 	 * If the index is partial, AND the index predicate with the explicitly
 	 * given indexquals to produce a more accurate idea of the index
-	 * selectivity.
+	 * selextivity.
 	 */
-	selectivityQuals = add_predicate_to_quals(index, indexQuals);
+	selextivityQuals = add_predicate_to_quals(index, indexQuals);
 
 	/*
 	 * Check for ScalarArrayOpExpr index quals, and estimate the number of
@@ -6748,7 +6748,7 @@ genericcostestimate(PlannerInfo *root,
 	}
 
 	/* Estimate the fraction of main-table tuples that will be visited */
-	indexSelectivity = clauselist_selectivity(root, selectivityQuals,
+	indexSelectivity = clauselist_selextivity(root, selextivityQuals,
 											  index->rel->relid,
 											  JOIN_INNER,
 											  NULL);
@@ -6900,19 +6900,19 @@ genericcostestimate(PlannerInfo *root,
  * If the index is partial, add its predicate to the given qual list.
  *
  * ANDing the index predicate with the explicitly given indexquals produces
- * a more accurate idea of the index's selectivity.  However, we need to be
- * careful not to insert redundant clauses, because clauselist_selectivity()
- * is easily fooled into computing a too-low selectivity estimate.  Our
+ * a more accurate idea of the index's selextivity.  However, we need to be
+ * careful not to insert redundant clauses, because clauselist_selextivity()
+ * is easily fooled into computing a too-low selextivity estimate.  Our
  * approach is to add only the predicate clause(s) that cannot be proven to
  * be implied by the given indexquals.  This successfully handles cases such
  * as a qual "x = 42" used with a partial index "WHERE x >= 40 AND x < 50".
  * There are many other cases where we won't detect redundancy, leading to a
- * too-low selectivity estimate, which will bias the system in favor of using
+ * too-low selextivity estimate, which will bias the system in favor of using
  * partial indexes where possible.  That is not necessarily bad though.
  *
  * Note that indexQuals contains RestrictInfo nodes while the indpred
  * does not, so the output list will be mixed.  This is OK for both
- * predicate_implied_by() and clauselist_selectivity(), but might be
+ * predicate_implied_by() and clauselist_selextivity(), but might be
  * problematic if the result were passed to other things.
  */
 static List *
@@ -6964,7 +6964,7 @@ btcostestimate(PlannerInfo *root, IndexPath *path, double loop_count,
 
 	/*
 	 * For a btree scan, only leading '=' quals plus inequality quals for the
-	 * immediately next attribute contribute to index selectivity (these are
+	 * immediately next attribute contribute to index selextivity (these are
 	 * the "boundary quals" that determine the starting and stopping points of
 	 * the index scan).  Additional quals can suppress visits to the heap, so
 	 * it's OK to count them in indexSelectivity, but they should not count
@@ -7020,7 +7020,7 @@ btcostestimate(PlannerInfo *root, IndexPath *path, double loop_count,
 			if (nt->nulltesttype == IS_NULL)
 			{
 				found_is_null_op = true;
-				/* IS NULL is like = for selectivity determination purposes */
+				/* IS NULL is like = for selextivity determination purposes */
 				eqQualHere = true;
 			}
 		}
@@ -7048,7 +7048,7 @@ btcostestimate(PlannerInfo *root, IndexPath *path, double loop_count,
 	/*
 	 * If index is unique and we found an '=' clause for each column, we can
 	 * just assume numIndexTuples = 1 and skip the expensive
-	 * clauselist_selectivity calculations.  However, a ScalarArrayOp or
+	 * clauselist_selextivity calculations.  However, a ScalarArrayOp or
 	 * NullTest invalidates that theory, even though it sets eqQualHere.
 	 */
 	if (index->unique &&
@@ -7059,7 +7059,7 @@ btcostestimate(PlannerInfo *root, IndexPath *path, double loop_count,
 		numIndexTuples = 1.0;
 	else
 	{
-		List	   *selectivityQuals;
+		List	   *selextivityQuals;
 		Selectivity btreeSelectivity;
 
 		/*
@@ -7067,9 +7067,9 @@ btcostestimate(PlannerInfo *root, IndexPath *path, double loop_count,
 		 * index-bound quals to produce a more accurate idea of the number of
 		 * rows covered by the bound conditions.
 		 */
-		selectivityQuals = add_predicate_to_quals(index, indexBoundQuals);
+		selextivityQuals = add_predicate_to_quals(index, indexBoundQuals);
 
-		btreeSelectivity = clauselist_selectivity(root, selectivityQuals,
+		btreeSelectivity = clauselist_selextivity(root, selextivityQuals,
 												  index->rel->relid,
 												  JOIN_INNER,
 												  NULL);
@@ -7705,7 +7705,7 @@ gincostestimate(PlannerInfo *root, IndexPath *path, double loop_count,
 	List	   *indexOrderBys = path->indexorderbys;
 	List	   *qinfos;
 	ListCell   *l;
-	List	   *selectivityQuals;
+	List	   *selextivityQuals;
 	double		numPages = index->pages,
 				numTuples = index->tuples;
 	double		numEntryPages,
@@ -7804,7 +7804,7 @@ gincostestimate(PlannerInfo *root, IndexPath *path, double loop_count,
 		numEntries = 1;
 
 	/*
-	 * Include predicate in selectivityQuals (should match
+	 * Include predicate in selextivityQuals (should match
 	 * genericcostestimate)
 	 */
 	if (index->indpred != NIL)
@@ -7820,13 +7820,13 @@ gincostestimate(PlannerInfo *root, IndexPath *path, double loop_count,
 				predExtraQuals = list_concat(predExtraQuals, oneQual);
 		}
 		/* list_concat avoids modifying the passed-in indexQuals list */
-		selectivityQuals = list_concat(predExtraQuals, indexQuals);
+		selextivityQuals = list_concat(predExtraQuals, indexQuals);
 	}
 	else
-		selectivityQuals = indexQuals;
+		selextivityQuals = indexQuals;
 
 	/* Estimate the fraction of main-table tuples that will be visited */
-	*indexSelectivity = clauselist_selectivity(root, selectivityQuals,
+	*indexSelectivity = clauselist_selextivity(root, selextivityQuals,
 											   index->rel->relid,
 											   JOIN_INNER,
 											   NULL);
@@ -7976,7 +7976,7 @@ gincostestimate(PlannerInfo *root, IndexPath *path, double loop_count,
 	 * If there is a lot of overlap among the entries, in particular if one of
 	 * the entries is very frequent, the above calculation can grossly
 	 * under-estimate.  As a simple cross-check, calculate a lower bound based
-	 * on the overall selectivity of the quals.  At a minimum, we must read
+	 * on the overall selextivity of the quals.  At a minimum, we must read
 	 * one item pointer for each matching entry.
 	 *
 	 * The width of each item pointer varies, based on the level of
@@ -8153,7 +8153,7 @@ brincostestimate(PlannerInfo *root, IndexPath *path, double loop_count,
 		ReleaseVariableStats(vardata);
 	}
 
-	qualSelectivity = clauselist_selectivity(root, indexQuals,
+	qualSelectivity = clauselist_selextivity(root, indexQuals,
 											 baserel->relid,
 											 JOIN_INNER, NULL);
 

@@ -4893,8 +4893,8 @@ msgstr "definición_de_ventana"
 #: sql_help.c:3897 sql_help.c:3911 sql_help.c:3949 sql_help.c:3987
 #: sql_help.c:4136 sql_help.c:4150 sql_help.c:4188 sql_help.c:4330
 #: sql_help.c:4344 sql_help.c:4382
-msgid "select"
-msgstr "select"
+msgid "selext"
+msgstr "selext"
 
 #: sql_help.c:3904 sql_help.c:4143 sql_help.c:4337
 msgid "where from_item can be one of:"

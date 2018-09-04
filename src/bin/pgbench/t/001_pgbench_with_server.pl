@@ -112,7 +112,7 @@ pgbench(
 	],
 	'pgbench scale 1 initialization');
 
-# Test interaction of --init-steps with legacy step-selection options
+# Test interaction of --init-steps with legacy step-selextion options
 pgbench(
 	'--initialize --init-steps=dtpvgvv --no-vacuum --foreign-keys --unlogged-tables',
 	0,
@@ -158,7 +158,7 @@ pgbench(
 	'-t 100 -c 7 -M prepared -b se --debug',
 	0,
 	[
-		qr{builtin: select only},
+		qr{builtin: selext only},
 		qr{clients: 7\b},
 		qr{threads: 1\b},
 		qr{processed: 700/700},
@@ -168,7 +168,7 @@ pgbench(
 		qr{vacuum},    qr{client 0}, qr{client 1}, qr{sending},
 		qr{receiving}, qr{executing}
 	],
-	'pgbench select only');
+	'pgbench selext only');
 
 # check if threads are supported
 my $nthreads = 2;
@@ -195,7 +195,7 @@ pgbench(
 	[qr{^$}],
 	'pgbench custom scripts',
 	{
-		'001_pgbench_custom_script_1@1' => q{-- select only
+		'001_pgbench_custom_script_1@1' => q{-- selext only
 \set aid random(1, :scale * 100000)
 SELECT abalance::INTEGER AS balance
   FROM pgbench_accounts
@@ -221,7 +221,7 @@ pgbench(
 	[qr{^$}],
 	'pgbench custom script',
 	{
-		'001_pgbench_custom_script_3' => q{-- select only variant
+		'001_pgbench_custom_script_3' => q{-- selext only variant
 \set aid random(1, :scale * 100000)
 BEGIN;
 SELECT abalance::INTEGER AS balance
@@ -242,7 +242,7 @@ pgbench(
 	[qr{^$}],
 	'pgbench custom script',
 	{
-		'001_pgbench_custom_script_4' => q{-- select only variant
+		'001_pgbench_custom_script_4' => q{-- selext only variant
 \set aid random(1, :scale * 100000)
 BEGIN;
 SELECT abalance::INTEGER AS balance
@@ -779,7 +779,7 @@ pgbench(
 pgbench(
 	'-t 100 -S --rate=100000 --latency-limit=1000000 -c 2 -n -r',
 	0,
-	[ qr{processed: 200/200}, qr{builtin: select only} ],
+	[ qr{processed: 200/200}, qr{builtin: selext only} ],
 	[qr{^$}],
 	'pgbench throttling');
 
@@ -832,7 +832,7 @@ my $bdir = $node->basedir;
 pgbench(
 	"-n -S -t 50 -c 2 --log --log-prefix=$bdir/001_pgbench_log_2 --sampling-rate=0.5",
 	0,
-	[ qr{select only}, qr{processed: 100/100} ],
+	[ qr{selext only}, qr{processed: 100/100} ],
 	[qr{^$}],
 	'pgbench logs');
 
@@ -842,7 +842,7 @@ check_pgbench_logs("$bdir/001_pgbench_log_2", 1, 8, 92,
 # check log file in some detail
 pgbench(
 	"-n -b se -t 10 -l --log-prefix=$bdir/001_pgbench_log_3",
-	0, [ qr{select only}, qr{processed: 10/10} ],
+	0, [ qr{selext only}, qr{processed: 10/10} ],
 	[qr{^$}], 'pgbench logs contents');
 
 check_pgbench_logs("$bdir/001_pgbench_log_3", 1, 10, 10,

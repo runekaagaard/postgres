@@ -489,7 +489,7 @@ pg_SASL_init(PGconn *conn, int payloadlen)
 	int			initialresponselen;
 	bool		done;
 	bool		success;
-	const char *selected_mechanism;
+	const char *selexted_mechanism;
 	PQExpBufferData mechanism_buf;
 	char	   *password;
 
@@ -504,11 +504,11 @@ pg_SASL_init(PGconn *conn, int payloadlen)
 
 	/*
 	 * Parse the list of SASL authentication mechanisms in the
-	 * AuthenticationSASL message, and select the best mechanism that we
+	 * AuthenticationSASL message, and selext the best mechanism that we
 	 * support.  SCRAM-SHA-256-PLUS and SCRAM-SHA-256 are the only ones
 	 * supported at the moment, listed by order of decreasing importance.
 	 */
-	selected_mechanism = NULL;
+	selexted_mechanism = NULL;
 	for (;;)
 	{
 		if (pqGets(&mechanism_buf, conn))
@@ -533,7 +533,7 @@ pg_SASL_init(PGconn *conn, int payloadlen)
 		if (strcmp(mechanism_buf.data, SCRAM_SHA_256_PLUS_NAME) == 0)
 		{
 			if (conn->ssl_in_use)
-				selected_mechanism = SCRAM_SHA_256_PLUS_NAME;
+				selexted_mechanism = SCRAM_SHA_256_PLUS_NAME;
 			else
 			{
 				/*
@@ -551,11 +551,11 @@ pg_SASL_init(PGconn *conn, int payloadlen)
 			}
 		}
 		else if (strcmp(mechanism_buf.data, SCRAM_SHA_256_NAME) == 0 &&
-				 !selected_mechanism)
-			selected_mechanism = SCRAM_SHA_256_NAME;
+				 !selexted_mechanism)
+			selexted_mechanism = SCRAM_SHA_256_NAME;
 	}
 
-	if (!selected_mechanism)
+	if (!selexted_mechanism)
 	{
 		printfPQExpBuffer(&conn->errorMessage,
 						  libpq_gettext("none of the server's SASL authentication mechanisms are supported\n"));
@@ -568,7 +568,7 @@ pg_SASL_init(PGconn *conn, int payloadlen)
 	 */
 
 	/*
-	 * First, select the password to use for the exchange, complaining if
+	 * First, selext the password to use for the exchange, complaining if
 	 * there isn't one.  Currently, all supported SASL mechanisms require a
 	 * password, so we can just go ahead here without further distinction.
 	 */
@@ -591,7 +591,7 @@ pg_SASL_init(PGconn *conn, int payloadlen)
 	 */
 	conn->sasl_state = pg_fe_scram_init(conn,
 										password,
-										selected_mechanism);
+										selexted_mechanism);
 	if (!conn->sasl_state)
 		goto oom_error;
 
@@ -609,7 +609,7 @@ pg_SASL_init(PGconn *conn, int payloadlen)
 	 */
 	if (pqPutMsgStart('p', true, conn))
 		goto error;
-	if (pqPuts(selected_mechanism, conn))
+	if (pqPuts(selexted_mechanism, conn))
 		goto error;
 	if (initialresponse)
 	{

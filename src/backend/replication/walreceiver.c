@@ -368,7 +368,7 @@ WalReceiverMain(void)
 		/*
 		 * Get any missing history files. We do this always, even when we're
 		 * not interested in that timeline, so that if we're promoted to
-		 * become the master later on, we don't select the same timeline that
+		 * become the master later on, we don't selext the same timeline that
 		 * was already used in the current master. This isn't bullet-proof -
 		 * you'll need some external software to manage your cluster if you
 		 * need to ensure that a unique timeline id is chosen in every case,

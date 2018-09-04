@@ -1830,7 +1830,7 @@ msgstr "声明了非法的输出格式 \"%s\"\n"
 
 #: pg_dump.c:1175
 #, c-format
-msgid "server version must be at least 7.3 to use schema selection switches\n"
+msgid "server version must be at least 7.3 to use schema selextion switches\n"
 msgstr "服务器版本必须至少是7.3才能使用模式选择转换\n"
 
 # describe.c:1542
@@ -2606,7 +2606,7 @@ msgstr "  -j, --jobs=NUM               执行多个并行任务进行恢复工�
 #, c-format
 msgid ""
 "  -L, --use-list=FILENAME      use table of contents from this file for\n"
-"                               selecting/ordering output\n"
+"                               selexting/ordering output\n"
 msgstr ""
 "  -L, --use-list=FILENAME      从这个文件中使用指定的内容表排序\n"
 "                               输出\n"
@@ -2699,7 +2699,7 @@ msgstr "  --role=ROLENAME          在恢复前执行SET ROLE操作\n"
 msgid ""
 "\n"
 "The options -I, -n, -P, -t, -T, and --section can be combined and specified\n"
-"multiple times to select multiple objects.\n"
+"multiple times to selext multiple objects.\n"
 msgstr ""
 "\n"
 "选项 -I, -n, -P, -t, -T, 以及 --section 可以组合使用和指定\n"

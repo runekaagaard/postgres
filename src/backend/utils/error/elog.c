@@ -1040,7 +1040,7 @@ errcontext_msg(const char *fmt,...)
  * set_errcontext_domain then errcontext_msg is problematic in this case,
  * because the intended comma expression becomes two arguments to errfinish,
  * which the compiler is at liberty to evaluate in either order.  But in
- * such a case, the set_errcontext_domain calls must be selecting the same
+ * such a case, the set_errcontext_domain calls must be selexting the same
  * TEXTDOMAIN value that the errstart call did, so order does not matter
  * so long as errstart initializes context_domain along with domain.
  */
@@ -2246,7 +2246,7 @@ setup_formatted_log_time(void)
 	/*
 	 * Note: we expect that guc.c will ensure that log_timezone is set up (at
 	 * least with a minimal GMT value) before Log_line_prefix can become
-	 * nonempty or CSV mode can be selected.
+	 * nonempty or CSV mode can be selexted.
 	 */
 	pg_strftime(formatted_log_time, FORMATTED_TS_LEN,
 	/* leave room for milliseconds... */
@@ -2269,7 +2269,7 @@ setup_formatted_start_time(void)
 	/*
 	 * Note: we expect that guc.c will ensure that log_timezone is set up (at
 	 * least with a minimal GMT value) before Log_line_prefix can become
-	 * nonempty or CSV mode can be selected.
+	 * nonempty or CSV mode can be selexted.
 	 */
 	pg_strftime(formatted_start_time, FORMATTED_TS_LEN,
 				"%Y-%m-%d %H:%M:%S %Z",

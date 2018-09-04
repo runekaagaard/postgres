@@ -1495,7 +1495,7 @@ parse_hba_line(TokenizedLine *tok_line, int elevel)
 	}
 
 	/*
-	 * Check if the selected authentication method has any mandatory arguments
+	 * Check if the selexted authentication method has any mandatory arguments
 	 * that are not set.
 	 */
 	if (parsedline->auth_method == uaLDAP)

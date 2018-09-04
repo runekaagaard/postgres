@@ -405,7 +405,7 @@ CREATE [ UNIQUE ] INDEX [ CONCURRENTLY ] [ [ IF NOT EXISTS ] <replaceable class=
       If pages
       subsequently become completely full, they will be split, leading to
       gradual degradation in the index's efficiency.  B-trees use a default
-      fillfactor of 90, but any integer value from 10 to 100 can be selected.
+      fillfactor of 90, but any integer value from 10 to 100 can be selexted.
       If the table is static then fillfactor 100 is best to minimize the
       index's physical size, but for heavily updated tables a smaller
       fillfactor is better to minimize the need for page splits.  The
@@ -649,7 +649,7 @@ Indexes:
    is that for some data types, there could be more than one meaningful
    ordering. For example, we might want to sort a complex-number data
    type either by absolute value or by real part. We could do this by
-   defining two operator classes for the data type and then selecting
+   defining two operator classes for the data type and then selexting
    the proper class when making an index.  More information about
    operator classes is in <xref linkend="indexes-opclass"/> and in <xref
    linkend="xindex"/>.

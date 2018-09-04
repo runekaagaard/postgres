@@ -89,7 +89,7 @@ typedef struct BufferAccessStrategyData
 
 	/*
 	 * Array of buffer numbers.  InvalidBuffer (that is, zero) indicates we
-	 * have not yet selected a buffer for this ring slot.  For allocation
+	 * have not yet selexted a buffer for this ring slot.  For allocation
 	 * simplicity this is palloc'd together with the fixed fields of the
 	 * struct.
 	 */
@@ -190,7 +190,7 @@ have_free_buffer()
  *
  *	Called by the bufmgr to get the next candidate buffer to use in
  *	BufferAlloc(). The only hard requirement BufferAlloc() has is that
- *	the selected buffer must not currently be pinned by anyone.
+ *	the selexted buffer must not currently be pinned by anyone.
  *
  *	strategy is a BufferAccessStrategy object, or NULL for default strategy.
  *
@@ -206,7 +206,7 @@ StrategyGetBuffer(BufferAccessStrategy strategy, uint32 *buf_state)
 	uint32		local_buf_state;	/* to avoid repeated (de-)referencing */
 
 	/*
-	 * If given a strategy object, see whether it can select a buffer. We
+	 * If given a strategy object, see whether it can selext a buffer. We
 	 * assume strategy objects don't need buffer_strategy_lock.
 	 */
 	if (strategy != NULL)
@@ -675,7 +675,7 @@ AddBufferToRing(BufferAccessStrategy strategy, BufferDesc *buf)
  * StrategyRejectBuffer -- consider rejecting a dirty buffer
  *
  * When a nondefault strategy is used, the buffer manager calls this function
- * when it turns out that the buffer selected by StrategyGetBuffer needs to
+ * when it turns out that the buffer selexted by StrategyGetBuffer needs to
  * be written out and doing so would require flushing WAL too.  This gives us
  * a chance to choose a different victim.
  *

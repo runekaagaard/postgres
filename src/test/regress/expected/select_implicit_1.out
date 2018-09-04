@@ -116,7 +116,7 @@ SELECT c, count(*) FROM test_missing_target GROUP BY 1 ORDER BY 1;
 --   group using reference number out of range
 --   failure expected
 SELECT c, count(*) FROM test_missing_target GROUP BY 3;
-ERROR:  GROUP BY position 3 is not in select list
+ERROR:  GROUP BY position 3 is not in selext list
 LINE 1: SELECT c, count(*) FROM test_missing_target GROUP BY 3;
                                                              ^
 --   group w/o existing GROUP BY and ORDER BY target under ambiguous condition

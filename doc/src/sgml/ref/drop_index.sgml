@@ -43,7 +43,7 @@ DROP INDEX [ CONCURRENTLY ] [ IF EXISTS ] <replaceable class="parameter">name</r
     <term><literal>CONCURRENTLY</literal></term>
     <listitem>
      <para>
-      Drop the index without locking out concurrent selects, inserts, updates,
+      Drop the index without locking out concurrent selexts, inserts, updates,
       and deletes on the index's table.  A normal <command>DROP INDEX</command>
       acquires exclusive lock on the table, blocking other accesses until the
       index drop can be completed.  With this option, the command instead

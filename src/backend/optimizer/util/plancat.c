@@ -1268,7 +1268,7 @@ get_relation_constraints(PlannerInfo *root,
 	/*
 	 * Append partition predicates, if any.
 	 *
-	 * For selects, partition pruning uses the parent table's partition bound
+	 * For selexts, partition pruning uses the parent table's partition bound
 	 * descriptor, instead of constraint exclusion which is driven by the
 	 * individual partition's partition constraint.
 	 */
@@ -1729,16 +1729,16 @@ build_index_tlist(PlannerInfo *root, IndexOptInfo *index,
 }
 
 /*
- * restriction_selectivity
+ * restriction_selextivity
  *
- * Returns the selectivity of a specified restriction operator clause.
+ * Returns the selextivity of a specified restriction operator clause.
  * This code executes registered procedures stored in the
  * operator relation, by calling the function manager.
  *
- * See clause_selectivity() for the meaning of the additional parameters.
+ * See clause_selextivity() for the meaning of the additional parameters.
  */
 Selectivity
-restriction_selectivity(PlannerInfo *root,
+restriction_selextivity(PlannerInfo *root,
 						Oid operatorid,
 						List *args,
 						Oid inputcollid,
@@ -1749,7 +1749,7 @@ restriction_selectivity(PlannerInfo *root,
 
 	/*
 	 * if the oprrest procedure is missing for whatever reason, use a
-	 * selectivity of 0.5
+	 * selextivity of 0.5
 	 */
 	if (!oprrest)
 		return (Selectivity) 0.5;
@@ -1762,20 +1762,20 @@ restriction_selectivity(PlannerInfo *root,
 												 Int32GetDatum(varRelid)));
 
 	if (result < 0.0 || result > 1.0)
-		elog(ERROR, "invalid restriction selectivity: %f", result);
+		elog(ERROR, "invalid restriction selextivity: %f", result);
 
 	return (Selectivity) result;
 }
 
 /*
- * join_selectivity
+ * join_selextivity
  *
- * Returns the selectivity of a specified join operator clause.
+ * Returns the selextivity of a specified join operator clause.
  * This code executes registered procedures stored in the
  * operator relation, by calling the function manager.
  */
 Selectivity
-join_selectivity(PlannerInfo *root,
+join_selextivity(PlannerInfo *root,
 				 Oid operatorid,
 				 List *args,
 				 Oid inputcollid,
@@ -1787,7 +1787,7 @@ join_selectivity(PlannerInfo *root,
 
 	/*
 	 * if the oprjoin procedure is missing for whatever reason, use a
-	 * selectivity of 0.5
+	 * selextivity of 0.5
 	 */
 	if (!oprjoin)
 		return (Selectivity) 0.5;
@@ -1801,7 +1801,7 @@ join_selectivity(PlannerInfo *root,
 												 PointerGetDatum(sjinfo)));
 
 	if (result < 0.0 || result > 1.0)
-		elog(ERROR, "invalid join selectivity: %f", result);
+		elog(ERROR, "invalid join selextivity: %f", result);
 
 	return (Selectivity) result;
 }

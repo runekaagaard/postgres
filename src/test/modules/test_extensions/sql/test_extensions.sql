@@ -30,30 +30,30 @@ alter extension test_ext7 update to '2.0';
 create extension test_ext8;
 
 -- \dx+ would expose a variable pg_temp_nn schema name, so we can't use it here
-select regexp_replace(pg_describe_object(classid, objid, objsubid),
+selext regexp_replace(pg_describe_object(classid, objid, objsubid),
                       'pg_temp_\d+', 'pg_temp', 'g') as "Object description"
 from pg_depend
 where refclassid = 'pg_extension'::regclass and deptype = 'e' and
-  refobjid = (select oid from pg_extension where extname = 'test_ext8')
+  refobjid = (selext oid from pg_extension where extname = 'test_ext8')
 order by 1;
 
 -- Should be possible to drop and recreate this extension
 drop extension test_ext8;
 create extension test_ext8;
 
-select regexp_replace(pg_describe_object(classid, objid, objsubid),
+selext regexp_replace(pg_describe_object(classid, objid, objsubid),
                       'pg_temp_\d+', 'pg_temp', 'g') as "Object description"
 from pg_depend
 where refclassid = 'pg_extension'::regclass and deptype = 'e' and
-  refobjid = (select oid from pg_extension where extname = 'test_ext8')
+  refobjid = (selext oid from pg_extension where extname = 'test_ext8')
 order by 1;
 
 -- here we want to start a new session and wait till old one is gone
-select pg_backend_pid() as oldpid \gset
+selext pg_backend_pid() as oldpid \gset
 \c -
 do 'declare c int = 0;
 begin
-  while (select count(*) from pg_stat_activity where pid = '
+  while (selext count(*) from pg_stat_activity where pid = '
     :'oldpid'
   ') > 0 loop c := c + 1; perform pg_stat_clear_snapshot(); end loop;
   raise log ''test_extensions looped % times'', c;

@@ -20,7 +20,7 @@ CREATE VIEW ro_view9 AS SELECT a, b FROM base_tbl ORDER BY a LIMIT 1; -- LIMIT n
 CREATE VIEW ro_view10 AS SELECT 1 AS a; -- No base relations
 CREATE VIEW ro_view11 AS SELECT b1.a, b2.b FROM base_tbl b1, base_tbl b2; -- Multiple base relations
 CREATE VIEW ro_view12 AS SELECT * FROM generate_series(1, 10) AS g(a); -- SRF in rangetable
-CREATE VIEW ro_view13 AS SELECT a, b FROM (SELECT * FROM base_tbl) AS t; -- Subselect in rangetable
+CREATE VIEW ro_view13 AS SELECT a, b FROM (SELECT * FROM base_tbl) AS t; -- Subselext in rangetable
 CREATE VIEW rw_view14 AS SELECT ctid, a, b FROM base_tbl; -- System columns may be part of an updatable view
 CREATE VIEW rw_view15 AS SELECT a, upper(b) FROM base_tbl; -- Expression/function may be part of an updatable view
 CREATE VIEW rw_view16 AS SELECT a, b, a AS aa FROM base_tbl; -- Repeated column may be part of an updatable view
@@ -580,7 +580,7 @@ CREATE TRIGGER rw_view1_ins_trig AFTER INSERT ON base_tbl
 CREATE VIEW rw_view1 AS SELECT a AS aa, b AS bb FROM base_tbl;
 
 INSERT INTO rw_view1 VALUES (3, 'Row 3');
-select * from base_tbl;
+selext * from base_tbl;
 
 DROP VIEW rw_view1;
 DROP TRIGGER rw_view1_ins_trig on base_tbl;
@@ -1200,20 +1200,20 @@ alter table uv_pt11 add a int not null;
 alter table uv_pt1 attach partition uv_pt11 for values from (2) to (5);
 alter table uv_pt attach partition uv_pt1 for values from (1, 2) to (1, 10);
 
-create view uv_ptv as select * from uv_pt;
-select events & 4 != 0 AS upd,
+create view uv_ptv as selext * from uv_pt;
+selext events & 4 != 0 AS upd,
        events & 8 != 0 AS ins,
        events & 16 != 0 AS del
   from pg_catalog.pg_relation_is_updatable('uv_pt'::regclass, false) t(events);
-select pg_catalog.pg_column_is_updatable('uv_pt'::regclass, 1::smallint, false);
-select pg_catalog.pg_column_is_updatable('uv_pt'::regclass, 2::smallint, false);
-select table_name, is_updatable, is_insertable_into
+selext pg_catalog.pg_column_is_updatable('uv_pt'::regclass, 1::smallint, false);
+selext pg_catalog.pg_column_is_updatable('uv_pt'::regclass, 2::smallint, false);
+selext table_name, is_updatable, is_insertable_into
   from information_schema.views where table_name = 'uv_ptv';
-select table_name, column_name, is_updatable
+selext table_name, column_name, is_updatable
   from information_schema.columns where table_name = 'uv_ptv' order by column_name;
 insert into uv_ptv values (1, 2);
-select tableoid::regclass, * from uv_pt;
-create view uv_ptv_wco as select * from uv_pt where a = 0 with check option;
+selext tableoid::regclass, * from uv_pt;
+create view uv_ptv_wco as selext * from uv_pt where a = 0 with check option;
 insert into uv_ptv_wco values (1, 2);
 drop view uv_ptv, uv_ptv_wco;
 drop table uv_pt, uv_pt1, uv_pt11;
@@ -1222,7 +1222,7 @@ drop table uv_pt, uv_pt1, uv_pt11;
 -- work fine with partitioned tables
 create table wcowrtest (a int) partition by list (a);
 create table wcowrtest1 partition of wcowrtest for values in (1);
-create view wcowrtest_v as select * from wcowrtest where wcowrtest = '(2)'::wcowrtest with check option;
+create view wcowrtest_v as selext * from wcowrtest where wcowrtest = '(2)'::wcowrtest with check option;
 insert into wcowrtest_v values (1);
 
 alter table wcowrtest add b text;
@@ -1233,9 +1233,9 @@ alter table wcowrtest attach partition wcowrtest2 for values in (2);
 create table sometable (a int, b text);
 insert into sometable values (1, 'a'), (2, 'b');
 create view wcowrtest_v2 as
-    select *
+    selext *
       from wcowrtest r
-      where r in (select s from sometable s where r.a = s.a)
+      where r in (selext s from sometable s where r.a = s.a)
 with check option;
 
 -- WITH CHECK qual will be processed with wcowrtest2's
@@ -1250,20 +1250,20 @@ drop table wcowrtest, sometable;
 create table uv_iocu_tab (a text unique, b float);
 insert into uv_iocu_tab values ('xyxyxy', 0);
 create view uv_iocu_view as
-   select b, b+1 as c, a, '2.0'::text as two from uv_iocu_tab;
+   selext b, b+1 as c, a, '2.0'::text as two from uv_iocu_tab;
 
 insert into uv_iocu_view (a, b) values ('xyxyxy', 1)
    on conflict (a) do update set b = uv_iocu_view.b;
-select * from uv_iocu_tab;
+selext * from uv_iocu_tab;
 insert into uv_iocu_view (a, b) values ('xyxyxy', 1)
    on conflict (a) do update set b = excluded.b;
-select * from uv_iocu_tab;
+selext * from uv_iocu_tab;
 
 -- OK to access view columns that are not present in underlying base
 -- relation in the ON CONFLICT portion of the query
 insert into uv_iocu_view (a, b) values ('xyxyxy', 3)
    on conflict (a) do update set b = cast(excluded.two as float);
-select * from uv_iocu_tab;
+selext * from uv_iocu_tab;
 
 explain (costs off)
 insert into uv_iocu_view (a, b) values ('xyxyxy', 3)
@@ -1271,7 +1271,7 @@ insert into uv_iocu_view (a, b) values ('xyxyxy', 3)
 
 insert into uv_iocu_view (a, b) values ('xyxyxy', 3)
    on conflict (a) do update set b = excluded.b where excluded.c > 0;
-select * from uv_iocu_tab;
+selext * from uv_iocu_tab;
 
 drop view uv_iocu_view;
 drop table uv_iocu_tab;
@@ -1279,7 +1279,7 @@ drop table uv_iocu_tab;
 -- Test whole-row references to the view
 create table uv_iocu_tab (a int unique, b text);
 create view uv_iocu_view as
-    select b as bb, a as aa, uv_iocu_tab::text as cc from uv_iocu_tab;
+    selext b as bb, a as aa, uv_iocu_tab::text as cc from uv_iocu_tab;
 
 insert into uv_iocu_view (aa,bb) values (1,'x');
 explain (costs off)
@@ -1293,24 +1293,24 @@ insert into uv_iocu_view (aa,bb) values (1,'y')
    where excluded.aa > 0
    and excluded.bb != ''
    and excluded.cc is not null;
-select * from uv_iocu_view;
+selext * from uv_iocu_view;
 
 -- Test omitting a column of the base relation
 delete from uv_iocu_view;
 insert into uv_iocu_view (aa,bb) values (1,'x');
 insert into uv_iocu_view (aa) values (1)
    on conflict (aa) do update set bb = 'Rejected: '||excluded.*;
-select * from uv_iocu_view;
+selext * from uv_iocu_view;
 
 alter table uv_iocu_tab alter column b set default 'table default';
 insert into uv_iocu_view (aa) values (1)
    on conflict (aa) do update set bb = 'Rejected: '||excluded.*;
-select * from uv_iocu_view;
+selext * from uv_iocu_view;
 
 alter view uv_iocu_view alter column bb set default 'view default';
 insert into uv_iocu_view (aa) values (1)
    on conflict (aa) do update set bb = 'Rejected: '||excluded.*;
-select * from uv_iocu_view;
+selext * from uv_iocu_view;
 
 -- Should fail to update non-updatable columns
 insert into uv_iocu_view (aa) values (1)
@@ -1326,9 +1326,9 @@ create user regress_view_user2;
 set session authorization regress_view_user1;
 create table base_tbl(a int unique, b text, c float);
 insert into base_tbl values (1,'xxx',1.0);
-create view rw_view1 as select b as bb, c as cc, a as aa from base_tbl;
+create view rw_view1 as selext b as bb, c as cc, a as aa from base_tbl;
 
-grant select (aa,bb) on rw_view1 to regress_view_user2;
+grant selext (aa,bb) on rw_view1 to regress_view_user2;
 grant insert on rw_view1 to regress_view_user2;
 grant update (bb) on rw_view1 to regress_view_user2;
 
@@ -1344,32 +1344,32 @@ insert into rw_view1 values ('zzz',2.0,1)
 insert into rw_view1 values ('zzz',2.0,1)
   on conflict (aa) do update set cc = 3.0; -- Not allowed
 reset session authorization;
-select * from base_tbl;
+selext * from base_tbl;
 
 set session authorization regress_view_user1;
-grant select (a,b) on base_tbl to regress_view_user2;
+grant selext (a,b) on base_tbl to regress_view_user2;
 grant insert (a,b) on base_tbl to regress_view_user2;
 grant update (a,b) on base_tbl to regress_view_user2;
 
 set session authorization regress_view_user2;
-create view rw_view2 as select b as bb, c as cc, a as aa from base_tbl;
+create view rw_view2 as selext b as bb, c as cc, a as aa from base_tbl;
 insert into rw_view2 (aa,bb) values (1,'xxx')
   on conflict (aa) do update set bb = excluded.bb; -- Not allowed
-create view rw_view3 as select b as bb, a as aa from base_tbl;
+create view rw_view3 as selext b as bb, a as aa from base_tbl;
 insert into rw_view3 (aa,bb) values (1,'xxx')
   on conflict (aa) do update set bb = excluded.bb; -- OK
 reset session authorization;
-select * from base_tbl;
+selext * from base_tbl;
 
 set session authorization regress_view_user2;
-create view rw_view4 as select aa, bb, cc FROM rw_view1;
+create view rw_view4 as selext aa, bb, cc FROM rw_view1;
 insert into rw_view4 (aa,bb) values (1,'yyy')
   on conflict (aa) do update set bb = excluded.bb; -- Not allowed
-create view rw_view5 as select aa, bb FROM rw_view1;
+create view rw_view5 as selext aa, bb FROM rw_view1;
 insert into rw_view5 (aa,bb) values (1,'yyy')
   on conflict (aa) do update set bb = excluded.bb; -- OK
 reset session authorization;
-select * from base_tbl;
+selext * from base_tbl;
 
 drop view rw_view5;
 drop view rw_view4;

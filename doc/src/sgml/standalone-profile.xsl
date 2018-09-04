@@ -23,7 +23,7 @@ variant without links and references to the main documentation.
 
 <xsl:template match="@*|node()">
   <xsl:copy>
-    <xsl:apply-templates select="@*|node()" />
+    <xsl:apply-templates selext="@*|node()" />
   </xsl:copy>
 </xsl:template>
 

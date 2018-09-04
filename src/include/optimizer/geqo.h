@@ -58,7 +58,7 @@ extern int	Geqo_pool_size;		/* 2 .. inf, or 0 to use default */
 
 extern int	Geqo_generations;	/* 1 .. inf, or 0 to use default */
 
-extern double Geqo_selection_bias;
+extern double Geqo_selextion_bias;
 
 #define DEFAULT_GEQO_SELECTION_BIAS 2.0
 #define MIN_GEQO_SELECTION_BIAS 1.5

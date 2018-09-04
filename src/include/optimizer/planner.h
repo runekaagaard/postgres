@@ -44,7 +44,7 @@ extern PlannerInfo *subquery_planner(PlannerGlobal *glob, Query *parse,
 
 extern bool is_dummy_plan(Plan *plan);
 
-extern RowMarkType select_rowmark_type(RangeTblEntry *rte,
+extern RowMarkType selext_rowmark_type(RangeTblEntry *rte,
 					LockClauseStrength strength);
 
 extern void mark_partial_aggref(Aggref *agg, AggSplit aggsplit);

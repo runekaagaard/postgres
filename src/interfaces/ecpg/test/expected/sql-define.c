@@ -156,7 +156,7 @@ if (sqlca.sqlcode < 0) sqlprint ( );}
 
    
 
-   { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select 1 , 29 :: text || '-' || 'abcdef'", ECPGt_EOIT, 
+   { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext 1 , 29 :: text || '-' || 'abcdef'", ECPGt_EOIT, 
 	ECPGt_int,&(i),(long)1,(long)1,sizeof(int), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,(s),(long)200,(long)1,(200)*sizeof(char), 

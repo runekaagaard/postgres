@@ -36,10 +36,10 @@ step "s2c"	{ COMMIT; }
 session "s3"
 setup		{ BEGIN ISOLATION LEVEL READ COMMITTED; }
 step "s3donothing" { INSERT INTO foo VALUES(2, 'session-3 donothing') ON CONFLICT DO NOTHING; }
-step "s3select" { SELECT * FROM foo ORDER BY a; }
+step "s3selext" { SELECT * FROM foo ORDER BY a; }
 step "s3c"	{ COMMIT; }
 
 # Regular case where one session block-waits on another to determine if it
 # should proceed with an insert or do nothing.
-permutation "s1u" "s2donothing" "s3donothing" "s1c" "s2c" "s3select" "s3c"
-permutation "s2donothing" "s1u" "s3donothing" "s1c" "s2c" "s3select" "s3c"
+permutation "s1u" "s2donothing" "s3donothing" "s1c" "s2c" "s3selext" "s3c"
+permutation "s2donothing" "s1u" "s3donothing" "s1c" "s2c" "s3selext" "s3c"

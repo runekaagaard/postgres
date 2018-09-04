@@ -242,16 +242,16 @@ get_row_security_policies(Query *root, RangeTblEntry *rte, int rt_index,
 	if ((commandType == CMD_UPDATE || commandType == CMD_DELETE) &&
 		rte->requiredPerms & ACL_SELECT)
 	{
-		List	   *select_permissive_policies;
-		List	   *select_restrictive_policies;
+		List	   *selext_permissive_policies;
+		List	   *selext_restrictive_policies;
 
 		get_policies_for_relation(rel, CMD_SELECT, user_id,
-								  &select_permissive_policies,
-								  &select_restrictive_policies);
+								  &selext_permissive_policies,
+								  &selext_restrictive_policies);
 
 		add_security_quals(rt_index,
-						   select_permissive_policies,
-						   select_restrictive_policies,
+						   selext_permissive_policies,
+						   selext_restrictive_policies,
 						   securityQuals,
 						   hasSubLinks);
 	}
@@ -285,17 +285,17 @@ get_row_security_policies(Query *root, RangeTblEntry *rte, int rt_index,
 		 */
 		if (rte->requiredPerms & ACL_SELECT)
 		{
-			List	   *select_permissive_policies = NIL;
-			List	   *select_restrictive_policies = NIL;
+			List	   *selext_permissive_policies = NIL;
+			List	   *selext_restrictive_policies = NIL;
 
 			get_policies_for_relation(rel, CMD_SELECT, user_id,
-									  &select_permissive_policies,
-									  &select_restrictive_policies);
+									  &selext_permissive_policies,
+									  &selext_restrictive_policies);
 			add_with_check_options(rel, rt_index,
 								   commandType == CMD_INSERT ?
 								   WCO_RLS_INSERT_CHECK : WCO_RLS_UPDATE_CHECK,
-								   select_permissive_policies,
-								   select_restrictive_policies,
+								   selext_permissive_policies,
+								   selext_restrictive_policies,
 								   withCheckOptions,
 								   hasSubLinks,
 								   true);
@@ -310,8 +310,8 @@ get_row_security_policies(Query *root, RangeTblEntry *rte, int rt_index,
 		{
 			List	   *conflict_permissive_policies;
 			List	   *conflict_restrictive_policies;
-			List	   *conflict_select_permissive_policies = NIL;
-			List	   *conflict_select_restrictive_policies = NIL;
+			List	   *conflict_selext_permissive_policies = NIL;
+			List	   *conflict_selext_restrictive_policies = NIL;
 
 			/* Get the policies that apply to the auxiliary UPDATE */
 			get_policies_for_relation(rel, CMD_UPDATE, user_id,
@@ -342,12 +342,12 @@ get_row_security_policies(Query *root, RangeTblEntry *rte, int rt_index,
 			if (rte->requiredPerms & ACL_SELECT)
 			{
 				get_policies_for_relation(rel, CMD_SELECT, user_id,
-										  &conflict_select_permissive_policies,
-										  &conflict_select_restrictive_policies);
+										  &conflict_selext_permissive_policies,
+										  &conflict_selext_restrictive_policies);
 				add_with_check_options(rel, rt_index,
 									   WCO_RLS_CONFLICT_CHECK,
-									   conflict_select_permissive_policies,
-									   conflict_select_restrictive_policies,
+									   conflict_selext_permissive_policies,
+									   conflict_selext_restrictive_policies,
 									   withCheckOptions,
 									   hasSubLinks,
 									   true);
@@ -371,8 +371,8 @@ get_row_security_policies(Query *root, RangeTblEntry *rte, int rt_index,
 			if (rte->requiredPerms & ACL_SELECT)
 				add_with_check_options(rel, rt_index,
 									   WCO_RLS_UPDATE_CHECK,
-									   conflict_select_permissive_policies,
-									   conflict_select_restrictive_policies,
+									   conflict_selext_permissive_policies,
+									   conflict_selext_restrictive_policies,
 									   withCheckOptions,
 									   hasSubLinks,
 									   true);

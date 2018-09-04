@@ -219,12 +219,12 @@ typedef struct Const
  *				These numbers are independent of PARAM_EXTERN numbers.
  *
  *		PARAM_SUBLINK:	The parameter represents an output column of a SubLink
- *				node's sub-select.  The column number is contained in the
+ *				node's sub-selext.  The column number is contained in the
  *				`paramid' field.  (This type of Param is converted to
  *				PARAM_EXEC during planning.)
  *
  *		PARAM_MULTIEXPR:  Like PARAM_SUBLINK, the parameter represents an
- *				output column of a SubLink node's sub-select, but here, the
+ *				output column of a SubLink node's sub-selext, but here, the
  *				SubLink is always a MULTIEXPR SubLink.  The high-order 16 bits
  *				of the `paramid' field contain the SubLink's subLinkId, and
  *				the low-order 16 bits contain the column number.  (This type
@@ -567,7 +567,7 @@ typedef struct BoolExpr
 /*
  * SubLink
  *
- * A SubLink represents a subselect appearing in an expression, and in some
+ * A SubLink represents a subselext appearing in an expression, and in some
  * cases also the combining operator(s) just above it.  The subLinkType
  * indicates the form of the expression represented:
  *	EXISTS_SUBLINK		EXISTS(SELECT ...)
@@ -579,17 +579,17 @@ typedef struct BoolExpr
  *	ARRAY_SUBLINK		ARRAY(SELECT with single targetlist item ...)
  *	CTE_SUBLINK			WITH query (never actually part of an expression)
  * For ALL, ANY, and ROWCOMPARE, the lefthand is a list of expressions of the
- * same length as the subselect's targetlist.  ROWCOMPARE will *always* have
- * a list with more than one entry; if the subselect has just one target
+ * same length as the subselext's targetlist.  ROWCOMPARE will *always* have
+ * a list with more than one entry; if the subselext has just one target
  * then the parser will create an EXPR_SUBLINK instead (and any operator
- * above the subselect will be represented separately).
- * ROWCOMPARE, EXPR, and MULTIEXPR require the subselect to deliver at most
+ * above the subselext will be represented separately).
+ * ROWCOMPARE, EXPR, and MULTIEXPR require the subselext to deliver at most
  * one row (if it returns no rows, the result is NULL).
  * ALL, ANY, and ROWCOMPARE require the combining operators to deliver boolean
  * results.  ALL and ANY combine the per-row results using AND and OR
  * semantics respectively.
  * ARRAY requires just one target column, and creates an array of the target
- * column's type using any number of rows resulting from the subselect.
+ * column's type using any number of rows resulting from the subselext.
  *
  * SubLink is classed as an Expr node, but it is not actually executable;
  * it must be replaced in the expression tree by a SubPlan node during
@@ -597,10 +597,10 @@ typedef struct BoolExpr
  *
  * NOTE: in the raw output of gram.y, testexpr contains just the raw form
  * of the lefthand expression (if any), and operName is the String name of
- * the combining operator.  Also, subselect is a raw parsetree.  During parse
+ * the combining operator.  Also, subselext is a raw parsetree.  During parse
  * analysis, the parser transforms testexpr into a complete boolean expression
  * that compares the lefthand value(s) to PARAM_SUBLINK nodes representing the
- * output columns of the subselect.  And subselect is transformed to a Query.
+ * output columns of the subselext.  And subselext is transformed to a Query.
  * This is the representation seen in saved rules and in the rewriter.
  *
  * In EXISTS, EXPR, MULTIEXPR, and ARRAY SubLinks, testexpr and operName
@@ -635,7 +635,7 @@ typedef struct SubLink
 	int			subLinkId;		/* ID (1..n); 0 if not MULTIEXPR */
 	Node	   *testexpr;		/* outer-query test for ALL/ANY/ROWCOMPARE */
 	List	   *operName;		/* originally specified operator name */
-	Node	   *subselect;		/* subselect as Query* or raw parsetree */
+	Node	   *subselext;		/* subselext as Query* or raw parsetree */
 	int			location;		/* token location, or -1 if unknown */
 } SubLink;
 
@@ -652,12 +652,12 @@ typedef struct SubLink
  * (OpExpr, an AND/OR tree of OpExprs, or RowCompareExpr) for the combining
  * operator(s); the left-hand arguments are the original lefthand expressions,
  * and the right-hand arguments are PARAM_EXEC Param nodes representing the
- * outputs of the sub-select.  (NOTE: runtime coercion functions may be
+ * outputs of the sub-selext.  (NOTE: runtime coercion functions may be
  * inserted as well.)  This is just the same expression tree as testexpr in
  * the original SubLink node, but the PARAM_SUBLINK nodes are replaced by
  * suitably numbered PARAM_EXEC nodes.
  *
- * If the sub-select becomes an initplan rather than a subplan, the executable
+ * If the sub-selext becomes an initplan rather than a subplan, the executable
  * expression is part of the outer plan's expression tree (and the SubPlan
  * node itself is not, but rather is found in the outer plan's initPlan
  * list).  In this case testexpr is NULL to avoid duplication.
@@ -668,8 +668,8 @@ typedef struct SubLink
  * args are always just Vars, but in principle they could be any expression).
  * The values are assigned to the global PARAM_EXEC params indexed by parParam
  * (the parParam and args lists must have the same ordering).  setParam is a
- * list of the PARAM_EXEC params that are computed by the sub-select, if it
- * is an initplan; they are listed in order by sub-select output column
+ * list of the PARAM_EXEC params that are computed by the sub-selext, if it
+ * is an initplan; they are listed in order by sub-selext output column
  * position.  (parParam and setParam are integer Lists, not Bitmapsets,
  * because their ordering is significant.)
  *
@@ -695,14 +695,14 @@ typedef struct SubPlan
 	Oid			firstColCollation;	/* Collation of first column of subplan
 									 * result */
 	/* Information about execution strategy: */
-	bool		useHashTable;	/* true to store subselect output in a hash
+	bool		useHashTable;	/* true to store subselext output in a hash
 								 * table (implies we are doing "IN") */
 	bool		unknownEqFalse; /* true if it's okay to return FALSE when the
 								 * spec result is UNKNOWN; this allows much
 								 * simpler handling of null values */
 	bool		parallel_safe;	/* is the subplan parallel-safe? */
 	/* Note: parallel_safe does not consider contents of testexpr or args */
-	/* Information for passing params into and out of the subselect: */
+	/* Information for passing params into and out of the subselext: */
 	/* setParam and parParam are lists of integers (param IDs) */
 	List	   *setParam;		/* initplan subqueries have to set these
 								 * Params for parent plan */
@@ -1407,7 +1407,7 @@ typedef struct TargetEntry
  * semantically interchangeable.
  *
  * NOTE: in the raw output of gram.y, a join tree contains RangeVar,
- * RangeSubselect, and RangeFunction nodes, which are all replaced by
+ * RangeSubselext, and RangeFunction nodes, which are all replaced by
  * RangeTblRef nodes during the parse analysis phase.  Also, the top-level
  * FromExpr is added during parse analysis; the grammar regards FROM and
  * WHERE as separate.

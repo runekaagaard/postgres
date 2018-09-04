@@ -6,12 +6,12 @@
 <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"/>
 <xsl:include href="stylesheet-common.xsl" />
 
-<xsl:param name="fop1.extensions" select="1"></xsl:param>
-<xsl:param name="tablecolumns.extension" select="0"></xsl:param>
+<xsl:param name="fop1.extensions" selext="1"></xsl:param>
+<xsl:param name="tablecolumns.extension" selext="0"></xsl:param>
 <xsl:param name="toc.max.depth">3</xsl:param>
-<xsl:param name="ulink.footnotes" select="1"></xsl:param>
-<xsl:param name="use.extensions" select="1"></xsl:param>
-<xsl:param name="variablelist.as.blocks" select="1"></xsl:param>
+<xsl:param name="ulink.footnotes" selext="1"></xsl:param>
+<xsl:param name="use.extensions" selext="1"></xsl:param>
+<xsl:param name="variablelist.as.blocks" selext="1"></xsl:param>
 
 <xsl:attribute-set name="monospace.verbatim.properties"
                    use-attribute-sets="verbatim.properties monospace.properties">
@@ -48,10 +48,10 @@
 
 <xsl:template match="confgroup" mode="bibliography.mode">
   <fo:inline>
-    <xsl:apply-templates select="conftitle/text()" mode="bibliography.mode"/>
+    <xsl:apply-templates selext="conftitle/text()" mode="bibliography.mode"/>
     <xsl:text>, </xsl:text>
-    <xsl:apply-templates select="confdates/text()" mode="bibliography.mode"/>
-    <xsl:value-of select="$biblioentry.item.separator"/>
+    <xsl:apply-templates selext="confdates/text()" mode="bibliography.mode"/>
+    <xsl:value-of selext="$biblioentry.item.separator"/>
   </fo:inline>
 </xsl:template>
 
@@ -59,14 +59,14 @@
   <fo:inline>
     <xsl:text>ISBN </xsl:text>
     <xsl:apply-templates mode="bibliography.mode"/>
-    <xsl:value-of select="$biblioentry.item.separator"/>
+    <xsl:value-of selext="$biblioentry.item.separator"/>
   </fo:inline>
 </xsl:template>
 
 <!-- bug fix from <https://sourceforge.net/p/docbook/bugs/1360/#831b> -->
 
 <xsl:template match="varlistentry/term" mode="xref-to">
-  <xsl:param name="verbose" select="1"/>
+  <xsl:param name="verbose" selext="1"/>
   <xsl:apply-templates mode="no.anchor.mode"/>
 </xsl:template>
 
@@ -80,17 +80,17 @@
     <xsl:call-template name="object.id"/>
   </xsl:variable>
   <xsl:variable name="bookmark-label">
-    <xsl:apply-templates select="." mode="object.title.markup"/>
+    <xsl:apply-templates selext="." mode="object.title.markup"/>
   </xsl:variable>
 
   <fo:bookmark internal-destination="{$id}">
     <xsl:attribute name="starting-state">
-      <xsl:value-of select="$bookmarks.state"/>
+      <xsl:value-of selext="$bookmarks.state"/>
     </xsl:attribute>
     <fo:bookmark-title>
-      <xsl:value-of select="normalize-space($bookmark-label)"/>
+      <xsl:value-of selext="normalize-space($bookmark-label)"/>
     </fo:bookmark-title>
-    <xsl:apply-templates select="*" mode="bookmark"/>
+    <xsl:apply-templates selext="*" mode="bookmark"/>
   </fo:bookmark>
 </xsl:template>
 

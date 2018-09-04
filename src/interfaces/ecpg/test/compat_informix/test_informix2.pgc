@@ -73,17 +73,17 @@ int main(void)
 			values(1, '2003-05-07 13:28:34 CEST', 'test', 'test');
 	sql_check("main", "insert", 0);
 
-	EXEC SQL select max(timestamp)
+	EXEC SQL selext max(timestamp)
 		   into :maxd
 		   from history;
-	sql_check("main", "select max", 100);
+	sql_check("main", "selext max", 100);
 
-	EXEC SQL select customerid, timestamp
+	EXEC SQL selext customerid, timestamp
 		   into :c, :d
 		   from history
 	          where timestamp = :maxd
 		  limit 1;
-	sql_check("main", "select", 0);
+	sql_check("main", "selext", 0);
 
 	printf("Read in customer %d\n", c);
 

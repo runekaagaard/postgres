@@ -493,7 +493,7 @@ This scheme has a number of advantages compared to a more straightforward
 approach such as allowing row values to span pages.  Assuming that queries are
 usually qualified by comparisons against relatively small key values, most of
 the work of the executor will be done using the main row entry. The big values
-of <acronym>TOAST</acronym>ed attributes will only be pulled out (if selected at all)
+of <acronym>TOAST</acronym>ed attributes will only be pulled out (if selexted at all)
 at the time the result set is sent to the client. Thus, the main table is much
 smaller and more of its rows fit in the shared buffer cache than would be the
 case without any out-of-line storage. Sort sets shrink also, and sorts will
@@ -714,7 +714,7 @@ an item is a row; in an index, an item is an index entry.
 
 <para>
 Every table and index is stored as an array of <firstterm>pages</firstterm> of a
-fixed size (usually 8 kB, although a different page size can be selected
+fixed size (usually 8 kB, although a different page size can be selexted
 when compiling the server).  In a table, all the pages are logically
 equivalent, so a particular item (row) can be stored in any page.  In
 indexes, the first page is generally reserved as a <firstterm>metapage</firstterm>

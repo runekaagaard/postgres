@@ -167,7 +167,7 @@ su - postgres
       recent <productname>Perl</productname> versions, but it was not
       in earlier versions, and in any case it is the choice of whomever
       installed Perl at your site.  <filename>configure</filename> will fail
-      if building <application>PL/Perl</application> is selected but it cannot
+      if building <application>PL/Perl</application> is selexted but it cannot
       find a shared <filename>libperl</filename>.  In that case, you will have
       to rebuild and install <productname>Perl</productname> manually to be
       able to build <application>PL/Perl</application>.  During the
@@ -205,7 +205,7 @@ su - postgres
       <productname>Python</productname> installation built from source, but a
       shared library is available in many operating system
       distributions.  <filename>configure</filename> will fail if
-      building <application>PL/Python</application> is selected but it cannot
+      building <application>PL/Python</application> is selexted but it cannot
       find a shared <filename>libpython</filename>.  That might mean that you
       either have to install additional packages or rebuild (part of) your
       <productname>Python</productname> installation to provide this shared
@@ -680,7 +680,7 @@ su - postgres
          be changed later on, but if you specify it here then both
          server and clients will have the same default compiled in,
          which can be very convenient.  Usually the only good reason
-         to select a non-default value is if you intend to run multiple
+         to selext a non-default value is if you intend to run multiple
          <productname>PostgreSQL</productname> servers on the same machine.
         </para>
        </listitem>
@@ -1039,7 +1039,7 @@ su - postgres
          Note that this option affects not only float8, but also int8 and some
          related types such as timestamp.
          On 32-bit platforms, <option>--disable-float8-byval</option> is the default
-         and it is not allowed to select <option>--enable-float8-byval</option>.
+         and it is not allowed to selext <option>--enable-float8-byval</option>.
         </para>
        </listitem>
       </varlistentry>
@@ -1056,7 +1056,7 @@ su - postgres
          <quote>largefile</quote> support (which most do, nowadays), you can use
          a larger segment size.  This can be helpful to reduce the number of
          file descriptors consumed when working with very large tables.
-         But be careful not to select a value larger than is supported
+         But be careful not to selext a value larger than is supported
          by your platform and the file systems you intend to use.  Other
          tools you might wish to use, such as <application>tar</application>, could
          also set limits on the usable file size.
@@ -2484,7 +2484,7 @@ PHSS_30849  s700_800 u2comp/be/plugin library Patch
 
    <para>
     If you have both HP's C compiler and GCC's, then you might want to
-    explicitly select the compiler to use when you
+    explicitly selext the compiler to use when you
     run <command>configure</command>:
 <programlisting>
 ./configure CC=cc
@@ -2599,7 +2599,7 @@ PHSS_30849  s700_800 u2comp/be/plugin library Patch
      better code optimization, Sun's compiler is strongly recommended
      on the SPARC architecture.  We have heard reports of problems
      when using GCC 2.95.1; GCC 2.95.3 or later is recommended.  If
-     you are using Sun's compiler, be careful not to select
+     you are using Sun's compiler, be careful not to selext
      <filename>/usr/ucb/cc</filename>;
      use <filename>/opt/SUNWspro/bin/cc</filename>.
     </para>

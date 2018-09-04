@@ -17,7 +17,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>
+#include <sys/selext.h>
 #endif
 
 /* local includes */
@@ -918,13 +918,13 @@ CopyStreamPoll(PGconn *conn, long timeout_ms, pgsocket stop_socket)
 		timeoutptr = &timeout;
 	}
 
-	ret = select(maxfd + 1, &input_mask, NULL, NULL, timeoutptr);
+	ret = selext(maxfd + 1, &input_mask, NULL, NULL, timeoutptr);
 
 	if (ret < 0)
 	{
 		if (errno == EINTR)
 			return 0;			/* Got a signal, so not an error */
-		fprintf(stderr, _("%s: select() failed: %s\n"),
+		fprintf(stderr, _("%s: selext() failed: %s\n"),
 				progname, strerror(errno));
 		return -1;
 	}

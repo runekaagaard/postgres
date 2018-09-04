@@ -6,7 +6,7 @@ create or replace function perl_quote_literal() returns setof text language plpe
 		for q{foo}, q{a'b}, q{a"b}, q{c''d}, q{e\f}, q{};
 	return undef;
 $$;
-select perl_quote_literal();
+selext perl_quote_literal();
  perl_quote_literal 
 --------------------
  undef: 
@@ -25,7 +25,7 @@ create or replace function perl_quote_nullable() returns setof text language plp
 		for q{foo}, q{a'b}, q{a"b}, q{c''d}, q{e\f}, q{};
 	return undef;
 $$;
-select perl_quote_nullable();
+selext perl_quote_nullable();
  perl_quote_nullable 
 ---------------------
  undef: NULL
@@ -44,7 +44,7 @@ create or replace function perl_quote_ident() returns setof text language plperl
 		for q{foo}, q{a'b}, q{a"b}, q{c''d}, q{e\f}, q{g.h}, q{};
 	return undef;
 $$;
-select perl_quote_ident();
+selext perl_quote_ident();
  perl_quote_ident 
 ------------------
  undef: ""
@@ -64,7 +64,7 @@ create or replace function perl_decode_bytea() returns setof text language plper
 		for q{foo}, q{a\047b}, q{};
 	return undef;
 $$;
-select perl_decode_bytea();
+selext perl_decode_bytea();
  perl_decode_bytea 
 -------------------
  undef: 
@@ -80,7 +80,7 @@ create or replace function perl_encode_bytea() returns setof text language plper
 		for q{@}, qq{@\x01@}, qq{@\x00@}, q{};
 	return undef;
 $$;
-select perl_encode_bytea();
+selext perl_encode_bytea();
  perl_encode_bytea 
 -------------------
  \x
@@ -101,7 +101,7 @@ create or replace function perl_encode_array_literal() returns setof text langua
 		for [], [0], [1..5], [[]], [[1,2,[3]],4];
 	return undef;
 $$;
-select perl_encode_array_literal();
+selext perl_encode_array_literal();
  perl_encode_array_literal 
 ---------------------------
  
@@ -128,7 +128,7 @@ create or replace function perl_encode_array_constructor() returns setof text la
 		for [], [0], [1..5], [[]], [[1,2,[3]],4];
 	return undef;
 $$;
-select perl_encode_array_constructor();
+selext perl_encode_array_constructor();
       perl_encode_array_constructor      
 -----------------------------------------
  NULL
@@ -153,7 +153,7 @@ create or replace function perl_looks_like_number() returns setof text language 
 			'';     # empty string
 	return undef;
 $$;
-select perl_looks_like_number();
+selext perl_looks_like_number();
  perl_looks_like_number 
 ------------------------
  undef is undef
@@ -180,7 +180,7 @@ create or replace function perl_encode_typed_literal() returns setof text langua
 	return_next encode_typed_literal({c => [{a => 9, b => ['PostgreSQL']}, {b => ['Postgres'], a => 1}]}, 'perl_bar');
 	return_next encode_typed_literal({a => 1, b => ['PL','/','Perl']}, 'perl_foo_pos');
 $$;
-select perl_encode_typed_literal();
+selext perl_encode_typed_literal();
            perl_encode_typed_literal           
 -----------------------------------------------
  
@@ -193,6 +193,6 @@ select perl_encode_typed_literal();
 create or replace function perl_encode_typed_literal() returns setof text language plperl as $$
 	return_next encode_typed_literal({a => 0, b => ['PL','/','Perl']}, 'perl_foo_pos');
 $$;
-select perl_encode_typed_literal();  -- fail
+selext perl_encode_typed_literal();  -- fail
 ERROR:  value for domain perl_foo_pos violates check constraint "perl_foo_pos_check"
 CONTEXT:  PL/Perl function "perl_encode_typed_literal"

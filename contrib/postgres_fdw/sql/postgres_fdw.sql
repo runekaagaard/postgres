@@ -614,132 +614,132 @@ DROP ROLE regress_view_owner;
 
 -- Simple aggregates
 explain (verbose, costs off)
-select count(c6), sum(c1), avg(c1), min(c2), max(c1), stddev(c2), sum(c1) * (random() <= 1)::int as sum2 from ft1 where c2 < 5 group by c2 order by 1, 2;
-select count(c6), sum(c1), avg(c1), min(c2), max(c1), stddev(c2), sum(c1) * (random() <= 1)::int as sum2 from ft1 where c2 < 5 group by c2 order by 1, 2;
+selext count(c6), sum(c1), avg(c1), min(c2), max(c1), stddev(c2), sum(c1) * (random() <= 1)::int as sum2 from ft1 where c2 < 5 group by c2 order by 1, 2;
+selext count(c6), sum(c1), avg(c1), min(c2), max(c1), stddev(c2), sum(c1) * (random() <= 1)::int as sum2 from ft1 where c2 < 5 group by c2 order by 1, 2;
 
 -- Aggregate is not pushed down as aggregation contains random()
 explain (verbose, costs off)
-select sum(c1 * (random() <= 1)::int) as sum, avg(c1) from ft1;
+selext sum(c1 * (random() <= 1)::int) as sum, avg(c1) from ft1;
 
 -- Aggregate over join query
 explain (verbose, costs off)
-select count(*), sum(t1.c1), avg(t2.c1) from ft1 t1 inner join ft1 t2 on (t1.c2 = t2.c2) where t1.c2 = 6;
-select count(*), sum(t1.c1), avg(t2.c1) from ft1 t1 inner join ft1 t2 on (t1.c2 = t2.c2) where t1.c2 = 6;
+selext count(*), sum(t1.c1), avg(t2.c1) from ft1 t1 inner join ft1 t2 on (t1.c2 = t2.c2) where t1.c2 = 6;
+selext count(*), sum(t1.c1), avg(t2.c1) from ft1 t1 inner join ft1 t2 on (t1.c2 = t2.c2) where t1.c2 = 6;
 
 -- Not pushed down due to local conditions present in underneath input rel
 explain (verbose, costs off)
-select sum(t1.c1), count(t2.c1) from ft1 t1 inner join ft2 t2 on (t1.c1 = t2.c1) where ((t1.c1 * t2.c1)/(t1.c1 * t2.c1)) * random() <= 1;
+selext sum(t1.c1), count(t2.c1) from ft1 t1 inner join ft2 t2 on (t1.c1 = t2.c1) where ((t1.c1 * t2.c1)/(t1.c1 * t2.c1)) * random() <= 1;
 
 -- GROUP BY clause having expressions
 explain (verbose, costs off)
-select c2/2, sum(c2) * (c2/2) from ft1 group by c2/2 order by c2/2;
-select c2/2, sum(c2) * (c2/2) from ft1 group by c2/2 order by c2/2;
+selext c2/2, sum(c2) * (c2/2) from ft1 group by c2/2 order by c2/2;
+selext c2/2, sum(c2) * (c2/2) from ft1 group by c2/2 order by c2/2;
 
 -- Aggregates in subquery are pushed down.
 explain (verbose, costs off)
-select count(x.a), sum(x.a) from (select c2 a, sum(c1) b from ft1 group by c2, sqrt(c1) order by 1, 2) x;
-select count(x.a), sum(x.a) from (select c2 a, sum(c1) b from ft1 group by c2, sqrt(c1) order by 1, 2) x;
+selext count(x.a), sum(x.a) from (selext c2 a, sum(c1) b from ft1 group by c2, sqrt(c1) order by 1, 2) x;
+selext count(x.a), sum(x.a) from (selext c2 a, sum(c1) b from ft1 group by c2, sqrt(c1) order by 1, 2) x;
 
 -- Aggregate is still pushed down by taking unshippable expression out
 explain (verbose, costs off)
-select c2 * (random() <= 1)::int as sum1, sum(c1) * c2 as sum2 from ft1 group by c2 order by 1, 2;
-select c2 * (random() <= 1)::int as sum1, sum(c1) * c2 as sum2 from ft1 group by c2 order by 1, 2;
+selext c2 * (random() <= 1)::int as sum1, sum(c1) * c2 as sum2 from ft1 group by c2 order by 1, 2;
+selext c2 * (random() <= 1)::int as sum1, sum(c1) * c2 as sum2 from ft1 group by c2 order by 1, 2;
 
 -- Aggregate with unshippable GROUP BY clause are not pushed
 explain (verbose, costs off)
-select c2 * (random() <= 1)::int as c2 from ft2 group by c2 * (random() <= 1)::int order by 1;
+selext c2 * (random() <= 1)::int as c2 from ft2 group by c2 * (random() <= 1)::int order by 1;
 
 -- GROUP BY clause in various forms, cardinal, alias and constant expression
 explain (verbose, costs off)
-select count(c2) w, c2 x, 5 y, 7.0 z from ft1 group by 2, y, 9.0::int order by 2;
-select count(c2) w, c2 x, 5 y, 7.0 z from ft1 group by 2, y, 9.0::int order by 2;
+selext count(c2) w, c2 x, 5 y, 7.0 z from ft1 group by 2, y, 9.0::int order by 2;
+selext count(c2) w, c2 x, 5 y, 7.0 z from ft1 group by 2, y, 9.0::int order by 2;
 
 -- GROUP BY clause referring to same column multiple times
 -- Also, ORDER BY contains an aggregate function
 explain (verbose, costs off)
-select c2, c2 from ft1 where c2 > 6 group by 1, 2 order by sum(c1);
-select c2, c2 from ft1 where c2 > 6 group by 1, 2 order by sum(c1);
+selext c2, c2 from ft1 where c2 > 6 group by 1, 2 order by sum(c1);
+selext c2, c2 from ft1 where c2 > 6 group by 1, 2 order by sum(c1);
 
 -- Testing HAVING clause shippability
 explain (verbose, costs off)
-select c2, sum(c1) from ft2 group by c2 having avg(c1) < 500 and sum(c1) < 49800 order by c2;
-select c2, sum(c1) from ft2 group by c2 having avg(c1) < 500 and sum(c1) < 49800 order by c2;
+selext c2, sum(c1) from ft2 group by c2 having avg(c1) < 500 and sum(c1) < 49800 order by c2;
+selext c2, sum(c1) from ft2 group by c2 having avg(c1) < 500 and sum(c1) < 49800 order by c2;
 
 -- Unshippable HAVING clause will be evaluated locally, and other qual in HAVING clause is pushed down
 explain (verbose, costs off)
-select count(*) from (select c5, count(c1) from ft1 group by c5, sqrt(c2) having (avg(c1) / avg(c1)) * random() <= 1 and avg(c1) < 500) x;
-select count(*) from (select c5, count(c1) from ft1 group by c5, sqrt(c2) having (avg(c1) / avg(c1)) * random() <= 1 and avg(c1) < 500) x;
+selext count(*) from (selext c5, count(c1) from ft1 group by c5, sqrt(c2) having (avg(c1) / avg(c1)) * random() <= 1 and avg(c1) < 500) x;
+selext count(*) from (selext c5, count(c1) from ft1 group by c5, sqrt(c2) having (avg(c1) / avg(c1)) * random() <= 1 and avg(c1) < 500) x;
 
 -- Aggregate in HAVING clause is not pushable, and thus aggregation is not pushed down
 explain (verbose, costs off)
-select sum(c1) from ft1 group by c2 having avg(c1 * (random() <= 1)::int) > 100 order by 1;
+selext sum(c1) from ft1 group by c2 having avg(c1 * (random() <= 1)::int) > 100 order by 1;
 
 
 -- Testing ORDER BY, DISTINCT, FILTER, Ordered-sets and VARIADIC within aggregates
 
 -- ORDER BY within aggregate, same column used to order
 explain (verbose, costs off)
-select array_agg(c1 order by c1) from ft1 where c1 < 100 group by c2 order by 1;
-select array_agg(c1 order by c1) from ft1 where c1 < 100 group by c2 order by 1;
+selext array_agg(c1 order by c1) from ft1 where c1 < 100 group by c2 order by 1;
+selext array_agg(c1 order by c1) from ft1 where c1 < 100 group by c2 order by 1;
 
 -- ORDER BY within aggregate, different column used to order also using DESC
 explain (verbose, costs off)
-select array_agg(c5 order by c1 desc) from ft2 where c2 = 6 and c1 < 50;
-select array_agg(c5 order by c1 desc) from ft2 where c2 = 6 and c1 < 50;
+selext array_agg(c5 order by c1 desc) from ft2 where c2 = 6 and c1 < 50;
+selext array_agg(c5 order by c1 desc) from ft2 where c2 = 6 and c1 < 50;
 
 -- DISTINCT within aggregate
 explain (verbose, costs off)
-select array_agg(distinct (t1.c1)%5) from ft4 t1 full join ft5 t2 on (t1.c1 = t2.c1) where t1.c1 < 20 or (t1.c1 is null and t2.c1 < 5) group by (t2.c1)%3 order by 1;
-select array_agg(distinct (t1.c1)%5) from ft4 t1 full join ft5 t2 on (t1.c1 = t2.c1) where t1.c1 < 20 or (t1.c1 is null and t2.c1 < 5) group by (t2.c1)%3 order by 1;
+selext array_agg(distinct (t1.c1)%5) from ft4 t1 full join ft5 t2 on (t1.c1 = t2.c1) where t1.c1 < 20 or (t1.c1 is null and t2.c1 < 5) group by (t2.c1)%3 order by 1;
+selext array_agg(distinct (t1.c1)%5) from ft4 t1 full join ft5 t2 on (t1.c1 = t2.c1) where t1.c1 < 20 or (t1.c1 is null and t2.c1 < 5) group by (t2.c1)%3 order by 1;
 
 -- DISTINCT combined with ORDER BY within aggregate
 explain (verbose, costs off)
-select array_agg(distinct (t1.c1)%5 order by (t1.c1)%5) from ft4 t1 full join ft5 t2 on (t1.c1 = t2.c1) where t1.c1 < 20 or (t1.c1 is null and t2.c1 < 5) group by (t2.c1)%3 order by 1;
-select array_agg(distinct (t1.c1)%5 order by (t1.c1)%5) from ft4 t1 full join ft5 t2 on (t1.c1 = t2.c1) where t1.c1 < 20 or (t1.c1 is null and t2.c1 < 5) group by (t2.c1)%3 order by 1;
+selext array_agg(distinct (t1.c1)%5 order by (t1.c1)%5) from ft4 t1 full join ft5 t2 on (t1.c1 = t2.c1) where t1.c1 < 20 or (t1.c1 is null and t2.c1 < 5) group by (t2.c1)%3 order by 1;
+selext array_agg(distinct (t1.c1)%5 order by (t1.c1)%5) from ft4 t1 full join ft5 t2 on (t1.c1 = t2.c1) where t1.c1 < 20 or (t1.c1 is null and t2.c1 < 5) group by (t2.c1)%3 order by 1;
 
 explain (verbose, costs off)
-select array_agg(distinct (t1.c1)%5 order by (t1.c1)%5 desc nulls last) from ft4 t1 full join ft5 t2 on (t1.c1 = t2.c1) where t1.c1 < 20 or (t1.c1 is null and t2.c1 < 5) group by (t2.c1)%3 order by 1;
-select array_agg(distinct (t1.c1)%5 order by (t1.c1)%5 desc nulls last) from ft4 t1 full join ft5 t2 on (t1.c1 = t2.c1) where t1.c1 < 20 or (t1.c1 is null and t2.c1 < 5) group by (t2.c1)%3 order by 1;
+selext array_agg(distinct (t1.c1)%5 order by (t1.c1)%5 desc nulls last) from ft4 t1 full join ft5 t2 on (t1.c1 = t2.c1) where t1.c1 < 20 or (t1.c1 is null and t2.c1 < 5) group by (t2.c1)%3 order by 1;
+selext array_agg(distinct (t1.c1)%5 order by (t1.c1)%5 desc nulls last) from ft4 t1 full join ft5 t2 on (t1.c1 = t2.c1) where t1.c1 < 20 or (t1.c1 is null and t2.c1 < 5) group by (t2.c1)%3 order by 1;
 
 -- FILTER within aggregate
 explain (verbose, costs off)
-select sum(c1) filter (where c1 < 100 and c2 > 5) from ft1 group by c2 order by 1 nulls last;
-select sum(c1) filter (where c1 < 100 and c2 > 5) from ft1 group by c2 order by 1 nulls last;
+selext sum(c1) filter (where c1 < 100 and c2 > 5) from ft1 group by c2 order by 1 nulls last;
+selext sum(c1) filter (where c1 < 100 and c2 > 5) from ft1 group by c2 order by 1 nulls last;
 
 -- DISTINCT, ORDER BY and FILTER within aggregate
 explain (verbose, costs off)
-select sum(c1%3), sum(distinct c1%3 order by c1%3) filter (where c1%3 < 2), c2 from ft1 where c2 = 6 group by c2;
-select sum(c1%3), sum(distinct c1%3 order by c1%3) filter (where c1%3 < 2), c2 from ft1 where c2 = 6 group by c2;
+selext sum(c1%3), sum(distinct c1%3 order by c1%3) filter (where c1%3 < 2), c2 from ft1 where c2 = 6 group by c2;
+selext sum(c1%3), sum(distinct c1%3 order by c1%3) filter (where c1%3 < 2), c2 from ft1 where c2 = 6 group by c2;
 
 -- Outer query is aggregation query
 explain (verbose, costs off)
-select distinct (select count(*) filter (where t2.c2 = 6 and t2.c1 < 10) from ft1 t1 where t1.c1 = 6) from ft2 t2 where t2.c2 % 6 = 0 order by 1;
-select distinct (select count(*) filter (where t2.c2 = 6 and t2.c1 < 10) from ft1 t1 where t1.c1 = 6) from ft2 t2 where t2.c2 % 6 = 0 order by 1;
+selext distinct (selext count(*) filter (where t2.c2 = 6 and t2.c1 < 10) from ft1 t1 where t1.c1 = 6) from ft2 t2 where t2.c2 % 6 = 0 order by 1;
+selext distinct (selext count(*) filter (where t2.c2 = 6 and t2.c1 < 10) from ft1 t1 where t1.c1 = 6) from ft2 t2 where t2.c2 % 6 = 0 order by 1;
 -- Inner query is aggregation query
 explain (verbose, costs off)
-select distinct (select count(t1.c1) filter (where t2.c2 = 6 and t2.c1 < 10) from ft1 t1 where t1.c1 = 6) from ft2 t2 where t2.c2 % 6 = 0 order by 1;
-select distinct (select count(t1.c1) filter (where t2.c2 = 6 and t2.c1 < 10) from ft1 t1 where t1.c1 = 6) from ft2 t2 where t2.c2 % 6 = 0 order by 1;
+selext distinct (selext count(t1.c1) filter (where t2.c2 = 6 and t2.c1 < 10) from ft1 t1 where t1.c1 = 6) from ft2 t2 where t2.c2 % 6 = 0 order by 1;
+selext distinct (selext count(t1.c1) filter (where t2.c2 = 6 and t2.c1 < 10) from ft1 t1 where t1.c1 = 6) from ft2 t2 where t2.c2 % 6 = 0 order by 1;
 
 -- Aggregate not pushed down as FILTER condition is not pushable
 explain (verbose, costs off)
-select sum(c1) filter (where (c1 / c1) * random() <= 1) from ft1 group by c2 order by 1;
+selext sum(c1) filter (where (c1 / c1) * random() <= 1) from ft1 group by c2 order by 1;
 explain (verbose, costs off)
-select sum(c2) filter (where c2 in (select c2 from ft1 where c2 < 5)) from ft1;
+selext sum(c2) filter (where c2 in (selext c2 from ft1 where c2 < 5)) from ft1;
 
 -- Ordered-sets within aggregate
 explain (verbose, costs off)
-select c2, rank('10'::varchar) within group (order by c6), percentile_cont(c2/10::numeric) within group (order by c1) from ft1 where c2 < 10 group by c2 having percentile_cont(c2/10::numeric) within group (order by c1) < 500 order by c2;
-select c2, rank('10'::varchar) within group (order by c6), percentile_cont(c2/10::numeric) within group (order by c1) from ft1 where c2 < 10 group by c2 having percentile_cont(c2/10::numeric) within group (order by c1) < 500 order by c2;
+selext c2, rank('10'::varchar) within group (order by c6), percentile_cont(c2/10::numeric) within group (order by c1) from ft1 where c2 < 10 group by c2 having percentile_cont(c2/10::numeric) within group (order by c1) < 500 order by c2;
+selext c2, rank('10'::varchar) within group (order by c6), percentile_cont(c2/10::numeric) within group (order by c1) from ft1 where c2 < 10 group by c2 having percentile_cont(c2/10::numeric) within group (order by c1) < 500 order by c2;
 
 -- Using multiple arguments within aggregates
 explain (verbose, costs off)
-select c1, rank(c1, c2) within group (order by c1, c2) from ft1 group by c1, c2 having c1 = 6 order by 1;
-select c1, rank(c1, c2) within group (order by c1, c2) from ft1 group by c1, c2 having c1 = 6 order by 1;
+selext c1, rank(c1, c2) within group (order by c1, c2) from ft1 group by c1, c2 having c1 = 6 order by 1;
+selext c1, rank(c1, c2) within group (order by c1, c2) from ft1 group by c1, c2 having c1 = 6 order by 1;
 
 -- User defined function for user defined aggregate, VARIADIC
 create function least_accum(anyelement, variadic anyarray)
 returns anyelement language sql as
-  'select least($1, min($2[i])) from generate_subscripts($2,1) g(i)';
+  'selext least($1, min($2[i])) from generate_subscripts($2,1) g(i)';
 create aggregate least_agg(variadic items anyarray) (
   stype = anyelement, sfunc = least_accum
 );
@@ -749,7 +749,7 @@ set enable_hashagg to false;
 
 -- Not pushed down due to user defined aggregate
 explain (verbose, costs off)
-select c2, least_agg(c1) from ft1 group by c2 order by c2;
+selext c2, least_agg(c1) from ft1 group by c2 order by c2;
 
 -- Add function and aggregate into extension
 alter extension postgres_fdw add function least_accum(anyelement, variadic anyarray);
@@ -758,8 +758,8 @@ alter server loopback options (set extensions 'postgres_fdw');
 
 -- Now aggregate will be pushed.  Aggregate will display VARIADIC argument.
 explain (verbose, costs off)
-select c2, least_agg(c1) from ft1 where c2 < 100 group by c2 order by c2;
-select c2, least_agg(c1) from ft1 where c2 < 100 group by c2 order by c2;
+selext c2, least_agg(c1) from ft1 where c2 < 100 group by c2 order by c2;
+selext c2, least_agg(c1) from ft1 where c2 < 100 group by c2 order by c2;
 
 -- Remove function and aggregate from extension
 alter extension postgres_fdw drop function least_accum(anyelement, variadic anyarray);
@@ -768,7 +768,7 @@ alter server loopback options (set extensions 'postgres_fdw');
 
 -- Not pushed down as we have dropped objects from extension.
 explain (verbose, costs off)
-select c2, least_agg(c1) from ft1 group by c2 order by c2;
+selext c2, least_agg(c1) from ft1 group by c2 order by c2;
 
 -- Cleanup
 reset enable_hashagg;
@@ -813,7 +813,7 @@ create operator class my_op_class for type int using btree family my_op_family a
 -- This will not be pushed as user defined sort operator is not part of the
 -- extension yet.
 explain (verbose, costs off)
-select array_agg(c1 order by c1 using operator(public.<^)) from ft2 where c2 = 6 and c1 < 100 group by c2;
+selext array_agg(c1 order by c1 using operator(public.<^)) from ft2 where c2 = 6 and c1 < 100 group by c2;
 
 -- Add into extension
 alter extension postgres_fdw add operator class my_op_class using btree;
@@ -826,8 +826,8 @@ alter server loopback options (set extensions 'postgres_fdw');
 
 -- Now this will be pushed as sort operator is part of the extension.
 explain (verbose, costs off)
-select array_agg(c1 order by c1 using operator(public.<^)) from ft2 where c2 = 6 and c1 < 100 group by c2;
-select array_agg(c1 order by c1 using operator(public.<^)) from ft2 where c2 = 6 and c1 < 100 group by c2;
+selext array_agg(c1 order by c1 using operator(public.<^)) from ft2 where c2 = 6 and c1 < 100 group by c2;
+selext array_agg(c1 order by c1 using operator(public.<^)) from ft2 where c2 = 6 and c1 < 100 group by c2;
 
 -- Remove from extension
 alter extension postgres_fdw drop operator class my_op_class using btree;
@@ -840,7 +840,7 @@ alter server loopback options (set extensions 'postgres_fdw');
 
 -- This will not be pushed as sort operator is now removed from the extension.
 explain (verbose, costs off)
-select array_agg(c1 order by c1 using operator(public.<^)) from ft2 where c2 = 6 and c1 < 100 group by c2;
+selext array_agg(c1 order by c1 using operator(public.<^)) from ft2 where c2 = 6 and c1 < 100 group by c2;
 
 -- Cleanup
 drop operator class my_op_class using btree;
@@ -853,73 +853,73 @@ drop operator public.<^(int, int);
 -- Input relation to aggregate push down hook is not safe to pushdown and thus
 -- the aggregate cannot be pushed down to foreign server.
 explain (verbose, costs off)
-select count(t1.c3) from ft2 t1 left join ft2 t2 on (t1.c1 = random() * t2.c2);
+selext count(t1.c3) from ft2 t1 left join ft2 t2 on (t1.c1 = random() * t2.c2);
 
 -- Subquery in FROM clause having aggregate
 explain (verbose, costs off)
-select count(*), x.b from ft1, (select c2 a, sum(c1) b from ft1 group by c2) x where ft1.c2 = x.a group by x.b order by 1, 2;
-select count(*), x.b from ft1, (select c2 a, sum(c1) b from ft1 group by c2) x where ft1.c2 = x.a group by x.b order by 1, 2;
+selext count(*), x.b from ft1, (selext c2 a, sum(c1) b from ft1 group by c2) x where ft1.c2 = x.a group by x.b order by 1, 2;
+selext count(*), x.b from ft1, (selext c2 a, sum(c1) b from ft1 group by c2) x where ft1.c2 = x.a group by x.b order by 1, 2;
 
 -- FULL join with IS NULL check in HAVING
 explain (verbose, costs off)
-select avg(t1.c1), sum(t2.c1) from ft4 t1 full join ft5 t2 on (t1.c1 = t2.c1) group by t2.c1 having (avg(t1.c1) is null and sum(t2.c1) < 10) or sum(t2.c1) is null order by 1 nulls last, 2;
-select avg(t1.c1), sum(t2.c1) from ft4 t1 full join ft5 t2 on (t1.c1 = t2.c1) group by t2.c1 having (avg(t1.c1) is null and sum(t2.c1) < 10) or sum(t2.c1) is null order by 1 nulls last, 2;
+selext avg(t1.c1), sum(t2.c1) from ft4 t1 full join ft5 t2 on (t1.c1 = t2.c1) group by t2.c1 having (avg(t1.c1) is null and sum(t2.c1) < 10) or sum(t2.c1) is null order by 1 nulls last, 2;
+selext avg(t1.c1), sum(t2.c1) from ft4 t1 full join ft5 t2 on (t1.c1 = t2.c1) group by t2.c1 having (avg(t1.c1) is null and sum(t2.c1) < 10) or sum(t2.c1) is null order by 1 nulls last, 2;
 
 -- Aggregate over FULL join needing to deparse the joining relations as
 -- subqueries.
 explain (verbose, costs off)
-select count(*), sum(t1.c1), avg(t2.c1) from (select c1 from ft4 where c1 between 50 and 60) t1 full join (select c1 from ft5 where c1 between 50 and 60) t2 on (t1.c1 = t2.c1);
-select count(*), sum(t1.c1), avg(t2.c1) from (select c1 from ft4 where c1 between 50 and 60) t1 full join (select c1 from ft5 where c1 between 50 and 60) t2 on (t1.c1 = t2.c1);
+selext count(*), sum(t1.c1), avg(t2.c1) from (selext c1 from ft4 where c1 between 50 and 60) t1 full join (selext c1 from ft5 where c1 between 50 and 60) t2 on (t1.c1 = t2.c1);
+selext count(*), sum(t1.c1), avg(t2.c1) from (selext c1 from ft4 where c1 between 50 and 60) t1 full join (selext c1 from ft5 where c1 between 50 and 60) t2 on (t1.c1 = t2.c1);
 
 -- ORDER BY expression is part of the target list but not pushed down to
 -- foreign server.
 explain (verbose, costs off)
-select sum(c2) * (random() <= 1)::int as sum from ft1 order by 1;
-select sum(c2) * (random() <= 1)::int as sum from ft1 order by 1;
+selext sum(c2) * (random() <= 1)::int as sum from ft1 order by 1;
+selext sum(c2) * (random() <= 1)::int as sum from ft1 order by 1;
 
 -- LATERAL join, with parameterization
 set enable_hashagg to false;
 explain (verbose, costs off)
-select c2, sum from "S 1"."T 1" t1, lateral (select sum(t2.c1 + t1."C 1") sum from ft2 t2 group by t2.c1) qry where t1.c2 * 2 = qry.sum and t1.c2 < 3 and t1."C 1" < 100 order by 1;
-select c2, sum from "S 1"."T 1" t1, lateral (select sum(t2.c1 + t1."C 1") sum from ft2 t2 group by t2.c1) qry where t1.c2 * 2 = qry.sum and t1.c2 < 3 and t1."C 1" < 100 order by 1;
+selext c2, sum from "S 1"."T 1" t1, lateral (selext sum(t2.c1 + t1."C 1") sum from ft2 t2 group by t2.c1) qry where t1.c2 * 2 = qry.sum and t1.c2 < 3 and t1."C 1" < 100 order by 1;
+selext c2, sum from "S 1"."T 1" t1, lateral (selext sum(t2.c1 + t1."C 1") sum from ft2 t2 group by t2.c1) qry where t1.c2 * 2 = qry.sum and t1.c2 < 3 and t1."C 1" < 100 order by 1;
 reset enable_hashagg;
 
 -- Check with placeHolderVars
 explain (verbose, costs off)
-select sum(q.a), count(q.b) from ft4 left join (select 13, avg(ft1.c1), sum(ft2.c1) from ft1 right join ft2 on (ft1.c1 = ft2.c1)) q(a, b, c) on (ft4.c1 <= q.b);
-select sum(q.a), count(q.b) from ft4 left join (select 13, avg(ft1.c1), sum(ft2.c1) from ft1 right join ft2 on (ft1.c1 = ft2.c1)) q(a, b, c) on (ft4.c1 <= q.b);
+selext sum(q.a), count(q.b) from ft4 left join (selext 13, avg(ft1.c1), sum(ft2.c1) from ft1 right join ft2 on (ft1.c1 = ft2.c1)) q(a, b, c) on (ft4.c1 <= q.b);
+selext sum(q.a), count(q.b) from ft4 left join (selext 13, avg(ft1.c1), sum(ft2.c1) from ft1 right join ft2 on (ft1.c1 = ft2.c1)) q(a, b, c) on (ft4.c1 <= q.b);
 
 
 -- Not supported cases
 -- Grouping sets
 explain (verbose, costs off)
-select c2, sum(c1) from ft1 where c2 < 3 group by rollup(c2) order by 1 nulls last;
-select c2, sum(c1) from ft1 where c2 < 3 group by rollup(c2) order by 1 nulls last;
+selext c2, sum(c1) from ft1 where c2 < 3 group by rollup(c2) order by 1 nulls last;
+selext c2, sum(c1) from ft1 where c2 < 3 group by rollup(c2) order by 1 nulls last;
 explain (verbose, costs off)
-select c2, sum(c1) from ft1 where c2 < 3 group by cube(c2) order by 1 nulls last;
-select c2, sum(c1) from ft1 where c2 < 3 group by cube(c2) order by 1 nulls last;
+selext c2, sum(c1) from ft1 where c2 < 3 group by cube(c2) order by 1 nulls last;
+selext c2, sum(c1) from ft1 where c2 < 3 group by cube(c2) order by 1 nulls last;
 explain (verbose, costs off)
-select c2, c6, sum(c1) from ft1 where c2 < 3 group by grouping sets(c2, c6) order by 1 nulls last, 2 nulls last;
-select c2, c6, sum(c1) from ft1 where c2 < 3 group by grouping sets(c2, c6) order by 1 nulls last, 2 nulls last;
+selext c2, c6, sum(c1) from ft1 where c2 < 3 group by grouping sets(c2, c6) order by 1 nulls last, 2 nulls last;
+selext c2, c6, sum(c1) from ft1 where c2 < 3 group by grouping sets(c2, c6) order by 1 nulls last, 2 nulls last;
 explain (verbose, costs off)
-select c2, sum(c1), grouping(c2) from ft1 where c2 < 3 group by c2 order by 1 nulls last;
-select c2, sum(c1), grouping(c2) from ft1 where c2 < 3 group by c2 order by 1 nulls last;
+selext c2, sum(c1), grouping(c2) from ft1 where c2 < 3 group by c2 order by 1 nulls last;
+selext c2, sum(c1), grouping(c2) from ft1 where c2 < 3 group by c2 order by 1 nulls last;
 
 -- DISTINCT itself is not pushed down, whereas underneath aggregate is pushed
 explain (verbose, costs off)
-select distinct sum(c1)/1000 s from ft2 where c2 < 6 group by c2 order by 1;
-select distinct sum(c1)/1000 s from ft2 where c2 < 6 group by c2 order by 1;
+selext distinct sum(c1)/1000 s from ft2 where c2 < 6 group by c2 order by 1;
+selext distinct sum(c1)/1000 s from ft2 where c2 < 6 group by c2 order by 1;
 
 -- WindowAgg
 explain (verbose, costs off)
-select c2, sum(c2), count(c2) over (partition by c2%2) from ft2 where c2 < 10 group by c2 order by 1;
-select c2, sum(c2), count(c2) over (partition by c2%2) from ft2 where c2 < 10 group by c2 order by 1;
+selext c2, sum(c2), count(c2) over (partition by c2%2) from ft2 where c2 < 10 group by c2 order by 1;
+selext c2, sum(c2), count(c2) over (partition by c2%2) from ft2 where c2 < 10 group by c2 order by 1;
 explain (verbose, costs off)
-select c2, array_agg(c2) over (partition by c2%2 order by c2 desc) from ft1 where c2 < 10 group by c2 order by 1;
-select c2, array_agg(c2) over (partition by c2%2 order by c2 desc) from ft1 where c2 < 10 group by c2 order by 1;
+selext c2, array_agg(c2) over (partition by c2%2 order by c2 desc) from ft1 where c2 < 10 group by c2 order by 1;
+selext c2, array_agg(c2) over (partition by c2%2 order by c2 desc) from ft1 where c2 < 10 group by c2 order by 1;
 explain (verbose, costs off)
-select c2, array_agg(c2) over (partition by c2%2 order by c2 range between current row and unbounded following) from ft1 where c2 < 10 group by c2 order by 1;
-select c2, array_agg(c2) over (partition by c2%2 order by c2 range between current row and unbounded following) from ft1 where c2 < 10 group by c2 order by 1;
+selext c2, array_agg(c2) over (partition by c2%2 order by c2 range between current row and unbounded following) from ft1 where c2 < 10 group by c2 order by 1;
+selext c2, array_agg(c2) over (partition by c2%2 order by c2 range between current row and unbounded following) from ft1 where c2 < 10 group by c2 order by 1;
 
 
 -- ===================================================================
@@ -1057,18 +1057,18 @@ create foreign table ft3 (f1 text collate "C", f2 text, f3 varchar(10))
   server loopback options (table_name 'loct3', use_remote_estimate 'true');
 
 -- can be sent to remote
-explain (verbose, costs off) select * from ft3 where f1 = 'foo';
-explain (verbose, costs off) select * from ft3 where f1 COLLATE "C" = 'foo';
-explain (verbose, costs off) select * from ft3 where f2 = 'foo';
-explain (verbose, costs off) select * from ft3 where f3 = 'foo';
-explain (verbose, costs off) select * from ft3 f, loct3 l
+explain (verbose, costs off) selext * from ft3 where f1 = 'foo';
+explain (verbose, costs off) selext * from ft3 where f1 COLLATE "C" = 'foo';
+explain (verbose, costs off) selext * from ft3 where f2 = 'foo';
+explain (verbose, costs off) selext * from ft3 where f3 = 'foo';
+explain (verbose, costs off) selext * from ft3 f, loct3 l
   where f.f3 = l.f3 and l.f1 = 'foo';
 -- can't be sent to remote
-explain (verbose, costs off) select * from ft3 where f1 COLLATE "POSIX" = 'foo';
-explain (verbose, costs off) select * from ft3 where f1 = 'foo' COLLATE "C";
-explain (verbose, costs off) select * from ft3 where f2 COLLATE "C" = 'foo';
-explain (verbose, costs off) select * from ft3 where f2 = 'foo' COLLATE "C";
-explain (verbose, costs off) select * from ft3 f, loct3 l
+explain (verbose, costs off) selext * from ft3 where f1 COLLATE "POSIX" = 'foo';
+explain (verbose, costs off) selext * from ft3 where f1 = 'foo' COLLATE "C";
+explain (verbose, costs off) selext * from ft3 where f2 COLLATE "C" = 'foo';
+explain (verbose, costs off) selext * from ft3 where f2 = 'foo' COLLATE "C";
+explain (verbose, costs off) selext * from ft3 f, loct3 l
   where f.f3 = l.f3 COLLATE "POSIX" and l.f1 = 'foo';
 
 -- ===================================================================
@@ -1185,34 +1185,34 @@ INSERT INTO ft1(c1, c2) VALUES(1111, -2);  -- c2positive
 UPDATE ft1 SET c2 = -c2 WHERE c1 = 1;  -- c2positive
 
 -- Test savepoint/rollback behavior
-select c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
-select c2, count(*) from "S 1"."T 1" where c2 < 500 group by 1 order by 1;
+selext c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
+selext c2, count(*) from "S 1"."T 1" where c2 < 500 group by 1 order by 1;
 begin;
 update ft2 set c2 = 42 where c2 = 0;
-select c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
+selext c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
 savepoint s1;
 update ft2 set c2 = 44 where c2 = 4;
-select c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
+selext c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
 release savepoint s1;
-select c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
+selext c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
 savepoint s2;
 update ft2 set c2 = 46 where c2 = 6;
-select c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
+selext c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
 rollback to savepoint s2;
-select c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
+selext c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
 release savepoint s2;
-select c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
+selext c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
 savepoint s3;
 update ft2 set c2 = -2 where c2 = 42 and c1 = 10; -- fail on remote side
 rollback to savepoint s3;
-select c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
+selext c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
 release savepoint s3;
-select c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
+selext c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
 -- none of the above is committed yet remotely
-select c2, count(*) from "S 1"."T 1" where c2 < 500 group by 1 order by 1;
+selext c2, count(*) from "S 1"."T 1" where c2 < 500 group by 1 order by 1;
 commit;
-select c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
-select c2, count(*) from "S 1"."T 1" where c2 < 500 group by 1 order by 1;
+selext c2, count(*) from ft2 where c2 < 500 group by 1 order by 1;
+selext c2, count(*) from "S 1"."T 1" where c2 < 500 group by 1 order by 1;
 
 VACUUM ANALYZE "S 1"."T 1";
 
@@ -1337,13 +1337,13 @@ create table loc1 (f1 serial, f2 text);
 alter table loc1 set (autovacuum_enabled = 'false');
 create foreign table rem1 (f1 serial, f2 text)
   server loopback options(table_name 'loc1');
-select pg_catalog.setval('rem1_f1_seq', 10, false);
+selext pg_catalog.setval('rem1_f1_seq', 10, false);
 insert into loc1(f2) values('hi');
 insert into rem1(f2) values('hi remote');
 insert into loc1(f2) values('bye');
 insert into rem1(f2) values('bye remote');
-select * from loc1;
-select * from rem1;
+selext * from loc1;
+selext * from rem1;
 
 -- ===================================================================
 -- test local triggers
@@ -1724,40 +1724,40 @@ insert into bar2 values(4,44,44);
 insert into bar2 values(7,77,77);
 
 explain (verbose, costs off)
-select * from bar where f1 in (select f1 from foo) for update;
-select * from bar where f1 in (select f1 from foo) for update;
+selext * from bar where f1 in (selext f1 from foo) for update;
+selext * from bar where f1 in (selext f1 from foo) for update;
 
 explain (verbose, costs off)
-select * from bar where f1 in (select f1 from foo) for share;
-select * from bar where f1 in (select f1 from foo) for share;
+selext * from bar where f1 in (selext f1 from foo) for share;
+selext * from bar where f1 in (selext f1 from foo) for share;
 
 -- Check UPDATE with inherited target and an inherited source table
 explain (verbose, costs off)
-update bar set f2 = f2 + 100 where f1 in (select f1 from foo);
-update bar set f2 = f2 + 100 where f1 in (select f1 from foo);
+update bar set f2 = f2 + 100 where f1 in (selext f1 from foo);
+update bar set f2 = f2 + 100 where f1 in (selext f1 from foo);
 
-select tableoid::regclass, * from bar order by 1,2;
+selext tableoid::regclass, * from bar order by 1,2;
 
 -- Check UPDATE with inherited target and an appendrel subquery
 explain (verbose, costs off)
 update bar set f2 = f2 + 100
 from
-  ( select f1 from foo union all select f1+3 from foo ) ss
+  ( selext f1 from foo union all selext f1+3 from foo ) ss
 where bar.f1 = ss.f1;
 update bar set f2 = f2 + 100
 from
-  ( select f1 from foo union all select f1+3 from foo ) ss
+  ( selext f1 from foo union all selext f1+3 from foo ) ss
 where bar.f1 = ss.f1;
 
-select tableoid::regclass, * from bar order by 1,2;
+selext tableoid::regclass, * from bar order by 1,2;
 
 -- Test forcing the remote server to produce sorted data for a merge join,
 -- but the foreign table is an inheritance child.
 truncate table loct1;
 truncate table only foo;
 \set num_rows_foo 2000
-insert into loct1 select generate_series(0, :num_rows_foo, 2), generate_series(0, :num_rows_foo, 2), generate_series(0, :num_rows_foo, 2);
-insert into foo select generate_series(1, :num_rows_foo, 2), generate_series(1, :num_rows_foo, 2);
+insert into loct1 selext generate_series(0, :num_rows_foo, 2), generate_series(0, :num_rows_foo, 2), generate_series(0, :num_rows_foo, 2);
+insert into foo selext generate_series(1, :num_rows_foo, 2), generate_series(1, :num_rows_foo, 2);
 SET enable_hashjoin to false;
 SET enable_nestloop to false;
 alter foreign table foo2 options (use_remote_estimate 'true');
@@ -1767,19 +1767,19 @@ analyze foo;
 analyze loct1;
 -- inner join; expressions in the clauses appear in the equivalence class list
 explain (verbose, costs off)
-	select foo.f1, loct1.f1 from foo join loct1 on (foo.f1 = loct1.f1) order by foo.f2 offset 10 limit 10;
-select foo.f1, loct1.f1 from foo join loct1 on (foo.f1 = loct1.f1) order by foo.f2 offset 10 limit 10;
+	selext foo.f1, loct1.f1 from foo join loct1 on (foo.f1 = loct1.f1) order by foo.f2 offset 10 limit 10;
+selext foo.f1, loct1.f1 from foo join loct1 on (foo.f1 = loct1.f1) order by foo.f2 offset 10 limit 10;
 -- outer join; expressions in the clauses do not appear in equivalence class
 -- list but no output change as compared to the previous query
 explain (verbose, costs off)
-	select foo.f1, loct1.f1 from foo left join loct1 on (foo.f1 = loct1.f1) order by foo.f2 offset 10 limit 10;
-select foo.f1, loct1.f1 from foo left join loct1 on (foo.f1 = loct1.f1) order by foo.f2 offset 10 limit 10;
+	selext foo.f1, loct1.f1 from foo left join loct1 on (foo.f1 = loct1.f1) order by foo.f2 offset 10 limit 10;
+selext foo.f1, loct1.f1 from foo left join loct1 on (foo.f1 = loct1.f1) order by foo.f2 offset 10 limit 10;
 RESET enable_hashjoin;
 RESET enable_nestloop;
 
 -- Test that WHERE CURRENT OF is not supported
 begin;
-declare c cursor for select * from bar where f1 = 7;
+declare c cursor for selext * from bar where f1 = 7;
 fetch from c;
 update bar set f2 = null where current of c;
 rollback;
@@ -1865,9 +1865,9 @@ insert into itrtest values (2, 'baz');
 insert into itrtest values (2, 'qux') returning *;
 insert into itrtest values (1, 'test1'), (2, 'test2') returning *;
 
-select tableoid::regclass, * FROM itrtest;
-select tableoid::regclass, * FROM remp1;
-select tableoid::regclass, * FROM remp2;
+selext tableoid::regclass, * FROM itrtest;
+selext tableoid::regclass, * FROM remp1;
+selext tableoid::regclass, * FROM remp2;
 
 delete from itrtest;
 
@@ -1881,7 +1881,7 @@ insert into itrtest values (1, 'foo') on conflict do nothing returning *;
 insert into itrtest values (1, 'bar') on conflict (a) do nothing;
 insert into itrtest values (1, 'bar') on conflict (a) do update set b = excluded.b;
 
-select tableoid::regclass, * FROM itrtest;
+selext tableoid::regclass, * FROM itrtest;
 
 delete from itrtest;
 
@@ -1903,7 +1903,7 @@ create trigger loct2_br_insert_trigger before insert on loct2
 insert into itrtest values (1, 'foo') returning *;
 insert into itrtest values (2, 'qux') returning *;
 insert into itrtest values (1, 'test1'), (2, 'test2') returning *;
-with result as (insert into itrtest values (1, 'test1'), (2, 'test2') returning *) select * from result;
+with result as (insert into itrtest values (1, 'test1'), (2, 'test2') returning *) selext * from result;
 
 drop trigger loct1_br_insert_trigger on loct1;
 drop trigger loct2_br_insert_trigger on loct2;
@@ -1923,9 +1923,9 @@ alter table utrtest attach partition locp for values in (2);
 insert into utrtest values (1, 'foo');
 insert into utrtest values (2, 'qux');
 
-select tableoid::regclass, * FROM utrtest;
-select tableoid::regclass, * FROM remp;
-select tableoid::regclass, * FROM locp;
+selext tableoid::regclass, * FROM utrtest;
+selext tableoid::regclass, * FROM remp;
+selext tableoid::regclass, * FROM locp;
 
 -- It's not allowed to move a row from a partition that is foreign to another
 update utrtest set a = 2 where b = 'foo' returning *;
@@ -1933,9 +1933,9 @@ update utrtest set a = 2 where b = 'foo' returning *;
 -- But the reverse is allowed
 update utrtest set a = 1 where b = 'qux' returning *;
 
-select tableoid::regclass, * FROM utrtest;
-select tableoid::regclass, * FROM remp;
-select tableoid::regclass, * FROM locp;
+selext tableoid::regclass, * FROM utrtest;
+selext tableoid::regclass, * FROM remp;
+selext tableoid::regclass, * FROM locp;
 
 -- The executor should not let unexercised FDWs shut down
 update utrtest set a = 1 where b = 'foo';
@@ -1981,16 +1981,16 @@ copy ctrtest from stdin;
 2	qux
 \.
 
-select tableoid::regclass, * FROM ctrtest;
-select tableoid::regclass, * FROM remp1;
-select tableoid::regclass, * FROM remp2;
+selext tableoid::regclass, * FROM ctrtest;
+selext tableoid::regclass, * FROM remp1;
+selext tableoid::regclass, * FROM remp2;
 
 -- Copying into foreign partitions directly should work as well
 copy remp1 from stdin;
 1	bar
 \.
 
-select tableoid::regclass, * FROM remp1;
+selext tableoid::regclass, * FROM remp1;
 
 drop table ctrtest;
 drop table loct1;
@@ -2009,7 +2009,7 @@ copy rem2 from stdin;
 1	foo
 2	bar
 \.
-select * from rem2;
+selext * from rem2;
 
 delete from rem2;
 
@@ -2025,7 +2025,7 @@ copy rem2 from stdin;
 copy rem2 from stdin; -- ERROR
 -1	xyzzy
 \.
-select * from rem2;
+selext * from rem2;
 
 alter foreign table rem2 drop constraint rem2_f1positive;
 alter table loc2 drop constraint loc2_f1positive;
@@ -2046,7 +2046,7 @@ copy rem2 from stdin;
 1	foo
 2	bar
 \.
-select * from rem2;
+selext * from rem2;
 
 drop trigger trig_row_before on rem2;
 drop trigger trig_row_after on rem2;
@@ -2063,7 +2063,7 @@ copy rem2 from stdin;
 1	foo
 2	bar
 \.
-select * from rem2;
+selext * from rem2;
 
 drop trigger trig_row_before_insert on rem2;
 
@@ -2077,7 +2077,7 @@ copy rem2 from stdin;
 1	foo
 2	bar
 \.
-select * from rem2;
+selext * from rem2;
 
 drop trigger trig_null on rem2;
 
@@ -2092,7 +2092,7 @@ copy rem2 from stdin;
 1	foo
 2	bar
 \.
-select * from rem2;
+selext * from rem2;
 
 drop trigger trig_row_before_insert on loc2;
 
@@ -2106,7 +2106,7 @@ copy rem2 from stdin;
 1	foo
 2	bar
 \.
-select * from rem2;
+selext * from rem2;
 
 drop trigger trig_null on loc2;
 
@@ -2124,7 +2124,7 @@ copy rem2 from stdin;
 1	foo
 2	bar
 \.
-select * from rem2;
+selext * from rem2;
 
 drop trigger rem2_trig_row_before on rem2;
 drop trigger rem2_trig_row_after on rem2;
@@ -2292,7 +2292,7 @@ EXPLAIN (COSTS OFF)
 SELECT t1.a,t1.b FROM fprt1 t1, LATERAL (SELECT t2.a, t2.b FROM fprt2 t2 WHERE t1.a = t2.b AND t1.b = t2.a) q WHERE t1.a%25 = 0 ORDER BY 1,2;
 SELECT t1.a,t1.b FROM fprt1 t1, LATERAL (SELECT t2.a, t2.b FROM fprt2 t2 WHERE t1.a = t2.b AND t1.b = t2.a) q WHERE t1.a%25 = 0 ORDER BY 1,2;
 
--- with PHVs, partitionwise join selected but no join pushdown
+-- with PHVs, partitionwise join selexted but no join pushdown
 EXPLAIN (COSTS OFF)
 SELECT t1.a, t1.phv, t2.b, t2.phv FROM (SELECT 't1_phv' phv, * FROM fprt1 WHERE a % 25 = 0) t1 FULL JOIN (SELECT 't2_phv' phv, * FROM fprt2 WHERE b % 25 = 0) t2 ON (t1.a = t2.b) ORDER BY t1.a, t2.b;
 SELECT t1.a, t1.phv, t2.b, t2.phv FROM (SELECT 't1_phv' phv, * FROM fprt1 WHERE a % 25 = 0) t1 FULL JOIN (SELECT 't2_phv' phv, * FROM fprt2 WHERE b % 25 = 0) t2 ON (t1.a = t2.b) ORDER BY t1.a, t2.b;

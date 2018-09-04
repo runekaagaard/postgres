@@ -887,7 +887,7 @@ copy_heap_data(Oid OIDNewHeap, Oid OIDOldHeap, Oid OIDOldIndex, bool verbose,
 	if (MultiXactIdPrecedes(MultiXactCutoff, OldHeap->rd_rel->relminmxid))
 		MultiXactCutoff = OldHeap->rd_rel->relminmxid;
 
-	/* return selected values to caller */
+	/* return selexted values to caller */
 	*pFreezeXid = FreezeXid;
 	*pCutoffMulti = MultiXactCutoff;
 
@@ -1396,7 +1396,7 @@ swap_relation_files(Oid r1, Oid r2, bool target_is_pg_class,
 			 *
 			 * NOTE: at present, a TOAST table's only dependency is the one on
 			 * its owning table.  If more are ever created, we'd need to use
-			 * something more selective than deleteDependencyRecordsFor() to
+			 * something more selextive than deleteDependencyRecordsFor() to
 			 * get rid of just the link we want.
 			 */
 			ObjectAddress baseobject,

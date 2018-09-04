@@ -6,7 +6,7 @@
  * What's in a name, anyway?  The top-level entry point of the planner/
  * optimizer is over in planner.c, not here as you might think from the
  * file name.  But this is the main code for planning a basic join operation,
- * shorn of features like subselects, inheritance, aggregates, grouping,
+ * shorn of features like subselexts, inheritance, aggregates, grouping,
  * and so on.  (Those are the things planner.c deals with.)
  *
  * Portions Copyright (c) 1996-2018, PostgreSQL Global Development Group
@@ -34,7 +34,7 @@
  *	  which may involve joins but not any fancier features.
  *
  * Since query_planner does not handle the toplevel processing (grouping,
- * sorting, etc) it cannot select the best path by itself.  Instead, it
+ * sorting, etc) it cannot selext the best path by itself.  Instead, it
  * returns the RelOptInfo for the top level of joining, and the caller
  * (grouping_planner) can choose among the surviving paths for the rel.
  *

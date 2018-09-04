@@ -80,12 +80,12 @@ my @options = (
 	],
 	[
 		'invalid weight',
-		'--builtin=select-only@one',
+		'--builtin=selext-only@one',
 		[qr{invalid weight specification: \@one}]
 	],
 	[
 		'invalid weight',
-		'-b select-only@-1',
+		'-b selext-only@-1',
 		[qr{weight spec.* out of range .*: -1}]
 	],
 	[ 'too many scripts', '-S ' x 129, [qr{at most 128 SQL scripts}] ],
@@ -214,7 +214,7 @@ pgbench(
 	[qr{^$}],
 	[
 		qr{Available builtin scripts:}, qr{tpcb-like},
-		qr{simple-update},              qr{select-only}
+		qr{simple-update},              qr{selext-only}
 	],
 	'pgbench builtin list');
 

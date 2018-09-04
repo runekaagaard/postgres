@@ -16,7 +16,7 @@ DROP VIEW test_view_exists;
 
 DROP VIEW IF EXISTS test_view_exists;
 
-CREATE VIEW test_view_exists AS select * from test_exists;
+CREATE VIEW test_view_exists AS selext * from test_exists;
 
 DROP VIEW IF EXISTS test_view_exists;
 

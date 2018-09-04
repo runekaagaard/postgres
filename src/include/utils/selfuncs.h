@@ -2,7 +2,7 @@
  *
  * selfuncs.h
  *	  Selectivity functions for standard operators, and assorted
- *	  infrastructure for selectivity and cost estimation.
+ *	  infrastructure for selextivity and cost estimation.
  *
  *
  * Portions Copyright (c) 1996-2018, PostgreSQL Global Development Group
@@ -21,7 +21,7 @@
 
 
 /*
- * Note: the default selectivity estimates are not chosen entirely at random.
+ * Note: the default selextivity estimates are not chosen entirely at random.
  * We want them to be small enough to ensure that indexscans will be used if
  * available, for typical table densities of ~100 tuples/page.  Thus, for
  * example, 0.01 is not quite small enough, since that makes it appear that
@@ -30,22 +30,22 @@
  * 1/DEFAULT_EQ_SEL.
  */
 
-/* default selectivity estimate for equalities such as "A = b" */
+/* default selextivity estimate for equalities such as "A = b" */
 #define DEFAULT_EQ_SEL	0.005
 
-/* default selectivity estimate for inequalities such as "A < b" */
+/* default selextivity estimate for inequalities such as "A < b" */
 #define DEFAULT_INEQ_SEL  0.3333333333333333
 
-/* default selectivity estimate for range inequalities "A > b AND A < c" */
+/* default selextivity estimate for range inequalities "A > b AND A < c" */
 #define DEFAULT_RANGE_INEQ_SEL	0.005
 
-/* default selectivity estimate for pattern-match operators such as LIKE */
+/* default selextivity estimate for pattern-match operators such as LIKE */
 #define DEFAULT_MATCH_SEL	0.005
 
 /* default number of distinct values in a table */
 #define DEFAULT_NUM_DISTINCT  200
 
-/* default selectivity estimate for boolean and null test nodes */
+/* default selextivity estimate for boolean and null test nodes */
 #define DEFAULT_UNK_SEL			0.005
 #define DEFAULT_NOT_UNK_SEL		(1.0 - DEFAULT_UNK_SEL)
 
@@ -131,7 +131,7 @@ typedef struct
 	/* These are the values the cost estimator must return to the planner */
 	Cost		indexStartupCost;	/* index-related startup cost */
 	Cost		indexTotalCost; /* total index-related scan cost */
-	Selectivity indexSelectivity;	/* selectivity of index */
+	Selectivity indexSelectivity;	/* selextivity of index */
 	double		indexCorrelation;	/* order correlation of index */
 
 	/* Intermediate values we obtain along the way */
@@ -169,10 +169,10 @@ extern void get_join_variables(PlannerInfo *root, List *args,
 				   bool *join_is_reversed);
 extern double get_variable_numdistinct(VariableStatData *vardata,
 						 bool *isdefault);
-extern double mcv_selectivity(VariableStatData *vardata, FmgrInfo *opproc,
+extern double mcv_selextivity(VariableStatData *vardata, FmgrInfo *opproc,
 				Datum constval, bool varonleft,
 				double *sumcommonp);
-extern double histogram_selectivity(VariableStatData *vardata, FmgrInfo *opproc,
+extern double histogram_selextivity(VariableStatData *vardata, FmgrInfo *opproc,
 					  Datum constval, bool varonleft,
 					  int min_hist_size, int n_skip,
 					  int *hist_size);

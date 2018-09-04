@@ -44,7 +44,7 @@
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: ecpg_process_output on line 39: OK: INSERT 0 1
 [NO_PID]: sqlca: code: 0, state: 00000
-[NO_PID]: ecpg_execute on line 42: query: declare C cursor for select strval , strval from strdbase; with 0 parameter(s) on connection ecpg1_regression
+[NO_PID]: ecpg_execute on line 42: query: declare C cursor for selext strval , strval from strdbase; with 0 parameter(s) on connection ecpg1_regression
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: ecpg_execute on line 42: using PQexec
 [NO_PID]: sqlca: code: 0, state: 00000

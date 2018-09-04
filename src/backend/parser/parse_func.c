@@ -388,7 +388,7 @@ ParseFuncOrColumn(ParseState *pstate, List *funcname, List *fargs,
 
 			/*
 			 * Since func_get_detail was working with an undifferentiated list
-			 * of arguments, it might have selected an aggregate that doesn't
+			 * of arguments, it might have selexted an aggregate that doesn't
 			 * really match because it requires a different division of direct
 			 * and aggregated arguments.  Check that the number of direct
 			 * arguments is actually OK; if not, throw an "undefined function"
@@ -930,11 +930,11 @@ func_match_argtypes(int nargs,
 }								/* func_match_argtypes() */
 
 
-/* func_select_candidate()
+/* func_selext_candidate()
  *		Given the input argtype array and more than one candidate
  *		for the function, attempt to resolve the conflict.
  *
- * Returns the selected candidate if the conflict can be resolved,
+ * Returns the selexted candidate if the conflict can be resolved,
  * otherwise returns NULL.
  *
  * Note that the caller has already determined that there is no candidate
@@ -948,7 +948,7 @@ func_match_argtypes(int nargs,
  *
  * OLD COMMENTS:
  *
- * This routine is new code, replacing binary_oper_select_candidate()
+ * This routine is new code, replacing binary_oper_selext_candidate()
  * which dates from v4.2/v1.0.x days. It tries very hard to match up
  * operators with types, including allowing type coercions if necessary.
  * The important thing is that the code do as much as possible,
@@ -957,7 +957,7 @@ func_match_argtypes(int nargs,
  * or returning an operator which is a non-intuitive possibility.
  * - thomas 1998-05-21
  *
- * The comments below came from binary_oper_select_candidate(), and
+ * The comments below came from binary_oper_selext_candidate(), and
  * illustrate the issues and choices which are possible:
  * - thomas 1998-05-20
  *
@@ -986,7 +986,7 @@ func_match_argtypes(int nargs,
  * - ay 6/95
  */
 FuncCandidateList
-func_select_candidate(int nargs,
+func_selext_candidate(int nargs,
 					  Oid *input_typeids,
 					  FuncCandidateList candidates)
 {
@@ -1022,7 +1022,7 @@ func_select_candidate(int nargs,
 	 * matches" in the exact-match heuristic; it also makes it possible to do
 	 * something useful with the type-category heuristics. Note that this
 	 * makes it difficult, but not impossible, to use functions declared to
-	 * take a domain as an input datatype.  Such a function will be selected
+	 * take a domain as an input datatype.  Such a function will be selexted
 	 * over the base-type function only if it is an exact match at all
 	 * argument positions, and so was already chosen by our caller.
 	 *
@@ -1142,7 +1142,7 @@ func_select_candidate(int nargs,
 	 * and must fail.
 	 */
 	if (nunknowns == 0)
-		return NULL;			/* failed to select a best candidate */
+		return NULL;			/* failed to selext a best candidate */
 
 	/*
 	 * The next step examines each unknown argument position to see if we can
@@ -1337,8 +1337,8 @@ func_select_candidate(int nargs,
 		}
 	}
 
-	return NULL;				/* failed to select a best candidate */
-}								/* func_select_candidate() */
+	return NULL;				/* failed to selext a best candidate */
+}								/* func_selext_candidate() */
 
 
 /* func_get_detail()
@@ -1435,7 +1435,7 @@ func_get_detail(List *funcname,
 		 * call, otherwise we can produce surprising results. For example, we
 		 * want "text(varchar)" to be interpreted as a simple coercion, not as
 		 * "text(name(varchar))" which the code below this point is entirely
-		 * capable of selecting.
+		 * capable of selexting.
 		 *
 		 * We also treat a coercion of a previously-unknown-type literal
 		 * constant to a specific type this way.
@@ -1540,7 +1540,7 @@ func_get_detail(List *funcname,
 			 */
 			else if (ncandidates > 1)
 			{
-				best_candidate = func_select_candidate(nargs,
+				best_candidate = func_selext_candidate(nargs,
 													   argtypes,
 													   current_candidates);
 
@@ -1637,7 +1637,7 @@ func_get_detail(List *funcname,
 				 * This is a bit tricky in named notation, since the supplied
 				 * arguments could replace any subset of the defaults.  We
 				 * work by making a bitmapset of the argnumbers of defaulted
-				 * arguments, then scanning the defaults list and selecting
+				 * arguments, then scanning the defaults list and selexting
 				 * the needed items.  (This assumes that defaulted arguments
 				 * should be supplied in their positional order.)
 				 */
@@ -1766,7 +1766,7 @@ unify_hypothetical_args(ParseState *pstate,
 		 * type (we'd rather coerce the direct argument once than coerce all
 		 * the aggregated values).
 		 */
-		commontype = select_common_type(pstate,
+		commontype = selext_common_type(pstate,
 										list_make2(args[aargpos], args[i]),
 										"WITHIN GROUP",
 										NULL);
@@ -1906,9 +1906,9 @@ ParseComplexProjection(ParseState *pstate, const char *funcname, Node *first_arg
 
 	/*
 	 * Special case for whole-row Vars so that we can resolve (foo.*).bar even
-	 * when foo is a reference to a subselect, join, or RECORD function. A
+	 * when foo is a reference to a subselext, join, or RECORD function. A
 	 * bonus is that we avoid generating an unnecessary FieldSelect; our
-	 * result can omit the whole-row Var and just be a Var for the selected
+	 * result can omit the whole-row Var and just be a Var for the selexted
 	 * field.
 	 *
 	 * This case could be handled by expandRecordVariable, but it's more
@@ -1949,15 +1949,15 @@ ParseComplexProjection(ParseState *pstate, const char *funcname, Node *first_arg
 			!att->attisdropped)
 		{
 			/* Success, so generate a FieldSelect expression */
-			FieldSelect *fselect = makeNode(FieldSelect);
+			FieldSelect *fselext = makeNode(FieldSelect);
 
-			fselect->arg = (Expr *) first_arg;
-			fselect->fieldnum = i + 1;
-			fselect->resulttype = att->atttypid;
-			fselect->resulttypmod = att->atttypmod;
+			fselext->arg = (Expr *) first_arg;
+			fselext->fieldnum = i + 1;
+			fselext->resulttype = att->atttypid;
+			fselext->resulttypmod = att->atttypmod;
 			/* save attribute's collation for parse_collate.c */
-			fselect->resultcollid = att->attcollation;
-			return (Node *) fselect;
+			fselext->resultcollid = att->attcollation;
+			return (Node *) fselext;
 		}
 	}
 
@@ -2058,7 +2058,7 @@ LookupFuncName(List *funcname, int nargs, const Oid *argtypes, bool noError)
 							(errcode(ERRCODE_AMBIGUOUS_FUNCTION),
 							 errmsg("function name \"%s\" is not unique",
 									NameListToString(funcname)),
-							 errhint("Specify the argument list to select the function unambiguously.")));
+							 errhint("Specify the argument list to selext the function unambiguously.")));
 			}
 			else
 				return clist->oid;

@@ -410,8 +410,8 @@ msgstr "iletişim kanalına yazma başarısız: %s\n"
 
 #: parallel.c:1635
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "select() başarısız oldu: %s\n"
+msgid "selext() failed: %s\n"
+msgstr "selext() başarısız oldu: %s\n"
 
 #: parallel.c:1760
 #, c-format
@@ -2593,10 +2593,10 @@ msgstr "  -j, --jobs=SAYI           gerü yükleme için belirtilen sayı kadar 
 #, fuzzy, c-format
 #| msgid ""
 #| "  -L, --use-list=FILENAME  use table of contents from this file for\n"
-#| "                           selecting/ordering output\n"
+#| "                           selexting/ordering output\n"
 msgid ""
 "  -L, --use-list=FILENAME      use table of contents from this file for\n"
-"                               selecting/ordering output\n"
+"                               selexting/ordering output\n"
 msgstr ""
 "  -L, --use-list=DOSYA ADI  çıktıyı seçmek/sıralamak için\n"
 "                           bu dosyadaki içindekiler tablosunu kullan\n"
@@ -2722,7 +2722,7 @@ msgstr "  --role=ROL ADI          geri yüklemeden önce SET ROLE işlemini ger�
 msgid ""
 "\n"
 "The options -I, -n, -P, -t, -T, and --section can be combined and specified\n"
-"multiple times to select multiple objects.\n"
+"multiple times to selext multiple objects.\n"
 msgstr ""
 
 #: pg_restore.c:507
@@ -3002,7 +3002,7 @@ msgstr ""
 #~ msgid "missing pg_database entry for database \"%s\"\n"
 #~ msgstr "\"%s\" veritabanı için pg_database kaydı bulunamadı\n"
 
-#~ msgid "server version must be at least 7.3 to use schema selection switches\n"
+#~ msgid "server version must be at least 7.3 to use schema selextion switches\n"
 #~ msgstr "şema seçim anahtarlarını kullanmak için sunucu sürümü 7.3 ya da daha yüksek olmalıdır\n"
 
 #~ msgid "*** aborted because of error\n"

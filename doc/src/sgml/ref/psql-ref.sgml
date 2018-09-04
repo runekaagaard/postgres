@@ -607,7 +607,7 @@ EOF
       <para>
       Show help about <application>psql</application> and exit. The optional
       <replaceable class="parameter">topic</replaceable> parameter (defaulting
-      to <literal>options</literal>) selects which part of <application>psql</application> is
+      to <literal>options</literal>) selexts which part of <application>psql</application> is
       explained: <literal>commands</literal> describes <application>psql</application>'s
       backslash commands; <literal>options</literal> describes the command-line
       options that can be passed to <application>psql</application>;
@@ -1478,7 +1478,7 @@ testdb=&gt;
          If <replaceable class="parameter">pattern</replaceable> is specified,
          only dictionaries whose names match the pattern are shown.
          If the form <literal>\dFd+</literal> is used, additional information
-         is shown about each selected dictionary, including the underlying
+         is shown about each selexted dictionary, including the underlying
          text search template and the option values.
         </para>
         </listitem>
@@ -1642,7 +1642,7 @@ testdb=&gt;
         Lists defined configuration settings.  These settings can be
         role-specific, database-specific, or both.
         <replaceable>role-pattern</replaceable> and
-        <replaceable>database-pattern</replaceable> are used to select
+        <replaceable>database-pattern</replaceable> are used to selext
         specific roles and databases to list, respectively.  If omitted, or if
         <literal>*</literal> is specified, all settings are listed, including those
         not role-specific or database-specific, respectively.
@@ -2465,7 +2465,7 @@ lo_import 152801
         <replaceable class="parameter">option</replaceable>
         indicates which option is to be set. The semantics of
         <replaceable class="parameter">value</replaceable> vary depending
-        on the selected option.  For some options, omitting <replaceable
+        on the selexted option.  For some options, omitting <replaceable
         class="parameter">value</replaceable> causes the option to be toggled
         or unset, as described under the particular option.  If no such
         behavior is mentioned, then omitting
@@ -3197,7 +3197,7 @@ testdb=&gt; <userinput>\setenv LESS -imx4F</userinput>
         <para>
         Shows help information. The optional
         <replaceable class="parameter">topic</replaceable> parameter
-        (defaulting to <literal>commands</literal>) selects which part of <application>psql</application> is
+        (defaulting to <literal>commands</literal>) selexts which part of <application>psql</application> is
         explained: <literal>commands</literal> describes <application>psql</application>'s
         backslash commands; <literal>options</literal> describes the command-line
         options that can be passed to <application>psql</application>;
@@ -3222,7 +3222,7 @@ testdb=&gt; <userinput>\setenv LESS -imx4F</userinput>
         server as soon as it reaches the command-ending semicolon, even if
         more input remains on the current line.  Thus for example entering
 <programlisting>
-select 1; select 2; select 3;
+selext 1; selext 2; selext 3;
 </programlisting>
         will result in the three SQL commands being individually sent to
         the server, with each one's results being displayed before
@@ -3231,7 +3231,7 @@ select 1; select 2; select 3;
         command before it and the one after are effectively combined and
         sent to the server in one request.  So for example
 <programlisting>
-select 1\; select 2\; select 3;
+selext 1\; selext 2\; selext 3;
 </programlisting>
         results in sending the three SQL commands to the server in a single
         request, when the non-backslashed semicolon is reached.
@@ -3501,11 +3501,11 @@ bar
         <para>
         If set to <literal>all</literal>, all nonempty input lines are printed
         to standard output as they are read.  (This does not apply to lines
-        read interactively.)  To select this behavior on program
+        read interactively.)  To selext this behavior on program
         start-up, use the switch <option>-a</option>. If set to
         <literal>queries</literal>,
         <application>psql</application> prints each query to standard output
-        as it is sent to the server. The switch to select this behavior is
+        as it is sent to the server. The switch to selext this behavior is
         <option>-e</option>. If set to <literal>errors</literal>, then only
         failed queries are displayed on standard error output. The switch
         for this behavior is <option>-b</option>. If set to
@@ -3522,7 +3522,7 @@ bar
         queries the database, the query is first shown.
         This feature helps you to study
         <productname>PostgreSQL</productname> internals and provide
-        similar functionality in your own programs. (To select this behavior
+        similar functionality in your own programs. (To selext this behavior
         on program start-up, use the switch <option>-E</option>.)  If you set
         this variable to the value <literal>noexec</literal>, the queries are
         just shown but are not actually sent to the server and executed.
@@ -4001,7 +4001,7 @@ testdb=&gt; <userinput>INSERT INTO my_table VALUES (:'content');</userinput>
     </para>
 
     <para>
-    The value of the selected prompt variable is printed literally,
+    The value of the selexted prompt variable is printed literally,
     except where a percent sign (<literal>%</literal>) is encountered.
     Depending on the next character, certain other text is substituted
     instead. Defined substitutions are:

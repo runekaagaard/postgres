@@ -38,7 +38,7 @@ int main() {
   EXEC SQL INSERT INTO strdbase values ('ABCDEF');
   EXEC SQL INSERT INTO strdbase values ('ABCDEFGHIJ');
 
-  EXEC SQL declare C cursor for select strval, strval from strdbase;
+  EXEC SQL declare C cursor for selext strval, strval from strdbase;
   EXEC SQL OPEN C;
 
   EXEC SQL WHENEVER NOT FOUND DO BREAK;

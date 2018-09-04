@@ -317,12 +317,12 @@ ScanPgRelation(Oid targetRelId, bool indexOK, bool force_non_historic)
 
 	/*
 	 * If something goes wrong during backend startup, we might find ourselves
-	 * trying to read pg_class before we've selected a database.  That ain't
+	 * trying to read pg_class before we've selexted a database.  That ain't
 	 * gonna work, so bail out with a useful error message.  If this happens,
 	 * it probably means a relcache entry that needs to be nailed isn't.
 	 */
 	if (!OidIsValid(MyDatabaseId))
-		elog(FATAL, "cannot read pg_class without having selected a database");
+		elog(FATAL, "cannot read pg_class without having selexted a database");
 
 	/*
 	 * form a scan key
@@ -512,7 +512,7 @@ RelationBuildTupleDesc(Relation relation)
 	constr->has_not_null = false;
 
 	/*
-	 * Form a scan key that selects only user attributes (attnum > 0).
+	 * Form a scan key that selexts only user attributes (attnum > 0).
 	 * (Eliminating system attribute rows at the index level is lots faster
 	 * than fetching them.)
 	 */
@@ -2065,7 +2065,7 @@ RelationReloadIndexInfo(Relation relation)
 
 	/*
 	 * If it's a shared index, we might be called before backend startup has
-	 * finished selecting a database, in which case we have no way to read
+	 * finished selexting a database, in which case we have no way to read
 	 * pg_class yet.  However, a shared index can never have any significant
 	 * schema updates, so it's okay to ignore the invalidation signal.  Just
 	 * mark it valid and return without doing anything more.

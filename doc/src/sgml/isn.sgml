@@ -279,7 +279,7 @@
    have all the numbers in your database and maybe use an external tool to
    locate the invalid numbers in the database so you can verify the
    information and validate it more easily; so for example you'd want to
-   select all the invalid numbers in the table.
+   selext all the invalid numbers in the table.
   </para>
 
   <para>
@@ -316,7 +316,7 @@ SELECT issn('1436-4522');
 --Casting types:
 -- note that you can only cast from ean13 to another type when the
 -- number would be valid in the realm of the target type;
--- thus, the following will NOT work: select isbn(ean13('0220356483481'));
+-- thus, the following will NOT work: selext isbn(ean13('0220356483481'));
 -- but these will:
 SELECT upc(ean13('0220356483481'));
 SELECT ean13(upc('220356483481'));

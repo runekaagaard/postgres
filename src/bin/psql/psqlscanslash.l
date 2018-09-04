@@ -465,7 +465,7 @@ other			.
 					 * stack and keep lexing
 					 */
 					psqlscan_pop_buffer_stack(cur_state);
-					psqlscan_select_top_buffer(cur_state);
+					psqlscan_selext_top_buffer(cur_state);
 				}
 
 %%
@@ -512,10 +512,10 @@ psql_scan_slash_command(PsqlScanState state)
 	/* There are no possible errors in this lex state... */
 
 	/*
-	 * In case the caller returns to using the regular SQL lexer, reselect the
+	 * In case the caller returns to using the regular SQL lexer, reselext the
 	 * appropriate initial state.
 	 */
-	psql_scan_reselect_sql_lexer(state);
+	psql_scan_reselext_sql_lexer(state);
 
 	return mybuf.data;
 }
@@ -587,10 +587,10 @@ psql_scan_slash_option(PsqlScanState state,
 	final_state = state->start_state;
 
 	/*
-	 * In case the caller returns to using the regular SQL lexer, reselect the
+	 * In case the caller returns to using the regular SQL lexer, reselext the
 	 * appropriate initial state.
 	 */
-	psql_scan_reselect_sql_lexer(state);
+	psql_scan_reselext_sql_lexer(state);
 
 	/*
 	 * Check the lex result: we should have gotten back either LEXRES_OK
@@ -687,9 +687,9 @@ psql_scan_slash_command_end(PsqlScanState state)
 
 	/*
 	 * We expect the caller to return to using the regular SQL lexer, so
-	 * reselect the appropriate initial state.
+	 * reselext the appropriate initial state.
 	 */
-	psql_scan_reselect_sql_lexer(state);
+	psql_scan_reselext_sql_lexer(state);
 }
 
 /*

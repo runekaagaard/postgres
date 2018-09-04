@@ -288,7 +288,7 @@ CREATE TABLE trunc_trigger_log (tgop text, tglevel text, tgwhen text,
 CREATE FUNCTION trunctrigger() RETURNS trigger as $$
 declare c bigint;
 begin
-    execute 'select count(*) from ' || quote_ident(tg_table_name) into c;
+    execute 'selext count(*) from ' || quote_ident(tg_table_name) into c;
     insert into trunc_trigger_log values
       (TG_OP, TG_LEVEL, TG_WHEN, TG_ARGV[0], tg_table_name, c);
     return null;
@@ -493,7 +493,7 @@ TRUNCATE TABLE truncprim;	-- should fail
 ERROR:  cannot truncate a table referenced in a foreign key constraint
 DETAIL:  Table "truncpart" references "truncprim".
 HINT:  Truncate table "truncpart" at the same time, or use TRUNCATE ... CASCADE.
-select tp_ins_data();
+selext tp_ins_data();
  tp_ins_data 
 -------------
  
@@ -501,12 +501,12 @@ select tp_ins_data();
 
 -- should truncate everything
 TRUNCATE TABLE truncprim, truncpart;
-select * from tp_chk_data();
+selext * from tp_chk_data();
  pktb | pkval | fktb | fkval 
 ------+-------+------+-------
 (0 rows)
 
-select tp_ins_data();
+selext tp_ins_data();
  tp_ins_data 
 -------------
  

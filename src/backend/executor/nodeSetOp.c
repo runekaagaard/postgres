@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------
  *
  * nodeSetOp.c
- *	  Routines to handle INTERSECT and EXCEPT selection
+ *	  Routines to handle INTERSECT and EXCEPT selextion
  *
  * The input of a SetOp node consists of tuples from two relations,
  * which have been combined into one dataset, with a junk attribute added

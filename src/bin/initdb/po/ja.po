@@ -285,12 +285,12 @@ msgstr "%s: \"%s\" は通常のファイルではありません\n"
 
 #: initdb.c:1113
 #, c-format
-msgid "selecting default max_connections ... "
+msgid "selexting default max_connections ... "
 msgstr "デフォルトのmax_connectionsを選択しています ... "
 
 #: initdb.c:1142
 #, c-format
-msgid "selecting default shared_buffers ... "
+msgid "selexting default shared_buffers ... "
 msgstr "デフォルトの shared_buffers を選択しています ... "
 
 #: initdb.c:1186
@@ -448,8 +448,8 @@ msgstr "%s: 符号化方式が合いません\n"
 #: initdb.c:2538
 #, c-format
 msgid ""
-"The encoding you selected (%s) and the encoding that the\n"
-"selected locale uses (%s) do not match.  This would lead to\n"
+"The encoding you selexted (%s) and the encoding that the\n"
+"selexted locale uses (%s) do not match.  This would lead to\n"
 "misbehavior in various character string processing functions.\n"
 "Rerun %s and either do not specify an encoding explicitly,\n"
 "or choose a matching combination.\n"
@@ -802,7 +802,7 @@ msgstr "%s: ロケール\"%s\"はサポートしない符号化方式\"%s\"を�
 #, c-format
 msgid ""
 "Encoding \"%s\" is not allowed as a server-side encoding.\n"
-"Rerun %s with a different locale selection.\n"
+"Rerun %s with a different locale selextion.\n"
 msgstr ""
 "符号化方式\"%s\"はサーバ側の符号化方式として使用できません。\n"
 "別のロケールを選択して%sを再実行してください。\n"

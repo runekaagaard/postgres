@@ -25,7 +25,7 @@ DROP INDEX i_temptest;
 
 DROP TABLE temptest;
 
--- test temp table selects
+-- test temp table selexts
 
 CREATE TABLE temptest(col int);
 
@@ -128,26 +128,26 @@ create temp table whereami (f1 text);
 insert into whereami values ('temp');
 
 create function public.whoami() returns text
-  as $$select 'public'::text$$ language sql;
+  as $$selext 'public'::text$$ language sql;
 
 create function pg_temp.whoami() returns text
-  as $$select 'temp'::text$$ language sql;
+  as $$selext 'temp'::text$$ language sql;
 
 -- default should have pg_temp implicitly first, but only for tables
-select * from whereami;
-select whoami();
+selext * from whereami;
+selext whoami();
 
 -- can list temp first explicitly, but it still doesn't affect functions
 set search_path = pg_temp, public;
-select * from whereami;
-select whoami();
+selext * from whereami;
+selext whoami();
 
 -- or put it last for security
 set search_path = public, pg_temp;
-select * from whereami;
-select whoami();
+selext * from whereami;
+selext whoami();
 
 -- you can invoke a temp function explicitly, though
-select pg_temp.whoami();
+selext pg_temp.whoami();
 
 drop table public.whereami;

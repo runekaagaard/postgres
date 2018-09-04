@@ -44,7 +44,7 @@ COMMENT ON AGGREGATE newcnt ("any") IS 'an agg(any) comment';
 
 -- multi-argument aggregate
 create function sum3(int8,int8,int8) returns int8 as
-'select $1 + $2 + $3' language sql strict immutable;
+'selext $1 + $2 + $3' language sql strict immutable;
 
 create aggregate sum2(int8,int8) (
    sfunc = sum3, stype = int8,
@@ -55,11 +55,11 @@ create aggregate sum2(int8,int8) (
 create type aggtype as (a integer, b integer, c text);
 
 create function aggf_trans(aggtype[],integer,integer,text) returns aggtype[]
-as 'select array_append($1,ROW($2,$3,$4)::aggtype)'
+as 'selext array_append($1,ROW($2,$3,$4)::aggtype)'
 language sql strict immutable;
 
 create function aggfns_trans(aggtype[],integer,integer,text) returns aggtype[]
-as 'select array_append($1,ROW($2,$3,$4)::aggtype)'
+as 'selext array_append($1,ROW($2,$3,$4)::aggtype)'
 language sql immutable;
 
 create aggregate aggfstr(integer,integer,text) (
@@ -75,7 +75,7 @@ create aggregate aggfns(integer,integer,text) (
 -- variadic aggregate
 create function least_accum(anyelement, variadic anyarray)
 returns anyelement language sql as
-  'select least($1, min($2[i])) from generate_subscripts($2,1) g(i)';
+  'selext least($1, min($2[i])) from generate_subscripts($2,1) g(i)';
 
 create aggregate least_agg(variadic items anyarray) (
   stype = anyelement, sfunc = least_accum

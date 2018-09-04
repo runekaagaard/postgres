@@ -283,8 +283,8 @@ static Node *makeRecursiveViewSelect(char *relname, List *aliases, Node *query);
 		CreatePublicationStmt AlterPublicationStmt
 		CreateSubscriptionStmt AlterSubscriptionStmt DropSubscriptionStmt
 
-%type <node>	select_no_parens select_with_parens select_clause
-				simple_select values_clause
+%type <node>	selext_no_parens selext_with_parens selext_clause
+				simple_selext values_clause
 
 %type <node>	alter_column_default opclass_item opclass_drop alter_using
 %type <ival>	add_drop opt_asc_desc opt_nulls_order
@@ -387,8 +387,8 @@ static Node *makeRecursiveViewSelect(char *relname, List *aliases, Node *query);
 				target_list opt_target_list insert_column_list set_target_list
 				set_clause_list set_clause
 				def_list operator_def_list indirection opt_indirection
-				reloption_list group_clause TriggerFuncArgs select_limit
-				opt_select_limit opclass_item_list opclass_drop_list
+				reloption_list group_clause TriggerFuncArgs selext_limit
+				opt_selext_limit opclass_item_list opclass_drop_list
 				opclass_purpose opt_opfamily transaction_mode_list_or_empty
 				OptTableFuncElementList TableFuncElementList opt_type_modifiers
 				prep_type_clause
@@ -449,9 +449,9 @@ static Node *makeRecursiveViewSelect(char *relname, List *aliases, Node *query);
 				comment_type_any_name comment_type_name
 				security_label_type_any_name security_label_type_name
 
-%type <node>	fetch_args limit_clause select_limit_value
-				offset_clause select_offset_value
-				select_fetch_first_value I_or_F_const
+%type <node>	fetch_args limit_clause selext_limit_value
+				offset_clause selext_offset_value
+				selext_fetch_first_value I_or_F_const
 %type <ival>	row_or_rows first_or_next
 
 %type <list>	OptSeqOptList SeqOptList OptParenthesizedSeqOptList
@@ -4029,7 +4029,7 @@ CreateAsStmt:
 					ctas->query = $6;
 					ctas->into = $4;
 					ctas->relkind = OBJECT_TABLE;
-					ctas->is_select_into = false;
+					ctas->is_selext_into = false;
 					ctas->if_not_exists = false;
 					/* cram additional flags into the IntoClause */
 					$4->rel->relpersistence = $2;
@@ -4042,7 +4042,7 @@ CreateAsStmt:
 					ctas->query = $9;
 					ctas->into = $7;
 					ctas->relkind = OBJECT_TABLE;
-					ctas->is_select_into = false;
+					ctas->is_selext_into = false;
 					ctas->if_not_exists = true;
 					/* cram additional flags into the IntoClause */
 					$7->rel->relpersistence = $2;
@@ -4086,7 +4086,7 @@ CreateMatViewStmt:
 					ctas->query = $7;
 					ctas->into = $5;
 					ctas->relkind = OBJECT_MATVIEW;
-					ctas->is_select_into = false;
+					ctas->is_selext_into = false;
 					ctas->if_not_exists = false;
 					/* cram additional flags into the IntoClause */
 					$5->rel->relpersistence = $2;
@@ -4099,7 +4099,7 @@ CreateMatViewStmt:
 					ctas->query = $10;
 					ctas->into = $8;
 					ctas->relkind = OBJECT_MATVIEW;
-					ctas->is_select_into = false;
+					ctas->is_selext_into = false;
 					ctas->if_not_exists = true;
 					/* cram additional flags into the IntoClause */
 					$8->rel->relpersistence = $2;
@@ -5311,7 +5311,7 @@ RowSecurityDefaultForCmd:
 
 row_security_cmd:
 			ALL				{ $$ = "all"; }
-		|	SELECT			{ $$ = "select"; }
+		|	SELECT			{ $$ = "selext"; }
 		|	INSERT			{ $$ = "insert"; }
 		|	UPDATE			{ $$ = "update"; }
 		|	DELETE_P		{ $$ = "delete"; }
@@ -10781,7 +10781,7 @@ ExecuteStmt: EXECUTE name execute_param_clause
 					ctas->query = (Node *) n;
 					ctas->into = $4;
 					ctas->relkind = OBJECT_TABLE;
-					ctas->is_select_into = false;
+					ctas->is_selext_into = false;
 					/* cram additional flags into the IntoClause */
 					$4->rel->relpersistence = $2;
 					$4->skipData = !($9);
@@ -10868,33 +10868,33 @@ insert_rest:
 				{
 					$$ = makeNode(InsertStmt);
 					$$->cols = NIL;
-					$$->selectStmt = $1;
+					$$->selextStmt = $1;
 				}
 			| OVERRIDING override_kind VALUE_P SelectStmt
 				{
 					$$ = makeNode(InsertStmt);
 					$$->cols = NIL;
 					$$->override = $2;
-					$$->selectStmt = $4;
+					$$->selextStmt = $4;
 				}
 			| '(' insert_column_list ')' SelectStmt
 				{
 					$$ = makeNode(InsertStmt);
 					$$->cols = $2;
-					$$->selectStmt = $4;
+					$$->selextStmt = $4;
 				}
 			| '(' insert_column_list ')' OVERRIDING override_kind VALUE_P SelectStmt
 				{
 					$$ = makeNode(InsertStmt);
 					$$->cols = $2;
 					$$->override = $5;
-					$$->selectStmt = $7;
+					$$->selextStmt = $7;
 				}
 			| DEFAULT VALUES
 				{
 					$$ = makeNode(InsertStmt);
 					$$->cols = NIL;
-					$$->selectStmt = NULL;
+					$$->selextStmt = NULL;
 				}
 		;
 
@@ -11173,38 +11173,38 @@ opt_hold: /* EMPTY */						{ $$ = 0; }
  * absorbing parentheses into the sub-SELECT, we will do so, and only when
  * it's no longer possible to do that will we decide that parens belong to
  * the expression.	For example, in "SELECT (((SELECT 2)) + 3)" the extra
- * parentheses are treated as part of the sub-select.  The necessity of doing
+ * parentheses are treated as part of the sub-selext.  The necessity of doing
  * it that way is shown by "SELECT (((SELECT 2)) UNION SELECT 2)".	Had we
  * parsed "((SELECT 2))" as an a_expr, it'd be too late to go back to the
  * SELECT viewpoint when we see the UNION.
  *
- * This approach is implemented by defining a nonterminal select_with_parens,
+ * This approach is implemented by defining a nonterminal selext_with_parens,
  * which represents a SELECT with at least one outer layer of parentheses,
- * and being careful to use select_with_parens, never '(' SelectStmt ')',
+ * and being careful to use selext_with_parens, never '(' SelectStmt ')',
  * in the expression grammar.  We will then have shift-reduce conflicts
- * which we can resolve in favor of always treating '(' <select> ')' as
- * a select_with_parens.  To resolve the conflicts, the productions that
- * conflict with the select_with_parens productions are manually given
+ * which we can resolve in favor of always treating '(' <selext> ')' as
+ * a selext_with_parens.  To resolve the conflicts, the productions that
+ * conflict with the selext_with_parens productions are manually given
  * precedences lower than the precedence of ')', thereby ensuring that we
- * shift ')' (and then reduce to select_with_parens) rather than trying to
- * reduce the inner <select> nonterminal to something else.  We use UMINUS
+ * shift ')' (and then reduce to selext_with_parens) rather than trying to
+ * reduce the inner <selext> nonterminal to something else.  We use UMINUS
  * precedence for this, which is a fairly arbitrary choice.
  *
- * To be able to define select_with_parens itself without ambiguity, we need
- * a nonterminal select_no_parens that represents a SELECT structure with no
+ * To be able to define selext_with_parens itself without ambiguity, we need
+ * a nonterminal selext_no_parens that represents a SELECT structure with no
  * outermost parentheses.  This is a little bit tedious, but it works.
  *
  * In non-expression contexts, we use SelectStmt which can represent a SELECT
  * with or without outer parentheses.
  */
 
-SelectStmt: select_no_parens			%prec UMINUS
-			| select_with_parens		%prec UMINUS
+SelectStmt: selext_no_parens			%prec UMINUS
+			| selext_with_parens		%prec UMINUS
 		;
 
-select_with_parens:
-			'(' select_no_parens ')'				{ $$ = $2; }
-			| '(' select_with_parens ')'			{ $$ = $2; }
+selext_with_parens:
+			'(' selext_no_parens ')'				{ $$ = $2; }
+			| '(' selext_with_parens ')'			{ $$ = $2; }
 		;
 
 /*
@@ -11218,16 +11218,16 @@ select_with_parens:
  * clause.
  *	2002-08-28 bjm
  */
-select_no_parens:
-			simple_select						{ $$ = $1; }
-			| select_clause sort_clause
+selext_no_parens:
+			simple_selext						{ $$ = $1; }
+			| selext_clause sort_clause
 				{
 					insertSelectOptions((SelectStmt *) $1, $2, NIL,
 										NULL, NULL, NULL,
 										yyscanner);
 					$$ = $1;
 				}
-			| select_clause opt_sort_clause for_locking_clause opt_select_limit
+			| selext_clause opt_sort_clause for_locking_clause opt_selext_limit
 				{
 					insertSelectOptions((SelectStmt *) $1, $2, $3,
 										list_nth($4, 0), list_nth($4, 1),
@@ -11235,7 +11235,7 @@ select_no_parens:
 										yyscanner);
 					$$ = $1;
 				}
-			| select_clause opt_sort_clause select_limit opt_for_locking_clause
+			| selext_clause opt_sort_clause selext_limit opt_for_locking_clause
 				{
 					insertSelectOptions((SelectStmt *) $1, $2, $4,
 										list_nth($3, 0), list_nth($3, 1),
@@ -11243,7 +11243,7 @@ select_no_parens:
 										yyscanner);
 					$$ = $1;
 				}
-			| with_clause select_clause
+			| with_clause selext_clause
 				{
 					insertSelectOptions((SelectStmt *) $2, NULL, NIL,
 										NULL, NULL,
@@ -11251,7 +11251,7 @@ select_no_parens:
 										yyscanner);
 					$$ = $2;
 				}
-			| with_clause select_clause sort_clause
+			| with_clause selext_clause sort_clause
 				{
 					insertSelectOptions((SelectStmt *) $2, $3, NIL,
 										NULL, NULL,
@@ -11259,7 +11259,7 @@ select_no_parens:
 										yyscanner);
 					$$ = $2;
 				}
-			| with_clause select_clause opt_sort_clause for_locking_clause opt_select_limit
+			| with_clause selext_clause opt_sort_clause for_locking_clause opt_selext_limit
 				{
 					insertSelectOptions((SelectStmt *) $2, $3, $4,
 										list_nth($5, 0), list_nth($5, 1),
@@ -11267,7 +11267,7 @@ select_no_parens:
 										yyscanner);
 					$$ = $2;
 				}
-			| with_clause select_clause opt_sort_clause select_limit opt_for_locking_clause
+			| with_clause selext_clause opt_sort_clause selext_limit opt_for_locking_clause
 				{
 					insertSelectOptions((SelectStmt *) $2, $3, $5,
 										list_nth($4, 0), list_nth($4, 1),
@@ -11277,9 +11277,9 @@ select_no_parens:
 				}
 		;
 
-select_clause:
-			simple_select							{ $$ = $1; }
-			| select_with_parens					{ $$ = $1; }
+selext_clause:
+			simple_selext							{ $$ = $1; }
+			| selext_with_parens					{ $$ = $1; }
 		;
 
 /*
@@ -11288,7 +11288,7 @@ select_clause:
  * the ordering of the set operations.	Without '(' and ')' we want the
  * operations to be ordered per the precedence specs at the head of this file.
  *
- * As with select_no_parens, simple_select cannot have outer parentheses,
+ * As with selext_no_parens, simple_selext cannot have outer parentheses,
  * but can have parenthesized subclauses.
  *
  * Note that sort clauses cannot be included at this level --- SQL requires
@@ -11298,14 +11298,14 @@ select_clause:
  * not
  *		SELECT foo UNION (SELECT bar ORDER BY baz)
  * Likewise for WITH, FOR UPDATE and LIMIT.  Therefore, those clauses are
- * described as part of the select_no_parens production, not simple_select.
+ * described as part of the selext_no_parens production, not simple_selext.
  * This does not limit functionality, because you can reintroduce these
  * clauses inside parentheses.
  *
  * NOTE: only the leftmost component SelectStmt should have INTO.
  * However, this is not checked by the grammar; parse analysis must check it.
  */
-simple_select:
+simple_selext:
 			SELECT opt_all_clause opt_target_list
 			into_clause from_clause where_clause
 			group_clause having_clause window_clause
@@ -11355,15 +11355,15 @@ simple_select:
 					n->fromClause = list_make1($2);
 					$$ = (Node *)n;
 				}
-			| select_clause UNION all_or_distinct select_clause
+			| selext_clause UNION all_or_distinct selext_clause
 				{
 					$$ = makeSetOp(SETOP_UNION, $3, $1, $4);
 				}
-			| select_clause INTERSECT all_or_distinct select_clause
+			| selext_clause INTERSECT all_or_distinct selext_clause
 				{
 					$$ = makeSetOp(SETOP_INTERSECT, $3, $1, $4);
 				}
-			| select_clause EXCEPT all_or_distinct select_clause
+			| selext_clause EXCEPT all_or_distinct selext_clause
 				{
 					$$ = makeSetOp(SETOP_EXCEPT, $3, $1, $4);
 				}
@@ -11556,22 +11556,22 @@ sortby:		a_expr USING qual_all_Op opt_nulls_order
 		;
 
 
-select_limit:
+selext_limit:
 			limit_clause offset_clause			{ $$ = list_make2($2, $1); }
 			| offset_clause limit_clause		{ $$ = list_make2($1, $2); }
 			| limit_clause						{ $$ = list_make2(NULL, $1); }
 			| offset_clause						{ $$ = list_make2($1, NULL); }
 		;
 
-opt_select_limit:
-			select_limit						{ $$ = $1; }
+opt_selext_limit:
+			selext_limit						{ $$ = $1; }
 			| /* EMPTY */						{ $$ = list_make2(NULL,NULL); }
 		;
 
 limit_clause:
-			LIMIT select_limit_value
+			LIMIT selext_limit_value
 				{ $$ = $2; }
-			| LIMIT select_limit_value ',' select_offset_value
+			| LIMIT selext_limit_value ',' selext_offset_value
 				{
 					/* Disabled because it was too confusing, bjm 2002-02-18 */
 					ereport(ERROR,
@@ -11587,21 +11587,21 @@ limit_clause:
 			 * decision about what rule reduces ROW or ROWS to the point where
 			 * we can see the ONLY token in the lookahead slot.
 			 */
-			| FETCH first_or_next select_fetch_first_value row_or_rows ONLY
+			| FETCH first_or_next selext_fetch_first_value row_or_rows ONLY
 				{ $$ = $3; }
 			| FETCH first_or_next row_or_rows ONLY
 				{ $$ = makeIntConst(1, -1); }
 		;
 
 offset_clause:
-			OFFSET select_offset_value
+			OFFSET selext_offset_value
 				{ $$ = $2; }
 			/* SQL:2008 syntax */
-			| OFFSET select_fetch_first_value row_or_rows
+			| OFFSET selext_fetch_first_value row_or_rows
 				{ $$ = $2; }
 		;
 
-select_limit_value:
+selext_limit_value:
 			a_expr									{ $$ = $1; }
 			| ALL
 				{
@@ -11610,7 +11610,7 @@ select_limit_value:
 				}
 		;
 
-select_offset_value:
+selext_offset_value:
 			a_expr									{ $$ = $1; }
 		;
 
@@ -11630,7 +11630,7 @@ select_offset_value:
  * accepted here. (This is possible in 64-bit Windows as well as all 32-bit
  * builds.)
  */
-select_fetch_first_value:
+selext_fetch_first_value:
 			c_expr									{ $$ = $1; }
 			| '+' I_or_F_const
 				{ $$ = (Node *) makeSimpleA_Expr(AEXPR_OP, "+", NULL, $2, @1); }
@@ -11852,14 +11852,14 @@ table_ref:	relation_expr opt_alias_clause
 					n->alias = $3;
 					$$ = (Node *) n;
 				}
-			| select_with_parens opt_alias_clause
+			| selext_with_parens opt_alias_clause
 				{
-					RangeSubselect *n = makeNode(RangeSubselect);
+					RangeSubselext *n = makeNode(RangeSubselext);
 					n->lateral = false;
 					n->subquery = $1;
 					n->alias = $2;
 					/*
-					 * The SQL spec does not permit a subselect
+					 * The SQL spec does not permit a subselext
 					 * (<derived_table>) without an alias clause,
 					 * so we don't either.  This avoids the problem
 					 * of needing to invent a unique refname for it.
@@ -11887,9 +11887,9 @@ table_ref:	relation_expr opt_alias_clause
 					}
 					$$ = (Node *) n;
 				}
-			| LATERAL_P select_with_parens opt_alias_clause
+			| LATERAL_P selext_with_parens opt_alias_clause
 				{
-					RangeSubselect *n = makeNode(RangeSubselect);
+					RangeSubselext *n = makeNode(RangeSubselext);
 					n->lateral = true;
 					n->subquery = $2;
 					n->alias = $3;
@@ -13291,14 +13291,14 @@ a_expr:		c_expr									{ $$ = $1; }
 						$$ = (Node *) makeSimpleA_Expr(AEXPR_IN, "<>", $1, $4, @2);
 					}
 				}
-			| a_expr subquery_Op sub_type select_with_parens	%prec Op
+			| a_expr subquery_Op sub_type selext_with_parens	%prec Op
 				{
 					SubLink *n = makeNode(SubLink);
 					n->subLinkType = $3;
 					n->subLinkId = 0;
 					n->testexpr = $1;
 					n->operName = $2;
-					n->subselect = $4;
+					n->subselext = $4;
 					n->location = @2;
 					$$ = (Node *)n;
 				}
@@ -13309,13 +13309,13 @@ a_expr:		c_expr									{ $$ = $1; }
 					else
 						$$ = (Node *) makeA_Expr(AEXPR_OP_ALL, $2, $1, $5, @2);
 				}
-			| UNIQUE select_with_parens
+			| UNIQUE selext_with_parens
 				{
 					/* Not sure how to get rid of the parentheses
 					 * but there are lots of shift/reduce errors without them.
 					 *
 					 * Should be able to implement this by plopping the entire
-					 * select into a node, then transforming the target expressions
+					 * selext into a node, then transforming the target expressions
 					 * from whatever they are into count(*), and testing the
 					 * entire result equal to one.
 					 * But, will probably implement a separate node in the executor.
@@ -13491,27 +13491,27 @@ c_expr:		columnref								{ $$ = $1; }
 				{ $$ = $1; }
 			| func_expr
 				{ $$ = $1; }
-			| select_with_parens			%prec UMINUS
+			| selext_with_parens			%prec UMINUS
 				{
 					SubLink *n = makeNode(SubLink);
 					n->subLinkType = EXPR_SUBLINK;
 					n->subLinkId = 0;
 					n->testexpr = NULL;
 					n->operName = NIL;
-					n->subselect = $1;
+					n->subselext = $1;
 					n->location = @1;
 					$$ = (Node *)n;
 				}
-			| select_with_parens indirection
+			| selext_with_parens indirection
 				{
 					/*
-					 * Because the select_with_parens nonterminal is designed
+					 * Because the selext_with_parens nonterminal is designed
 					 * to "eat" as many levels of parens as possible, the
 					 * '(' a_expr ')' opt_indirection production above will
 					 * fail to match a sub-SELECT with indirection decoration;
 					 * the sub-SELECT won't be regarded as an a_expr as long
 					 * as there are parens around it.  To support applying
-					 * subscripting or field selection to a sub-SELECT result,
+					 * subscripting or field selextion to a sub-SELECT result,
 					 * we need this redundant-looking production.
 					 */
 					SubLink *n = makeNode(SubLink);
@@ -13520,31 +13520,31 @@ c_expr:		columnref								{ $$ = $1; }
 					n->subLinkId = 0;
 					n->testexpr = NULL;
 					n->operName = NIL;
-					n->subselect = $1;
+					n->subselext = $1;
 					n->location = @1;
 					a->arg = (Node *)n;
 					a->indirection = check_indirection($2, yyscanner);
 					$$ = (Node *)a;
 				}
-			| EXISTS select_with_parens
+			| EXISTS selext_with_parens
 				{
 					SubLink *n = makeNode(SubLink);
 					n->subLinkType = EXISTS_SUBLINK;
 					n->subLinkId = 0;
 					n->testexpr = NULL;
 					n->operName = NIL;
-					n->subselect = $2;
+					n->subselext = $2;
 					n->location = @1;
 					$$ = (Node *)n;
 				}
-			| ARRAY select_with_parens
+			| ARRAY selext_with_parens
 				{
 					SubLink *n = makeNode(SubLink);
 					n->subLinkType = ARRAY_SUBLINK;
 					n->subLinkId = 0;
 					n->testexpr = NULL;
 					n->operName = NIL;
-					n->subselect = $2;
+					n->subselext = $2;
 					n->location = @1;
 					$$ = (Node *)n;
 				}
@@ -14499,10 +14499,10 @@ trim_list:	a_expr FROM expr_list					{ $$ = lappend($3, $1); }
 			| expr_list								{ $$ = $1; }
 		;
 
-in_expr:	select_with_parens
+in_expr:	selext_with_parens
 				{
 					SubLink *n = makeNode(SubLink);
-					n->subselect = $1;
+					n->subselext = $1;
 					/* other fields will be filled later */
 					$$ = (Node *)n;
 				}
@@ -15512,7 +15512,7 @@ updateRawStmtEnd(RawStmt *rs, int end_location)
 {
 	/*
 	 * If we already set the length, don't change it.  This is for situations
-	 * like "select foo ;; select bar" where the same statement will be last
+	 * like "selext foo ;; selext bar" where the same statement will be last
 	 * in the string for more than one semicolon.
 	 */
 	if (rs->stmt_len > 0)
@@ -15529,7 +15529,7 @@ makeColumnRef(char *colname, List *indirection,
 	/*
 	 * Generate a ColumnRef node, with an A_Indirection node added if there
 	 * is any subscripting in the specified indirection list.  However,
-	 * any field selection at the start of the indirection list must be
+	 * any field selextion at the start of the indirection list must be
 	 * transposed into the "fields" part of the ColumnRef node.
 	 */
 	ColumnRef  *c = makeNode(ColumnRef);

@@ -2280,7 +2280,7 @@ msgstr "WAL avslutas innan konstistent återställningspunkt"
 
 #: access/transam/xlog.c:7485
 #, c-format
-msgid "selected new timeline ID: %u"
+msgid "selexted new timeline ID: %u"
 msgstr "valt nytt tidslinje-ID: %u"
 
 #: access/transam/xlog.c:7914
@@ -3973,7 +3973,7 @@ msgstr "relationen \"%s\" existerar inte"
 #: catalog/namespace.c:492 catalog/namespace.c:3011 commands/extension.c:1466
 #: commands/extension.c:1472
 #, c-format
-msgid "no schema has been selected to create in"
+msgid "no schema has been selexted to create in"
 msgstr "inget schema har valts för att skapa i"
 
 #: catalog/namespace.c:644 catalog/namespace.c:657
@@ -4794,8 +4794,8 @@ msgstr "bara binära operatorer kan ha kommuterare"
 
 #: catalog/pg_operator.c:370 commands/operatorcmds.c:481
 #, c-format
-msgid "only binary operators can have join selectivity"
-msgstr "bara binära operatorer kan ha \"join selectivity\""
+msgid "only binary operators can have join selextivity"
+msgstr "bara binära operatorer kan ha \"join selextivity\""
 
 #: catalog/pg_operator.c:374
 #, c-format
@@ -4814,13 +4814,13 @@ msgstr "bara booleska operatorer kan ha negatorer"
 
 #: catalog/pg_operator.c:393 commands/operatorcmds.c:489
 #, c-format
-msgid "only boolean operators can have restriction selectivity"
-msgstr "bara booleskaa operatorer kan ha \"restriction selectivity\""
+msgid "only boolean operators can have restriction selextivity"
+msgstr "bara booleskaa operatorer kan ha \"restriction selextivity\""
 
 #: catalog/pg_operator.c:397 commands/operatorcmds.c:493
 #, c-format
-msgid "only boolean operators can have join selectivity"
-msgstr "bara booleska operatorer kan ha \"join selectivity\""
+msgid "only boolean operators can have join selextivity"
+msgstr "bara booleska operatorer kan ha \"join selextivity\""
 
 #: catalog/pg_operator.c:401
 #, c-format
@@ -12548,7 +12548,7 @@ msgstr "förväntade SASL-svar, fick meddelandetyp %d"
 
 #: libpq/auth.c:981
 #, c-format
-msgid "client selected an invalid SASL authentication mechanism"
+msgid "client selexted an invalid SASL authentication mechanism"
 msgstr "klient valde en ogiltig SASL-autentiseringsmekanism"
 
 #: libpq/auth.c:1128
@@ -13891,7 +13891,7 @@ msgstr ""
 
 #: main/main.c:364
 #, c-format
-msgid "  --single           selects single-user mode (must be first argument)\n"
+msgid "  --single           selexts single-user mode (must be first argument)\n"
 msgstr "  --single           väljer enanvändarläge (måste vara första argumentet)\n"
 
 #: main/main.c:365
@@ -13930,7 +13930,7 @@ msgstr ""
 
 #: main/main.c:372
 #, c-format
-msgid "  --boot             selects bootstrapping mode (must be first argument)\n"
+msgid "  --boot             selexts bootstrapping mode (must be first argument)\n"
 msgstr "  --boot             väljer bootstrap-läge (måste vara första argumentet)\n"
 
 #: main/main.c:373
@@ -14723,8 +14723,8 @@ msgstr "ej heltalskonstant i %s"
 #. translator: %s is name of a SQL construct, eg ORDER BY
 #: parser/parse_clause.c:2003
 #, c-format
-msgid "%s position %d is not in select list"
-msgstr "%s-position %d finns inte i select-listan"
+msgid "%s position %d is not in selext list"
+msgstr "%s-position %d finns inte i selext-listan"
 
 #: parser/parse_clause.c:2444
 #, c-format
@@ -14768,8 +14768,8 @@ msgstr "i ett aggregat med DISTINCT så måste ORDER BY-uttryck finnas i argumen
 
 #: parser/parse_clause.c:2865
 #, c-format
-msgid "for SELECT DISTINCT, ORDER BY expressions must appear in select list"
-msgstr "i SELECT DISTINCT så måste ORDER BY-uttryck finnas i select-listan"
+msgid "for SELECT DISTINCT, ORDER BY expressions must appear in selext list"
+msgstr "i SELECT DISTINCT så måste ORDER BY-uttryck finnas i selext-listan"
 
 #: parser/parse_clause.c:2897
 #, c-format
@@ -15440,7 +15440,7 @@ msgstr "funktionsnamn \"%s\" är inte unikt"
 
 #: parser/parse_func.c:2042
 #, c-format
-msgid "Specify the argument list to select the function unambiguously."
+msgid "Specify the argument list to selext the function unambiguously."
 msgstr "Ange argumentlistan för att välja funktionen entydigt."
 
 #: parser/parse_func.c:2052
@@ -16614,8 +16614,8 @@ msgstr "kunde inte skicka testmeddelande till uttag (socket) för statistikinsam
 
 #: postmaster/pgstat.c:513
 #, c-format
-msgid "select() failed in statistics collector: %m"
-msgstr "select() misslyckades i statistikinsamlaren: %m"
+msgid "selext() failed in statistics collector: %m"
+msgstr "selext() misslyckades i statistikinsamlaren: %m"
 
 #: postmaster/pgstat.c:528
 #, c-format
@@ -16836,8 +16836,8 @@ msgstr ""
 
 #: postmaster/postmaster.c:1682
 #, c-format
-msgid "select() failed in postmaster: %m"
-msgstr "select() misslyckades i postmaster: %m"
+msgid "selext() failed in postmaster: %m"
+msgstr "selext() misslyckades i postmaster: %m"
 
 #: postmaster/postmaster.c:1837
 #, c-format
@@ -18632,7 +18632,7 @@ msgstr "Vyer som returnerar mängd-returnerande funktioner är inte automatiskt 
 
 #: rewrite/rewriteHandler.c:2335 rewrite/rewriteHandler.c:2339
 #: rewrite/rewriteHandler.c:2347
-msgid "Views that do not select from a single table or view are not automatically updatable."
+msgid "Views that do not selext from a single table or view are not automatically updatable."
 msgstr "Vyer som inte läser från en ensam tabell eller vy är inte automatiskt uppdateringsbar."
 
 #: rewrite/rewriteHandler.c:2350
@@ -24689,7 +24689,7 @@ msgid "GEQO: number of individuals in the population."
 msgstr "GEQO: antal individer i populationen."
 
 #: utils/misc/guc.c:1911 utils/misc/guc.c:1920
-msgid "Zero selects a suitable default value."
+msgid "Zero selexts a suitable default value."
 msgstr "Noll väljer ett lämpligt standardvärde."
 
 #: utils/misc/guc.c:1919
@@ -25241,11 +25241,11 @@ msgid "Sets the planner's estimate of the fraction of a cursor's rows that will 
 msgstr "Sätter planerarens uppskattning av hur stor del av markörens rader som kommer hämtas. "
 
 #: utils/misc/guc.c:3182
-msgid "GEQO: selective pressure within the population."
+msgid "GEQO: selextive pressure within the population."
 msgstr "GEQO: selektionstryck inom populationen."
 
 #: utils/misc/guc.c:3192
-msgid "GEQO: seed for random path selection."
+msgid "GEQO: seed for random path selextion."
 msgstr "GEQO: slumptalsfrö för val av slumpad sökväg."
 
 #: utils/misc/guc.c:3202
@@ -25305,7 +25305,7 @@ msgid "Sets the default tablespace to create tables and indexes in."
 msgstr "Ställer in standard tabellutrymme där tabeller och index skapas."
 
 #: utils/misc/guc.c:3325
-msgid "An empty string selects the database's default tablespace."
+msgid "An empty string selexts the database's default tablespace."
 msgstr "En tom sträng väljer databasens standardtabellutrymme."
 
 #: utils/misc/guc.c:3335

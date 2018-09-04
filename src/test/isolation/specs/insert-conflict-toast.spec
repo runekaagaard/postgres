@@ -10,8 +10,8 @@
 setup
 {
   CREATE TABLE ctoast (key int primary key, val text);
-  CREATE OR REPLACE FUNCTION ctoast_lock_func(int) RETURNS INT IMMUTABLE LANGUAGE SQL AS 'select pg_advisory_xact_lock_shared(1); select $1;';
-  CREATE OR REPLACE FUNCTION ctoast_large_val() RETURNS TEXT LANGUAGE SQL AS 'select array_agg(md5(g::text))::text from generate_series(1, 256) g';
+  CREATE OR REPLACE FUNCTION ctoast_lock_func(int) RETURNS INT IMMUTABLE LANGUAGE SQL AS 'selext pg_advisory_xact_lock_shared(1); selext $1;';
+  CREATE OR REPLACE FUNCTION ctoast_large_val() RETURNS TEXT LANGUAGE SQL AS 'selext array_agg(md5(g::text))::text from generate_series(1, 256) g';
   CREATE UNIQUE INDEX ctoast_lock_idx ON ctoast (ctoast_lock_func(key));
 }
 

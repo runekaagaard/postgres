@@ -48,7 +48,7 @@ test: create_function_2
 # execute two copy tests parallel, to check that copy itself
 # is concurrent safe.
 # ----------
-test: copy copyselect copydml
+test: copy copyselext copydml
 
 # ----------
 # More groups of parallel tests
@@ -69,17 +69,17 @@ test: create_aggregate create_function_3 create_cast constraints triggers inheri
 test: sanity_check
 
 # ----------
-# Believe it or not, select creates a table, subsequent
+# Believe it or not, selext creates a table, subsequent
 # tests need.
 # ----------
 test: errors
-test: select
+test: selext
 ignore: random
 
 # ----------
 # Another group of parallel tests
 # ----------
-test: select_into select_distinct select_distinct_on select_implicit select_having subselect union case join aggregates transactions random portals arrays btree_index hash_index update namespace prepared_xacts delete
+test: selext_into selext_distinct selext_distinct_on selext_implicit selext_having subselext union case join aggregates transactions random portals arrays btree_index hash_index update namespace prepared_xacts delete
 
 # ----------
 # Another group of parallel tests
@@ -95,7 +95,7 @@ test: alter_generic alter_operator misc psql async dbsize misc_functions sysview
 test: rules psql_crosstab amutils
 
 # run by itself so it can run parallel workers
-test: select_parallel
+test: selext_parallel
 test: write_parallel
 
 # no relation related tests can be put in this group
@@ -104,7 +104,7 @@ test: publication subscription
 # ----------
 # Another group of parallel tests
 # ----------
-test: select_views portals_p2 foreign_key cluster dependency guc bitmapops combocid tsearch tsdicts foreign_data window xmlmap functional_deps advisory_lock json jsonb json_encoding indirect_toast equivclass
+test: selext_views portals_p2 foreign_key cluster dependency guc bitmapops combocid tsearch tsdicts foreign_data window xmlmap functional_deps advisory_lock json jsonb json_encoding indirect_toast equivclass
 
 # ----------
 # Another group of parallel tests

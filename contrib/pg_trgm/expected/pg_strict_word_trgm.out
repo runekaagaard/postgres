@@ -1,7 +1,7 @@
 DROP INDEX trgm_idx2;
 \copy test_trgm3 from 'data/trgm2.data'
 ERROR:  relation "test_trgm3" does not exist
-select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where 'Baykal' <<% t order by sml desc, t;
+selext t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where 'Baykal' <<% t order by sml desc, t;
                   t                  |   sml    
 -------------------------------------+----------
  Baykal                              |        1
@@ -23,7 +23,7 @@ select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where 'Baykal
  Baykalovsk                          |      0.5
 (17 rows)
 
-select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where 'Kabankala' <<% t order by sml desc, t;
+selext t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where 'Kabankala' <<% t order by sml desc, t;
               t               |   sml    
 ------------------------------+----------
  Kabankala                    |        1
@@ -32,7 +32,7 @@ select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where 'Kab
  Kabakala                     | 0.583333
 (4 rows)
 
-select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where t %>> 'Baykal' order by sml desc, t;
+selext t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where t %>> 'Baykal' order by sml desc, t;
                   t                  |   sml    
 -------------------------------------+----------
  Baykal                              |        1
@@ -54,7 +54,7 @@ select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where t %>> '
  Baykalovsk                          |      0.5
 (17 rows)
 
-select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where t %>> 'Kabankala' order by sml desc, t;
+selext t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where t %>> 'Kabankala' order by sml desc, t;
               t               |   sml    
 ------------------------------+----------
  Kabankala                    |        1
@@ -63,7 +63,7 @@ select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where t %>
  Kabakala                     | 0.583333
 (4 rows)
 
-select t <->>> 'Alaikallupoddakulam', t from test_trgm2 order by t <->>> 'Alaikallupoddakulam' limit 7;
+selext t <->>> 'Alaikallupoddakulam', t from test_trgm2 order by t <->>> 'Alaikallupoddakulam' limit 7;
  ?column? |            t             
 ----------+--------------------------
         0 | Alaikallupoddakulam
@@ -77,7 +77,7 @@ select t <->>> 'Alaikallupoddakulam', t from test_trgm2 order by t <->>> 'Alaika
 
 create index trgm_idx2 on test_trgm2 using gist (t gist_trgm_ops);
 set enable_seqscan=off;
-select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where 'Baykal' <<% t order by sml desc, t;
+selext t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where 'Baykal' <<% t order by sml desc, t;
                   t                  |   sml    
 -------------------------------------+----------
  Baykal                              |        1
@@ -99,7 +99,7 @@ select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where 'Baykal
  Baykalovsk                          |      0.5
 (17 rows)
 
-select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where 'Kabankala' <<% t order by sml desc, t;
+selext t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where 'Kabankala' <<% t order by sml desc, t;
               t               |   sml    
 ------------------------------+----------
  Kabankala                    |        1
@@ -108,7 +108,7 @@ select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where 'Kab
  Kabakala                     | 0.583333
 (4 rows)
 
-select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where t %>> 'Baykal' order by sml desc, t;
+selext t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where t %>> 'Baykal' order by sml desc, t;
                   t                  |   sml    
 -------------------------------------+----------
  Baykal                              |        1
@@ -130,7 +130,7 @@ select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where t %>> '
  Baykalovsk                          |      0.5
 (17 rows)
 
-select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where t %>> 'Kabankala' order by sml desc, t;
+selext t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where t %>> 'Kabankala' order by sml desc, t;
               t               |   sml    
 ------------------------------+----------
  Kabankala                    |        1
@@ -140,7 +140,7 @@ select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where t %>
 (4 rows)
 
 explain (costs off)
-select t <->>> 'Alaikallupoddakulam', t from test_trgm2 order by t <->>> 'Alaikallupoddakulam' limit 7;
+selext t <->>> 'Alaikallupoddakulam', t from test_trgm2 order by t <->>> 'Alaikallupoddakulam' limit 7;
                        QUERY PLAN                        
 ---------------------------------------------------------
  Limit
@@ -148,7 +148,7 @@ select t <->>> 'Alaikallupoddakulam', t from test_trgm2 order by t <->>> 'Alaika
          Order By: (t <->>> 'Alaikallupoddakulam'::text)
 (3 rows)
 
-select t <->>> 'Alaikallupoddakulam', t from test_trgm2 order by t <->>> 'Alaikallupoddakulam' limit 7;
+selext t <->>> 'Alaikallupoddakulam', t from test_trgm2 order by t <->>> 'Alaikallupoddakulam' limit 7;
  ?column? |            t             
 ----------+--------------------------
         0 | Alaikallupoddakulam
@@ -163,7 +163,7 @@ select t <->>> 'Alaikallupoddakulam', t from test_trgm2 order by t <->>> 'Alaika
 drop index trgm_idx2;
 create index trgm_idx2 on test_trgm2 using gin (t gin_trgm_ops);
 set enable_seqscan=off;
-select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where 'Baykal' <<% t order by sml desc, t;
+selext t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where 'Baykal' <<% t order by sml desc, t;
                   t                  |   sml    
 -------------------------------------+----------
  Baykal                              |        1
@@ -185,7 +185,7 @@ select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where 'Baykal
  Baykalovsk                          |      0.5
 (17 rows)
 
-select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where 'Kabankala' <<% t order by sml desc, t;
+selext t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where 'Kabankala' <<% t order by sml desc, t;
               t               |   sml    
 ------------------------------+----------
  Kabankala                    |        1
@@ -194,7 +194,7 @@ select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where 'Kab
  Kabakala                     | 0.583333
 (4 rows)
 
-select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where t %>> 'Baykal' order by sml desc, t;
+selext t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where t %>> 'Baykal' order by sml desc, t;
                   t                  |   sml    
 -------------------------------------+----------
  Baykal                              |        1
@@ -216,7 +216,7 @@ select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where t %>> '
  Baykalovsk                          |      0.5
 (17 rows)
 
-select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where t %>> 'Kabankala' order by sml desc, t;
+selext t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where t %>> 'Kabankala' order by sml desc, t;
               t               |   sml    
 ------------------------------+----------
  Kabankala                    |        1
@@ -226,7 +226,7 @@ select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where t %>
 (4 rows)
 
 set "pg_trgm.strict_word_similarity_threshold" to 0.4;
-select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where 'Baykal' <<% t order by sml desc, t;
+selext t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where 'Baykal' <<% t order by sml desc, t;
                   t                  |   sml    
 -------------------------------------+----------
  Baykal                              |        1
@@ -285,7 +285,7 @@ select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where 'Baykal
  Sidi Mohammed Bakkal                |      0.4
 (54 rows)
 
-select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where 'Kabankala' <<% t order by sml desc, t;
+selext t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where 'Kabankala' <<% t order by sml desc, t;
               t               |   sml    
 ------------------------------+----------
  Kabankala                    |        1
@@ -295,7 +295,7 @@ select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where 'Kab
  Kabikala                     | 0.461538
 (5 rows)
 
-select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where t %>> 'Baykal' order by sml desc, t;
+selext t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where t %>> 'Baykal' order by sml desc, t;
                   t                  |   sml    
 -------------------------------------+----------
  Baykal                              |        1
@@ -354,7 +354,7 @@ select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where t %>> '
  Sidi Mohammed Bakkal                |      0.4
 (54 rows)
 
-select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where t %>> 'Kabankala' order by sml desc, t;
+selext t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where t %>> 'Kabankala' order by sml desc, t;
               t               |   sml    
 ------------------------------+----------
  Kabankala                    |        1
@@ -365,7 +365,7 @@ select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where t %>
 (5 rows)
 
 set "pg_trgm.strict_word_similarity_threshold" to 0.2;
-select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where 'Baykal' <<% t order by sml desc, t;
+selext t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where 'Baykal' <<% t order by sml desc, t;
                              t                             |   sml    
 -----------------------------------------------------------+----------
  Baykal                                                    |        1
@@ -615,7 +615,7 @@ select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where 'Baykal
  Urochishche Bakaldikha                                    |      0.2
 (245 rows)
 
-select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where 'Kabankala' <<% t order by sml desc, t;
+selext t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where 'Kabankala' <<% t order by sml desc, t;
                 t                 |   sml    
 ----------------------------------+----------
  Kabankala                        |        1
@@ -694,7 +694,7 @@ select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where 'Kab
  Waikala                          |      0.2
 (74 rows)
 
-select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where t %>> 'Baykal' order by sml desc, t;
+selext t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where t %>> 'Baykal' order by sml desc, t;
                              t                             |   sml    
 -----------------------------------------------------------+----------
  Baykal                                                    |        1
@@ -944,7 +944,7 @@ select t,strict_word_similarity('Baykal',t) as sml from test_trgm2 where t %>> '
  Urochishche Bakaldikha                                    |      0.2
 (245 rows)
 
-select t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where t %>> 'Kabankala' order by sml desc, t;
+selext t,strict_word_similarity('Kabankala',t) as sml from test_trgm2 where t %>> 'Kabankala' order by sml desc, t;
                 t                 |   sml    
 ----------------------------------+----------
  Kabankala                        |        1

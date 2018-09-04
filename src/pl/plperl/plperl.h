@@ -87,7 +87,7 @@
 #undef putenv
 #undef recv
 #undef rename
-#undef select
+#undef selext
 #undef send
 #undef socket
 #undef stat

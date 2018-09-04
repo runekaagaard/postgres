@@ -24,7 +24,7 @@
   Implementing a new type of custom scan is a three-step process.  First,
   during planning, it is necessary to generate access paths representing a
   scan using the proposed strategy.  Second, if one of those access paths
-  is selected by the planner as the optimal strategy for scanning a
+  is selexted by the planner as the optimal strategy for scanning a
   particular relation, the access path must be converted to a plan.
   Finally, it must be possible to execute the plan and generate the same
   results that would have been generated for any other access path targeting
@@ -158,7 +158,7 @@ typedef struct CustomScan
     <structname>Plan</structname> nodes.
     <structfield>custom_exprs</structfield> should be used to
     store expression trees that will need to be fixed up by
-    <filename>setrefs.c</filename> and <filename>subselect.c</filename>, while
+    <filename>setrefs.c</filename> and <filename>subselext.c</filename>, while
     <structfield>custom_private</structfield> should be used to store other private data
     that is only used by the custom scan provider itself.
     <structfield>custom_scan_tlist</structfield> can be NIL when scanning a base

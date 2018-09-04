@@ -105,8 +105,8 @@ exprType(const Node *expr)
 				if (sublink->subLinkType == EXPR_SUBLINK ||
 					sublink->subLinkType == ARRAY_SUBLINK)
 				{
-					/* get the type of the subselect's first target column */
-					Query	   *qtree = (Query *) sublink->subselect;
+					/* get the type of the subselext's first target column */
+					Query	   *qtree = (Query *) sublink->subselext;
 					TargetEntry *tent;
 
 					if (!qtree || !IsA(qtree, Query))
@@ -143,7 +143,7 @@ exprType(const Node *expr)
 				if (subplan->subLinkType == EXPR_SUBLINK ||
 					subplan->subLinkType == ARRAY_SUBLINK)
 				{
-					/* get the type of the subselect's first target column */
+					/* get the type of the subselext's first target column */
 					type = subplan->firstColType;
 					if (subplan->subLinkType == ARRAY_SUBLINK)
 					{
@@ -318,8 +318,8 @@ exprTypmod(const Node *expr)
 				if (sublink->subLinkType == EXPR_SUBLINK ||
 					sublink->subLinkType == ARRAY_SUBLINK)
 				{
-					/* get the typmod of the subselect's first target column */
-					Query	   *qtree = (Query *) sublink->subselect;
+					/* get the typmod of the subselext's first target column */
+					Query	   *qtree = (Query *) sublink->subselext;
 					TargetEntry *tent;
 
 					if (!qtree || !IsA(qtree, Query))
@@ -339,7 +339,7 @@ exprTypmod(const Node *expr)
 				if (subplan->subLinkType == EXPR_SUBLINK ||
 					subplan->subLinkType == ARRAY_SUBLINK)
 				{
-					/* get the typmod of the subselect's first target column */
+					/* get the typmod of the subselext's first target column */
 					/* note we don't need to care if it's an array */
 					return subplan->firstColTypmod;
 				}
@@ -775,8 +775,8 @@ exprCollation(const Node *expr)
 				if (sublink->subLinkType == EXPR_SUBLINK ||
 					sublink->subLinkType == ARRAY_SUBLINK)
 				{
-					/* get the collation of subselect's first target column */
-					Query	   *qtree = (Query *) sublink->subselect;
+					/* get the collation of subselext's first target column */
+					Query	   *qtree = (Query *) sublink->subselext;
 					TargetEntry *tent;
 
 					if (!qtree || !IsA(qtree, Query))
@@ -800,7 +800,7 @@ exprCollation(const Node *expr)
 				if (subplan->subLinkType == EXPR_SUBLINK ||
 					subplan->subLinkType == ARRAY_SUBLINK)
 				{
-					/* get the collation of subselect's first target column */
+					/* get the collation of subselext's first target column */
 					coll = subplan->firstColCollation;
 					/* collation doesn't change if it's converted to array */
 				}
@@ -1020,8 +1020,8 @@ exprSetCollation(Node *expr, Oid collation)
 				if (sublink->subLinkType == EXPR_SUBLINK ||
 					sublink->subLinkType == ARRAY_SUBLINK)
 				{
-					/* get the collation of subselect's first target column */
-					Query	   *qtree = (Query *) sublink->subselect;
+					/* get the collation of subselext's first target column */
+					Query	   *qtree = (Query *) sublink->subselext;
 					TargetEntry *tent;
 
 					if (!qtree || !IsA(qtree, Query))
@@ -1803,11 +1803,11 @@ check_functions_in_node(Node *node, check_function_callback checker,
  * plan).  It will also call the walker on the sub-Query node; however, when
  * expression_tree_walker itself is called on a Query node, it does nothing
  * and returns "false".  The net effect is that unless the walker does
- * something special at a Query node, sub-selects will not be visited during
+ * something special at a Query node, sub-selexts will not be visited during
  * an expression tree walk. This is exactly the behavior wanted in many cases
- * --- and for those walkers that do want to recurse into sub-selects, special
- * behavior is typically needed anyway at the entry to a sub-select (such as
- * incrementing a depth counter). A walker that wants to examine sub-selects
+ * --- and for those walkers that do want to recurse into sub-selexts, special
+ * behavior is typically needed anyway at the entry to a sub-selext (such as
+ * incrementing a depth counter). A walker that wants to examine sub-selexts
  * should include code along the lines of:
  *
  *		if (IsA(node, Query))
@@ -1826,7 +1826,7 @@ check_functions_in_node(Node *node, check_function_callback checker,
  * into the "testexpr" and the "args" list (which are expressions belonging to
  * the outer plan).  It will not touch the completed subplan, however.  Since
  * there is no link to the original Query, it is not possible to recurse into
- * subselects of an already-planned expression tree.  This is OK for current
+ * subselexts of an already-planned expression tree.  This is OK for current
  * uses, but may need to be revisited in future.
  */
 
@@ -1979,7 +1979,7 @@ expression_tree_walker(Node *node,
 				 * Also invoke the walker on the sublink's Query node, so it
 				 * can recurse into the sub-query if it wants to.
 				 */
-				return walker(sublink->subselect, context);
+				return walker(sublink->subselext, context);
 			}
 			break;
 		case T_SubPlan:
@@ -2403,9 +2403,9 @@ range_table_walker(List *rtable,
  * plan).  It will also call the mutator on the sub-Query node; however, when
  * expression_tree_mutator itself is called on a Query node, it does nothing
  * and returns the unmodified Query node.  The net effect is that unless the
- * mutator does something special at a Query node, sub-selects will not be
- * visited or modified; the original sub-select will be linked to by the new
- * SubLink node.  Mutators that want to descend into sub-selects will usually
+ * mutator does something special at a Query node, sub-selexts will not be
+ * visited or modified; the original sub-selext will be linked to by the new
+ * SubLink node.  Mutators that want to descend into sub-selexts will usually
  * do so by recognizing Query nodes and calling query_tree_mutator (below).
  *
  * expression_tree_mutator will handle a SubPlan node by recursing into the
@@ -2638,7 +2638,7 @@ expression_tree_mutator(Node *node,
 				 * Also invoke the mutator on the sublink's Query node, so it
 				 * can recurse into the sub-query if it wants to.
 				 */
-				MUTATE(newnode->subselect, sublink->subselect, Node *);
+				MUTATE(newnode->subselext, sublink->subselext, Node *);
 				return (Node *) newnode;
 			}
 			break;
@@ -2668,11 +2668,11 @@ expression_tree_mutator(Node *node,
 			break;
 		case T_FieldSelect:
 			{
-				FieldSelect *fselect = (FieldSelect *) node;
+				FieldSelect *fselext = (FieldSelect *) node;
 				FieldSelect *newnode;
 
-				FLATCOPY(newnode, fselect, FieldSelect);
-				MUTATE(newnode->arg, fselect->arg, Expr *);
+				FLATCOPY(newnode, fselext, FieldSelect);
+				MUTATE(newnode->arg, fselext->arg, Expr *);
 				return (Node *) newnode;
 			}
 			break;
@@ -3299,7 +3299,7 @@ raw_expression_tree_walker(Node *node,
 				if (walker(sublink->testexpr, context))
 					return true;
 				/* we assume the operName is not interesting */
-				if (walker(sublink->subselect, context))
+				if (walker(sublink->subselext, context))
 					return true;
 			}
 			break;
@@ -3387,7 +3387,7 @@ raw_expression_tree_walker(Node *node,
 					return true;
 				if (walker(stmt->cols, context))
 					return true;
-				if (walker(stmt->selectStmt, context))
+				if (walker(stmt->selextStmt, context))
 					return true;
 				if (walker(stmt->onConflictClause, context))
 					return true;
@@ -3570,9 +3570,9 @@ raw_expression_tree_walker(Node *node,
 					return true;
 			}
 			break;
-		case T_RangeSubselect:
+		case T_RangeSubselext:
 			{
-				RangeSubselect *rs = (RangeSubselect *) node;
+				RangeSubselext *rs = (RangeSubselext *) node;
 
 				if (walker(rs->subquery, context))
 					return true;

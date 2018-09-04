@@ -290,10 +290,10 @@ CREATE TABLE message (mid INT PRIMARY KEY, sections INT[], ...);
 -- create specialized index
 CREATE INDEX message_rdtree_idx ON message USING GIST (sections gist__int_ops);
 
--- select messages in section 1 OR 2 - OVERLAP operator
+-- selext messages in section 1 OR 2 - OVERLAP operator
 SELECT message.mid FROM message WHERE message.sections &amp;&amp; '{1,2}';
 
--- select messages in sections 1 AND 2 - CONTAINS operator
+-- selext messages in sections 1 AND 2 - CONTAINS operator
 SELECT message.mid FROM message WHERE message.sections @&gt; '{1,2}';
 
 -- the same, using QUERY operator

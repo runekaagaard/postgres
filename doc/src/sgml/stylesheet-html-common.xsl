@@ -12,8 +12,8 @@
   -->
 
 <!-- Parameters -->
-<xsl:param name="make.valid.html" select="1"></xsl:param>
-<xsl:param name="generate.id.attributes" select="1"></xsl:param>
+<xsl:param name="make.valid.html" selext="1"></xsl:param>
+<xsl:param name="generate.id.attributes" selext="1"></xsl:param>
 <xsl:param name="link.mailto.url">pgsql-docs@postgresql.org</xsl:param>
 <xsl:param name="toc.max.depth">2</xsl:param>
 
@@ -28,10 +28,10 @@
   <span>
     <xsl:call-template name="common.html.attributes"/>
     <xsl:call-template name="id.attribute"/>
-    <xsl:apply-templates select="conftitle/text()" mode="bibliography.mode"/>
+    <xsl:apply-templates selext="conftitle/text()" mode="bibliography.mode"/>
     <xsl:text>, </xsl:text>
-    <xsl:apply-templates select="confdates/text()" mode="bibliography.mode"/>
-    <xsl:copy-of select="$biblioentry.item.separator"/>
+    <xsl:apply-templates selext="confdates/text()" mode="bibliography.mode"/>
+    <xsl:copy-of selext="$biblioentry.item.separator"/>
   </span>
 </xsl:template>
 
@@ -41,7 +41,7 @@
     <xsl:call-template name="id.attribute"/>
     <xsl:text>ISBN </xsl:text>
     <xsl:apply-templates mode="bibliography.mode"/>
-    <xsl:copy-of select="$biblioentry.item.separator"/>
+    <xsl:copy-of selext="$biblioentry.item.separator"/>
   </span>
 </xsl:template>
 
@@ -68,14 +68,14 @@ section   toc
 set       toc,title
 </xsl:param>
 
-<xsl:param name="generate.section.toc.level" select="1"></xsl:param>
+<xsl:param name="generate.section.toc.level" selext="1"></xsl:param>
 
 <!-- include refentry under sect1 in tocs -->
 <xsl:template match="sect1" mode="toc">
-  <xsl:param name="toc-context" select="."/>
+  <xsl:param name="toc-context" selext="."/>
   <xsl:call-template name="subtoc">
-    <xsl:with-param name="toc-context" select="$toc-context"/>
-    <xsl:with-param name="nodes" select="sect2|refentry
+    <xsl:with-param name="toc-context" selext="$toc-context"/>
+    <xsl:with-param name="nodes" selext="sect2|refentry
                                          |bridgehead[$bridgehead.in.toc != 0]"/>
   </xsl:call-template>
 </xsl:template>
@@ -86,22 +86,22 @@ set       toc,title
 <!-- from html/autoidx.xsl -->
 
 <xsl:template name="generate-basic-index">
-  <xsl:param name="scope" select="NOTANODE"/>
+  <xsl:param name="scope" selext="NOTANODE"/>
 
   <xsl:variable name="role">
     <xsl:if test="$index.on.role != 0">
-      <xsl:value-of select="@role"/>
+      <xsl:value-of selext="@role"/>
     </xsl:if>
   </xsl:variable>
 
   <xsl:variable name="type">
     <xsl:if test="$index.on.type != 0">
-      <xsl:value-of select="@type"/>
+      <xsl:value-of selext="@type"/>
     </xsl:if>
   </xsl:variable>
 
   <xsl:variable name="terms"
-                select="//indexterm
+                selext="//indexterm
                         [count(.|key('letter',
                           translate(substring(&primary;, 1, 1),
                              &lowercase;,
@@ -110,10 +110,10 @@ set       toc,title
                           and not(@class = 'endofrange')]"/>
 
   <xsl:variable name="alphabetical"
-                select="$terms[contains(concat(&lowercase;, &uppercase;),
+                selext="$terms[contains(concat(&lowercase;, &uppercase;),
                                         substring(&primary;, 1, 1))]"/>
 
-  <xsl:variable name="others" select="$terms[not(contains(concat(&lowercase;,
+  <xsl:variable name="others" selext="$terms[not(contains(concat(&lowercase;,
                                                  &uppercase;),
                                              substring(&primary;, 1, 1)))]"/>
 
@@ -122,18 +122,18 @@ set       toc,title
     <p class="indexdiv-quicklinks">
       <a href="#indexdiv-Symbols">
         <xsl:call-template name="gentext">
-          <xsl:with-param name="key" select="'index symbols'"/>
+          <xsl:with-param name="key" selext="'index symbols'"/>
         </xsl:call-template>
       </a>
-      <xsl:apply-templates select="$alphabetical[count(.|key('letter',
+      <xsl:apply-templates selext="$alphabetical[count(.|key('letter',
                                    translate(substring(&primary;, 1, 1),
                                    &lowercase;,&uppercase;))[&scope;][1]) = 1]"
                            mode="index-div-quicklinks">
-        <xsl:with-param name="position" select="position()"/>
-        <xsl:with-param name="scope" select="$scope"/>
-        <xsl:with-param name="role" select="$role"/>
-        <xsl:with-param name="type" select="$type"/>
-        <xsl:sort select="translate(&primary;, &lowercase;, &uppercase;)"/>
+        <xsl:with-param name="position" selext="position()"/>
+        <xsl:with-param name="scope" selext="$scope"/>
+        <xsl:with-param name="role" selext="$role"/>
+        <xsl:with-param name="type" selext="$type"/>
+        <xsl:sort selext="translate(&primary;, &lowercase;, &uppercase;)"/>
       </xsl:apply-templates>
     </p>
     <!-- pgsql-docs: end added stuff -->
@@ -146,17 +146,17 @@ set       toc,title
           <div class="indexdiv" id="indexdiv-Symbols">
             <h3>
               <xsl:call-template name="gentext">
-                <xsl:with-param name="key" select="'index symbols'"/>
+                <xsl:with-param name="key" selext="'index symbols'"/>
               </xsl:call-template>
             </h3>
             <dl>
-              <xsl:apply-templates select="$others[count(.|key('primary', &primary;)[&scope;][1]) = 1]"
+              <xsl:apply-templates selext="$others[count(.|key('primary', &primary;)[&scope;][1]) = 1]"
                                    mode="index-symbol-div">
-                <xsl:with-param name="position" select="position()"/>
-                <xsl:with-param name="scope" select="$scope"/>
-                <xsl:with-param name="role" select="$role"/>
-                <xsl:with-param name="type" select="$type"/>
-                <xsl:sort select="translate(&primary;, &lowercase;, &uppercase;)"/>
+                <xsl:with-param name="position" selext="position()"/>
+                <xsl:with-param name="scope" selext="$scope"/>
+                <xsl:with-param name="role" selext="$role"/>
+                <xsl:with-param name="type" selext="$type"/>
+                <xsl:sort selext="translate(&primary;, &lowercase;, &uppercase;)"/>
               </xsl:apply-templates>
             </dl>
           </div>
@@ -169,18 +169,18 @@ set       toc,title
           <div class="indexdiv" id="indexdiv-Symbols">
             <h3>
               <xsl:call-template name="gentext">
-                <xsl:with-param name="key" select="'index symbols'"/>
+                <xsl:with-param name="key" selext="'index symbols'"/>
               </xsl:call-template>
             </h3>
             <dl>
-              <xsl:apply-templates select="$others[count(.|key('primary',
+              <xsl:apply-templates selext="$others[count(.|key('primary',
                                           &primary;)[&scope;][1]) = 1]"
                                   mode="index-symbol-div">
-                <xsl:with-param name="position" select="position()"/>
-                <xsl:with-param name="scope" select="$scope"/>
-                <xsl:with-param name="role" select="$role"/>
-                <xsl:with-param name="type" select="$type"/>
-                <xsl:sort select="translate(&primary;, &lowercase;, &uppercase;)"/>
+                <xsl:with-param name="position" selext="position()"/>
+                <xsl:with-param name="scope" selext="$scope"/>
+                <xsl:with-param name="role" selext="$role"/>
+                <xsl:with-param name="type" selext="$type"/>
+                <xsl:sort selext="translate(&primary;, &lowercase;, &uppercase;)"/>
               </xsl:apply-templates>
             </dl>
           </div>
@@ -188,26 +188,26 @@ set       toc,title
       </xsl:choose>
     </xsl:if>
 
-    <xsl:apply-templates select="$alphabetical[count(.|key('letter',
+    <xsl:apply-templates selext="$alphabetical[count(.|key('letter',
                                  translate(substring(&primary;, 1, 1),
                                            &lowercase;,&uppercase;))[&scope;][1]) = 1]"
                          mode="index-div-basic">
-      <xsl:with-param name="position" select="position()"/>
-      <xsl:with-param name="scope" select="$scope"/>
-      <xsl:with-param name="role" select="$role"/>
-      <xsl:with-param name="type" select="$type"/>
-      <xsl:sort select="translate(&primary;, &lowercase;, &uppercase;)"/>
+      <xsl:with-param name="position" selext="position()"/>
+      <xsl:with-param name="scope" selext="$scope"/>
+      <xsl:with-param name="role" selext="$role"/>
+      <xsl:with-param name="type" selext="$type"/>
+      <xsl:sort selext="translate(&primary;, &lowercase;, &uppercase;)"/>
     </xsl:apply-templates>
   </div>
 </xsl:template>
 
 <xsl:template match="indexterm" mode="index-div-basic">
-  <xsl:param name="scope" select="."/>
-  <xsl:param name="role" select="''"/>
-  <xsl:param name="type" select="''"/>
+  <xsl:param name="scope" selext="."/>
+  <xsl:param name="role" selext="''"/>
+  <xsl:param name="type" selext="''"/>
 
   <xsl:variable name="key"
-                select="translate(substring(&primary;, 1, 1),
+                selext="translate(substring(&primary;, 1, 1),
                          &lowercase;,&uppercase;)"/>
 
   <xsl:if test="key('letter', $key)[&scope;]
@@ -215,24 +215,24 @@ set       toc,title
     <div class="indexdiv">
       <!-- pgsql-docs: added id attribute here for linking to it -->
       <xsl:attribute name="id">
-        <xsl:value-of select="concat('indexdiv-', $key)"/>
+        <xsl:value-of selext="concat('indexdiv-', $key)"/>
       </xsl:attribute>
 
       <xsl:if test="contains(concat(&lowercase;, &uppercase;), $key)">
         <h3>
-          <xsl:value-of select="translate($key, &lowercase;, &uppercase;)"/>
+          <xsl:value-of selext="translate($key, &lowercase;, &uppercase;)"/>
         </h3>
       </xsl:if>
       <dl>
-        <xsl:apply-templates select="key('letter', $key)[&scope;]
+        <xsl:apply-templates selext="key('letter', $key)[&scope;]
                                      [count(.|key('primary', &primary;)
                                      [&scope;][1])=1]"
                              mode="index-primary">
-          <xsl:with-param name="position" select="position()"/>
-          <xsl:with-param name="scope" select="$scope"/>
-          <xsl:with-param name="role" select="$role"/>
-          <xsl:with-param name="type" select="$type"/>
-          <xsl:sort select="translate(&primary;, &lowercase;, &uppercase;)"/>
+          <xsl:with-param name="position" selext="position()"/>
+          <xsl:with-param name="scope" selext="$scope"/>
+          <xsl:with-param name="role" selext="$role"/>
+          <xsl:with-param name="type" selext="$type"/>
+          <xsl:sort selext="translate(&primary;, &lowercase;, &uppercase;)"/>
         </xsl:apply-templates>
       </dl>
     </div>
@@ -241,12 +241,12 @@ set       toc,title
 
 <!-- pgsql-docs -->
 <xsl:template match="indexterm" mode="index-div-quicklinks">
-  <xsl:param name="scope" select="."/>
-  <xsl:param name="role" select="''"/>
-  <xsl:param name="type" select="''"/>
+  <xsl:param name="scope" selext="."/>
+  <xsl:param name="role" selext="''"/>
+  <xsl:param name="type" selext="''"/>
 
   <xsl:variable name="key"
-                select="translate(substring(&primary;, 1, 1),
+                selext="translate(substring(&primary;, 1, 1),
                         &lowercase;,&uppercase;)"/>
 
   <xsl:if test="key('letter', $key)[&scope;]
@@ -255,9 +255,9 @@ set       toc,title
       |
       <a>
         <xsl:attribute name="href">
-          <xsl:value-of select="concat('#indexdiv-', $key)"/>
+          <xsl:value-of selext="concat('#indexdiv-', $key)"/>
         </xsl:attribute>
-        <xsl:value-of select="translate($key, &lowercase;, &uppercase;)"/>
+        <xsl:value-of selext="translate($key, &lowercase;, &uppercase;)"/>
       </a>
     </xsl:if>
   </xsl:if>
@@ -267,23 +267,23 @@ set       toc,title
 <!-- upper case HTML anchors for backward compatibility -->
 
 <xsl:template name="object.id">
-  <xsl:param name="object" select="."/>
+  <xsl:param name="object" selext="."/>
   <xsl:choose>
     <xsl:when test="$object/@id">
-      <xsl:value-of select="translate($object/@id, &lowercase;, &uppercase;)"/>
+      <xsl:value-of selext="translate($object/@id, &lowercase;, &uppercase;)"/>
     </xsl:when>
     <xsl:when test="$object/@xml:id">
-      <xsl:value-of select="$object/@xml:id"/>
+      <xsl:value-of selext="$object/@xml:id"/>
     </xsl:when>
     <xsl:when test="$generate.consistent.ids != 0">
       <!-- Make $object the current node -->
-      <xsl:for-each select="$object">
+      <xsl:for-each selext="$object">
         <xsl:text>id-</xsl:text>
         <xsl:number level="multiple" count="*"/>
       </xsl:for-each>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:value-of select="generate-id($object)"/>
+      <xsl:value-of selext="generate-id($object)"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

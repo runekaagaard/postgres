@@ -124,7 +124,7 @@ DECLARE <replaceable class="parameter">name</replaceable> [ BINARY ] [ INSENSITI
     <term><replaceable class="parameter">query</replaceable></term>
     <listitem>
      <para>
-      A <xref linkend="sql-select"/> or
+      A <xref linkend="sql-selext"/> or
       <xref linkend="sql-values"/> command
       which will provide the rows to be returned by the cursor.
      </para>
@@ -244,7 +244,7 @@ DECLARE <replaceable class="parameter">name</replaceable> [ BINARY ] [ INSENSITI
     If the cursor's query includes <literal>FOR UPDATE</literal> or <literal>FOR
     SHARE</literal>, then returned rows are locked at the time they are first
     fetched, in the same way as for a regular
-    <xref linkend="sql-select"/> command with
+    <xref linkend="sql-selext"/> command with
     these options.
     In addition, the returned rows will be the most up-to-date versions;
     therefore these options provide the equivalent of what the SQL standard

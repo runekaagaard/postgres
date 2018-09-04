@@ -333,17 +333,17 @@ msgstr "%s: tệp \"%s\" không phải là tệp thông thường\n"
 
 #: initdb.c:987
 #, c-format
-msgid "selecting default max_connections ... "
+msgid "selexting default max_connections ... "
 msgstr "đang chọn giá trị mặc định cho max_connections ... "
 
 #: initdb.c:1017
 #, c-format
-msgid "selecting default shared_buffers ... "
+msgid "selexting default shared_buffers ... "
 msgstr "đang chọn giá trị mặc định cho shared_buffers ... "
 
 #: initdb.c:1050
 #, c-format
-msgid "selecting dynamic shared memory implementation ... "
+msgid "selexting dynamic shared memory implementation ... "
 msgstr "đang chọn triển khai bộ nhớ chia sẻ động (DSM) ... "
 
 #: initdb.c:1085
@@ -437,8 +437,8 @@ msgstr "%s: mã hóa không khớp\n"
 #: initdb.c:2301
 #, c-format
 msgid ""
-"The encoding you selected (%s) and the encoding that the\n"
-"selected locale uses (%s) do not match.  This would lead to\n"
+"The encoding you selexted (%s) and the encoding that the\n"
+"selexted locale uses (%s) do not match.  This would lead to\n"
 "misbehavior in various character string processing functions.\n"
 "Rerun %s and either do not specify an encoding explicitly,\n"
 "or choose a matching combination.\n"
@@ -804,7 +804,7 @@ msgstr "%s: ngôn ngữ \"%s\" yêu cầu encoding không được hỗ trợ \"
 #, c-format
 msgid ""
 "Encoding \"%s\" is not allowed as a server-side encoding.\n"
-"Rerun %s with a different locale selection.\n"
+"Rerun %s with a different locale selextion.\n"
 msgstr ""
 "Encoding \"%s\" không được cho phép làm encoding cho server.\n"
 "Chạy lại %s với một lựa chọn ngôn ngữ khác.\n"

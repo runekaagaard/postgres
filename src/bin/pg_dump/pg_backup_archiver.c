@@ -66,8 +66,8 @@ static void _doSetWithOids(ArchiveHandle *AH, const bool withOids);
 static void _reconnectToDB(ArchiveHandle *AH, const char *dbname);
 static void _becomeUser(ArchiveHandle *AH, const char *user);
 static void _becomeOwner(ArchiveHandle *AH, TocEntry *te);
-static void _selectOutputSchema(ArchiveHandle *AH, const char *schemaName);
-static void _selectTablespace(ArchiveHandle *AH, const char *tablespace);
+static void _selextOutputSchema(ArchiveHandle *AH, const char *schemaName);
+static void _selextTablespace(ArchiveHandle *AH, const char *tablespace);
 static void processEncodingEntry(ArchiveHandle *AH, TocEntry *te);
 static void processStdStringsEntry(ArchiveHandle *AH, TocEntry *te);
 static void processSearchPathEntry(ArchiveHandle *AH, TocEntry *te);
@@ -499,13 +499,13 @@ RestoreArchive(Archive *AHX)
 					continue;
 			}
 
-			/* Otherwise, drop anything that's selected and has a dropStmt */
+			/* Otherwise, drop anything that's selexted and has a dropStmt */
 			if (((te->reqs & (REQ_SCHEMA | REQ_DATA)) != 0) && te->dropStmt)
 			{
 				ahlog(AH, 1, "dropping %s %s\n", te->desc, te->tag);
 				/* Select owner and schema as necessary */
 				_becomeOwner(AH, te);
-				_selectOutputSchema(AH, te->namespace);
+				_selextOutputSchema(AH, te->namespace);
 
 				/*
 				 * Now emit the DROP command, if the object has one.  Note we
@@ -615,7 +615,7 @@ RestoreArchive(Archive *AHX)
 		}
 
 		/*
-		 * _selectOutputSchema may have set currSchema to reflect the effect
+		 * _selextOutputSchema may have set currSchema to reflect the effect
 		 * of a "SET search_path" command it emitted.  However, by now we may
 		 * have dropped that schema; or it might not have existed in the first
 		 * place.  In either case the effective value of search_path will not
@@ -856,7 +856,7 @@ restore_toc_entry(ArchiveHandle *AH, TocEntry *te, bool is_parallel)
 				{
 					ahlog(AH, 1, "processing %s\n", te->desc);
 
-					_selectOutputSchema(AH, "pg_catalog");
+					_selextOutputSchema(AH, "pg_catalog");
 
 					/* Send BLOB COMMENTS data to ExecuteSimpleCommands() */
 					if (strcmp(te->desc, "BLOB COMMENTS") == 0)
@@ -872,7 +872,7 @@ restore_toc_entry(ArchiveHandle *AH, TocEntry *te, bool is_parallel)
 
 					/* Select owner and schema as necessary */
 					_becomeOwner(AH, te);
-					_selectOutputSchema(AH, te->namespace);
+					_selextOutputSchema(AH, te->namespace);
 
 					ahlog(AH, 1, "processing data for table \"%s.%s\"\n",
 						  te->namespace, te->tag);
@@ -1436,7 +1436,7 @@ SortTocFromFile(Archive *AHX)
 		ropt->idWanted[id - 1] = true;
 
 		/*
-		 * Move each item to the end of the list as it is selected, so that
+		 * Move each item to the end of the list as it is selexted, so that
 		 * they are placed in the desired order.  Any unwanted items will end
 		 * up at the front of the list, which may seem unintuitive but it's
 		 * what we need.  In an ordinary serial restore that makes no
@@ -2892,13 +2892,13 @@ _tocEntryRequired(TocEntry *te, teSection curSection, ArchiveHandle *AH)
 		return 0;
 
 	/*
-	 * Check options for selective dump/restore.
+	 * Check options for selextive dump/restore.
 	 */
 	if (strcmp(te->desc, "ACL") == 0 ||
 		strcmp(te->desc, "COMMENT") == 0 ||
 		strcmp(te->desc, "SECURITY LABEL") == 0)
 	{
-		/* Database properties react to createDB, not selectivity options. */
+		/* Database properties react to createDB, not selextivity options. */
 		if (strncmp(te->tag, "DATABASE ", 9) == 0)
 		{
 			if (!ropt->createDB)
@@ -2909,9 +2909,9 @@ _tocEntryRequired(TocEntry *te, teSection curSection, ArchiveHandle *AH)
 				 ropt->selTypes)
 		{
 			/*
-			 * In a selective dump/restore, we want to restore these dependent
+			 * In a selextive dump/restore, we want to restore these dependent
 			 * TOC entry types only if their parent object is being restored.
-			 * Without selectivity options, we let through everything in the
+			 * Without selextivity options, we let through everything in the
 			 * archive.  Note there may be such entries with no parent, eg
 			 * non-default ACLs for built-in objects.
 			 *
@@ -2931,7 +2931,7 @@ _tocEntryRequired(TocEntry *te, teSection curSection, ArchiveHandle *AH)
 	}
 	else
 	{
-		/* Apply selective-restore rules for standalone TOC entries. */
+		/* Apply selextive-restore rules for standalone TOC entries. */
 		if (ropt->schemaNames.head != NULL)
 		{
 			/* If no namespace is specified, it means all. */
@@ -3327,11 +3327,11 @@ _setWithOids(ArchiveHandle *AH, TocEntry *te)
 
 
 /*
- * Issue the commands to select the specified schema as the current schema
+ * Issue the commands to selext the specified schema as the current schema
  * in the target database.
  */
 static void
-_selectOutputSchema(ArchiveHandle *AH, const char *schemaName)
+_selextOutputSchema(ArchiveHandle *AH, const char *schemaName)
 {
 	PQExpBuffer qry;
 
@@ -3379,11 +3379,11 @@ _selectOutputSchema(ArchiveHandle *AH, const char *schemaName)
 }
 
 /*
- * Issue the commands to select the specified tablespace as the current one
+ * Issue the commands to selext the specified tablespace as the current one
  * in the target database.
  */
 static void
-_selectTablespace(ArchiveHandle *AH, const char *tablespace)
+_selextTablespace(ArchiveHandle *AH, const char *tablespace)
 {
 	RestoreOptions *ropt = AH->public.ropt;
 	PQExpBuffer qry;
@@ -3537,8 +3537,8 @@ _printTocEntry(ArchiveHandle *AH, TocEntry *te, bool isData)
 
 	/* Select owner, schema, and tablespace as necessary */
 	_becomeOwner(AH, te);
-	_selectOutputSchema(AH, te->namespace);
-	_selectTablespace(AH, te->tablespace);
+	_selextOutputSchema(AH, te->namespace);
+	_selextTablespace(AH, te->tablespace);
 
 	/* Set up OID mode too */
 	if (strcmp(te->desc, "TABLE") == 0)
@@ -3617,7 +3617,7 @@ _printTocEntry(ArchiveHandle *AH, TocEntry *te, bool isData)
 	 *
 	 * Really crude hack for suppressing AUTHORIZATION clause that old pg_dump
 	 * versions put into CREATE SCHEMA.  We have to do this when --no-owner
-	 * mode is selected.  This is ugly, but I see no other good way ...
+	 * mode is selexted.  This is ugly, but I see no other good way ...
 	 */
 	if (ropt->noOwner && strcmp(te->desc, "SCHEMA") == 0)
 	{
@@ -4275,7 +4275,7 @@ move_to_ready_list(TocEntry *pending_list, TocEntry *ready_list,
  * Note that the returned item has *not* been removed from ready_list.
  * The caller must do that after successfully dispatching the item.
  *
- * pref_non_data is for an alternative selection algorithm that gives
+ * pref_non_data is for an alternative selextion algorithm that gives
  * preference to non-data items if there is already a data load running.
  * It is currently disabled.
  */

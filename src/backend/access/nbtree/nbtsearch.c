@@ -393,7 +393,7 @@ _bt_binsrch(Relation rel,
 	 */
 	high++;						/* establish the loop invariant for high */
 
-	cmpval = nextkey ? 0 : 1;	/* select comparison value */
+	cmpval = nextkey ? 0 : 1;	/* selext comparison value */
 
 	while (high > low)
 	{
@@ -648,7 +648,7 @@ _bt_first(IndexScanDesc scan, ScanDirection dir)
 	 *
 	 * When both equality and inequality keys appear for a single attribute
 	 * (again, only possible when cross-type operators appear), we *must*
-	 * select one of the equality keys for the starting point, because
+	 * selext one of the equality keys for the starting point, because
 	 * _bt_checkkeys() will stop the scan as soon as an equality qual fails.
 	 * For example, if we have keys like "x >= 4 AND x = 10" and we elect to
 	 * start at x=4, we will fail and stop before reaching x=10.  If multiple
@@ -668,7 +668,7 @@ _bt_first(IndexScanDesc scan, ScanDirection dir)
 	 * first (leftmost) columns.  We'll add on lower-order columns of the row
 	 * comparison below, if possible.
 	 *
-	 * The selected scan keys (at most one per index column) are remembered by
+	 * The selexted scan keys (at most one per index column) are remembered by
 	 * storing their addresses into the local startKeys[] array.
 	 *----------
 	 */
@@ -963,7 +963,7 @@ _bt_first(IndexScanDesc scan, ScanDirection dir)
 	}
 
 	/*----------
-	 * Examine the selected initial-positioning strategy to determine exactly
+	 * Examine the selexted initial-positioning strategy to determine exactly
 	 * where we need to start the scan, and set flag variables to control the
 	 * code below.
 	 *

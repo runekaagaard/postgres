@@ -26,7 +26,7 @@
 
 
 /*
- * The default text search selectivity is chosen to be small enough to
+ * The default text search selextivity is chosen to be small enough to
  * encourage indexscans for typical table densities.  See selfuncs.h and
  * DEFAULT_EQ_SEL for details.
  */
@@ -61,7 +61,7 @@ static int	compare_lexeme_textfreq(const void *e1, const void *e2);
 /*
  *	tsmatchsel -- Selectivity of "@@"
  *
- * restriction selectivity function for tsvector @@ tsquery and
+ * restriction selextivity function for tsvector @@ tsquery and
  * tsquery @@ tsvector
  */
 Datum
@@ -132,9 +132,9 @@ tsmatchsel(PG_FUNCTION_ARGS)
 
 
 /*
- *	tsmatchjoinsel -- join selectivity of "@@"
+ *	tsmatchjoinsel -- join selextivity of "@@"
  *
- * join selectivity function for tsvector @@ tsquery and tsquery @@ tsvector
+ * join selextivity function for tsvector @@ tsquery and tsquery @@ tsvector
  */
 Datum
 tsmatchjoinsel(PG_FUNCTION_ARGS)
@@ -145,7 +145,7 @@ tsmatchjoinsel(PG_FUNCTION_ARGS)
 
 
 /*
- * @@ selectivity for tsvector var vs tsquery constant
+ * @@ selextivity for tsvector var vs tsquery constant
  */
 static Selectivity
 tsquerysel(VariableStatData *vardata, Datum constval)
@@ -254,14 +254,14 @@ mcelem_tsquery_selec(TSQuery query, Datum *mcelem, int nmcelem,
 }
 
 /*
- * Traverse the tsquery in preorder, calculating selectivity as:
+ * Traverse the tsquery in preorder, calculating selextivity as:
  *
  *	 selec(left_oper) * selec(right_oper) in AND & PHRASE nodes,
  *
  *	 selec(left_oper) + selec(right_oper) -
  *		selec(left_oper) * selec(right_oper) in OR nodes,
  *
- *	 1 - select(oper) in NOT nodes
+ *	 1 - selext(oper) in NOT nodes
  *
  *	 histogram-based estimation in prefix VAL nodes
  *
@@ -309,7 +309,7 @@ tsquery_opr_selec(QueryItem *item, char *operand,
 			 * extrapolate the fraction of matching MCELEMs to the remaining
 			 * rows, assuming that the MCELEMs are representative of the whole
 			 * lexeme population in this respect.  (Compare
-			 * histogram_selectivity().)  Note that these are most common
+			 * histogram_selextivity().)  Note that these are most common
 			 * elements not most common values, so they're not mutually
 			 * exclusive.  We treat occurrences as independent events.
 			 *
@@ -344,7 +344,7 @@ tsquery_opr_selec(QueryItem *item, char *operand,
 			selec = matched + (1.0 - allmces) * ((double) n_matched / length);
 
 			/*
-			 * In any case, never believe that a prefix match has selectivity
+			 * In any case, never believe that a prefix match has selextivity
 			 * less than we would assign for a non-MCELEM lexeme.  This
 			 * preserves the property that "word:*" should be estimated to
 			 * match at least as many rows as "word" would be.
@@ -367,7 +367,7 @@ tsquery_opr_selec(QueryItem *item, char *operand,
 			if (searchres)
 			{
 				/*
-				 * The element is in MCELEM.  Return precise selectivity (or
+				 * The element is in MCELEM.  Return precise selextivity (or
 				 * at least as precise as ANALYZE could find out).
 				 */
 				selec = searchres->frequency;
@@ -376,7 +376,7 @@ tsquery_opr_selec(QueryItem *item, char *operand,
 			{
 				/*
 				 * The element is not in MCELEM.  Punt, but assume that the
-				 * selectivity cannot be more than minfreq / 2.
+				 * selextivity cannot be more than minfreq / 2.
 				 */
 				selec = Min(DEFAULT_TS_MATCH_SEL, minfreq / 2);
 			}

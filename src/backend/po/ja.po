@@ -1635,7 +1635,7 @@ msgstr "WAL が対応するリカバリポイントより前で終了します"
 
 #: access/transam/xlog.c:6965
 #, c-format
-msgid "selected new timeline ID: %u"
+msgid "selexted new timeline ID: %u"
 msgstr "選択された新しいタイムラインID: %u"
 
 #: access/transam/xlog.c:7325
@@ -2955,7 +2955,7 @@ msgstr "リレーション\"%s\"は存在しません"
 #: catalog/namespace.c:485 catalog/namespace.c:2834 commands/extension.c:1400
 #: commands/extension.c:1406
 #, c-format
-msgid "no schema has been selected to create in"
+msgid "no schema has been selexted to create in"
 msgstr "作成先のスキーマが選択されていません"
 
 #: catalog/namespace.c:637 catalog/namespace.c:650
@@ -3562,7 +3562,7 @@ msgstr "二項演算子のみが交代演算子を持つことができます"
 
 #: catalog/pg_operator.c:375
 #, c-format
-msgid "only binary operators can have join selectivity"
+msgid "only binary operators can have join selextivity"
 msgstr "二項演算子のみが結合選択性を持つことができます"
 
 #: catalog/pg_operator.c:379
@@ -3582,12 +3582,12 @@ msgstr "ブール型演算子のみが否定演算子を持つことができま
 
 #: catalog/pg_operator.c:398
 #, c-format
-msgid "only boolean operators can have restriction selectivity"
+msgid "only boolean operators can have restriction selextivity"
 msgstr "ブール型演算子のみが制限選択性を持つことができます"
 
 #: catalog/pg_operator.c:402
 #, c-format
-msgid "only boolean operators can have join selectivity"
+msgid "only boolean operators can have join selextivity"
 msgstr "ブール型演算子のみが結合選択性を持つことができます"
 
 #: catalog/pg_operator.c:406
@@ -10487,7 +10487,7 @@ msgstr ""
 
 #: main/main.c:315
 #, c-format
-msgid "  --single           selects single-user mode (must be first argument)\n"
+msgid "  --single           selexts single-user mode (must be first argument)\n"
 msgstr "  --single        シングルユーザモードを選択します（最初の引数でなければなりません）\n"
 
 #: main/main.c:316
@@ -10526,7 +10526,7 @@ msgstr ""
 
 #: main/main.c:323
 #, c-format
-msgid "  --boot             selects bootstrapping mode (must be first argument)\n"
+msgid "  --boot             selexts bootstrapping mode (must be first argument)\n"
 msgstr "  --boot          初期起動モードを選択します（最初の引数でなければなりません）\n"
 
 #: main/main.c:324
@@ -11110,7 +11110,7 @@ msgstr "%sに整数以外の定数があります"
 #. translator: %s is name of a SQL construct, eg ORDER BY
 #: parser/parse_clause.c:1471
 #, c-format
-msgid "%s position %d is not in select list"
+msgid "%s position %d is not in selext list"
 msgstr "%sの位置%dはSELECTリストにありません"
 
 #: parser/parse_clause.c:1693
@@ -11140,7 +11140,7 @@ msgstr "DISTINCT や ORDER BY 表現を伴なう集約は引数リストの中�
 
 #: parser/parse_clause.c:1850
 #, c-format
-msgid "for SELECT DISTINCT, ORDER BY expressions must appear in select list"
+msgid "for SELECT DISTINCT, ORDER BY expressions must appear in selext list"
 msgstr "SELECT DISTINCTではORDER BYの式はSELECTリスト内になければなりません"
 
 #: parser/parse_clause.c:1936 parser/parse_clause.c:1968
@@ -12157,8 +12157,8 @@ msgstr "poll() が失敗しました: %m"
 #: port/pg_latch.c:423 port/unix_latch.c:423
 #: replication/libpqwalreceiver/libpqwalreceiver.c:356
 #, c-format
-msgid "select() failed: %m"
-msgstr "select() が失敗しました: %m"
+msgid "selext() failed: %m"
+msgstr "selext() が失敗しました: %m"
 
 #: port/pg_sema.c:111 port/sysv_sema.c:111
 #, c-format
@@ -12592,8 +12592,8 @@ msgstr "統計情報コレクタのソケットに試験メッセージを送信
 
 #: postmaster/pgstat.c:465
 #, c-format
-msgid "select() failed in statistics collector: %m"
-msgstr "統計情報コレクタでselect()が失敗しました: %m"
+msgid "selext() failed in statistics collector: %m"
+msgstr "統計情報コレクタでselext()が失敗しました: %m"
 
 #: postmaster/pgstat.c:480
 #, c-format
@@ -12851,8 +12851,8 @@ msgstr ""
 
 #: postmaster/postmaster.c:1557
 #, c-format
-msgid "select() failed in postmaster: %m"
-msgstr "postmasterでselect()が失敗しました: %m"
+msgid "selext() failed in postmaster: %m"
+msgstr "postmasterでselext()が失敗しました: %m"
 
 #: postmaster/postmaster.c:1749 postmaster/postmaster.c:1780
 #, c-format
@@ -13807,8 +13807,8 @@ msgstr "セキュリティ保護されたビューは自動更新できません
 
 #: rewrite/rewriteHandler.c:2034 rewrite/rewriteHandler.c:2038
 #: rewrite/rewriteHandler.c:2045
-msgid "Views that do not select from a single table or view are not automatically updatable."
-msgstr "単一のテーブルまたはビューからselectしていないビューは自動更新できません"
+msgid "Views that do not selext from a single table or view are not automatically updatable."
+msgstr "単一のテーブルまたはビューからselextしていないビューは自動更新できません"
 
 #: rewrite/rewriteHandler.c:2068
 msgid "Views that return columns that are not columns of their base relation are not automatically updatable."
@@ -18923,7 +18923,7 @@ msgid "GEQO: number of individuals in the population."
 msgstr "GEQO: 遺伝的個体群内の個体数です。"
 
 #: utils/misc/guc.c:1545 utils/misc/guc.c:1554
-msgid "Zero selects a suitable default value."
+msgid "Zero selexts a suitable default value."
 msgstr "0は適切なデフォルト値を選択します。"
 
 #: utils/misc/guc.c:1553
@@ -19329,11 +19329,11 @@ msgid "Sets the planner's estimate of the fraction of a cursor's rows that will 
 msgstr "取り出されるカーソル行の割合について、プランナの予測値を設定します。"
 
 #: utils/misc/guc.c:2511
-msgid "GEQO: selective pressure within the population."
+msgid "GEQO: selextive pressure within the population."
 msgstr "GEQO: 個体群内の選択圧力です。"
 
 #: utils/misc/guc.c:2521
-msgid "GEQO: seed for random path selection."
+msgid "GEQO: seed for random path selextion."
 msgstr "GEQO: 乱数パス選択用のシード"
 
 #: utils/misc/guc.c:2531
@@ -19391,7 +19391,7 @@ msgid "Sets the default tablespace to create tables and indexes in."
 msgstr "テーブルとインデックスの作成先となるデフォルトのテーブル空間を設定します。"
 
 #: utils/misc/guc.c:2644
-msgid "An empty string selects the database's default tablespace."
+msgid "An empty string selexts the database's default tablespace."
 msgstr "空文字列はデータベースのデフォルトのテーブル空間を選択します。"
 
 #: utils/misc/guc.c:2654
@@ -20406,8 +20406,8 @@ msgstr "異なるデータベースからのスナップショットを読み込
 #~ msgid "SELECT FOR UPDATE/SHARE cannot be used with foreign table \"%s\""
 #~ msgstr "SELECT FOR UPDATE/SHARE は外部テーブル \"%s\" と一緒には使用できません"
 
-#~ msgid "select() failed in logger process: %m"
-#~ msgstr "ロガープロセスでselect()が失敗しました: %m"
+#~ msgid "selext() failed in logger process: %m"
+#~ msgstr "ロガープロセスでselext()が失敗しました: %m"
 
 #~ msgid "constraints on foreign tables are not supported"
 #~ msgstr "外部テーブルへの制約はサポートされていません"

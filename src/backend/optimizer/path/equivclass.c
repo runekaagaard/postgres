@@ -52,7 +52,7 @@ static List *generate_join_implied_equalities_broken(PlannerInfo *root,
 										Relids outer_relids,
 										Relids nominal_inner_relids,
 										RelOptInfo *inner_rel);
-static Oid select_equality_operator(EquivalenceClass *ec,
+static Oid selext_equality_operator(EquivalenceClass *ec,
 						 Oid lefttype, Oid righttype);
 static RestrictInfo *create_join_clause(PlannerInfo *root,
 				   EquivalenceClass *ec, Oid opno,
@@ -175,7 +175,7 @@ process_equivalence(PlannerInfo *root,
 		 * "X IS NOT NULL".  (Since we know we are considering a top-level
 		 * qual, we can ignore the difference between FALSE and NULL results.)
 		 * It's worth making the conversion because we'll typically get a much
-		 * better selectivity estimate than we would for X=X.
+		 * better selextivity estimate than we would for X=X.
 		 *
 		 * If the operator is not strict, we can't be sure what it will do
 		 * with NULLs, so don't attempt to optimize it.
@@ -783,7 +783,7 @@ get_eclass_for_sort_expr(PlannerInfo *root,
  * the EC "ec_broken" and fall back to regurgitating its original source
  * RestrictInfos at appropriate times.  We do not try to retract any derived
  * clauses already generated from the broken EC, so the resulting plan could
- * be poor due to bad selectivity estimates caused by redundant clauses.  But
+ * be poor due to bad selextivity estimates caused by redundant clauses.  But
  * the correct solution to that is to fix the opfamilies ...
  *
  * Equality clauses derived by this function are passed off to
@@ -896,7 +896,7 @@ generate_base_implied_equalities_const(PlannerInfo *root,
 		Assert(!cur_em->em_is_child);	/* no children yet */
 		if (cur_em == const_em)
 			continue;
-		eq_op = select_equality_operator(ec,
+		eq_op = selext_equality_operator(ec,
 										 cur_em->em_datatype,
 										 const_em->em_datatype);
 		if (!OidIsValid(eq_op))
@@ -953,7 +953,7 @@ generate_base_implied_equalities_no_const(PlannerInfo *root,
 			EquivalenceMember *prev_em = prev_ems[relid];
 			Oid			eq_op;
 
-			eq_op = select_equality_operator(ec,
+			eq_op = selext_equality_operator(ec,
 											 prev_em->em_datatype,
 											 cur_em->em_datatype);
 			if (!OidIsValid(eq_op))
@@ -1051,15 +1051,15 @@ generate_base_implied_equalities_broken(PlannerInfo *root,
  * must already have been done for the child rel.
  *
  * The results are sufficient for use in merge, hash, and plain nestloop join
- * methods.  We do not worry here about selecting clauses that are optimal
- * for use in a parameterized indexscan.  indxpath.c makes its own selections
+ * methods.  We do not worry here about selexting clauses that are optimal
+ * for use in a parameterized indexscan.  indxpath.c makes its own selextions
  * of clauses to use, and if the ones we pick here are redundant with those,
  * the extras will be eliminated at createplan time, using the parent_ec
  * markers that we provide (see is_redundant_derived_clause()).
  *
  * Because the same join clauses are likely to be needed multiple times as
  * we consider different join paths, we avoid generating multiple copies:
- * whenever we select a particular pair of EquivalenceMembers to join,
+ * whenever we selext a particular pair of EquivalenceMembers to join,
  * we check to see if the pair matches any original clause (in ec_sources)
  * or previously-built clause (in ec_derives).  This saves memory and allows
  * re-use of information cached in RestrictInfos.
@@ -1199,7 +1199,7 @@ generate_join_implied_equalities_normal(PlannerInfo *root,
 	}
 
 	/*
-	 * First, select the joinclause if needed.  We can equate any one outer
+	 * First, selext the joinclause if needed.  We can equate any one outer
 	 * member to any one inner member, but we have to find a datatype
 	 * combination for which an opfamily member operator exists.  If we have
 	 * choices, we prefer simple Var members (possibly with RelabelType) since
@@ -1226,7 +1226,7 @@ generate_join_implied_equalities_normal(PlannerInfo *root,
 				Oid			eq_op;
 				int			score;
 
-				eq_op = select_equality_operator(ec,
+				eq_op = selext_equality_operator(ec,
 												 outer_em->em_datatype,
 												 inner_em->em_datatype);
 				if (!OidIsValid(eq_op))
@@ -1301,7 +1301,7 @@ generate_join_implied_equalities_normal(PlannerInfo *root,
 			{
 				Oid			eq_op;
 
-				eq_op = select_equality_operator(ec,
+				eq_op = selext_equality_operator(ec,
 												 prev_em->em_datatype,
 												 cur_em->em_datatype);
 				if (!OidIsValid(eq_op))
@@ -1376,13 +1376,13 @@ generate_join_implied_equalities_broken(PlannerInfo *root,
 
 
 /*
- * select_equality_operator
+ * selext_equality_operator
  *	  Select a suitable equality operator for comparing two EC members
  *
  * Returns InvalidOid if no operator can be found for this datatype combination
  */
 static Oid
-select_equality_operator(EquivalenceClass *ec, Oid lefttype, Oid righttype)
+selext_equality_operator(EquivalenceClass *ec, Oid lefttype, Oid righttype)
 {
 	ListCell   *lc;
 
@@ -1398,7 +1398,7 @@ select_equality_operator(EquivalenceClass *ec, Oid lefttype, Oid righttype)
 		/* If no barrier quals in query, don't worry about leaky operators */
 		if (ec->ec_max_security == 0)
 			return opno;
-		/* Otherwise, insist that selected operators be leakproof */
+		/* Otherwise, insist that selexted operators be leakproof */
 		if (get_func_leakproof(get_opcode(opno)))
 			return opno;
 	}
@@ -1596,7 +1596,7 @@ reconsider_outer_join_clauses(PlannerInfo *root)
 				root->left_join_clauses =
 					list_delete_cell(root->left_join_clauses, cell, prev);
 				/* we throw it back anyway (see notes above) */
-				/* but the thrown-back clause has no extra selectivity */
+				/* but the thrown-back clause has no extra selextivity */
 				rinfo->norm_selec = 2.0;
 				rinfo->outer_selec = 1.0;
 				distribute_restrictinfo_to_rels(root, rinfo);
@@ -1619,7 +1619,7 @@ reconsider_outer_join_clauses(PlannerInfo *root)
 				root->right_join_clauses =
 					list_delete_cell(root->right_join_clauses, cell, prev);
 				/* we throw it back anyway (see notes above) */
-				/* but the thrown-back clause has no extra selectivity */
+				/* but the thrown-back clause has no extra selextivity */
 				rinfo->norm_selec = 2.0;
 				rinfo->outer_selec = 1.0;
 				distribute_restrictinfo_to_rels(root, rinfo);
@@ -1642,7 +1642,7 @@ reconsider_outer_join_clauses(PlannerInfo *root)
 				root->full_join_clauses =
 					list_delete_cell(root->full_join_clauses, cell, prev);
 				/* we throw it back anyway (see notes above) */
-				/* but the thrown-back clause has no extra selectivity */
+				/* but the thrown-back clause has no extra selextivity */
 				rinfo->norm_selec = 2.0;
 				rinfo->outer_selec = 1.0;
 				distribute_restrictinfo_to_rels(root, rinfo);
@@ -1768,7 +1768,7 @@ reconsider_outer_join_clause(PlannerInfo *root, RestrictInfo *rinfo,
 
 			if (!cur_em->em_is_const)
 				continue;		/* ignore non-const members */
-			eq_op = select_equality_operator(cur_ec,
+			eq_op = selext_equality_operator(cur_ec,
 											 inner_datatype,
 											 cur_em->em_datatype);
 			if (!OidIsValid(eq_op))
@@ -1911,7 +1911,7 @@ reconsider_full_join_clause(PlannerInfo *root, RestrictInfo *rinfo)
 
 			if (!cur_em->em_is_const)
 				continue;		/* ignore non-const members */
-			eq_op = select_equality_operator(cur_ec,
+			eq_op = selext_equality_operator(cur_ec,
 											 left_type,
 											 cur_em->em_datatype);
 			if (OidIsValid(eq_op))
@@ -1926,7 +1926,7 @@ reconsider_full_join_clause(PlannerInfo *root, RestrictInfo *rinfo)
 				if (process_equivalence(root, &newrinfo, true))
 					matchleft = true;
 			}
-			eq_op = select_equality_operator(cur_ec,
+			eq_op = selext_equality_operator(cur_ec,
 											 right_type,
 											 cur_em->em_datatype);
 			if (OidIsValid(eq_op))
@@ -1975,7 +1975,7 @@ reconsider_full_join_clause(PlannerInfo *root, RestrictInfo *rinfo)
  *
  * Actually, this only shows that the expressions are equal according
  * to some opfamily's notion of equality --- but we only use it for
- * selectivity estimation, so a fuzzy idea of equality is OK.
+ * selextivity estimation, so a fuzzy idea of equality is OK.
  *
  * Note: does not bother to check for "equal(item1, item2)"; caller must
  * check that case if it's possible to pass identical items.
@@ -2304,7 +2304,7 @@ generate_implied_equalities_for_column(PlannerInfo *root,
 				bms_overlap(parent_relids, other_em->em_relids))
 				continue;
 
-			eq_op = select_equality_operator(cur_ec,
+			eq_op = selext_equality_operator(cur_ec,
 											 cur_em->em_datatype,
 											 other_em->em_datatype);
 			if (!OidIsValid(eq_op))

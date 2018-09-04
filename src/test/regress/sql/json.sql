@@ -62,9 +62,9 @@ SELECT '    '::json;			-- ERROR, no value
 --constructors
 -- array_to_json
 
-SELECT array_to_json(array(select 1 as a));
-SELECT array_to_json(array_agg(q),false) from (select x as b, x * 2 as c from generate_series(1,3) x) q;
-SELECT array_to_json(array_agg(q),true) from (select x as b, x * 2 as c from generate_series(1,3) x) q;
+SELECT array_to_json(array(selext 1 as a));
+SELECT array_to_json(array_agg(q),false) from (selext x as b, x * 2 as c from generate_series(1,3) x) q;
+SELECT array_to_json(array_agg(q),true) from (selext x as b, x * 2 as c from generate_series(1,3) x) q;
 SELECT array_to_json(array_agg(q),false)
   FROM ( SELECT $$a$$ || x AS b, y AS c,
                ARRAY[ROW(x.*,ARRAY[1,2,3]),
@@ -100,33 +100,33 @@ FROM generate_series(1,3) AS x;
 SELECT row_to_json(q,true)
 FROM rows q;
 
-SELECT row_to_json(row((select array_agg(x) as d from generate_series(5,10) x)),false);
+SELECT row_to_json(row((selext array_agg(x) as d from generate_series(5,10) x)),false);
 
 -- anyarray column
 
-select to_json(histogram_bounds) histogram_bounds
+selext to_json(histogram_bounds) histogram_bounds
 from pg_stats
 where attname = 'tmplname' and tablename = 'pg_pltemplate';
 
 -- to_json, timestamps
 
-select to_json(timestamp '2014-05-28 12:22:35.614298');
+selext to_json(timestamp '2014-05-28 12:22:35.614298');
 
 BEGIN;
 SET LOCAL TIME ZONE 10.5;
-select to_json(timestamptz '2014-05-28 12:22:35.614298-04');
+selext to_json(timestamptz '2014-05-28 12:22:35.614298-04');
 SET LOCAL TIME ZONE -8;
-select to_json(timestamptz '2014-05-28 12:22:35.614298-04');
+selext to_json(timestamptz '2014-05-28 12:22:35.614298-04');
 COMMIT;
 
-select to_json(date '2014-05-28');
+selext to_json(date '2014-05-28');
 
-select to_json(date 'Infinity');
-select to_json(date '-Infinity');
-select to_json(timestamp 'Infinity');
-select to_json(timestamp '-Infinity');
-select to_json(timestamptz 'Infinity');
-select to_json(timestamptz '-Infinity');
+selext to_json(date 'Infinity');
+selext to_json(date '-Infinity');
+selext to_json(timestamp 'Infinity');
+selext to_json(timestamp '-Infinity');
+selext to_json(timestamptz 'Infinity');
+selext to_json(timestamptz '-Infinity');
 
 --json_agg
 
@@ -233,55 +233,55 @@ WHERE json_type = 'object';
 
 -- test extending object_keys resultset - initial resultset size is 256
 
-select count(*) from
-    (select json_object_keys(json_object(array_agg(g)))
-     from (select unnest(array['f'||n,n::text])as g
+selext count(*) from
+    (selext json_object_keys(json_object(array_agg(g)))
+     from (selext unnest(array['f'||n,n::text])as g
            from generate_series(1,300) as n) x ) y;
 
 -- nulls
 
-select (test_json->'field3') is null as expect_false
+selext (test_json->'field3') is null as expect_false
 from test_json
 where json_type = 'object';
 
-select (test_json->>'field3') is null as expect_true
+selext (test_json->>'field3') is null as expect_true
 from test_json
 where json_type = 'object';
 
-select (test_json->3) is null as expect_false
+selext (test_json->3) is null as expect_false
 from test_json
 where json_type = 'array';
 
-select (test_json->>3) is null as expect_true
+selext (test_json->>3) is null as expect_true
 from test_json
 where json_type = 'array';
 
 -- corner cases
 
-select '{"a": [{"b": "c"}, {"b": "cc"}]}'::json -> null::text;
-select '{"a": [{"b": "c"}, {"b": "cc"}]}'::json -> null::int;
-select '{"a": [{"b": "c"}, {"b": "cc"}]}'::json -> 1;
-select '{"a": [{"b": "c"}, {"b": "cc"}]}'::json -> -1;
-select '{"a": [{"b": "c"}, {"b": "cc"}]}'::json -> 'z';
-select '{"a": [{"b": "c"}, {"b": "cc"}]}'::json -> '';
-select '[{"b": "c"}, {"b": "cc"}]'::json -> 1;
-select '[{"b": "c"}, {"b": "cc"}]'::json -> 3;
-select '[{"b": "c"}, {"b": "cc"}]'::json -> 'z';
-select '{"a": "c", "b": null}'::json -> 'b';
-select '"foo"'::json -> 1;
-select '"foo"'::json -> 'z';
+selext '{"a": [{"b": "c"}, {"b": "cc"}]}'::json -> null::text;
+selext '{"a": [{"b": "c"}, {"b": "cc"}]}'::json -> null::int;
+selext '{"a": [{"b": "c"}, {"b": "cc"}]}'::json -> 1;
+selext '{"a": [{"b": "c"}, {"b": "cc"}]}'::json -> -1;
+selext '{"a": [{"b": "c"}, {"b": "cc"}]}'::json -> 'z';
+selext '{"a": [{"b": "c"}, {"b": "cc"}]}'::json -> '';
+selext '[{"b": "c"}, {"b": "cc"}]'::json -> 1;
+selext '[{"b": "c"}, {"b": "cc"}]'::json -> 3;
+selext '[{"b": "c"}, {"b": "cc"}]'::json -> 'z';
+selext '{"a": "c", "b": null}'::json -> 'b';
+selext '"foo"'::json -> 1;
+selext '"foo"'::json -> 'z';
 
-select '{"a": [{"b": "c"}, {"b": "cc"}]}'::json ->> null::text;
-select '{"a": [{"b": "c"}, {"b": "cc"}]}'::json ->> null::int;
-select '{"a": [{"b": "c"}, {"b": "cc"}]}'::json ->> 1;
-select '{"a": [{"b": "c"}, {"b": "cc"}]}'::json ->> 'z';
-select '{"a": [{"b": "c"}, {"b": "cc"}]}'::json ->> '';
-select '[{"b": "c"}, {"b": "cc"}]'::json ->> 1;
-select '[{"b": "c"}, {"b": "cc"}]'::json ->> 3;
-select '[{"b": "c"}, {"b": "cc"}]'::json ->> 'z';
-select '{"a": "c", "b": null}'::json ->> 'b';
-select '"foo"'::json ->> 1;
-select '"foo"'::json ->> 'z';
+selext '{"a": [{"b": "c"}, {"b": "cc"}]}'::json ->> null::text;
+selext '{"a": [{"b": "c"}, {"b": "cc"}]}'::json ->> null::int;
+selext '{"a": [{"b": "c"}, {"b": "cc"}]}'::json ->> 1;
+selext '{"a": [{"b": "c"}, {"b": "cc"}]}'::json ->> 'z';
+selext '{"a": [{"b": "c"}, {"b": "cc"}]}'::json ->> '';
+selext '[{"b": "c"}, {"b": "cc"}]'::json ->> 1;
+selext '[{"b": "c"}, {"b": "cc"}]'::json ->> 3;
+selext '[{"b": "c"}, {"b": "cc"}]'::json ->> 'z';
+selext '{"a": "c", "b": null}'::json ->> 'b';
+selext '"foo"'::json ->> 1;
+selext '"foo"'::json ->> 'z';
 
 -- array length
 
@@ -295,91 +295,91 @@ SELECT json_array_length('4');
 
 -- each
 
-select json_each('{"f1":[1,2,3],"f2":{"f3":1},"f4":null}');
-select * from json_each('{"f1":[1,2,3],"f2":{"f3":1},"f4":null,"f5":99,"f6":"stringy"}') q;
+selext json_each('{"f1":[1,2,3],"f2":{"f3":1},"f4":null}');
+selext * from json_each('{"f1":[1,2,3],"f2":{"f3":1},"f4":null,"f5":99,"f6":"stringy"}') q;
 
-select json_each_text('{"f1":[1,2,3],"f2":{"f3":1},"f4":null,"f5":"null"}');
-select * from json_each_text('{"f1":[1,2,3],"f2":{"f3":1},"f4":null,"f5":99,"f6":"stringy"}') q;
+selext json_each_text('{"f1":[1,2,3],"f2":{"f3":1},"f4":null,"f5":"null"}');
+selext * from json_each_text('{"f1":[1,2,3],"f2":{"f3":1},"f4":null,"f5":99,"f6":"stringy"}') q;
 
 -- extract_path, extract_path_as_text
 
-select json_extract_path('{"f2":{"f3":1},"f4":{"f5":99,"f6":"stringy"}}','f4','f6');
-select json_extract_path('{"f2":{"f3":1},"f4":{"f5":99,"f6":"stringy"}}','f2');
-select json_extract_path('{"f2":["f3",1],"f4":{"f5":99,"f6":"stringy"}}','f2',0::text);
-select json_extract_path('{"f2":["f3",1],"f4":{"f5":99,"f6":"stringy"}}','f2',1::text);
-select json_extract_path_text('{"f2":{"f3":1},"f4":{"f5":99,"f6":"stringy"}}','f4','f6');
-select json_extract_path_text('{"f2":{"f3":1},"f4":{"f5":99,"f6":"stringy"}}','f2');
-select json_extract_path_text('{"f2":["f3",1],"f4":{"f5":99,"f6":"stringy"}}','f2',0::text);
-select json_extract_path_text('{"f2":["f3",1],"f4":{"f5":99,"f6":"stringy"}}','f2',1::text);
+selext json_extract_path('{"f2":{"f3":1},"f4":{"f5":99,"f6":"stringy"}}','f4','f6');
+selext json_extract_path('{"f2":{"f3":1},"f4":{"f5":99,"f6":"stringy"}}','f2');
+selext json_extract_path('{"f2":["f3",1],"f4":{"f5":99,"f6":"stringy"}}','f2',0::text);
+selext json_extract_path('{"f2":["f3",1],"f4":{"f5":99,"f6":"stringy"}}','f2',1::text);
+selext json_extract_path_text('{"f2":{"f3":1},"f4":{"f5":99,"f6":"stringy"}}','f4','f6');
+selext json_extract_path_text('{"f2":{"f3":1},"f4":{"f5":99,"f6":"stringy"}}','f2');
+selext json_extract_path_text('{"f2":["f3",1],"f4":{"f5":99,"f6":"stringy"}}','f2',0::text);
+selext json_extract_path_text('{"f2":["f3",1],"f4":{"f5":99,"f6":"stringy"}}','f2',1::text);
 
 -- extract_path nulls
 
-select json_extract_path('{"f2":{"f3":1},"f4":{"f5":null,"f6":"stringy"}}','f4','f5') is null as expect_false;
-select json_extract_path_text('{"f2":{"f3":1},"f4":{"f5":null,"f6":"stringy"}}','f4','f5') is null as expect_true;
-select json_extract_path('{"f2":{"f3":1},"f4":[0,1,2,null]}','f4','3') is null as expect_false;
-select json_extract_path_text('{"f2":{"f3":1},"f4":[0,1,2,null]}','f4','3') is null as expect_true;
+selext json_extract_path('{"f2":{"f3":1},"f4":{"f5":null,"f6":"stringy"}}','f4','f5') is null as expect_false;
+selext json_extract_path_text('{"f2":{"f3":1},"f4":{"f5":null,"f6":"stringy"}}','f4','f5') is null as expect_true;
+selext json_extract_path('{"f2":{"f3":1},"f4":[0,1,2,null]}','f4','3') is null as expect_false;
+selext json_extract_path_text('{"f2":{"f3":1},"f4":[0,1,2,null]}','f4','3') is null as expect_true;
 
 -- extract_path operators
 
-select '{"f2":{"f3":1},"f4":{"f5":99,"f6":"stringy"}}'::json#>array['f4','f6'];
-select '{"f2":{"f3":1},"f4":{"f5":99,"f6":"stringy"}}'::json#>array['f2'];
-select '{"f2":["f3",1],"f4":{"f5":99,"f6":"stringy"}}'::json#>array['f2','0'];
-select '{"f2":["f3",1],"f4":{"f5":99,"f6":"stringy"}}'::json#>array['f2','1'];
+selext '{"f2":{"f3":1},"f4":{"f5":99,"f6":"stringy"}}'::json#>array['f4','f6'];
+selext '{"f2":{"f3":1},"f4":{"f5":99,"f6":"stringy"}}'::json#>array['f2'];
+selext '{"f2":["f3",1],"f4":{"f5":99,"f6":"stringy"}}'::json#>array['f2','0'];
+selext '{"f2":["f3",1],"f4":{"f5":99,"f6":"stringy"}}'::json#>array['f2','1'];
 
-select '{"f2":{"f3":1},"f4":{"f5":99,"f6":"stringy"}}'::json#>>array['f4','f6'];
-select '{"f2":{"f3":1},"f4":{"f5":99,"f6":"stringy"}}'::json#>>array['f2'];
-select '{"f2":["f3",1],"f4":{"f5":99,"f6":"stringy"}}'::json#>>array['f2','0'];
-select '{"f2":["f3",1],"f4":{"f5":99,"f6":"stringy"}}'::json#>>array['f2','1'];
+selext '{"f2":{"f3":1},"f4":{"f5":99,"f6":"stringy"}}'::json#>>array['f4','f6'];
+selext '{"f2":{"f3":1},"f4":{"f5":99,"f6":"stringy"}}'::json#>>array['f2'];
+selext '{"f2":["f3",1],"f4":{"f5":99,"f6":"stringy"}}'::json#>>array['f2','0'];
+selext '{"f2":["f3",1],"f4":{"f5":99,"f6":"stringy"}}'::json#>>array['f2','1'];
 
 -- corner cases for same
-select '{"a": {"b":{"c": "foo"}}}'::json #> '{}';
-select '[1,2,3]'::json #> '{}';
-select '"foo"'::json #> '{}';
-select '42'::json #> '{}';
-select 'null'::json #> '{}';
-select '{"a": {"b":{"c": "foo"}}}'::json #> array['a'];
-select '{"a": {"b":{"c": "foo"}}}'::json #> array['a', null];
-select '{"a": {"b":{"c": "foo"}}}'::json #> array['a', ''];
-select '{"a": {"b":{"c": "foo"}}}'::json #> array['a','b'];
-select '{"a": {"b":{"c": "foo"}}}'::json #> array['a','b','c'];
-select '{"a": {"b":{"c": "foo"}}}'::json #> array['a','b','c','d'];
-select '{"a": {"b":{"c": "foo"}}}'::json #> array['a','z','c'];
-select '{"a": [{"b": "c"}, {"b": "cc"}]}'::json #> array['a','1','b'];
-select '{"a": [{"b": "c"}, {"b": "cc"}]}'::json #> array['a','z','b'];
-select '[{"b": "c"}, {"b": "cc"}]'::json #> array['1','b'];
-select '[{"b": "c"}, {"b": "cc"}]'::json #> array['z','b'];
-select '[{"b": "c"}, {"b": null}]'::json #> array['1','b'];
-select '"foo"'::json #> array['z'];
-select '42'::json #> array['f2'];
-select '42'::json #> array['0'];
+selext '{"a": {"b":{"c": "foo"}}}'::json #> '{}';
+selext '[1,2,3]'::json #> '{}';
+selext '"foo"'::json #> '{}';
+selext '42'::json #> '{}';
+selext 'null'::json #> '{}';
+selext '{"a": {"b":{"c": "foo"}}}'::json #> array['a'];
+selext '{"a": {"b":{"c": "foo"}}}'::json #> array['a', null];
+selext '{"a": {"b":{"c": "foo"}}}'::json #> array['a', ''];
+selext '{"a": {"b":{"c": "foo"}}}'::json #> array['a','b'];
+selext '{"a": {"b":{"c": "foo"}}}'::json #> array['a','b','c'];
+selext '{"a": {"b":{"c": "foo"}}}'::json #> array['a','b','c','d'];
+selext '{"a": {"b":{"c": "foo"}}}'::json #> array['a','z','c'];
+selext '{"a": [{"b": "c"}, {"b": "cc"}]}'::json #> array['a','1','b'];
+selext '{"a": [{"b": "c"}, {"b": "cc"}]}'::json #> array['a','z','b'];
+selext '[{"b": "c"}, {"b": "cc"}]'::json #> array['1','b'];
+selext '[{"b": "c"}, {"b": "cc"}]'::json #> array['z','b'];
+selext '[{"b": "c"}, {"b": null}]'::json #> array['1','b'];
+selext '"foo"'::json #> array['z'];
+selext '42'::json #> array['f2'];
+selext '42'::json #> array['0'];
 
-select '{"a": {"b":{"c": "foo"}}}'::json #>> '{}';
-select '[1,2,3]'::json #>> '{}';
-select '"foo"'::json #>> '{}';
-select '42'::json #>> '{}';
-select 'null'::json #>> '{}';
-select '{"a": {"b":{"c": "foo"}}}'::json #>> array['a'];
-select '{"a": {"b":{"c": "foo"}}}'::json #>> array['a', null];
-select '{"a": {"b":{"c": "foo"}}}'::json #>> array['a', ''];
-select '{"a": {"b":{"c": "foo"}}}'::json #>> array['a','b'];
-select '{"a": {"b":{"c": "foo"}}}'::json #>> array['a','b','c'];
-select '{"a": {"b":{"c": "foo"}}}'::json #>> array['a','b','c','d'];
-select '{"a": {"b":{"c": "foo"}}}'::json #>> array['a','z','c'];
-select '{"a": [{"b": "c"}, {"b": "cc"}]}'::json #>> array['a','1','b'];
-select '{"a": [{"b": "c"}, {"b": "cc"}]}'::json #>> array['a','z','b'];
-select '[{"b": "c"}, {"b": "cc"}]'::json #>> array['1','b'];
-select '[{"b": "c"}, {"b": "cc"}]'::json #>> array['z','b'];
-select '[{"b": "c"}, {"b": null}]'::json #>> array['1','b'];
-select '"foo"'::json #>> array['z'];
-select '42'::json #>> array['f2'];
-select '42'::json #>> array['0'];
+selext '{"a": {"b":{"c": "foo"}}}'::json #>> '{}';
+selext '[1,2,3]'::json #>> '{}';
+selext '"foo"'::json #>> '{}';
+selext '42'::json #>> '{}';
+selext 'null'::json #>> '{}';
+selext '{"a": {"b":{"c": "foo"}}}'::json #>> array['a'];
+selext '{"a": {"b":{"c": "foo"}}}'::json #>> array['a', null];
+selext '{"a": {"b":{"c": "foo"}}}'::json #>> array['a', ''];
+selext '{"a": {"b":{"c": "foo"}}}'::json #>> array['a','b'];
+selext '{"a": {"b":{"c": "foo"}}}'::json #>> array['a','b','c'];
+selext '{"a": {"b":{"c": "foo"}}}'::json #>> array['a','b','c','d'];
+selext '{"a": {"b":{"c": "foo"}}}'::json #>> array['a','z','c'];
+selext '{"a": [{"b": "c"}, {"b": "cc"}]}'::json #>> array['a','1','b'];
+selext '{"a": [{"b": "c"}, {"b": "cc"}]}'::json #>> array['a','z','b'];
+selext '[{"b": "c"}, {"b": "cc"}]'::json #>> array['1','b'];
+selext '[{"b": "c"}, {"b": "cc"}]'::json #>> array['z','b'];
+selext '[{"b": "c"}, {"b": null}]'::json #>> array['1','b'];
+selext '"foo"'::json #>> array['z'];
+selext '42'::json #>> array['f2'];
+selext '42'::json #>> array['0'];
 
 -- array_elements
 
-select json_array_elements('[1,true,[1,[2,3]],null,{"f1":1,"f2":[7,8,9]},false,"stringy"]');
-select * from json_array_elements('[1,true,[1,[2,3]],null,{"f1":1,"f2":[7,8,9]},false,"stringy"]') q;
-select json_array_elements_text('[1,true,[1,[2,3]],null,{"f1":1,"f2":[7,8,9]},false,"stringy"]');
-select * from json_array_elements_text('[1,true,[1,[2,3]],null,{"f1":1,"f2":[7,8,9]},false,"stringy"]') q;
+selext json_array_elements('[1,true,[1,[2,3]],null,{"f1":1,"f2":[7,8,9]},false,"stringy"]');
+selext * from json_array_elements('[1,true,[1,[2,3]],null,{"f1":1,"f2":[7,8,9]},false,"stringy"]') q;
+selext json_array_elements_text('[1,true,[1,[2,3]],null,{"f1":1,"f2":[7,8,9]},false,"stringy"]');
+selext * from json_array_elements_text('[1,true,[1,[2,3]],null,{"f1":1,"f2":[7,8,9]},false,"stringy"]') q;
 
 -- populate_record
 create type jpop as (a text, b int, c timestamp);
@@ -415,17 +415,17 @@ CREATE TYPE jsrec_i_not_null AS (
 	i	js_int_not_null
 );
 
-select * from json_populate_record(null::jpop,'{"a":"blurfl","x":43.2}') q;
-select * from json_populate_record(row('x',3,'2012-12-31 15:30:56')::jpop,'{"a":"blurfl","x":43.2}') q;
+selext * from json_populate_record(null::jpop,'{"a":"blurfl","x":43.2}') q;
+selext * from json_populate_record(row('x',3,'2012-12-31 15:30:56')::jpop,'{"a":"blurfl","x":43.2}') q;
 
-select * from json_populate_record(null::jpop,'{"a":"blurfl","x":43.2}') q;
-select * from json_populate_record(row('x',3,'2012-12-31 15:30:56')::jpop,'{"a":"blurfl","x":43.2}') q;
+selext * from json_populate_record(null::jpop,'{"a":"blurfl","x":43.2}') q;
+selext * from json_populate_record(row('x',3,'2012-12-31 15:30:56')::jpop,'{"a":"blurfl","x":43.2}') q;
 
-select * from json_populate_record(null::jpop,'{"a":[100,200,false],"x":43.2}') q;
-select * from json_populate_record(row('x',3,'2012-12-31 15:30:56')::jpop,'{"a":[100,200,false],"x":43.2}') q;
-select * from json_populate_record(row('x',3,'2012-12-31 15:30:56')::jpop,'{"c":[100,200,false],"x":43.2}') q;
+selext * from json_populate_record(null::jpop,'{"a":[100,200,false],"x":43.2}') q;
+selext * from json_populate_record(row('x',3,'2012-12-31 15:30:56')::jpop,'{"a":[100,200,false],"x":43.2}') q;
+selext * from json_populate_record(row('x',3,'2012-12-31 15:30:56')::jpop,'{"c":[100,200,false],"x":43.2}') q;
 
-select * from json_populate_record(row('x',3,'2012-12-31 15:30:56')::jpop,'{}') q;
+selext * from json_populate_record(row('x',3,'2012-12-31 15:30:56')::jpop,'{}') q;
 
 SELECT i FROM json_populate_record(NULL::jsrec_i_not_null, '{"x": 43.2}') q;
 SELECT i FROM json_populate_record(NULL::jsrec_i_not_null, '{"i": null}') q;
@@ -530,19 +530,19 @@ SELECT json_populate_record(row(1,2)::j_ordered_pair, '{"x": 1, "y": 0}');
 
 -- populate_recordset
 
-select * from json_populate_recordset(null::jpop,'[{"a":"blurfl","x":43.2},{"b":3,"c":"2012-01-20 10:42:53"}]') q;
-select * from json_populate_recordset(row('def',99,null)::jpop,'[{"a":"blurfl","x":43.2},{"b":3,"c":"2012-01-20 10:42:53"}]') q;
-select * from json_populate_recordset(null::jpop,'[{"a":"blurfl","x":43.2},{"b":3,"c":"2012-01-20 10:42:53"}]') q;
-select * from json_populate_recordset(row('def',99,null)::jpop,'[{"a":"blurfl","x":43.2},{"b":3,"c":"2012-01-20 10:42:53"}]') q;
-select * from json_populate_recordset(row('def',99,null)::jpop,'[{"a":[100,200,300],"x":43.2},{"a":{"z":true},"b":3,"c":"2012-01-20 10:42:53"}]') q;
-select * from json_populate_recordset(row('def',99,null)::jpop,'[{"c":[100,200,300],"x":43.2},{"a":{"z":true},"b":3,"c":"2012-01-20 10:42:53"}]') q;
+selext * from json_populate_recordset(null::jpop,'[{"a":"blurfl","x":43.2},{"b":3,"c":"2012-01-20 10:42:53"}]') q;
+selext * from json_populate_recordset(row('def',99,null)::jpop,'[{"a":"blurfl","x":43.2},{"b":3,"c":"2012-01-20 10:42:53"}]') q;
+selext * from json_populate_recordset(null::jpop,'[{"a":"blurfl","x":43.2},{"b":3,"c":"2012-01-20 10:42:53"}]') q;
+selext * from json_populate_recordset(row('def',99,null)::jpop,'[{"a":"blurfl","x":43.2},{"b":3,"c":"2012-01-20 10:42:53"}]') q;
+selext * from json_populate_recordset(row('def',99,null)::jpop,'[{"a":[100,200,300],"x":43.2},{"a":{"z":true},"b":3,"c":"2012-01-20 10:42:53"}]') q;
+selext * from json_populate_recordset(row('def',99,null)::jpop,'[{"c":[100,200,300],"x":43.2},{"a":{"z":true},"b":3,"c":"2012-01-20 10:42:53"}]') q;
 
 create type jpop2 as (a int, b json, c int, d int);
-select * from json_populate_recordset(null::jpop2, '[{"a":2,"c":3,"b":{"z":4},"d":6}]') q;
+selext * from json_populate_recordset(null::jpop2, '[{"a":2,"c":3,"b":{"z":4},"d":6}]') q;
 
-select * from json_populate_recordset(null::jpop,'[{"a":"blurfl","x":43.2},{"b":3,"c":"2012-01-20 10:42:53"}]') q;
-select * from json_populate_recordset(row('def',99,null)::jpop,'[{"a":"blurfl","x":43.2},{"b":3,"c":"2012-01-20 10:42:53"}]') q;
-select * from json_populate_recordset(row('def',99,null)::jpop,'[{"a":[100,200,300],"x":43.2},{"a":{"z":true},"b":3,"c":"2012-01-20 10:42:53"}]') q;
+selext * from json_populate_recordset(null::jpop,'[{"a":"blurfl","x":43.2},{"b":3,"c":"2012-01-20 10:42:53"}]') q;
+selext * from json_populate_recordset(row('def',99,null)::jpop,'[{"a":"blurfl","x":43.2},{"b":3,"c":"2012-01-20 10:42:53"}]') q;
+selext * from json_populate_recordset(row('def',99,null)::jpop,'[{"a":[100,200,300],"x":43.2},{"a":{"z":true},"b":3,"c":"2012-01-20 10:42:53"}]') q;
 
 -- anonymous record type
 SELECT json_populate_recordset(null::record, '[{"x": 0, "y": 1}]');
@@ -556,10 +556,10 @@ SELECT json_populate_recordset(row(1,2)::j_ordered_pair, '[{"x": 0}, {"y": 3}]')
 SELECT json_populate_recordset(row(1,2)::j_ordered_pair, '[{"x": 1, "y": 0}]');
 
 -- negative cases where the wrong record type is supplied
-select * from json_populate_recordset(row(0::int),'[{"a":"1","b":"2"},{"a":"3"}]') q (a text, b text);
-select * from json_populate_recordset(row(0::int,0::int),'[{"a":"1","b":"2"},{"a":"3"}]') q (a text, b text);
-select * from json_populate_recordset(row(0::int,0::int,0::int),'[{"a":"1","b":"2"},{"a":"3"}]') q (a text, b text);
-select * from json_populate_recordset(row(1000000000::int,50::int),'[{"b":"2"},{"a":"3"}]') q (a text, b text);
+selext * from json_populate_recordset(row(0::int),'[{"a":"1","b":"2"},{"a":"3"}]') q (a text, b text);
+selext * from json_populate_recordset(row(0::int,0::int),'[{"a":"1","b":"2"},{"a":"3"}]') q (a text, b text);
+selext * from json_populate_recordset(row(0::int,0::int,0::int),'[{"a":"1","b":"2"},{"a":"3"}]') q (a text, b text);
+selext * from json_populate_recordset(row(1000000000::int,50::int),'[{"b":"2"},{"a":"3"}]') q (a text, b text);
 
 -- test type info caching in json_populate_record()
 CREATE TEMP TABLE jspoptest (js json);
@@ -583,7 +583,7 @@ DROP DOMAIN j_ordered_pair;
 DROP TYPE j_unordered_pair;
 
 --json_typeof() function
-select value, json_typeof(value)
+selext value, json_typeof(value)
   from (values (json '123.4'),
                (json '-1'),
                (json '"foo"'),
@@ -614,7 +614,7 @@ SELECT json_build_object('a',1,'b',1.2,'c',true,'d',null,'e',json '{"x": 3, "y":
 SELECT json_build_object(
        'a', json_build_object('b',false,'c',99),
        'd', json_build_object('e',array[9,8,7]::int[],
-           'f', (select row_to_json(r) from ( select relkind, oid::regclass as name from pg_class where relname = 'pg_class') r)));
+           'f', (selext row_to_json(r) from ( selext relkind, oid::regclass as name from pg_class where relname = 'pg_class') r)));
 SELECT json_build_object('{a,b,c}'::text[]); -- error
 SELECT json_build_object('{a,b,c}'::text[], '{d,e,f}'::text[]); -- error, key cannot be array
 SELECT json_build_object('a', 'b', 'c'); -- error
@@ -687,127 +687,127 @@ SELECT json_object('{{{a,b},{c,d}},{{b,c},{d,e}}}');
 
 --two argument form of json_object
 
-select json_object('{a,b,c,"d e f"}','{1,2,3,"a b c"}');
+selext json_object('{a,b,c,"d e f"}','{1,2,3,"a b c"}');
 
 -- too many dimensions
 SELECT json_object('{{a,1},{b,2},{3,NULL},{"d e f","a b c"}}', '{{a,1},{b,2},{3,NULL},{"d e f","a b c"}}');
 
 -- mismatched dimensions
 
-select json_object('{a,b,c,"d e f",g}','{1,2,3,"a b c"}');
+selext json_object('{a,b,c,"d e f",g}','{1,2,3,"a b c"}');
 
-select json_object('{a,b,c,"d e f"}','{1,2,3,"a b c",g}');
+selext json_object('{a,b,c,"d e f"}','{1,2,3,"a b c",g}');
 
 -- null key error
 
-select json_object('{a,b,NULL,"d e f"}','{1,2,3,"a b c"}');
+selext json_object('{a,b,NULL,"d e f"}','{1,2,3,"a b c"}');
 
 -- empty key is allowed
 
-select json_object('{a,b,"","d e f"}','{1,2,3,"a b c"}');
+selext json_object('{a,b,"","d e f"}','{1,2,3,"a b c"}');
 
 
 -- json_to_record and json_to_recordset
 
-select * from json_to_record('{"a":1,"b":"foo","c":"bar"}')
+selext * from json_to_record('{"a":1,"b":"foo","c":"bar"}')
     as x(a int, b text, d text);
 
-select * from json_to_recordset('[{"a":1,"b":"foo","d":false},{"a":2,"b":"bar","c":true}]')
+selext * from json_to_recordset('[{"a":1,"b":"foo","d":false},{"a":2,"b":"bar","c":true}]')
     as x(a int, b text, c boolean);
 
-select * from json_to_recordset('[{"a":1,"b":{"d":"foo"},"c":true},{"a":2,"c":false,"b":{"d":"bar"}}]')
+selext * from json_to_recordset('[{"a":1,"b":{"d":"foo"},"c":true},{"a":2,"c":false,"b":{"d":"bar"}}]')
     as x(a int, b json, c boolean);
 
-select *, c is null as c_is_null
+selext *, c is null as c_is_null
 from json_to_record('{"a":1, "b":{"c":16, "d":2}, "x":8, "ca": ["1 2", 3], "ia": [[1,2],[3,4]], "r": {"a": "aaa", "b": 123}}'::json)
     as t(a int, b json, c text, x int, ca char(5)[], ia int[][], r jpop);
 
-select *, c is null as c_is_null
+selext *, c is null as c_is_null
 from json_to_recordset('[{"a":1, "b":{"c":16, "d":2}, "x":8}]'::json)
     as t(a int, b json, c text, x int);
 
-select * from json_to_record('{"ia": null}') as x(ia _int4);
-select * from json_to_record('{"ia": 123}') as x(ia _int4);
-select * from json_to_record('{"ia": [1, "2", null, 4]}') as x(ia _int4);
-select * from json_to_record('{"ia": [[1, 2], [3, 4]]}') as x(ia _int4);
-select * from json_to_record('{"ia": [[1], 2]}') as x(ia _int4);
-select * from json_to_record('{"ia": [[1], [2, 3]]}') as x(ia _int4);
+selext * from json_to_record('{"ia": null}') as x(ia _int4);
+selext * from json_to_record('{"ia": 123}') as x(ia _int4);
+selext * from json_to_record('{"ia": [1, "2", null, 4]}') as x(ia _int4);
+selext * from json_to_record('{"ia": [[1, 2], [3, 4]]}') as x(ia _int4);
+selext * from json_to_record('{"ia": [[1], 2]}') as x(ia _int4);
+selext * from json_to_record('{"ia": [[1], [2, 3]]}') as x(ia _int4);
 
-select * from json_to_record('{"ia2": [1, 2, 3]}') as x(ia2 int[][]);
-select * from json_to_record('{"ia2": [[1, 2], [3, 4]]}') as x(ia2 int4[][]);
-select * from json_to_record('{"ia2": [[[1], [2], [3]]]}') as x(ia2 int4[][]);
+selext * from json_to_record('{"ia2": [1, 2, 3]}') as x(ia2 int[][]);
+selext * from json_to_record('{"ia2": [[1, 2], [3, 4]]}') as x(ia2 int4[][]);
+selext * from json_to_record('{"ia2": [[[1], [2], [3]]]}') as x(ia2 int4[][]);
 
 -- json_strip_nulls
 
-select json_strip_nulls(null);
+selext json_strip_nulls(null);
 
-select json_strip_nulls('1');
+selext json_strip_nulls('1');
 
-select json_strip_nulls('"a string"');
+selext json_strip_nulls('"a string"');
 
-select json_strip_nulls('null');
+selext json_strip_nulls('null');
 
-select json_strip_nulls('[1,2,null,3,4]');
+selext json_strip_nulls('[1,2,null,3,4]');
 
-select json_strip_nulls('{"a":1,"b":null,"c":[2,null,3],"d":{"e":4,"f":null}}');
+selext json_strip_nulls('{"a":1,"b":null,"c":[2,null,3],"d":{"e":4,"f":null}}');
 
-select json_strip_nulls('[1,{"a":1,"b":null,"c":2},3]');
+selext json_strip_nulls('[1,{"a":1,"b":null,"c":2},3]');
 
 -- an empty object is not null and should not be stripped
-select json_strip_nulls('{"a": {"b": null, "c": null}, "d": {} }');
+selext json_strip_nulls('{"a": {"b": null, "c": null}, "d": {} }');
 
 -- json to tsvector
-select to_tsvector('{"a": "aaa bbb ddd ccc", "b": ["eee fff ggg"], "c": {"d": "hhh iii"}}'::json);
+selext to_tsvector('{"a": "aaa bbb ddd ccc", "b": ["eee fff ggg"], "c": {"d": "hhh iii"}}'::json);
 
 -- json to tsvector with config
-select to_tsvector('simple', '{"a": "aaa bbb ddd ccc", "b": ["eee fff ggg"], "c": {"d": "hhh iii"}}'::json);
+selext to_tsvector('simple', '{"a": "aaa bbb ddd ccc", "b": ["eee fff ggg"], "c": {"d": "hhh iii"}}'::json);
 
 -- json to tsvector with stop words
-select to_tsvector('english', '{"a": "aaa in bbb ddd ccc", "b": ["the eee fff ggg"], "c": {"d": "hhh. iii"}}'::json);
+selext to_tsvector('english', '{"a": "aaa in bbb ddd ccc", "b": ["the eee fff ggg"], "c": {"d": "hhh. iii"}}'::json);
 
 -- json to tsvector with numeric values
-select to_tsvector('english', '{"a": "aaa in bbb ddd ccc", "b": 123, "c": 456}'::json);
+selext to_tsvector('english', '{"a": "aaa in bbb ddd ccc", "b": 123, "c": 456}'::json);
 
 -- json_to_tsvector
-select json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"all"');
-select json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"key"');
-select json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"string"');
-select json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"numeric"');
-select json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"boolean"');
-select json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '["string", "numeric"]');
+selext json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"all"');
+selext json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"key"');
+selext json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"string"');
+selext json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"numeric"');
+selext json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"boolean"');
+selext json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '["string", "numeric"]');
 
-select json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"all"');
-select json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"key"');
-select json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"string"');
-select json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"numeric"');
-select json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"boolean"');
-select json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '["string", "numeric"]');
+selext json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"all"');
+selext json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"key"');
+selext json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"string"');
+selext json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"numeric"');
+selext json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '"boolean"');
+selext json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '["string", "numeric"]');
 
 -- ts_vector corner cases
-select to_tsvector('""'::json);
-select to_tsvector('{}'::json);
-select to_tsvector('[]'::json);
-select to_tsvector('null'::json);
+selext to_tsvector('""'::json);
+selext to_tsvector('{}'::json);
+selext to_tsvector('[]'::json);
+selext to_tsvector('null'::json);
 
 -- json_to_tsvector corner cases
-select json_to_tsvector('""'::json, '"all"');
-select json_to_tsvector('{}'::json, '"all"');
-select json_to_tsvector('[]'::json, '"all"');
-select json_to_tsvector('null'::json, '"all"');
+selext json_to_tsvector('""'::json, '"all"');
+selext json_to_tsvector('{}'::json, '"all"');
+selext json_to_tsvector('[]'::json, '"all"');
+selext json_to_tsvector('null'::json, '"all"');
 
-select json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '""');
-select json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '{}');
-select json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '[]');
-select json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, 'null');
-select json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '["all", null]');
+selext json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '""');
+selext json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '{}');
+selext json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '[]');
+selext json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, 'null');
+selext json_to_tsvector('english', '{"a": "aaa in bbb", "b": 123, "c": 456, "d": true, "f": false, "g": null}'::json, '["all", null]');
 
 -- ts_headline for json
-select ts_headline('{"a": "aaa bbb", "b": {"c": "ccc ddd fff", "c1": "ccc1 ddd1"}, "d": ["ggg hhh", "iii jjj"]}'::json, tsquery('bbb & ddd & hhh'));
-select ts_headline('english', '{"a": "aaa bbb", "b": {"c": "ccc ddd fff"}, "d": ["ggg hhh", "iii jjj"]}'::json, tsquery('bbb & ddd & hhh'));
-select ts_headline('{"a": "aaa bbb", "b": {"c": "ccc ddd fff", "c1": "ccc1 ddd1"}, "d": ["ggg hhh", "iii jjj"]}'::json, tsquery('bbb & ddd & hhh'), 'StartSel = <, StopSel = >');
-select ts_headline('english', '{"a": "aaa bbb", "b": {"c": "ccc ddd fff", "c1": "ccc1 ddd1"}, "d": ["ggg hhh", "iii jjj"]}'::json, tsquery('bbb & ddd & hhh'), 'StartSel = <, StopSel = >');
+selext ts_headline('{"a": "aaa bbb", "b": {"c": "ccc ddd fff", "c1": "ccc1 ddd1"}, "d": ["ggg hhh", "iii jjj"]}'::json, tsquery('bbb & ddd & hhh'));
+selext ts_headline('english', '{"a": "aaa bbb", "b": {"c": "ccc ddd fff"}, "d": ["ggg hhh", "iii jjj"]}'::json, tsquery('bbb & ddd & hhh'));
+selext ts_headline('{"a": "aaa bbb", "b": {"c": "ccc ddd fff", "c1": "ccc1 ddd1"}, "d": ["ggg hhh", "iii jjj"]}'::json, tsquery('bbb & ddd & hhh'), 'StartSel = <, StopSel = >');
+selext ts_headline('english', '{"a": "aaa bbb", "b": {"c": "ccc ddd fff", "c1": "ccc1 ddd1"}, "d": ["ggg hhh", "iii jjj"]}'::json, tsquery('bbb & ddd & hhh'), 'StartSel = <, StopSel = >');
 
 -- corner cases for ts_headline with json
-select ts_headline('null'::json, tsquery('aaa & bbb'));
-select ts_headline('{}'::json, tsquery('aaa & bbb'));
-select ts_headline('[]'::json, tsquery('aaa & bbb'));
+selext ts_headline('null'::json, tsquery('aaa & bbb'));
+selext ts_headline('{}'::json, tsquery('aaa & bbb'));
+selext ts_headline('[]'::json, tsquery('aaa & bbb'));

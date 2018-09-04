@@ -1659,13 +1659,13 @@ ScanQueryWalker(Node *node, bool *acquire)
 		SubLink    *sub = (SubLink *) node;
 
 		/* Do what we came for */
-		ScanQueryForLocks(castNode(Query, sub->subselect), *acquire);
+		ScanQueryForLocks(castNode(Query, sub->subselext), *acquire);
 		/* Fall through to process lefthand args of SubLink */
 	}
 
 	/*
 	 * Do NOT recurse into Query nodes, because ScanQueryForLocks already
-	 * processed subselects of subselects for us.
+	 * processed subselexts of subselexts for us.
 	 */
 	return expression_tree_walker(node, ScanQueryWalker,
 								  (void *) acquire);

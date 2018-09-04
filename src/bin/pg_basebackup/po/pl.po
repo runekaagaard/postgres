@@ -1056,8 +1056,8 @@ msgstr "%s: niepoprawne gniazdo: %s"
 
 #: pg_recvlogical.c:430 receivelog.c:918
 #, c-format
-msgid "%s: select() failed: %s\n"
-msgstr "%s: select() nie powiodła się: %s\n"
+msgid "%s: selext() failed: %s\n"
+msgstr "%s: selext() nie powiodła się: %s\n"
 
 #: pg_recvlogical.c:439 receivelog.c:968
 #, c-format

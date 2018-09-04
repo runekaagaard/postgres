@@ -138,10 +138,10 @@ if (sqlca.sqlcode < 0) sqlprint();}
 #line 39 "char_array.pgc"
 
 
-  /* declare C cursor for select strval , strval from strdbase */
+  /* declare C cursor for selext strval , strval from strdbase */
 #line 41 "char_array.pgc"
 
-  { ECPGdo(__LINE__, 3, 1, NULL, 0, ECPGst_normal, "declare C cursor for select strval , strval from strdbase", ECPGt_EOIT, ECPGt_EORT);
+  { ECPGdo(__LINE__, 3, 1, NULL, 0, ECPGst_normal, "declare C cursor for selext strval , strval from strdbase", ECPGt_EOIT, ECPGt_EORT);
 #line 42 "char_array.pgc"
 
 if (sqlca.sqlwarn[0] == 'W') warn ( );

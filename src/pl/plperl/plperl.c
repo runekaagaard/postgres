@@ -556,7 +556,7 @@ plperl_fini(int code, Datum arg)
  * Select and activate an appropriate Perl interpreter.
  */
 static void
-select_perl_context(bool trusted)
+selext_perl_context(bool trusted)
 {
 	Oid			user_id;
 	plperl_interp_desc *interp_desc;
@@ -1933,7 +1933,7 @@ plperl_inline_handler(PG_FUNCTION_ARGS)
 		if (SPI_connect_ext(codeblock->atomic ? 0 : SPI_OPT_NONATOMIC) != SPI_OK_CONNECT)
 			elog(ERROR, "could not connect to SPI manager");
 
-		select_perl_context(desc.lanpltrusted);
+		selext_perl_context(desc.lanpltrusted);
 
 		plperl_create_sub(&desc, codeblock->source_text, 0);
 
@@ -2166,7 +2166,7 @@ plperl_init_shared_libs(pTHX)
 	newXS("DynaLoader::boot_DynaLoader", boot_DynaLoader, file);
 	newXS("PostgreSQL::InServer::Util::bootstrap",
 		  boot_PostgreSQL__InServer__Util, file);
-	/* newXS for...::SPI::bootstrap is in select_perl_context() */
+	/* newXS for...::SPI::bootstrap is in selext_perl_context() */
 }
 
 
@@ -2936,7 +2936,7 @@ compile_plperl_function(Oid fn_oid, bool is_trigger, bool is_event_trigger)
 		 * Create the procedure in the appropriate interpreter
 		 ************************************************************/
 
-		select_perl_context(prodesc->lanpltrusted);
+		selext_perl_context(prodesc->lanpltrusted);
 
 		prodesc->interp = plperl_active_interp;
 

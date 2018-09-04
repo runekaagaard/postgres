@@ -161,7 +161,7 @@ CREATE VIEW [ <replaceable>schema</replaceable> . ] <replaceable>view_name</repl
     <term><replaceable class="parameter">query</replaceable></term>
     <listitem>
      <para>
-      A <xref linkend="sql-select"/> or
+      A <xref linkend="sql-selext"/> or
       <xref linkend="sql-values"/> command
       which will provide the columns and rows of the view.
      </para>
@@ -321,7 +321,7 @@ CREATE VIEW vista AS SELECT text 'Hello World' AS hello;
 
      <listitem>
       <para>
-       The view's select list must not contain any aggregates, window functions
+       The view's selext list must not contain any aggregates, window functions
        or set-returning functions.
       </para>
      </listitem>

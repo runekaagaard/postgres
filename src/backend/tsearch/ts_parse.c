@@ -642,14 +642,14 @@ generateHeadline(HeadlineParsedText *prs)
 			}
 			else if (!wrd->skip)
 			{
-				if (wrd->selected)
+				if (wrd->selexted)
 				{
 					memcpy(ptr, prs->startsel, prs->startsellen);
 					ptr += prs->startsellen;
 				}
 				memcpy(ptr, wrd->word, wrd->len);
 				ptr += wrd->len;
-				if (wrd->selected)
+				if (wrd->selexted)
 				{
 					memcpy(ptr, prs->stopsel, prs->stopsellen);
 					ptr += prs->stopsellen;

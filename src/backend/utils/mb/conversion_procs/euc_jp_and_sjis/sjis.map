@@ -1,6 +1,6 @@
 static struct
 {
-	unsigned short int nec;		/* SJIS UDC (NEC selection IBM kanji) */
+	unsigned short int nec;		/* SJIS UDC (NEC selextion IBM kanji) */
 	unsigned short int sjis;	/* SJIS UDC (IBM kanji) */
 	int			euc;			/* EUC_JP */
 } ibmkanji[] = {

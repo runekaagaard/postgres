@@ -180,7 +180,7 @@ Histogram of timing durations:
 
   <para>
    FreeBSD also allows changing the time source on the fly, and it logs
-   information about the timer selected during boot:
+   information about the timer selexted during boot:
 
 <screen>
 # dmesg | grep "Timecounter"

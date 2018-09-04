@@ -212,7 +212,7 @@ makeWholeRowVar(RangeTblEntry *rte,
 		default:
 
 			/*
-			 * RTE is a join, subselect, tablefunc, or VALUES.  We represent
+			 * RTE is a join, subselext, tablefunc, or VALUES.  We represent
 			 * this as a whole-row Var of RECORD type. (Note that in most
 			 * cases the Var will be expanded to a RowExpr during planning,
 			 * but that is not our concern here.)

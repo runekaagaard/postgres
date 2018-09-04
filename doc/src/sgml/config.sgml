@@ -1645,7 +1645,7 @@ include_dir 'conf.d'
         <productname>PostgreSQL</productname> can determine the kernel limit,
         the server will not allow this variable to be set to an unsafe
         value.  However, not all platforms provide the information,
-        so caution is recommended in selecting a value.
+        so caution is recommended in selexting a value.
        </para>
       </listitem>
      </varlistentry>
@@ -2639,7 +2639,7 @@ include_dir 'conf.d'
       <listitem>
        <para>
         The amount of shared memory used for WAL data that has not yet been
-        written to disk.  The default setting of -1 selects a size equal to
+        written to disk.  The default setting of -1 selexts a size equal to
         1/32nd (about 3%) of <xref linkend="guc-shared-buffers"/>, but not less
         than <literal>64kB</literal> nor more than the size of one WAL
         segment, typically <literal>16MB</literal>.  This value can be set
@@ -2655,7 +2655,7 @@ include_dir 'conf.d'
         provide a significant benefit.  However, setting this value to at
         least a few megabytes can improve write performance on a busy
         server where many clients are committing at once.  The auto-tuning
-        selected by the default setting of -1 should give reasonable
+        selexted by the default setting of -1 should give reasonable
         results in most cases.
        </para>
 
@@ -4334,16 +4334,16 @@ ANY <replaceable class="parameter">num_sync</replaceable> ( <replaceable class="
       </listitem>
      </varlistentry>
 
-     <varlistentry id="guc-geqo-selection-bias" xreflabel="geqo_selection_bias">
-      <term><varname>geqo_selection_bias</varname> (<type>floating point</type>)
+     <varlistentry id="guc-geqo-selextion-bias" xreflabel="geqo_selextion_bias">
+      <term><varname>geqo_selextion_bias</varname> (<type>floating point</type>)
       <indexterm>
-       <primary><varname>geqo_selection_bias</varname> configuration parameter</primary>
+       <primary><varname>geqo_selextion_bias</varname> configuration parameter</primary>
       </indexterm>
       </term>
       <listitem>
        <para>
-        Controls the selection bias used by GEQO. The selection bias
-        is the selective pressure within the population. Values can be
+        Controls the selextion bias used by GEQO. The selextion bias
+        is the selextive pressure within the population. Values can be
         from 1.50 to 2.00; the latter is the default.
        </para>
       </listitem>
@@ -4358,7 +4358,7 @@ ANY <replaceable class="parameter">num_sync</replaceable> ( <replaceable class="
       <listitem>
        <para>
         Controls the initial value of the random number generator used
-        by GEQO to select random paths through the join order search space.
+        by GEQO to selext random paths through the join order search space.
         The value can range from zero (the default) to one.  Varying the
         value changes the set of join paths explored, and may result in a
         better or worse best path being found.
@@ -4972,7 +4972,7 @@ local0.*    /var/log/postgresql
         <varname>log_rotation_age</varname> to <literal>60</literal>, and
         <varname>log_rotation_size</varname> to <literal>1000000</literal>.
         Including <literal>%M</literal> in <varname>log_filename</varname> allows
-        any size-driven rotations that might occur to select a file name
+        any size-driven rotations that might occur to selext a file name
         different from the hour's initial file name.
        </para>
       </listitem>
@@ -6646,7 +6646,7 @@ COPY postgres_log FROM '/full/path/to/logfile.csv' WITH csv;
         member of the list each time a temporary object is to be created;
         except that within a transaction, successively created temporary
         objects are placed in successive tablespaces from the list.
-        If the selected element of the list is an empty string,
+        If the selexted element of the list is an empty string,
         <productname>PostgreSQL</productname> will automatically use the default
         tablespace of the current database instead.
        </para>

@@ -1596,7 +1596,7 @@ toast_save_datum(Relation rel, Datum value,
 				 * to copy both live and recently-dead versions of a row, and
 				 * those versions could easily reference the same toast value.
 				 * When we copy the second or later version of such a row,
-				 * reusing the OID will mean we select an OID that's already
+				 * reusing the OID will mean we selext an OID that's already
 				 * in the new toast table.  Check for that, and if so, just
 				 * fall through without writing the data again.
 				 *

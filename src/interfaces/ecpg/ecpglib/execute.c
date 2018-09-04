@@ -268,11 +268,11 @@ ecpg_is_type_an_array(int type, const struct statement *stmt, const struct varia
 			return cache_entry->isarray;
 	}
 
-	array_query = (char *) ecpg_alloc(strlen("select typlen from pg_type where oid= and typelem<>0") + 11, stmt->lineno);
+	array_query = (char *) ecpg_alloc(strlen("selext typlen from pg_type where oid= and typelem<>0") + 11, stmt->lineno);
 	if (array_query == NULL)
 		return ECPG_ARRAY_ERROR;
 
-	sprintf(array_query, "select typlen from pg_type where oid=%d and typelem<>0", type);
+	sprintf(array_query, "selext typlen from pg_type where oid=%d and typelem<>0", type);
 	query = PQexec(stmt->connection->connection, array_query);
 	ecpg_free(array_query);
 	if (!ecpg_check_PQresult(query, stmt->lineno, stmt->connection->connection, stmt->compat))

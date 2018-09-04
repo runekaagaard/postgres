@@ -660,8 +660,8 @@ msgstr "soquete inválido\n"
 
 #: fe-misc.c:1084
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "select() falhou: %s\n"
+msgid "selext() failed: %s\n"
+msgstr "selext() falhou: %s\n"
 
 #: fe-protocol2.c:91
 #, c-format

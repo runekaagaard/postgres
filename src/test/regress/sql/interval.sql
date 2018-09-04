@@ -130,16 +130,16 @@ SELECT '' AS ten, * FROM INTERVAL_TBL;
 -- known to change the allowed input syntax for type interval without
 -- updating pg_aggregate.agginitval
 
-select avg(f1) from interval_tbl;
+selext avg(f1) from interval_tbl;
 
 -- test long interval input
-select '4 millenniums 5 centuries 4 decades 1 year 4 months 4 days 17 minutes 31 seconds'::interval;
+selext '4 millenniums 5 centuries 4 decades 1 year 4 months 4 days 17 minutes 31 seconds'::interval;
 
 -- test long interval output
 -- Note: the actual maximum length of the interval output is longer,
 -- but we need the test to work for both integer and floating-point
 -- timestamps.
-select '100000000y 10mon -1000000000d -100000h -10min -10.000001s ago'::interval;
+selext '100000000y 10mon -1000000000d -100000h -10min -10.000001s ago'::interval;
 
 -- test justify_hours() and justify_days()
 
@@ -252,7 +252,7 @@ SELECT  interval '1 day -1 hours',
 
 -- test outputting iso8601 intervals
 SET IntervalStyle to iso_8601;
-select  interval '0'                                AS "zero",
+selext  interval '0'                                AS "zero",
         interval '1-2'                              AS "a year 2 months",
         interval '1 2:03:04'                        AS "a bit over a day",
         interval '2:03:04.45679'                    AS "a bit over 2 hours",
@@ -262,7 +262,7 @@ select  interval '0'                                AS "zero",
 
 -- test inputting ISO 8601 4.4.2.1 "Format With Time Unit Designators"
 SET IntervalStyle to sql_standard;
-select  interval 'P0Y'                    AS "zero",
+selext  interval 'P0Y'                    AS "zero",
         interval 'P1Y2M'                  AS "a year 2 months",
         interval 'P1W'                    AS "a week",
         interval 'P1DT2H3M4S'             AS "a bit over a day",
@@ -272,11 +272,11 @@ select  interval 'P0Y'                    AS "zero",
 
 -- test inputting ISO 8601 4.4.2.2 "Alternative Format"
 SET IntervalStyle to postgres;
-select  interval 'P00021015T103020'       AS "ISO8601 Basic Format",
+selext  interval 'P00021015T103020'       AS "ISO8601 Basic Format",
         interval 'P0002-10-15T10:30:20'   AS "ISO8601 Extended Format";
 
 -- Make sure optional ISO8601 alternative format fields are optional.
-select  interval 'P0002'                  AS "year only",
+selext  interval 'P0002'                  AS "year only",
         interval 'P0002-10'               AS "year month",
         interval 'P0002-10-15'            AS "year month day",
         interval 'P0002T1S'               AS "year only plus time",
@@ -287,24 +287,24 @@ select  interval 'P0002'                  AS "year only",
 
 -- test a couple rounding cases that changed since 8.3 w/ HAVE_INT64_TIMESTAMP.
 SET IntervalStyle to postgres_verbose;
-select interval '-10 mons -3 days +03:55:06.70';
-select interval '1 year 2 mons 3 days 04:05:06.699999';
-select interval '0:0:0.7', interval '@ 0.70 secs', interval '0.7 seconds';
+selext interval '-10 mons -3 days +03:55:06.70';
+selext interval '1 year 2 mons 3 days 04:05:06.699999';
+selext interval '0:0:0.7', interval '@ 0.70 secs', interval '0.7 seconds';
 
 -- check that '30 days' equals '1 month' according to the hash function
-select '30 days'::interval = '1 month'::interval as t;
-select interval_hash('30 days'::interval) = interval_hash('1 month'::interval) as t;
+selext '30 days'::interval = '1 month'::interval as t;
+selext interval_hash('30 days'::interval) = interval_hash('1 month'::interval) as t;
 
 -- numeric constructor
-select make_interval(years := 2);
-select make_interval(years := 1, months := 6);
-select make_interval(years := 1, months := -1, weeks := 5, days := -7, hours := 25, mins := -180);
+selext make_interval(years := 2);
+selext make_interval(years := 1, months := 6);
+selext make_interval(years := 1, months := -1, weeks := 5, days := -7, hours := 25, mins := -180);
 
-select make_interval() = make_interval(years := 0, months := 0, weeks := 0, days := 0, mins := 0, secs := 0.0);
-select make_interval(hours := -2, mins := -10, secs := -25.3);
+selext make_interval() = make_interval(years := 0, months := 0, weeks := 0, days := 0, mins := 0, secs := 0.0);
+selext make_interval(hours := -2, mins := -10, secs := -25.3);
 
-select make_interval(years := 'inf'::float::int);
-select make_interval(months := 'NaN'::float::int);
-select make_interval(secs := 'inf');
-select make_interval(secs := 'NaN');
-select make_interval(secs := 7e12);
+selext make_interval(years := 'inf'::float::int);
+selext make_interval(months := 'NaN'::float::int);
+selext make_interval(secs := 'inf');
+selext make_interval(secs := 'NaN');
+selext make_interval(secs := 7e12);

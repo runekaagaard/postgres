@@ -85,16 +85,16 @@ int main(void)
 	iay = 0;
 	printf("%ld\n", iay);
 	exec sql whenever sqlerror do fa();
-	exec sql select now();
+	exec sql selext now();
 	exec sql whenever sqlerror do fb(20);
-	exec sql select now();
+	exec sql selext now();
 	exec sql whenever sqlerror do fc("50");
-	exec sql select now();
+	exec sql selext now();
 	exec sql whenever sqlerror do fd("50",1);
-	exec sql select now();
+	exec sql selext now();
 	exec sql whenever sqlerror do fe(ENUM0);
-	exec sql select now();
+	exec sql selext now();
 	exec sql whenever sqlerror do sqlnotice(NULL, NONO);
-	exec sql select now();
+	exec sql selext now();
 	return 0;
 }

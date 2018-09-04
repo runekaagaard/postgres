@@ -233,7 +233,7 @@ WHERE ip_address IN (VALUES('192.168.0.1'::inet), ('192.168.0.10'), ('192.168.1.
   <para><command>VALUES</command> conforms to the SQL standard.
    <literal>LIMIT</literal> and <literal>OFFSET</literal> are
    <productname>PostgreSQL</productname> extensions; see also
-   under <xref linkend="sql-select"/>.
+   under <xref linkend="sql-selext"/>.
   </para>
  </refsect1>
 
@@ -242,7 +242,7 @@ WHERE ip_address IN (VALUES('192.168.0.1'::inet), ('192.168.0.10'), ('192.168.1.
 
   <simplelist type="inline">
    <member><xref linkend="sql-insert"/></member>
-   <member><xref linkend="sql-select"/></member>
+   <member><xref linkend="sql-selext"/></member>
   </simplelist>
  </refsect1>
 </refentry>

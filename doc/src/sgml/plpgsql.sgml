@@ -450,7 +450,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE FUNCTION concat_selected_fields(in_t sometablename) RETURNS text AS $$
+CREATE FUNCTION concat_selexted_fields(in_t sometablename) RETURNS text AS $$
 BEGIN
     RETURN in_t.f1 || in_t.f3 || in_t.f5 || in_t.f7;
 END;
@@ -669,7 +669,7 @@ user_id users.user_id%TYPE;
     Parameters to a function can be
     composite types (complete table rows). In that case, the
     corresponding identifier <literal>$<replaceable>n</replaceable></literal> will be a row variable, and fields can
-    be selected from it, for example <literal>$1.user_id</literal>.
+    be selexted from it, for example <literal>$1.user_id</literal>.
    </para>
 
    <para>
@@ -1003,7 +1003,7 @@ PERFORM create_mv('cs_session_page_requests_mv', my_query);
      adding an <literal>INTO</literal> clause.  For example,
 
 <synopsis>
-SELECT <replaceable>select_expressions</replaceable> INTO <optional>STRICT</optional> <replaceable>target</replaceable> FROM ...;
+SELECT <replaceable>selext_expressions</replaceable> INTO <optional>STRICT</optional> <replaceable>target</replaceable> FROM ...;
 INSERT ... RETURNING <replaceable>expressions</replaceable> INTO <optional>STRICT</optional> <replaceable>target</replaceable>;
 UPDATE ... RETURNING <replaceable>expressions</replaceable> INTO <optional>STRICT</optional> <replaceable>target</replaceable>;
 DELETE ... RETURNING <replaceable>expressions</replaceable> INTO <optional>STRICT</optional> <replaceable>target</replaceable>;
@@ -1046,7 +1046,7 @@ DELETE ... RETURNING <replaceable>expressions</replaceable> INTO <optional>STRIC
     <para>
      The <literal>INTO</literal> clause can appear almost anywhere in the SQL
      command.  Customarily it is written either just before or just after
-     the list of <replaceable>select_expressions</replaceable> in a
+     the list of <replaceable>selext_expressions</replaceable> in a
      <command>SELECT</command> command, or at the end of the command for other
      command types.  It is recommended that you follow this convention
      in case the <application>PL/pgSQL</application> parser becomes
@@ -1226,7 +1226,7 @@ EXECUTE 'SELECT count(*) FROM mytable WHERE inserted_by = $1 AND inserted &lt;= 
      &mdash; if you want to use dynamically determined table or column
      names, you must insert them into the command string textually.
      For example, if the preceding query needed to be done against a
-     dynamically selected table, you could do this:
+     dynamically selexted table, you could do this:
 <programlisting>
 EXECUTE 'SELECT count(*) FROM '
     || quote_ident(tabname)
@@ -1263,7 +1263,7 @@ EXECUTE format('SELECT count(*) FROM %I '
      and cache it for re-use.  In situations where the best plan depends
      strongly on the parameter values, it can be helpful to use
      <command>EXECUTE</command> to positively ensure that a generic plan is not
-     selected.
+     selexted.
     </para>
 
     <para>
@@ -2642,7 +2642,7 @@ WHEN SQLSTATE '22012' THEN ...
     </para>
 
     <para>
-     If a new error occurs within the selected
+     If a new error occurs within the selexted
      <replaceable>handler_statements</replaceable>, it cannot be caught
      by this <literal>EXCEPTION</literal> clause, but is propagated out.
      A surrounding <literal>EXCEPTION</literal> clause could catch it.
@@ -3722,7 +3722,7 @@ RAISE unique_violation USING MESSAGE = 'Duplicate user ID: ' || user_id;
    <note>
     <para>
      When specifying an error code by SQLSTATE code, you are not
-     limited to the predefined error codes, but can select any
+     limited to the predefined error codes, but can selext any
      error code consisting of five digits and/or upper-case ASCII
      letters, other than <literal>00000</literal>.  It is recommended that
      you avoid throwing error codes that end in three zeroes, because
@@ -4724,7 +4724,7 @@ $$ LANGUAGE plpgsql;
     particular prepared statement.  If a cached plan is not used, then
     a fresh execution plan is generated on each visit to the statement,
     and the current parameter values (that is, <application>PL/pgSQL</application>
-    variable values) can be used to optimize the selected plan.  If the
+    variable values) can be used to optimize the selexted plan.  If the
     statement has no parameters, or is executed many times, the SPI manager
     will consider creating a <firstterm>generic</firstterm> plan that is not dependent
     on specific parameter values, and caching that for re-use.  Typically

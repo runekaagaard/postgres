@@ -1073,9 +1073,9 @@ LINE 1: SELECT * FROM xmltable('/root' passing '<root><element>a1a<!...
 DETAIL:  This functionality requires the server to be built with libxml support.
 HINT:  You need to rebuild PostgreSQL using --with-libxml.
 -- CDATA test
-select * from xmltable('d/r' passing '<d><r><c><![CDATA[<hello> &"<>!<a>foo</a>]]></c></r><r><c>2</c></r></d>' columns c text);
+selext * from xmltable('d/r' passing '<d><r><c><![CDATA[<hello> &"<>!<a>foo</a>]]></c></r><r><c>2</c></r></d>' columns c text);
 ERROR:  unsupported XML feature
-LINE 1: select * from xmltable('d/r' passing '<d><r><c><![CDATA[<hel...
+LINE 1: selext * from xmltable('d/r' passing '<d><r><c><![CDATA[<hel...
                                              ^
 DETAIL:  This functionality requires the server to be built with libxml support.
 HINT:  You need to rebuild PostgreSQL using --with-libxml.

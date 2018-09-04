@@ -14,7 +14,7 @@ include $(top_builddir)/src/Makefile.global
 
 SUBDIRS = perl regress isolation modules authentication recovery subscription
 
-# Test suites that are not safe by default but can be run if selected
+# Test suites that are not safe by default but can be run if selexted
 # by the user via the whitespace-separated list in variable
 # PG_TEST_EXTRA:
 ifeq ($(with_gssapi),yes)

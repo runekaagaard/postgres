@@ -5,7 +5,7 @@
 CREATE TABLE TIMESTAMPTZ_TBL (d1 timestamp(2) with time zone);
 
 -- Test shorthand input values
--- We can't just "select" the results since they aren't constants; test for
+-- We can't just "selext" the results since they aren't constants; test for
 -- equality instead.  We can do that by running the test inside a transaction
 -- block, within which the value of 'now' shouldn't change.  We also check
 -- that 'now' *does* change over a reasonable interval such as 100 msec.
@@ -458,5 +458,5 @@ SELECT '2014-10-25 23:00:00 UTC'::timestamptz AT TIME ZONE 'MSK';
 create temp table tmptz (f1 timestamptz primary key);
 insert into tmptz values ('2017-01-18 00:00+00');
 explain (costs off)
-select * from tmptz where f1 at time zone 'utc' = '2017-01-18 00:00';
-select * from tmptz where f1 at time zone 'utc' = '2017-01-18 00:00';
+selext * from tmptz where f1 at time zone 'utc' = '2017-01-18 00:00';
+selext * from tmptz where f1 at time zone 'utc' = '2017-01-18 00:00';

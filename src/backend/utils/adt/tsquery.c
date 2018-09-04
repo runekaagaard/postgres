@@ -831,7 +831,7 @@ parse_tsquery(char *buf,
 	/* plain should not be used with web */
 	Assert((flags & (P_TSQ_PLAIN | P_TSQ_WEB)) != (P_TSQ_PLAIN | P_TSQ_WEB));
 
-	/* select suitable tokenizer */
+	/* selext suitable tokenizer */
 	if (flags & P_TSQ_PLAIN)
 		state.gettoken = gettoken_query_plain;
 	else if (flags & P_TSQ_WEB)

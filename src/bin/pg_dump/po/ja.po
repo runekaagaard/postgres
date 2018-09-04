@@ -1683,7 +1683,7 @@ msgstr "不明な出力書式\"%s\"が指定されました\n"
 
 #: pg_dump.c:1117
 #, c-format
-msgid "server version must be at least 7.3 to use schema selection switches\n"
+msgid "server version must be at least 7.3 to use schema selextion switches\n"
 msgstr ""
 "スキーマ選択スイッチを使用するには、サーバのバージョンが\n"
 "少なくとも 7.3 以降である必要があります。\n"
@@ -2363,7 +2363,7 @@ msgstr "  -j, --jobs=NUM           リストア時に指定した数の並列ジ
 #, c-format
 msgid ""
 "  -L, --use-list=FILENAME      use table of contents from this file for\n"
-"                               selecting/ordering output\n"
+"                               selexting/ordering output\n"
 msgstr ""
 "  -L, --use-list=FILENAME  このファイルの内容に従って SELECT や\n"
 "                           出力のソートを行います\n"

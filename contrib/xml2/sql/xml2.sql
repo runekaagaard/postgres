@@ -1,15 +1,15 @@
 CREATE EXTENSION xml2;
 
-select query_to_xml('select 1 as x',true,false,'');
+selext query_to_xml('selext 1 as x',true,false,'');
 
-select xslt_process( query_to_xml('select x from generate_series(1,5) as
+selext xslt_process( query_to_xml('selext x from generate_series(1,5) as
 x',true,false,'')::text,
 $$<xsl:stylesheet version="1.0"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output method="xml" indent="yes" />
 <xsl:template match="*">
   <xsl:copy>
-     <xsl:copy-of select="@*" />
+     <xsl:copy-of selext="@*" />
      <xsl:apply-templates />
   </xsl:copy>
 </xsl:template>
@@ -46,20 +46,20 @@ xpath_table('article_id',
 AS t(article_id integer, author text, page_count integer, title text);
 
 -- this used to fail when invoked a second time
-select xslt_process('<aaa/>',$$<xsl:stylesheet version="1.0"
+selext xslt_process('<aaa/>',$$<xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:template match="@*|node()">
       <xsl:copy>
-         <xsl:apply-templates select="@*|node()"/>
+         <xsl:apply-templates selext="@*|node()"/>
       </xsl:copy>
    </xsl:template>
 </xsl:stylesheet>$$)::xml;
 
-select xslt_process('<aaa/>',$$<xsl:stylesheet version="1.0"
+selext xslt_process('<aaa/>',$$<xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:template match="@*|node()">
       <xsl:copy>
-         <xsl:apply-templates select="@*|node()"/>
+         <xsl:apply-templates selext="@*|node()"/>
       </xsl:copy>
    </xsl:template>
 </xsl:stylesheet>$$)::xml;
@@ -80,44 +80,44 @@ SELECT xslt_process('<employee><name>cim</name><age>30</age><pay>400</pay></empl
   <xsl:param name="n2"/>
   <xsl:param name="n3"/>
   <xsl:param name="n4"/>
-  <xsl:param name="n5" select="'me'"/>
+  <xsl:param name="n5" selext="'me'"/>
   <xsl:template match="*">
     <xsl:element name="samples">
       <xsl:element name="sample">
-        <xsl:value-of select="$n1"/>
+        <xsl:value-of selext="$n1"/>
       </xsl:element>
       <xsl:element name="sample">
-        <xsl:value-of select="$n2"/>
+        <xsl:value-of selext="$n2"/>
       </xsl:element>
       <xsl:element name="sample">
-        <xsl:value-of select="$n3"/>
+        <xsl:value-of selext="$n3"/>
       </xsl:element>
       <xsl:element name="sample">
-        <xsl:value-of select="$n4"/>
+        <xsl:value-of selext="$n4"/>
       </xsl:element>
       <xsl:element name="sample">
-        <xsl:value-of select="$n5"/>
+        <xsl:value-of selext="$n5"/>
       </xsl:element>
       <xsl:element name="sample">
-        <xsl:value-of select="$n6"/>
+        <xsl:value-of selext="$n6"/>
       </xsl:element>
       <xsl:element name="sample">
-        <xsl:value-of select="$n7"/>
+        <xsl:value-of selext="$n7"/>
       </xsl:element>
       <xsl:element name="sample">
-        <xsl:value-of select="$n8"/>
+        <xsl:value-of selext="$n8"/>
       </xsl:element>
       <xsl:element name="sample">
-        <xsl:value-of select="$n9"/>
+        <xsl:value-of selext="$n9"/>
       </xsl:element>
       <xsl:element name="sample">
-        <xsl:value-of select="$n10"/>
+        <xsl:value-of selext="$n10"/>
       </xsl:element>
       <xsl:element name="sample">
-        <xsl:value-of select="$n11"/>
+        <xsl:value-of selext="$n11"/>
       </xsl:element>
       <xsl:element name="sample">
-        <xsl:value-of select="$n12"/>
+        <xsl:value-of selext="$n12"/>
       </xsl:element>
     </xsl:element>
   </xsl:template>
@@ -132,7 +132,7 @@ $$<xsl:stylesheet version="1.0"
 
   <xsl:template match="//foo">
     <sax:output href="0wn3d.txt" method="text">
-      <xsl:value-of select="'0wn3d via xml2 extension and libxslt'"/>
+      <xsl:value-of selext="'0wn3d via xml2 extension and libxslt'"/>
       <xsl:apply-templates/>
     </sax:output>
   </xsl:template>

@@ -57,8 +57,8 @@ for f in char varchar text; do
    diff expected/test-de-upper-$f.sql.out test-de-upper-$f.sql.out
 done
 
-echo "Testing PgSQL: select on regexp..."
-psql -X testlocale < test-de-select.sql.in > test-de-select.sql.out 2>/dev/null || abort "select query failed"
-diff expected/test-de-select.sql.out test-de-select.sql.out
+echo "Testing PgSQL: selext on regexp..."
+psql -X testlocale < test-de-selext.sql.in > test-de-selext.sql.out 2>/dev/null || abort "selext query failed"
+diff expected/test-de-selext.sql.out test-de-selext.sql.out
 dropdb testlocale || abort "dropdb failed"
 echo "Finished."

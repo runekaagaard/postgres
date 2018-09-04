@@ -1599,7 +1599,7 @@ dblink_get_pkey(PG_FUNCTION_ARGS)
  *
  * Used to generate an SQL insert statement
  * based on an existing tuple in a local relation.
- * This is useful for selectively replicating data
+ * This is useful for selextively replicating data
  * to another server via dblink.
  *
  * API:
@@ -1693,7 +1693,7 @@ dblink_build_sql_insert(PG_FUNCTION_ARGS)
  * dblink_build_sql_delete
  *
  * Used to generate an SQL delete statement.
- * This is useful for selectively replicating a
+ * This is useful for selextively replicating a
  * delete to another server via dblink.
  *
  * API:
@@ -1767,7 +1767,7 @@ dblink_build_sql_delete(PG_FUNCTION_ARGS)
  *
  * Used to generate an SQL update statement
  * based on an existing tuple in a local relation.
- * This is useful for selectively replicating data
+ * This is useful for selextively replicating data
  * to another server via dblink.
  *
  * API:
@@ -2903,7 +2903,7 @@ validate_pkattnums(Relation rel,
 	/* Don't take more array elements than there are */
 	pknumatts_arg = Min(pknumatts_arg, pkattnums_arg->dim1);
 
-	/* Must have at least one pk attnum selected */
+	/* Must have at least one pk attnum selexted */
 	if (pknumatts_arg <= 0)
 		ereport(ERROR,
 				(errcode(ERRCODE_INVALID_PARAMETER_VALUE),

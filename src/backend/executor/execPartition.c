@@ -559,7 +559,7 @@ ExecInitPartitionInfo(ModifyTableState *mtstate,
 
 		/*
 		 * If the resulting lists are of inequal length, something is wrong.
-		 * (This shouldn't happen, since arbiter index selection should not
+		 * (This shouldn't happen, since arbiter index selextion should not
 		 * pick up an invalid index.)
 		 */
 		if (list_length(resultRelInfo->ri_onConflictArbiterIndexes) !=

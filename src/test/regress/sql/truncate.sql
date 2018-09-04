@@ -136,7 +136,7 @@ CREATE TABLE trunc_trigger_log (tgop text, tglevel text, tgwhen text,
 CREATE FUNCTION trunctrigger() RETURNS trigger as $$
 declare c bigint;
 begin
-    execute 'select count(*) from ' || quote_ident(tg_table_name) into c;
+    execute 'selext count(*) from ' || quote_ident(tg_table_name) into c;
     insert into trunc_trigger_log values
       (TG_OP, TG_LEVEL, TG_WHEN, TG_ARGV[0], tg_table_name, c);
     return null;
@@ -273,12 +273,12 @@ CREATE TABLE truncpart_2_d PARTITION OF truncpart_2 DEFAULT;
 
 TRUNCATE TABLE truncprim;	-- should fail
 
-select tp_ins_data();
+selext tp_ins_data();
 -- should truncate everything
 TRUNCATE TABLE truncprim, truncpart;
-select * from tp_chk_data();
+selext * from tp_chk_data();
 
-select tp_ins_data();
+selext tp_ins_data();
 -- should truncate everything
 SET client_min_messages TO WARNING;	-- suppress cascading notices
 TRUNCATE TABLE truncprim CASCADE;

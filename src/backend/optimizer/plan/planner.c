@@ -45,7 +45,7 @@
 #include "optimizer/planmain.h"
 #include "optimizer/planner.h"
 #include "optimizer/prep.h"
-#include "optimizer/subselect.h"
+#include "optimizer/subselext.h"
 #include "optimizer/tlist.h"
 #include "optimizer/var.h"
 #include "parser/analyze.h"
@@ -193,7 +193,7 @@ static PathTarget *make_partial_grouping_target(PlannerInfo *root,
 							 PathTarget *grouping_target,
 							 Node *havingQual);
 static List *postprocess_setop_tlist(List *new_tlist, List *orig_tlist);
-static List *select_active_windows(PlannerInfo *root, WindowFuncLists *wflists);
+static List *selext_active_windows(PlannerInfo *root, WindowFuncLists *wflists);
 static PathTarget *make_window_input_target(PlannerInfo *root,
 						 PathTarget *final_target,
 						 List *activeWindows);
@@ -585,7 +585,7 @@ standard_planner(Query *parse, int cursorOptions, ParamListInfo boundParams)
  * Returns the PlannerInfo struct ("root") that contains all data generated
  * while planning the subquery.  In particular, the Path(s) attached to
  * the (UPPERREL_FINAL, NULL) upperrel represent our conclusions about the
- * cheapest way(s) to implement the query.  The top level will select the
+ * cheapest way(s) to implement the query.  The top level will selext the
  * best Path and pass it through createplan.c to produce a finished Plan.
  *--------------------
  */
@@ -894,7 +894,7 @@ subquery_planner(PlannerGlobal *glob, Query *parse,
 	 *
 	 * Also, it may be that the clause is so expensive to execute that we're
 	 * better off doing it only once per group, despite the loss of
-	 * selectivity.  This is hard to estimate short of doing the entire
+	 * selextivity.  This is hard to estimate short of doing the entire
 	 * planning process twice, so we use a heuristic: clauses containing
 	 * subplans are left in HAVING.  Otherwise, we move or copy the HAVING
 	 * clause into WHERE, in hopes of eliminating tuples before aggregation
@@ -1859,7 +1859,7 @@ grouping_planner(PlannerInfo *root, bool inheritance_update,
 			wflists = find_window_functions((Node *) tlist,
 											list_length(parse->windowClause));
 			if (wflists->numWindowFuncs > 0)
-				activeWindows = select_active_windows(root, wflists);
+				activeWindows = selext_active_windows(root, wflists);
 			else
 				parse->hasWindowFuncs = false;
 		}
@@ -2579,7 +2579,7 @@ preprocess_rowmarks(PlannerInfo *root)
 		newrc = makeNode(PlanRowMark);
 		newrc->rti = newrc->prti = rc->rti;
 		newrc->rowmarkId = ++(root->glob->lastRowMarkId);
-		newrc->markType = select_rowmark_type(rte, rc->strength);
+		newrc->markType = selext_rowmark_type(rte, rc->strength);
 		newrc->allMarkTypes = (1 << newrc->markType);
 		newrc->strength = rc->strength;
 		newrc->waitPolicy = rc->waitPolicy;
@@ -2604,7 +2604,7 @@ preprocess_rowmarks(PlannerInfo *root)
 		newrc = makeNode(PlanRowMark);
 		newrc->rti = newrc->prti = i;
 		newrc->rowmarkId = ++(root->glob->lastRowMarkId);
-		newrc->markType = select_rowmark_type(rte, LCS_NONE);
+		newrc->markType = selext_rowmark_type(rte, LCS_NONE);
 		newrc->allMarkTypes = (1 << newrc->markType);
 		newrc->strength = LCS_NONE;
 		newrc->waitPolicy = LockWaitBlock;	/* doesn't matter */
@@ -2620,7 +2620,7 @@ preprocess_rowmarks(PlannerInfo *root)
  * Select RowMarkType to use for a given table
  */
 RowMarkType
-select_rowmark_type(RangeTblEntry *rte, LockClauseStrength strength)
+selext_rowmark_type(RangeTblEntry *rte, LockClauseStrength strength)
 {
 	if (rte->rtekind != RTE_RELATION)
 	{
@@ -2629,7 +2629,7 @@ select_rowmark_type(RangeTblEntry *rte, LockClauseStrength strength)
 	}
 	else if (rte->relkind == RELKIND_FOREIGN_TABLE)
 	{
-		/* Let the FDW select the rowmark type, if it wants to */
+		/* Let the FDW selext the rowmark type, if it wants to */
 		FdwRoutine *fdwroutine = GetFdwRoutineByRelId(rte->relid);
 
 		if (fdwroutine->GetForeignRowMarkType != NULL)
@@ -4441,7 +4441,7 @@ consider_groupingsets_paths(PlannerInfo *root,
  * output_target: what the topmost WindowAggPath should return
  * tlist: query's target list (needed to look up pathkeys)
  * wflists: result of find_window_functions
- * activeWindows: result of select_active_windows
+ * activeWindows: result of selext_active_windows
  *
  * Note: all Paths in input_rel are expected to return input_target.
  */
@@ -4530,7 +4530,7 @@ create_window_paths(PlannerInfo *root,
  * output_target: what the topmost WindowAggPath should return
  * tlist: query's target list (needed to look up pathkeys)
  * wflists: result of find_window_functions
- * activeWindows: result of select_active_windows
+ * activeWindows: result of selext_active_windows
  */
 static void
 create_one_window_path(PlannerInfo *root,
@@ -4548,7 +4548,7 @@ create_one_window_path(PlannerInfo *root,
 	/*
 	 * Since each window clause could require a different sort order, we stack
 	 * up a WindowAgg node for each clause, with sort steps between them as
-	 * needed.  (We assume that select_active_windows chose a good order for
+	 * needed.  (We assume that selext_active_windows chose a good order for
 	 * executing the clauses in.)
 	 *
 	 * input_target should contain all Vars and Aggs needed for the result.
@@ -4754,7 +4754,7 @@ create_distinct_paths(PlannerInfo *root,
 	 *
 	 * If we were not able to make any other types of path, we *must* hash or
 	 * die trying.  If we do have other choices, there are several things that
-	 * should prevent selection of hashing: if the query uses DISTINCT ON
+	 * should prevent selextion of hashing: if the query uses DISTINCT ON
 	 * (because it won't really have the expected behavior if we hash), or if
 	 * enable_hashagg is off, or if it looks like the hashtable will exceed
 	 * work_mem.
@@ -5253,12 +5253,12 @@ postprocess_setop_tlist(List *new_tlist, List *orig_tlist)
 }
 
 /*
- * select_active_windows
+ * selext_active_windows
  *		Create a list of the "active" window clauses (ie, those referenced
  *		by non-deleted WindowFuncs) in the order they are to be executed.
  */
 static List *
-select_active_windows(PlannerInfo *root, WindowFuncLists *wflists)
+selext_active_windows(PlannerInfo *root, WindowFuncLists *wflists)
 {
 	List	   *result;
 	List	   *actives;
@@ -5349,7 +5349,7 @@ select_active_windows(PlannerInfo *root, WindowFuncLists *wflists)
  *
  * 'final_target' is the query's final target list (in PathTarget form)
  * 'activeWindows' is the list of active windows previously identified by
- *			select_active_windows.
+ *			selext_active_windows.
  *
  * The result is the PathTarget to be computed by the plan node immediately
  * below the first WindowAgg node.

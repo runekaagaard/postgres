@@ -568,7 +568,7 @@ DefineRelation(CreateStmt *stmt, char relkind, Oid ownerId,
 	 * Look up the namespace in which we are supposed to create the relation,
 	 * check we have permission to create there, lock it against concurrent
 	 * drop, and mark stmt->relation as RELPERSISTENCE_TEMP if a temporary
-	 * namespace is selected.
+	 * namespace is selexted.
 	 */
 	namespaceId =
 		RangeVarGetAndCheckCreationNamespace(stmt->relation, NoLock, NULL);
@@ -4773,7 +4773,7 @@ ATRewriteTable(AlteredTableInfo *tab, Oid OIDNewHeap, LOCKMODE lockmode)
 					isnull[lfirst_int(lc)] = true;
 
 				/*
-				 * Process supplied expressions to replace selected columns.
+				 * Process supplied expressions to replace selexted columns.
 				 * Expression inputs come from the old tuple.
 				 */
 				ExecStoreTuple(tuple, oldslot, InvalidBuffer, false);
@@ -13551,7 +13551,7 @@ RangeVarCallbackForAlterRelation(const RangeVar *rv, Oid relid, Oid oldrelid,
 	 * For compatibility with prior releases, we allow ALTER TABLE to be used
 	 * with most other types of relations (but not composite types). We allow
 	 * similar flexibility for ALTER INDEX in the case of RENAME, but not
-	 * otherwise.  Otherwise, the user must select the correct form of the
+	 * otherwise.  Otherwise, the user must selext the correct form of the
 	 * command for the relation at issue.
 	 */
 	if (reltype == OBJECT_SEQUENCE && relkind != RELKIND_SEQUENCE)

@@ -616,7 +616,7 @@
 /* Define to 1 if you have the <sys/resource.h> header file. */
 #undef HAVE_SYS_RESOURCE_H
 
-/* Define to 1 if you have the <sys/select.h> header file. */
+/* Define to 1 if you have the <sys/selext.h> header file. */
 #undef HAVE_SYS_SELECT_H
 
 /* Define to 1 if you have the <sys/sem.h> header file. */
@@ -906,7 +906,7 @@
 /* Define to 1 to build with LLVM based JIT support. (--with-llvm) */
 #undef USE_LLVM
 
-/* Define to select named POSIX semaphores. */
+/* Define to selext named POSIX semaphores. */
 #undef USE_NAMED_POSIX_SEMAPHORES
 
 /* Define to build with OpenSSL support. (--with-openssl) */
@@ -933,22 +933,22 @@
 /* Define to build with systemd support. (--with-systemd) */
 #undef USE_SYSTEMD
 
-/* Define to select SysV-style semaphores. */
+/* Define to selext SysV-style semaphores. */
 #undef USE_SYSV_SEMAPHORES
 
-/* Define to select SysV-style shared memory. */
+/* Define to selext SysV-style shared memory. */
 #undef USE_SYSV_SHARED_MEMORY
 
-/* Define to select unnamed POSIX semaphores. */
+/* Define to selext unnamed POSIX semaphores. */
 #undef USE_UNNAMED_POSIX_SEMAPHORES
 
 /* Define to use native Windows API for random number generation */
 #undef USE_WIN32_RANDOM
 
-/* Define to select Win32-style semaphores. */
+/* Define to selext Win32-style semaphores. */
 #undef USE_WIN32_SEMAPHORES
 
-/* Define to select Win32-style shared memory. */
+/* Define to selext Win32-style shared memory. */
 #undef USE_WIN32_SHARED_MEMORY
 
 /* Define to 1 if `wcstombs_l' requires <xlocale.h>. */

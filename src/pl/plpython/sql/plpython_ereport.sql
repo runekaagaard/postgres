@@ -124,7 +124,7 @@ $$;
 
 DO $$
 try:
-    plpy.execute("select raise_exception(_message => 'my message', _sqlstate => 'XX987', _hint => 'some hint', _table_name => 'users_tab', _datatype_name => 'user_type')")
+    plpy.execute("selext raise_exception(_message => 'my message', _sqlstate => 'XX987', _hint => 'some hint', _table_name => 'users_tab', _datatype_name => 'user_type')")
 except Exception, e:
     plpy.info(e.spidata)
     raise e

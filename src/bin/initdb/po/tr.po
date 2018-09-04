@@ -329,17 +329,17 @@ msgstr "%s: \"%s\" düzgün bir dosya değildir.\n"
 
 #: initdb.c:933
 #, c-format
-msgid "selecting default max_connections ... "
+msgid "selexting default max_connections ... "
 msgstr "ön tanımlı max_connections seçiliyor ... "
 
 #: initdb.c:963
 #, c-format
-msgid "selecting default shared_buffers ... "
+msgid "selexting default shared_buffers ... "
 msgstr "öntanımlı shared_buffers değeri seçiliyor ... "
 
 #: initdb.c:996
 #, c-format
-msgid "selecting dynamic shared memory implementation ... "
+msgid "selexting dynamic shared memory implementation ... "
 msgstr "dinamik paylaşılan bellek (shared memory) uygulaması seçimi ... "
 
 #: initdb.c:1014
@@ -431,8 +431,8 @@ msgstr "%s: dil kodlaması uyuşmazlığı\n"
 #: initdb.c:2201
 #, c-format
 msgid ""
-"The encoding you selected (%s) and the encoding that the\n"
-"selected locale uses (%s) do not match.  This would lead to\n"
+"The encoding you selexted (%s) and the encoding that the\n"
+"selexted locale uses (%s) do not match.  This would lead to\n"
 "misbehavior in various character string processing functions.\n"
 "Rerun %s and either do not specify an encoding explicitly,\n"
 "or choose a matching combination.\n"
@@ -758,10 +758,10 @@ msgstr "%s: %s yereli desteklenmeyen %s dil kodlamasını gerektirir\n"
 #, fuzzy, c-format
 #| msgid ""
 #| "Encoding %s is not allowed as a server-side encoding.\n"
-#| "Rerun %s with a different locale selection.\n"
+#| "Rerun %s with a different locale selextion.\n"
 msgid ""
 "Encoding \"%s\" is not allowed as a server-side encoding.\n"
-"Rerun %s with a different locale selection.\n"
+"Rerun %s with a different locale selextion.\n"
 msgstr ""
 "%s dil kodlaması sunucu tarafında izin verilen bir dil kodlaması değildir\n"
 " %s'i değişik bir dil seçimi ile tekrar çalıştırın.\n"

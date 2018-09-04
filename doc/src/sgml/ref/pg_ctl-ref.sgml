@@ -184,7 +184,7 @@ PostgreSQL documentation
   <para>
    <option>stop</option> mode shuts down the server that is running in
    the specified data directory.  Three different
-   shutdown methods can be selected with the <option>-m</option>
+   shutdown methods can be selexted with the <option>-m</option>
    option.  <quote>Smart</quote> mode waits for all active
    clients to disconnect and any online backup to finish.
    If the server is in hot standby, recovery and streaming replication
@@ -249,7 +249,7 @@ PostgreSQL documentation
   <para>
    <option>register</option> mode registers the <productname>PostgreSQL</productname>
    server as a system service on <productname>Microsoft Windows</productname>.
-   The <option>-S</option> option allows selection of service start type,
+   The <option>-S</option> option allows selextion of service start type,
    either <quote>auto</quote> (start service automatically on system startup)
    or <quote>demand</quote> (start service on demand).
   </para>
@@ -473,7 +473,7 @@ PostgreSQL documentation
    </variablelist>
 
   <para>
-   If an option is specified that is valid, but not relevant to the selected
+   If an option is specified that is valid, but not relevant to the selexted
    operating mode, <application>pg_ctl</application> ignores it.
   </para>
 

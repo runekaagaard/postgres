@@ -4831,7 +4831,7 @@ msgstr "definicja_okna"
 #: sql_help.c:3920 sql_help.c:3934 sql_help.c:3972 sql_help.c:4010
 #: sql_help.c:4159 sql_help.c:4173 sql_help.c:4211 sql_help.c:4353
 #: sql_help.c:4367 sql_help.c:4405
-msgid "select"
+msgid "selext"
 msgstr "wybierz"
 
 #: sql_help.c:3927 sql_help.c:4166 sql_help.c:4360

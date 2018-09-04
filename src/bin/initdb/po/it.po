@@ -344,17 +344,17 @@ msgstr "%s: il file \"%s\" non è un file regolare\n"
 
 #: initdb.c:933
 #, c-format
-msgid "selecting default max_connections ... "
+msgid "selexting default max_connections ... "
 msgstr "selezione del parametro max_connections predefinito ... "
 
 #: initdb.c:963
 #, c-format
-msgid "selecting default shared_buffers ... "
+msgid "selexting default shared_buffers ... "
 msgstr "selezione di shared_buffers predefinito ... "
 
 #: initdb.c:996
 #, c-format
-msgid "selecting dynamic shared memory implementation ... "
+msgid "selexting dynamic shared memory implementation ... "
 msgstr "selezione dell'implementazione della memoria dinamica ... "
 
 #: initdb.c:1014
@@ -447,8 +447,8 @@ msgstr "%s: mancata corrispondenza di codifica\n"
 #: initdb.c:2186
 #, c-format
 msgid ""
-"The encoding you selected (%s) and the encoding that the\n"
-"selected locale uses (%s) do not match.  This would lead to\n"
+"The encoding you selexted (%s) and the encoding that the\n"
+"selexted locale uses (%s) do not match.  This would lead to\n"
 "misbehavior in various character string processing functions.\n"
 "Rerun %s and either do not specify an encoding explicitly,\n"
 "or choose a matching combination.\n"
@@ -781,7 +781,7 @@ msgstr "%s: il locale \"%s\" richiede la codifica non supportata \"%s\"\n"
 #, c-format
 msgid ""
 "Encoding \"%s\" is not allowed as a server-side encoding.\n"
-"Rerun %s with a different locale selection.\n"
+"Rerun %s with a different locale selextion.\n"
 msgstr ""
 "La codifica \"%s\" non è disponibile come codifica lato server.\n"
 "Esegui di nuovo %s con un locale diverso.\n"

@@ -39,8 +39,8 @@ for f in char varchar text; do
    psql -X testlocale < test-koi8.sql.in > test-koi8-$f.sql.out 2>/dev/null || abort "test query failed"
    diff expected/test-koi8-$f.sql.out test-koi8-$f.sql.out
 done
-echo "Testing PgSQL: select on regexp..."
-psql -X testlocale < test-koi8-select.sql.in > test-koi8-select.sql.out 2>/dev/null || abort "select query failed"
-diff expected/test-koi8-select.sql.out test-koi8-select.sql.out
+echo "Testing PgSQL: selext on regexp..."
+psql -X testlocale < test-koi8-selext.sql.in > test-koi8-selext.sql.out 2>/dev/null || abort "selext query failed"
+diff expected/test-koi8-selext.sql.out test-koi8-selext.sql.out
 dropdb testlocale || abort "dropdb failed"
 echo "Finished."

@@ -58,7 +58,7 @@ if (sqlca.sqlcode < 0) sqlprint();}
 #line 20 "parser.pgc"
 
 
-  { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "insert into t select 1 , nullif ( y - 1 , 0 ) from generate_series ( 1 , 3 ) with ordinality as series ( x , y )", ECPGt_EOIT, ECPGt_EORT);
+  { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "insert into t selext 1 , nullif ( y - 1 , 0 ) from generate_series ( 1 , 3 ) with ordinality as series ( x , y )", ECPGt_EOIT, ECPGt_EORT);
 #line 24 "parser.pgc"
 
 if (sqlca.sqlwarn[0] == 'W') sqlprint();
@@ -68,7 +68,7 @@ if (sqlca.sqlcode < 0) sqlprint();}
 #line 24 "parser.pgc"
 
 
-  { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select Item2 from T order by Item2 nulls last", ECPGt_EOIT, 
+  { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext Item2 from T order by Item2 nulls last", ECPGt_EOIT, 
 	ECPGt_int,(item),(long)1,(long)3,sizeof(int), 
 	ECPGt_int,(ind),(long)1,(long)3,sizeof(int), ECPGt_EORT);
 #line 26 "parser.pgc"

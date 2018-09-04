@@ -34,17 +34,17 @@ SELECT relname, spcname FROM pg_catalog.pg_tablespace t, pg_catalog.pg_class c
 INSERT INTO testschema.foo VALUES(1);
 INSERT INTO testschema.foo VALUES(2);
 -- tables from dynamic sources
-CREATE TABLE testschema.asselect TABLESPACE regress_tblspace AS SELECT 1;
+CREATE TABLE testschema.asselext TABLESPACE regress_tblspace AS SELECT 1;
 SELECT relname, spcname FROM pg_catalog.pg_tablespace t, pg_catalog.pg_class c
-    where c.reltablespace = t.oid AND c.relname = 'asselect';
+    where c.reltablespace = t.oid AND c.relname = 'asselext';
  relname  |     spcname      
 ----------+------------------
- asselect | regress_tblspace
+ asselext | regress_tblspace
 (1 row)
 
-PREPARE selectsource(int) AS SELECT $1;
+PREPARE selextsource(int) AS SELECT $1;
 CREATE TABLE testschema.asexecute TABLESPACE regress_tblspace
-    AS EXECUTE selectsource(2);
+    AS EXECUTE selextsource(2);
 SELECT relname, spcname FROM pg_catalog.pg_tablespace t, pg_catalog.pg_class c
     where c.reltablespace = t.oid AND c.relname = 'asexecute';
   relname  |     spcname      
@@ -243,7 +243,7 @@ DROP TABLESPACE regress_tblspace_renamed;
 DROP SCHEMA testschema CASCADE;
 NOTICE:  drop cascades to 5 other objects
 DETAIL:  drop cascades to table testschema.foo
-drop cascades to table testschema.asselect
+drop cascades to table testschema.asselext
 drop cascades to table testschema.asexecute
 drop cascades to table testschema.atable
 drop cascades to table testschema.tablespace_acl

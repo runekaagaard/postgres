@@ -41,7 +41,7 @@ CREATE POLICY <replaceable class="parameter">name</replaceable> ON <replaceable 
   </para>
 
   <para>
-   A policy grants the permission to select, insert, update, or delete rows
+   A policy grants the permission to selext, insert, update, or delete rows
    that match the relevant policy expression.  Existing table rows are
    checked against the expression specified in <literal>USING</literal>,
    while new rows that would be created via <literal>INSERT</literal>
@@ -235,14 +235,14 @@ CREATE POLICY <replaceable class="parameter">name</replaceable> ON <replaceable 
          exist, then both the <literal>ALL</literal> policy and the more
          specific policy (or policies) will be applied.
          Additionally, <literal>ALL</literal> policies will be applied to
-         both the selection side of a query and the modification side, using
+         both the selextion side of a query and the modification side, using
          the <literal>USING</literal> expression for both cases if only
          a <literal>USING</literal> expression has been defined.
        </para>
        <para>
          As an example, if an <literal>UPDATE</literal> is issued, then the
          <literal>ALL</literal> policy will be applicable both to what the
-         <literal>UPDATE</literal> will be able to select as rows to be
+         <literal>UPDATE</literal> will be able to selext as rows to be
          updated (applying the <literal>USING</literal> expression),
          and to the resulting updated rows, to check if they are permitted
          to be added to the table (applying the <literal>WITH CHECK</literal>
@@ -256,7 +256,7 @@ CREATE POLICY <replaceable class="parameter">name</replaceable> ON <replaceable 
       </listitem>
      </varlistentry>
 
-     <varlistentry id="sql-createpolicy-select">
+     <varlistentry id="sql-createpolicy-selext">
       <term><literal>SELECT</literal></term>
       <listitem>
        <para>
@@ -445,7 +445,7 @@ CREATE POLICY <replaceable class="parameter">name</replaceable> ON <replaceable 
       <row>
        <entry><command>INSERT ... RETURNING</command></entry>
        <entry>
-        New row <footnote id="rls-select-priv">
+        New row <footnote id="rls-selext-priv">
          <para>
           If read access is required to the existing or new row (for example,
           a <literal>WHERE</literal> or <literal>RETURNING</literal> clause
@@ -461,7 +461,7 @@ CREATE POLICY <replaceable class="parameter">name</replaceable> ON <replaceable 
       <row>
        <entry><command>UPDATE</command></entry>
        <entry>
-        Existing &amp; new rows <footnoteref linkend="rls-select-priv"/>
+        Existing &amp; new rows <footnoteref linkend="rls-selext-priv"/>
        </entry>
        <entry>&mdash;</entry>
        <entry>Existing row</entry>
@@ -471,7 +471,7 @@ CREATE POLICY <replaceable class="parameter">name</replaceable> ON <replaceable 
       <row>
        <entry><command>DELETE</command></entry>
        <entry>
-        Existing row <footnoteref linkend="rls-select-priv"/>
+        Existing row <footnoteref linkend="rls-selext-priv"/>
        </entry>
        <entry>&mdash;</entry>
        <entry>&mdash;</entry>
@@ -499,7 +499,7 @@ CREATE POLICY <replaceable class="parameter">name</replaceable> ON <replaceable 
     When multiple policies of different command types apply to the same command
     (for example, <literal>SELECT</literal> and <literal>UPDATE</literal>
     policies applied to an <literal>UPDATE</literal> command), then the user
-    must have both types of permissions (for example, permission to select rows
+    must have both types of permissions (for example, permission to selext rows
     from the relation as well as permission to update them).  Thus the
     expressions for one type of policy are combined with the expressions for
     the other type of policy using the <literal>AND</literal> operator.

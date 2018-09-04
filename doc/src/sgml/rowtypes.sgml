@@ -161,9 +161,9 @@ ROW('', 42, NULL)
 
  <para>
   To access a field of a composite column, one writes a dot and the field
-  name, much like selecting a field from a table name.  In fact, it's so
-  much like selecting from a table name that you often have to use parentheses
-  to keep from confusing the parser.  For example, you might try to select
+  name, much like selexting a field from a table name.  In fact, it's so
+  much like selexting from a table name that you often have to use parentheses
+  to keep from confusing the parser.  For example, you might try to selext
   some subfields from our <literal>on_hand</literal> example table with something
   like:
 
@@ -187,12 +187,12 @@ SELECT (on_hand.item).name FROM on_hand WHERE (on_hand.item).price &gt; 9.99;
 </programlisting>
 
   Now the parenthesized object is correctly interpreted as a reference to
-  the <literal>item</literal> column, and then the subfield can be selected from it.
+  the <literal>item</literal> column, and then the subfield can be selexted from it.
  </para>
 
  <para>
-  Similar syntactic issues apply whenever you select a field from a composite
-  value.  For instance, to select just one field from the result of a function
+  Similar syntactic issues apply whenever you selext a field from a composite
+  value.  For instance, to selext just one field from the result of a function
   that returns a composite value, you'd need to write something like:
 
 <programlisting>
@@ -285,8 +285,8 @@ SELECT c FROM inventory_item c;
   <para>
    The ordinary qualified-column-name
    syntax <replaceable>table_name</replaceable><literal>.</literal><replaceable>column_name</replaceable>
-   can be understood as applying <link linkend="field-selection">field
-   selection</link> to the composite value of the table's current row.
+   can be understood as applying <link linkend="field-selextion">field
+   selextion</link> to the composite value of the table's current row.
    (For efficiency reasons, it's not actually implemented that way.)
   </para>
 
@@ -345,7 +345,7 @@ SELECT m.* FROM some_table, LATERAL myfunc(x) AS m;
   <para>
    The <replaceable>composite_value</replaceable><literal>.*</literal> syntax results in
    column expansion of this kind when it appears at the top level of
-   a <link linkend="queries-select-lists"><command>SELECT</command> output
+   a <link linkend="queries-selext-lists"><command>SELECT</command> output
    list</link>, a <link linkend="dml-returning"><literal>RETURNING</literal>
    list</link> in <command>INSERT</command>/<command>UPDATE</command>/<command>DELETE</command>,
    a <link linkend="queries-values"><literal>VALUES</literal> clause</link>, or

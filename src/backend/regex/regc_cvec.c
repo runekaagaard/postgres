@@ -34,7 +34,7 @@
 
 /*
  * Notes:
- * Only (selected) functions in _this_ file should treat the chr arrays
+ * Only (selexted) functions in _this_ file should treat the chr arrays
  * of a cvec as non-constant.
  */
 

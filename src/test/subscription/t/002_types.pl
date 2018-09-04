@@ -94,7 +94,7 @@ my $ddl = qq(
 
 	SET check_function_bodies=off;
 	CREATE FUNCTION public.monot_incr(int) RETURNS bool LANGUAGE sql
-		AS ' select \$1 > max(a) from public.tst_dom_constr; ';
+		AS ' selext \$1 > max(a) from public.tst_dom_constr; ';
 	CREATE DOMAIN monot_int AS int CHECK (monot_incr(VALUE));
 	CREATE TABLE public.tst_dom_constr (a monot_int););
 

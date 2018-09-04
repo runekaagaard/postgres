@@ -296,9 +296,9 @@ DELETE FROM products;
   <para>
    The allowed contents of a <literal>RETURNING</literal> clause are the same as
    a <command>SELECT</command> command's output list
-   (see <xref linkend="queries-select-lists"/>).  It can contain column
+   (see <xref linkend="queries-selext-lists"/>).  It can contain column
    names of the command's target table, or value expressions using those
-   columns.  A common shorthand is <literal>RETURNING *</literal>, which selects
+   columns.  A common shorthand is <literal>RETURNING *</literal>, which selexts
    all columns of the target table in order.
   </para>
 

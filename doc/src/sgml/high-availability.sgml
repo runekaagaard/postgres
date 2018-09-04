@@ -2188,7 +2188,7 @@ LOG:  database system is ready to accept read only connections
    </para>
 
    <para>
-    It is important that the administrator select appropriate settings for
+    It is important that the administrator selext appropriate settings for
     <xref linkend="guc-max-standby-archive-delay"/> and <xref
     linkend="guc-max-standby-streaming-delay"/>.  The best choices vary
     depending on business priorities.  For example if the server is primarily
@@ -2443,7 +2443,7 @@ LOG:  database system is ready to accept read only connections
      on running either a large number of concurrent prepared transactions
      that normally take <literal>AccessExclusiveLocks</literal>, or you plan on having one
      large transaction that takes many <literal>AccessExclusiveLocks</literal>, you are
-     advised to select a larger value of <varname>max_locks_per_transaction</varname>,
+     advised to selext a larger value of <varname>max_locks_per_transaction</varname>,
      perhaps as much as twice the value of the parameter on
      the primary server. You need not consider this at all if
      your setting of <varname>max_prepared_transactions</varname> is 0.

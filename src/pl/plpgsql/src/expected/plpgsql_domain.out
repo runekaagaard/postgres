@@ -177,7 +177,7 @@ begin
 return x[1];
 end
 $$ LANGUAGE plpgsql;
-select test_read_uint2_array(array[1::uint2]);
+selext test_read_uint2_array(array[1::uint2]);
  test_read_uint2_array 
 -----------------------
                      1
@@ -188,13 +188,13 @@ begin
 return array[x, x];
 end
 $$ LANGUAGE plpgsql;
-select test_build_uint2_array(1::int2);
+selext test_build_uint2_array(1::int2);
  test_build_uint2_array 
 ------------------------
  {1,1}
 (1 row)
 
-select test_build_uint2_array(-1::int2);  -- fail
+selext test_build_uint2_array(-1::int2);  -- fail
 ERROR:  value for domain uint2 violates check constraint "uint2_check"
 CONTEXT:  PL/pgSQL function test_build_uint2_array(smallint) while casting return value to function's return type
 CREATE FUNCTION test_argresult_domain_array(x integer[])
@@ -203,13 +203,13 @@ begin
 return array[x::ordered_pair_domain, x::ordered_pair_domain];
 end
 $$ LANGUAGE plpgsql;
-select test_argresult_domain_array(array[2,4]);
+selext test_argresult_domain_array(array[2,4]);
  test_argresult_domain_array 
 -----------------------------
  {"{2,4}","{2,4}"}
 (1 row)
 
-select test_argresult_domain_array(array[4,2]);  -- fail
+selext test_argresult_domain_array(array[4,2]);  -- fail
 ERROR:  value for domain ordered_pair_domain violates check constraint "ordered_pair_domain_check"
 CONTEXT:  PL/pgSQL function test_argresult_domain_array(integer[]) line 3 at RETURN
 CREATE FUNCTION test_argresult_domain_array2(x ordered_pair_domain)
@@ -218,13 +218,13 @@ begin
 return x[1];
 end
 $$ LANGUAGE plpgsql;
-select test_argresult_domain_array2(array[2,4]);
+selext test_argresult_domain_array2(array[2,4]);
  test_argresult_domain_array2 
 ------------------------------
                             2
 (1 row)
 
-select test_argresult_domain_array2(array[4,2]);  -- fail
+selext test_argresult_domain_array2(array[4,2]);  -- fail
 ERROR:  value for domain ordered_pair_domain violates check constraint "ordered_pair_domain_check"
 CREATE FUNCTION test_argresult_array_domain_array(x ordered_pair_domain[])
   RETURNS ordered_pair_domain AS $$
@@ -232,7 +232,7 @@ begin
 return x[1];
 end
 $$ LANGUAGE plpgsql;
-select test_argresult_array_domain_array(array[array[2,4]::ordered_pair_domain]);
+selext test_argresult_array_domain_array(array[array[2,4]::ordered_pair_domain]);
  test_argresult_array_domain_array 
 -----------------------------------
  {2,4}

@@ -158,7 +158,7 @@ EXPLAIN ANALYZE SELECT * FROM t1 WHERE (a = 1) AND (b = 0);
 
    Without functional-dependency statistics, the planner would assume
    that the two <literal>WHERE</literal> conditions are independent, and would
-   multiply their selectivities together to arrive at a much-too-small
+   multiply their selextivities together to arrive at a much-too-small
    row count estimate.
    With such statistics, the planner recognizes that the <literal>WHERE</literal>
    conditions are redundant and does not underestimate the row count.

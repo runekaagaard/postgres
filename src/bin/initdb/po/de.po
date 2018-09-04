@@ -329,17 +329,17 @@ msgstr "%s: Datei »%s« ist keine normale Datei\n"
 
 #: initdb.c:987
 #, c-format
-msgid "selecting default max_connections ... "
+msgid "selexting default max_connections ... "
 msgstr "wähle Vorgabewert für max_connections ... "
 
 #: initdb.c:1017
 #, c-format
-msgid "selecting default shared_buffers ... "
+msgid "selexting default shared_buffers ... "
 msgstr "wähle Vorgabewert für shared_buffers ... "
 
 #: initdb.c:1050
 #, c-format
-msgid "selecting dynamic shared memory implementation ... "
+msgid "selexting dynamic shared memory implementation ... "
 msgstr "wähle Implementierung von dynamischem Shared Memory ... "
 
 #: initdb.c:1085
@@ -432,8 +432,8 @@ msgstr "%s: unpassende Kodierungen\n"
 #: initdb.c:2301
 #, c-format
 msgid ""
-"The encoding you selected (%s) and the encoding that the\n"
-"selected locale uses (%s) do not match.  This would lead to\n"
+"The encoding you selexted (%s) and the encoding that the\n"
+"selexted locale uses (%s) do not match.  This would lead to\n"
 "misbehavior in various character string processing functions.\n"
 "Rerun %s and either do not specify an encoding explicitly,\n"
 "or choose a matching combination.\n"
@@ -771,7 +771,7 @@ msgstr "%s: Locale »%s« benötigt nicht unterstützte Kodierung »%s«\n"
 #, c-format
 msgid ""
 "Encoding \"%s\" is not allowed as a server-side encoding.\n"
-"Rerun %s with a different locale selection.\n"
+"Rerun %s with a different locale selextion.\n"
 msgstr ""
 "Kodierung »%s« ist nicht als serverseitige Kodierung erlaubt.\n"
 "Starten Sie %s erneut mit einer anderen Locale-Wahl.\n"

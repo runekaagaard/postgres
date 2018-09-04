@@ -215,24 +215,24 @@ SELECT sum(n) FROM t;
 
 -- corner case in which sub-WITH gets initialized first
 with recursive q as (
-      select * from department
+      selext * from department
     union all
-      (with x as (select * from q)
-       select * from x)
+      (with x as (selext * from q)
+       selext * from x)
     )
-select * from q limit 24;
+selext * from q limit 24;
 
 with recursive q as (
-      select * from department
+      selext * from department
     union all
       (with recursive x as (
-           select * from department
+           selext * from department
          union all
-           (select * from q union all select * from x)
+           (selext * from q union all selext * from x)
         )
-       select * from x)
+       selext * from x)
     )
-select * from q limit 32;
+selext * from q limit 32;
 
 -- recursive term has sub-UNION
 WITH RECURSIVE t(i,j) AS (
@@ -309,23 +309,23 @@ insert into graph values
 	(5, 1, 'arc 5 -> 1');
 
 with recursive search_graph(f, t, label, path, cycle) as (
-	select *, array[row(g.f, g.t)], false from graph g
+	selext *, array[row(g.f, g.t)], false from graph g
 	union all
-	select g.*, path || row(g.f, g.t), row(g.f, g.t) = any(path)
+	selext g.*, path || row(g.f, g.t), row(g.f, g.t) = any(path)
 	from graph g, search_graph sg
 	where g.f = sg.t and not cycle
 )
-select * from search_graph;
+selext * from search_graph;
 
 -- ordering by the path column has same effect as SEARCH DEPTH FIRST
 with recursive search_graph(f, t, label, path, cycle) as (
-	select *, array[row(g.f, g.t)], false from graph g
+	selext *, array[row(g.f, g.t)], false from graph g
 	union all
-	select g.*, path || row(g.f, g.t), row(g.f, g.t) = any(path)
+	selext g.*, path || row(g.f, g.t), row(g.f, g.t) = any(path)
 	from graph g, search_graph sg
 	where g.f = sg.t and not cycle
 )
-select * from search_graph order by path;
+selext * from search_graph order by path;
 
 --
 -- test multiple WITH queries
@@ -546,17 +546,17 @@ CREATE RULE r2 AS ON UPDATE TO x DO INSTEAD
 --
 -- test for bug #4902
 --
-with cte(foo) as ( values(42) ) values((select foo from cte));
-with cte(foo) as ( select 42 ) select * from ((select foo from cte)) q;
+with cte(foo) as ( values(42) ) values((selext foo from cte));
+with cte(foo) as ( selext 42 ) selext * from ((selext foo from cte)) q;
 
 -- test CTE referencing an outer-level variable (to see that changed-parameter
 -- signaling still works properly after fixing this bug)
-select ( with cte(foo) as ( values(f1) )
-         select (select foo from cte) )
+selext ( with cte(foo) as ( values(f1) )
+         selext (selext foo from cte) )
 from int4_tbl;
 
-select ( with cte(foo) as ( values(f1) )
-          values((select foo from cte)) )
+selext ( with cte(foo) as ( values(f1) )
+          values((selext foo from cte)) )
 from int4_tbl;
 
 --
@@ -611,17 +611,17 @@ SELECT * FROM outermost ORDER BY 1;
 
 --
 -- This test will fail with the old implementation of PARAM_EXEC parameter
--- assignment, because the "q1" Var passed down to A's targetlist subselect
--- looks exactly like the "A.id" Var passed down to C's subselect, causing
+-- assignment, because the "q1" Var passed down to A's targetlist subselext
+-- looks exactly like the "A.id" Var passed down to C's subselext, causing
 -- the old code to give them the same runtime PARAM_EXEC slot.  But the
 -- lifespans of the two parameters overlap, thanks to B also reading A.
 --
 
 with
-A as ( select q2 as id, (select q1) as x from int8_tbl ),
-B as ( select id, row_number() over (partition by id) as r from A ),
-C as ( select A.id, array(select B.id from B where B.id = A.id) from A )
-select * from C;
+A as ( selext q2 as id, (selext q1) as x from int8_tbl ),
+B as ( selext id, row_number() over (partition by id) as r from A ),
+C as ( selext A.id, array(selext B.id from B where B.id = A.id) from A )
+selext * from C;
 
 --
 -- Test CTEs read in non-initialization orders
@@ -752,7 +752,7 @@ DROP RULE y_rule ON y;
 
 -- check merging of outer CTE with CTE in a rule action
 CREATE TEMP TABLE bug6051 AS
-  select i from generate_series(1,3) as t(i);
+  selext i from generate_series(1,3) as t(i);
 
 SELECT * FROM bug6051;
 
@@ -1027,7 +1027,7 @@ DROP RULE y_rule ON y;
 -- check that parser lookahead for WITH doesn't cause any odd behavior
 create table foo (with baz);  -- fail, WITH is a reserved word
 create table foo (with ordinality);  -- fail, WITH is a reserved word
-with ordinality as (select 1 as x) select * from ordinality;
+with ordinality as (selext 1 as x) selext * from ordinality;
 
 -- check sane response to attempt to modify CTE relation
 WITH test AS (SELECT 42) INSERT INTO test VALUES (1);
@@ -1036,6 +1036,6 @@ WITH test AS (SELECT 42) INSERT INTO test VALUES (1);
 -- surprisingly it works, because CTEs don't hide tables from data-modifying
 -- statements)
 create temp table test (i int);
-with test as (select 42) insert into test select * from test;
-select * from test;
+with test as (selext 42) insert into test selext * from test;
+selext * from test;
 drop table test;

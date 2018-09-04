@@ -513,7 +513,7 @@ static void div_var(const NumericVar *var1, const NumericVar *var2,
 		int rscale, bool round);
 static void div_var_fast(const NumericVar *var1, const NumericVar *var2,
 			 NumericVar *result, int rscale, bool round);
-static int	select_div_scale(const NumericVar *var1, const NumericVar *var2);
+static int	selext_div_scale(const NumericVar *var1, const NumericVar *var2);
 static void mod_var(const NumericVar *var1, const NumericVar *var2,
 		NumericVar *result);
 static void ceil_var(const NumericVar *var, NumericVar *result);
@@ -1579,14 +1579,14 @@ compute_bucket(Numeric operand, Numeric bound1, Numeric bound2,
 		sub_var(&operand_var, &bound1_var, &operand_var);
 		sub_var(&bound2_var, &bound1_var, &bound2_var);
 		div_var(&operand_var, &bound2_var, result_var,
-				select_div_scale(&operand_var, &bound2_var), true);
+				selext_div_scale(&operand_var, &bound2_var), true);
 	}
 	else
 	{
 		sub_var(&bound1_var, &operand_var, &operand_var);
 		sub_var(&bound1_var, &bound2_var, &bound1_var);
 		div_var(&operand_var, &bound1_var, result_var,
-				select_div_scale(&operand_var, &bound1_var), true);
+				selext_div_scale(&operand_var, &bound1_var), true);
 	}
 
 	mul_var(result_var, count_var, result_var,
@@ -2538,7 +2538,7 @@ numeric_div(PG_FUNCTION_ARGS)
 	/*
 	 * Select scale for division result
 	 */
-	rscale = select_div_scale(&arg1, &arg2);
+	rscale = selext_div_scale(&arg1, &arg2);
 
 	/*
 	 * Do the divide and return the result
@@ -2944,7 +2944,7 @@ numeric_log(PG_FUNCTION_ARGS)
 
 	/*
 	 * Call log_var() to compute and return the result; note it handles scale
-	 * selection itself.
+	 * selextion itself.
 	 */
 	log_var(&arg1, &arg2, &result);
 
@@ -3025,7 +3025,7 @@ numeric_power(PG_FUNCTION_ARGS)
 
 	/*
 	 * Call power_var() to compute and return the result; note it handles
-	 * scale selection itself.
+	 * scale selextion itself.
 	 */
 	power_var(&arg1, &arg2, &result);
 
@@ -4893,7 +4893,7 @@ numeric_stddev_internal(NumericAggState *state,
 			mul_var(&vN, &vNminus1, &vNminus1, 0);	/* N * (N - 1) */
 		else
 			mul_var(&vN, &vN, &vNminus1, 0);	/* N * N */
-		rscale = select_div_scale(&vsumX2, &vNminus1);
+		rscale = selext_div_scale(&vsumX2, &vNminus1);
 		div_var(&vsumX2, &vNminus1, &vsumX, rscale, true);	/* variance */
 		if (!variance)
 			sqrt_var(&vsumX, &vsumX, rscale);	/* stddev */
@@ -7625,12 +7625,12 @@ div_var_fast(const NumericVar *var1, const NumericVar *var2,
 
 
 /*
- * Default scale selection for division
+ * Default scale selextion for division
  *
  * Returns the appropriate result scale for the division result.
  */
 static int
-select_div_scale(const NumericVar *var1, const NumericVar *var2)
+selext_div_scale(const NumericVar *var1, const NumericVar *var2)
 {
 	int			weight1,
 				weight2,
@@ -7642,7 +7642,7 @@ select_div_scale(const NumericVar *var1, const NumericVar *var2)
 
 	/*
 	 * The result scale of a division isn't specified in any SQL standard. For
-	 * PostgreSQL we select a result scale that will give at least
+	 * PostgreSQL we selext a result scale that will give at least
 	 * NUMERIC_MIN_SIG_DIGITS significant digits, so that numeric gives a
 	 * result no less accurate than float8; but use a scale not less than
 	 * either input's display scale.
@@ -8241,7 +8241,7 @@ power_var(const NumericVar *base, const NumericVar *exp, NumericVar *result)
 			/* Test for overflow by reverse-conversion. */
 			if ((int64) expval == expval64)
 			{
-				/* Okay, select rscale */
+				/* Okay, selext rscale */
 				rscale = NUMERIC_MIN_SIG_DIGITS;
 				rscale = Max(rscale, base->dscale);
 				rscale = Max(rscale, NUMERIC_MIN_DISPLAY_SCALE);

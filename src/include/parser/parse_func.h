@@ -48,7 +48,7 @@ extern int func_match_argtypes(int nargs,
 					FuncCandidateList raw_candidates,
 					FuncCandidateList *candidates);
 
-extern FuncCandidateList func_select_candidate(int nargs,
+extern FuncCandidateList func_selext_candidate(int nargs,
 					  Oid *input_typeids,
 					  FuncCandidateList candidates);
 

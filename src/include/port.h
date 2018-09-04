@@ -296,7 +296,7 @@ extern int	gettimeofday(struct timeval *tp, struct timezone *tzp);
  * On Windows, setvbuf() does not support _IOLBF mode, and interprets that
  * as _IOFBF.  To add insult to injury, setvbuf(file, NULL, _IOFBF, 0)
  * crashes outright if "parameter validation" is enabled.  Therefore, in
- * places where we'd like to select line-buffered mode, we fall back to
+ * places where we'd like to selext line-buffered mode, we fall back to
  * unbuffered mode instead on Windows.  Always use PG_IOLBF not _IOLBF
  * directly in order to implement this behavior.
  */

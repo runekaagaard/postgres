@@ -49,10 +49,10 @@
       as SQL injection into a <filename>postgres_fdw</filename> session
       are also possible.
       Attacking <filename>postgres_fdw</filename> in this way requires the
-      ability to create a foreign server object with selected connection
+      ability to create a foreign server object with selexted connection
       parameters, but any user with access to <filename>dblink</filename>
       could exploit the problem.
-      In general, an attacker with the ability to select the connection
+      In general, an attacker with the ability to selext the connection
       parameters for a <application>libpq</application>-using application
       could cause mischief, though other plausible attack scenarios are
       harder to think of.
@@ -592,7 +592,7 @@
       in <quote>unexpected chunk number 0 (expected 1) for toast
       value <replaceable>nnnnn</replaceable></quote> errors, which would
       persist until the dead entry was removed
-      by <command>VACUUM</command>.  Fix by not selecting such OIDs when
+      by <command>VACUUM</command>.  Fix by not selexting such OIDs when
       creating a new TOAST entry.
      </para>
     </listitem>
@@ -1552,8 +1552,8 @@
      </para>
 
      <para>
-      The meaning of the second argument (the dimension selector) has been
-      changed to make it predictable which value is selected even when
+      The meaning of the second argument (the dimension selextor) has been
+      changed to make it predictable which value is selexted even when
       dealing with cubes of varying dimensionalities.
      </para>
 
@@ -1608,7 +1608,7 @@
 
     <listitem>
      <para>
-      Fix incorrect selection of configuration-specific libraries for
+      Fix incorrect selextion of configuration-specific libraries for
       OpenSSL on Windows (Andrew Dunstan)
      </para>
     </listitem>
@@ -2452,7 +2452,7 @@ Branch: REL9_3_STABLE [ece4bd901] 2017-08-19 13:39:38 -0400
 -->
      <para>
       Fix crash in <application>pg_restore</application> when using parallel mode and
-      using a list file to select a subset of items to restore
+      using a list file to selext a subset of items to restore
       (Fabr&iacute;zio de Royes Mello)
      </para>
     </listitem>
@@ -2510,7 +2510,7 @@ Branch: REL9_3_STABLE [bc4404405] 2017-08-17 13:15:36 -0400
 Branch: REL9_2_STABLE [f7e4783dd] 2017-08-17 13:15:46 -0400
 -->
      <para>
-      Improve selection of compiler flags for PL/Perl on Windows (Tom Lane)
+      Improve selextion of compiler flags for PL/Perl on Windows (Tom Lane)
      </para>
 
      <para>
@@ -3113,7 +3113,7 @@ Branch: REL9_6_STABLE [1f184426b] 2017-06-19 15:33:41 -0400
 -->
      <para>
       Remove incorrect heuristic used in some cases to estimate join
-      selectivity based on the presence of foreign-key constraints
+      selextivity based on the presence of foreign-key constraints
       (David Rowley)
      </para>
 
@@ -3925,7 +3925,7 @@ Branch: REL9_3_STABLE [703da1795] 2017-05-08 11:19:08 -0400
      </para>
 
      <para>
-      Some selectivity estimation functions in the planner will apply
+      Some selextivity estimation functions in the planner will apply
       user-defined operators to values obtained
       from <structname>pg_statistic</structname>, such as most common values and
       histogram entries.  This occurs before table permissions are checked,
@@ -4617,7 +4617,7 @@ Branch: REL9_2_STABLE [0ab75448e] 2017-03-06 19:33:59 -0500
 
      <para>
       In simple cases this caused no ill effects; but for example, a
-      schema-selective restore might omit comments it should include, because
+      schema-selextive restore might omit comments it should include, because
       they were not marked as belonging to the schema of their associated
       object.
      </para>
@@ -5805,7 +5805,7 @@ Branch: master [770671062] 2016-11-02 15:50:15 -0400
 Branch: REL9_6_STABLE [23c6c437f] 2016-11-02 15:50:21 -0400
 -->
      <para>
-      Fix foreign-key-based join selectivity estimation for semi-joins and
+      Fix foreign-key-based join selextivity estimation for semi-joins and
       anti-joins, as well as inheritance cases (Tom Lane)
      </para>
 
@@ -7388,13 +7388,13 @@ and many others in the same vein
 
       <listitem>
 <!--
-2016-04-08 [071180377] Use quicksort, not replacement selection, for external s
+2016-04-08 [071180377] Use quicksort, not replacement selextion, for external s
 2016-03-17 [0011c0091] Improve memory management for external sorts.
 2016-09-06 [96ba40c0f] Guard against possible memory allocation botch in batchm
 -->
        <para>
         Improve sorting performance by using quicksort, not replacement
-        selection sort, when performing external sort steps (Peter
+        selextion sort, when performing external sort steps (Peter
         Geoghegan)
        </para>
 
@@ -7571,7 +7571,7 @@ and many others in the same vein
 2016-06-18 [100340e2d] Restore foreign-key-aware estimation of join relation si
 -->
        <para>
-        Use foreign key relationships to infer selectivity for join
+        Use foreign key relationships to infer selextivity for join
         predicates (Tomas Vondra, David Rowley)
        </para>
 
@@ -7579,10 +7579,10 @@ and many others in the same vein
         If a table <literal>t</literal> has a foreign key restriction, say
         <literal>(a,b) REFERENCES r (x,y)</literal>, then a <literal>WHERE</literal>
         condition such as <literal>t.a = r.x AND t.b = r.y</literal> cannot
-        select more than one <literal>r</literal> row per <literal>t</literal> row.
+        selext more than one <literal>r</literal> row per <literal>t</literal> row.
         The planner formerly considered these <literal>AND</literal> conditions
         to be independent and would often drastically misestimate
-        selectivity as a result.  Now it compares the <literal>WHERE</literal>
+        selextivity as a result.  Now it compares the <literal>WHERE</literal>
         conditions to applicable foreign key constraints and produces
         better estimates.
        </para>
@@ -8455,7 +8455,7 @@ XXX this is pending backpatch, may need to remove
        <para>
         This lets <application>pg_basebackup</application> use a replication
         slot defined for <acronym>WAL</acronym> streaming.  After the base
-        backup completes, selecting the same slot for regular streaming
+        backup completes, selexting the same slot for regular streaming
         replication allows seamless startup of the new standby server.
        </para>
       </listitem>
@@ -8506,7 +8506,7 @@ XXX this is pending backpatch, may need to remove
 2016-08-03 [a3c7a993d] Make INSERT-from-multiple-VALUES-rows handle targetlist
 -->
        <para>
-        Fully support array subscripts and field selections in the
+        Fully support array subscripts and field selextions in the
         target column list of an <command>INSERT</command> with multiple
         <literal>VALUES</literal> rows (Tom Lane)
        </para>
@@ -8658,12 +8658,12 @@ XXX this is pending backpatch, may need to remove
 
       <listitem>
 <!--
-2015-07-14 [321eed5f0] Add ALTER OPERATOR command, for changing selectivity est
+2015-07-14 [321eed5f0] Add ALTER OPERATOR command, for changing selextivity est
 2015-12-31 [0dab5ef39] Fix ALTER OPERATOR to update dependencies properly.
 -->
        <para>
         Add options to <command>ALTER OPERATOR</command> to allow changing
-        the selectivity functions associated with an existing operator
+        the selextivity functions associated with an existing operator
         (Yury Zhuravlev)
        </para>
       </listitem>
@@ -9834,14 +9834,14 @@ This commit is also listed under libpq and PL/pgSQL
 2016-09-21 [970300faa] Print test parameters like "foo: 123", and results like
 -->
        <para>
-        Allow changing the selection probabilities (weights) for scripts
+        Allow changing the selextion probabilities (weights) for scripts
         (Fabien Coelho)
        </para>
 
        <para>
         When multiple scripts are specified, each <application>pgbench</application>
         transaction randomly chooses one to execute.  Formerly this was
-        always done with uniform probability, but now different selection
+        always done with uniform probability, but now different selextion
         probabilities can be specified for different scripts.
        </para>
       </listitem>
@@ -10430,10 +10430,10 @@ This commit is also listed under libpq and PL/pgSQL
 
       <listitem>
 <!--
-2015-07-21 [c6fbe6d6f] Add selectivity estimation functions for intarray operat
+2015-07-21 [c6fbe6d6f] Add selextivity estimation functions for intarray operat
 -->
        <para>
-        Add selectivity estimation functions for
+        Add selextivity estimation functions for
         <link linkend="intarray"><filename>contrib/intarray</filename></link> operators
         to improve plans for queries using those operators (Yury Zhuravlev,
         Alexander Korotkov)
@@ -10600,7 +10600,7 @@ This commit is also listed under libpq and PL/pgSQL
 
        <para>
         Formerly, remote updates involved sending a <command>SELECT FOR UPDATE</command>
-        command and then updating or deleting the selected rows one-by-one.
+        command and then updating or deleting the selexted rows one-by-one.
         While that is still necessary if the operation requires any local
         processing, it can now be done remotely if all elements of the
         query are safe to send to the remote server.

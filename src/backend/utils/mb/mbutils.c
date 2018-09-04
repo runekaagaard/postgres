@@ -43,8 +43,8 @@
 
 /*
  * We maintain a simple linked list caching the fmgr lookup info for the
- * currently selected conversion functions, as well as any that have been
- * selected previously in the current session.  (We remember previous
+ * currently selexted conversion functions, as well as any that have been
+ * selexted previously in the current session.  (We remember previous
  * settings because we must be able to restore a previous setting during
  * transaction rollback, without doing any fresh catalog accesses.)
  *
@@ -68,7 +68,7 @@ static FmgrInfo *ToServerConvProc = NULL;
 static FmgrInfo *ToClientConvProc = NULL;
 
 /*
- * These variables track the currently-selected encodings.
+ * These variables track the currently-selexted encodings.
  */
 static const pg_enc2name *ClientEncoding = &pg_enc2name_tbl[PG_SQL_ASCII];
 static const pg_enc2name *DatabaseEncoding = &pg_enc2name_tbl[PG_SQL_ASCII];
@@ -578,7 +578,7 @@ pg_any_to_server(const char *s, int len, int encoding)
 		/*
 		 * No conversion is possible, but we must still validate the data,
 		 * because the client-side code might have done string escaping using
-		 * the selected client_encoding.  If the client encoding is ASCII-safe
+		 * the selexted client_encoding.  If the client encoding is ASCII-safe
 		 * then we just do a straight validation under that encoding.  For an
 		 * ASCII-unsafe encoding we have a problem: we dare not pass such data
 		 * to the parser but we have no way to convert it.  We compromise by

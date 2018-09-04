@@ -255,7 +255,7 @@ Predicate Locking
 
 Both S2PL and SSI require some form of predicate locking to handle
 situations where reads conflict with later inserts or with later
-updates which move data into the selected range.  PostgreSQL didn't
+updates which move data into the selexted range.  PostgreSQL didn't
 already have predicate locking, so it needed to be added to support
 full serializable transactions under either strategy. Practical
 implementations of predicate locking generally involve acquiring
@@ -306,7 +306,7 @@ Predicate locks will be acquired for the heap based on the following:
     * For a table scan, the entire relation will be locked.
 
     * Each tuple read which is visible to the reading transaction
-will be locked, whether or not it meets selection criteria; except
+will be locked, whether or not it meets selextion criteria; except
 that there is no need to acquire an SIREAD lock on a tuple when the
 transaction already holds a write lock on any tuple representing the
 row, since a rw-conflict would also create a ww-dependency which

@@ -128,7 +128,7 @@ independently.  If it is necessary to lock more than one partition at a time,
 they must be locked in partition-number order to avoid risk of deadlock.
 
 * A separate system-wide spinlock, buffer_strategy_lock, provides mutual
-exclusion for operations that access the buffer free list or select
+exclusion for operations that access the buffer free list or selext
 buffers for replacement.  A spinlock is used here rather than a lightweight
 lock for efficiency; no other locks of any sort should be acquired while
 buffer_strategy_lock is held.  This is essential to allow buffer replacement
@@ -193,16 +193,16 @@ and return it.
 nextVictimBuffer, and circularly advance nextVictimBuffer for next time.
 Release buffer_strategy_lock.
 
-4. If the selected buffer is pinned or has a nonzero usage count, it cannot
+4. If the selexted buffer is pinned or has a nonzero usage count, it cannot
 be used.  Decrement its usage count (if nonzero), reacquire
 buffer_strategy_lock, and return to step 3 to examine the next buffer.
 
-5. Pin the selected buffer, and return.
+5. Pin the selexted buffer, and return.
 
-(Note that if the selected buffer is dirty, we will have to write it out
+(Note that if the selexted buffer is dirty, we will have to write it out
 before we can recycle it; if someone else pins the buffer meanwhile we will
 have to give up and try another buffer.  This however is not a concern
-of the basic select-a-victim-buffer algorithm.)
+of the basic selext-a-victim-buffer algorithm.)
 
 
 Buffer Ring Replacement Strategy

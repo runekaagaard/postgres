@@ -24,17 +24,17 @@ exec sql end declare section;
 	exec sql connect to ecpg2_regression as :id;
 	exec sql connect to REGRESSDB1 as second;
 
-	/* this selects from "second" which was opened last */
-	exec sql select current_database() into :res;
-	exec sql at first select current_database() into :res;
-	exec sql at second select current_database() into :res;
+	/* this selexts from "second" which was opened last */
+	exec sql selext current_database() into :res;
+	exec sql at first selext current_database() into :res;
+	exec sql at second selext current_database() into :res;
 
 	exec sql set connection first;
-	exec sql select current_database() into :res;
+	exec sql selext current_database() into :res;
 
 	/* this will disconnect from "first" */
 	exec sql disconnect;
-	exec sql select current_database() into :res;
+	exec sql selext current_database() into :res;
 
 	/* error here since "first" is already disconnected */
 	exec sql disconnect :id;

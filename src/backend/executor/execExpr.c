@@ -199,7 +199,7 @@ ExecInitExprWithParams(Expr *node, ParamListInfo ext_params)
  * If any of the subexpressions yield NULL, then the result of the conjunction
  * is false.  This makes ExecQual primarily useful for evaluating WHERE
  * clauses, since SQL specifies that tuples with null WHERE results do not
- * get selected.
+ * get selexted.
  */
 ExprState *
 ExecInitQual(List *qual, PlanState *parent)
@@ -1120,16 +1120,16 @@ ExecInitExprRec(Expr *node, ExprState *state,
 
 		case T_FieldSelect:
 			{
-				FieldSelect *fselect = (FieldSelect *) node;
+				FieldSelect *fselext = (FieldSelect *) node;
 
 				/* evaluate row/record argument into result area */
-				ExecInitExprRec(fselect->arg, state, resv, resnull);
+				ExecInitExprRec(fselext->arg, state, resv, resnull);
 
 				/* and extract field */
 				scratch.opcode = EEOP_FIELDSELECT;
-				scratch.d.fieldselect.fieldnum = fselect->fieldnum;
-				scratch.d.fieldselect.resulttype = fselect->resulttype;
-				scratch.d.fieldselect.argdesc = NULL;
+				scratch.d.fieldselext.fieldnum = fselext->fieldnum;
+				scratch.d.fieldselext.resulttype = fselext->resulttype;
+				scratch.d.fieldselext.argdesc = NULL;
 
 				ExprEvalPushStep(state, &scratch);
 				break;

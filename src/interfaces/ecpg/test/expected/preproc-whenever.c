@@ -80,7 +80,7 @@ if (sqlca.sqlcode < 0) sqlprint();}
 	/* exec sql whenever sql_warning  do warn ( ) ; */
 #line 35 "whenever.pgc"
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select * from test", ECPGt_EOIT, 
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext * from test", ECPGt_EOIT, 
 	ECPGt_int,&(i),(long)1,(long)1,sizeof(int), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,(c),(long)6,(long)1,(6)*sizeof(char), 
@@ -103,7 +103,7 @@ if (sqlca.sqlcode < 0) sqlprint();}
 #line 37 "whenever.pgc"
 
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select * from nonexistant", ECPGt_EOIT, 
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext * from nonexistant", ECPGt_EOIT, 
 	ECPGt_int,&(i),(long)1,(long)1,sizeof(int), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);
 #line 39 "whenever.pgc"
@@ -124,10 +124,10 @@ if (sqlca.sqlcode < 0) sqlprint();}
 #line 40 "whenever.pgc"
 
 
-	/* exec sql whenever sqlerror  do print ( \"select\" ) ; */
+	/* exec sql whenever sqlerror  do print ( \"selext\" ) ; */
 #line 42 "whenever.pgc"
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select * from nonexistant", ECPGt_EOIT, 
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext * from nonexistant", ECPGt_EOIT, 
 	ECPGt_int,&(i),(long)1,(long)1,sizeof(int), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);
 #line 43 "whenever.pgc"
@@ -135,7 +135,7 @@ if (sqlca.sqlcode < 0) sqlprint();}
 if (sqlca.sqlwarn[0] == 'W') warn ( );
 #line 43 "whenever.pgc"
 
-if (sqlca.sqlcode < 0) print ( "select" );}
+if (sqlca.sqlcode < 0) print ( "selext" );}
 #line 43 "whenever.pgc"
 
 	{ ECPGtrans(__LINE__, NULL, "rollback");
@@ -144,14 +144,14 @@ if (sqlca.sqlcode < 0) print ( "select" );}
 if (sqlca.sqlwarn[0] == 'W') warn ( );
 #line 44 "whenever.pgc"
 
-if (sqlca.sqlcode < 0) print ( "select" );}
+if (sqlca.sqlcode < 0) print ( "selext" );}
 #line 44 "whenever.pgc"
 
 
 	/* exec sql whenever sqlerror  call print2 ( ) ; */
 #line 46 "whenever.pgc"
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select * from nonexistant", ECPGt_EOIT, 
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext * from nonexistant", ECPGt_EOIT, 
 	ECPGt_int,&(i),(long)1,(long)1,sizeof(int), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);
 #line 47 "whenever.pgc"
@@ -175,7 +175,7 @@ if (sqlca.sqlcode < 0) print2 ( );}
 	/* exec sql whenever sqlerror  continue ; */
 #line 50 "whenever.pgc"
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select * from nonexistant", ECPGt_EOIT, 
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext * from nonexistant", ECPGt_EOIT, 
 	ECPGt_int,&(i),(long)1,(long)1,sizeof(int), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);
 #line 51 "whenever.pgc"
@@ -193,7 +193,7 @@ if (sqlca.sqlwarn[0] == 'W') warn ( );}
 	/* exec sql whenever sqlerror  goto  error ; */
 #line 54 "whenever.pgc"
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select * from nonexistant", ECPGt_EOIT, 
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext * from nonexistant", ECPGt_EOIT, 
 	ECPGt_int,&(i),(long)1,(long)1,sizeof(int), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);
 #line 55 "whenever.pgc"
@@ -222,7 +222,7 @@ if (sqlca.sqlcode < 0) goto error;}
 
 	/* This cannot fail, thus we don't get an exit value not equal 0. */
 	/* However, it still test the precompiler output. */
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select 1", ECPGt_EOIT, 
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext 1", ECPGt_EOIT, 
 	ECPGt_int,&(i),(long)1,(long)1,sizeof(int), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);
 #line 64 "whenever.pgc"

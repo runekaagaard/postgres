@@ -25,7 +25,7 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>
+#include <sys/selext.h>
 #endif
 #ifdef HAVE_SYS_RESOURCE_H
 #include <sys/time.h>

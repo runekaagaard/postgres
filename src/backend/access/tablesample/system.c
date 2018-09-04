@@ -3,14 +3,14 @@
  * system.c
  *	  support routines for SYSTEM tablesample method
  *
- * To ensure repeatability of samples, it is necessary that selection of a
+ * To ensure repeatability of samples, it is necessary that selextion of a
  * given tuple be history-independent; otherwise syncscanning would break
  * repeatability, to say nothing of logically-irrelevant maintenance such
  * as physical extension or shortening of the relation.
  *
  * To achieve that, we proceed by hashing each candidate block number together
- * with the active seed, and then selecting it if the hash is less than the
- * cutoff value computed from the selection probability by BeginSampleScan.
+ * with the active seed, and then selexting it if the hash is less than the
+ * cutoff value computed from the selextion probability by BeginSampleScan.
  *
  *
  * Portions Copyright (c) 1996-2018, PostgreSQL Global Development Group
@@ -38,7 +38,7 @@
 /* Private state */
 typedef struct
 {
-	uint64		cutoff;			/* select blocks with hash less than this */
+	uint64		cutoff;			/* selext blocks with hash less than this */
 	uint32		seed;			/* random seed */
 	BlockNumber nextblock;		/* next block to consider sampling */
 	OffsetNumber lt;			/* last tuple returned from current block */
@@ -167,7 +167,7 @@ system_beginsamplescan(SampleScanState *node,
 	 * Bulkread buffer access strategy probably makes sense unless we're
 	 * scanning a very small fraction of the table.  The 1% cutoff here is a
 	 * guess.  We should use pagemode visibility checking, since we scan all
-	 * tuples on each selected page.
+	 * tuples on each selexted page.
 	 */
 	node->use_bulkread = (percent >= 1);
 	node->use_pagemode = true;
@@ -226,7 +226,7 @@ system_nextsampleblock(SampleScanState *node)
 /*
  * Select next sampled tuple in current block.
  *
- * In block sampling, we just want to sample all the tuples in each selected
+ * In block sampling, we just want to sample all the tuples in each selexted
  * block.
  *
  * It is OK here to return an offset without knowing if the tuple is visible

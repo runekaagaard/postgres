@@ -93,7 +93,7 @@ if (sqlca.sqlcode < 0) sqlprint();}
 #line 32 "execute.pgc"
 
 
-	sprintf(command, "insert into test (name, amount, letter) select name, amount+10, letter from test");
+	sprintf(command, "insert into test (name, amount, letter) selext name, amount+10, letter from test");
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_exec_immediate, command, ECPGt_EOIT, ECPGt_EORT);
 #line 35 "execute.pgc"
 
@@ -103,7 +103,7 @@ if (sqlca.sqlcode < 0) sqlprint();}
 
 	printf("Inserted %ld tuples via execute immediate\n", sqlca.sqlerrd[2]);
 
-	sprintf(command, "insert into test (name, amount, letter) select name, amount+$1, letter from test");
+	sprintf(command, "insert into test (name, amount, letter) selext name, amount+$1, letter from test");
 	{ ECPGprepare(__LINE__, NULL, 0, "i", command);
 #line 40 "execute.pgc"
 
@@ -128,7 +128,7 @@ if (sqlca.sqlcode < 0) sqlprint();}
 #line 45 "execute.pgc"
 
 
-	sprintf (command, "select * from test");
+	sprintf (command, "selext * from test");
 
 	{ ECPGprepare(__LINE__, NULL, 0, "f", command);
 #line 49 "execute.pgc"
@@ -193,7 +193,7 @@ if (sqlca.sqlcode < 0) sqlprint();}
 #line 67 "execute.pgc"
 
 
-	sprintf (command, "select * from test where amount = $1");
+	sprintf (command, "selext * from test where amount = $1");
 
 	{ ECPGprepare(__LINE__, NULL, 0, "f", command);
 #line 71 "execute.pgc"
@@ -260,7 +260,7 @@ if (sqlca.sqlcode < 0) sqlprint();}
 #line 89 "execute.pgc"
 
 
-	sprintf (command, "select * from test where amount = $1");
+	sprintf (command, "selext * from test where amount = $1");
 
 	{ ECPGprepare(__LINE__, NULL, 0, "f", command);
 #line 93 "execute.pgc"

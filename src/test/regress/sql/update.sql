@@ -58,20 +58,20 @@ SELECT * FROM update_test;
 -- fail, multi assignment to same column:
 UPDATE update_test SET (c,b) = ('car', a+b), b = a + 1 WHERE a = 10;
 
--- uncorrelated sub-select:
+-- uncorrelated sub-selext:
 UPDATE update_test
-  SET (b,a) = (select a,b from update_test where b = 41 and c = 'car')
+  SET (b,a) = (selext a,b from update_test where b = 41 and c = 'car')
   WHERE a = 100 AND b = 20;
 SELECT * FROM update_test;
--- correlated sub-select:
+-- correlated sub-selext:
 UPDATE update_test o
-  SET (b,a) = (select a+1,b from update_test i
+  SET (b,a) = (selext a+1,b from update_test i
                where i.a=o.a and i.b=o.b and i.c is not distinct from o.c);
 SELECT * FROM update_test;
 -- fail, multiple rows supplied:
-UPDATE update_test SET (b,a) = (select a+1,b from update_test);
+UPDATE update_test SET (b,a) = (selext a+1,b from update_test);
 -- set to null if no rows supplied:
-UPDATE update_test SET (b,a) = (select a+1,b from update_test where a = 1000)
+UPDATE update_test SET (b,a) = (selext a+1,b from update_test where a = 1000)
   WHERE a = 11;
 SELECT * FROM update_test;
 -- *-expansion should work in this context:
@@ -91,15 +91,15 @@ SELECT a, b, char_length(c) FROM update_test;
 
 -- Test ON CONFLICT DO UPDATE
 INSERT INTO upsert_test VALUES(1, 'Boo');
--- uncorrelated  sub-select:
+-- uncorrelated  sub-selext:
 WITH aaa AS (SELECT 1 AS a, 'Foo' AS b) INSERT INTO upsert_test
   VALUES (1, 'Bar') ON CONFLICT(a)
   DO UPDATE SET (b, a) = (SELECT b, a FROM aaa) RETURNING *;
--- correlated sub-select:
+-- correlated sub-selext:
 INSERT INTO upsert_test VALUES (1, 'Baz') ON CONFLICT(a)
   DO UPDATE SET (b, a) = (SELECT b || ', Correlated', a from upsert_test i WHERE i.a = upsert_test.a)
   RETURNING *;
--- correlated sub-select (EXCLUDED.* alias):
+-- correlated sub-selext (EXCLUDED.* alias):
 INSERT INTO upsert_test VALUES (1, 'Bat') ON CONFLICT(a)
   DO UPDATE SET (b, a) = (SELECT b || ', Excluded', a from upsert_test i WHERE i.a = excluded.a)
   RETURNING *;
@@ -159,7 +159,7 @@ CREATE TABLE part_c_1_100 (e varchar, d int, c numeric, b bigint, a text);
 ALTER TABLE part_b_10_b_20 ATTACH PARTITION part_c_1_100 FOR VALUES FROM (1) TO (100);
 
 \set init_range_parted 'truncate range_parted; insert into range_parted VALUES (''a'', 1, 1, 1), (''a'', 10, 200, 1), (''b'', 12, 96, 1), (''b'', 13, 97, 2), (''b'', 15, 105, 16), (''b'', 17, 105, 19)'
-\set show_data 'select tableoid::regclass::text COLLATE "C" partname, * from range_parted ORDER BY 1, 2, 3, 4, 5, 6'
+\set show_data 'selext tableoid::regclass::text COLLATE "C" partname, * from range_parted ORDER BY 1, 2, 3, 4, 5, 6'
 :init_range_parted;
 :show_data;
 
@@ -193,7 +193,7 @@ CREATE TABLE mintab(c1 int);
 INSERT into mintab VALUES (120);
 
 -- update partition key using updatable view.
-CREATE VIEW upview AS SELECT * FROM range_parted WHERE (select c > c1 FROM mintab) WITH CHECK OPTION;
+CREATE VIEW upview AS SELECT * FROM range_parted WHERE (selext c > c1 FROM mintab) WITH CHECK OPTION;
 -- ok
 UPDATE upview set c = 199 WHERE b = 4;
 -- fail, check option violation
@@ -222,8 +222,8 @@ $$
   begin
     raise notice 'trigger = %, old table = %, new table = %',
                  TG_NAME,
-                 (select string_agg(old_table::text, ', ' ORDER BY a) FROM old_table),
-                 (select string_agg(new_table::text, ', ' ORDER BY a) FROM new_table);
+                 (selext string_agg(old_table::text, ', ' ORDER BY a) FROM old_table),
+                 (selext string_agg(new_table::text, ', ' ORDER BY a) FROM new_table);
     return null;
   end;
 $$;

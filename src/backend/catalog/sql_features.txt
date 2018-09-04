@@ -58,10 +58,10 @@ E031	Identifiers	03	Trailing underscore	YES
 E051	Basic query specification			YES	
 E051	Basic query specification	01	SELECT DISTINCT	YES	
 E051	Basic query specification	02	GROUP BY clause	YES	
-E051	Basic query specification	04	GROUP BY can contain columns not in <select list>	YES	
+E051	Basic query specification	04	GROUP BY can contain columns not in <selext list>	YES	
 E051	Basic query specification	05	Select list items can be renamed	YES	
 E051	Basic query specification	06	HAVING clause	YES	
-E051	Basic query specification	07	Qualified * in select list	YES	
+E051	Basic query specification	07	Qualified * in selext list	YES	
 E051	Basic query specification	08	Correlation names in the FROM clause	YES	
 E051	Basic query specification	09	Rename columns in the FROM clause	YES	
 E061	Basic predicates and search conditions			YES	
@@ -110,7 +110,7 @@ E101	Basic data manipulation	04	Searched DELETE statement	YES
 E111	Single row SELECT statement			YES	
 E121	Basic cursor support			YES	
 E121	Basic cursor support	01	DECLARE CURSOR	YES	
-E121	Basic cursor support	02	ORDER BY columns need not be in select list	YES	
+E121	Basic cursor support	02	ORDER BY columns need not be in selext list	YES	
 E121	Basic cursor support	03	Value expressions in ORDER BY clause	YES	
 E121	Basic cursor support	04	OPEN statement	YES	
 E121	Basic cursor support	06	Positioned UPDATE statement	YES	

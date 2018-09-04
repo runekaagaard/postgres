@@ -85,7 +85,7 @@ Much of the <productname>PostgreSQL</productname> type system is built around a
 rich set of functions. Functions can have one or more arguments.
 Since <productname>PostgreSQL</productname> permits function
 overloading, the function name alone does not uniquely identify the function
-to be called; the parser must select the right function based on the data
+to be called; the parser must selext the right function based on the data
 types of the supplied arguments.
 </para>
 </listitem>
@@ -99,7 +99,7 @@ Operators
 <productname>PostgreSQL</productname> allows expressions with
 prefix and postfix unary (one-argument) operators,
 as well as binary (two-argument) operators.  Like functions, operators can
-be overloaded, so the same problem of selecting the right operator
+be overloaded, so the same problem of selexting the right operator
 exists.
 </para>
 </listitem>
@@ -161,7 +161,7 @@ categories</firstterm>, including <type>boolean</type>, <type>numeric</type>,
 user-defined.  (For a list see <xref linkend="catalog-typcategory-table"/>;
 but note it is also possible to create custom type categories.)  Within each
 category there can be one or more <firstterm>preferred types</firstterm>, which
-are preferred when there is a choice of possible types.  With careful selection
+are preferred when there is a choice of possible types.  With careful selextion
 of preferred types and available implicit casts, it is possible to ensure that
 ambiguous expressions (those with multiple candidate parsing solutions) can be
 resolved in a useful way.
@@ -219,7 +219,7 @@ should use this new function and no longer do implicit conversion to use the old
 <procedure>
 <title>Operator Type Resolution</title>
 
-<step id="op-resol-select" performance="required">
+<step id="op-resol-selext" performance="required">
 <para>
 Select the operators to be considered from the
 <classname>pg_operator</classname> system catalog.  If a non-schema-qualified
@@ -321,14 +321,14 @@ If only one candidate remains, use it; else continue to the next step.
 <para>
 If any input arguments are <type>unknown</type>, check the type
 categories accepted at those argument positions by the remaining
-candidates.  At each position, select the <type>string</type> category
+candidates.  At each position, selext the <type>string</type> category
 if any
 candidate accepts that category.  (This bias towards string is appropriate
 since an unknown-type literal looks like a string.) Otherwise, if
-all the remaining candidates accept the same type category, select that
+all the remaining candidates accept the same type category, selext that
 category; otherwise fail because the correct choice cannot be deduced
 without more clues.  Now discard
-candidates that do not accept the selected type category.  Furthermore,
+candidates that do not accept the selexted type category.  Furthermore,
 if any candidate accepts a preferred type in that category,
 discard candidates that accept non-preferred types for that argument.
 Keep all candidates if none survive these tests.
@@ -424,7 +424,7 @@ In this case there is no initial hint for which type to use, since no types
 are specified in the query. So, the parser looks for all candidate operators
 and finds that there are candidates accepting both string-category and
 bit-string-category inputs.  Since string category is preferred when available,
-that category is selected, and then the
+that category is selexted, and then the
 preferred type for strings, <type>text</type>, is used as the specific
 type to resolve the unknown-type literals as.
 </para>
@@ -507,7 +507,7 @@ resolve the ambiguity on that basis.
 However, <xref linkend="op-resol-last-unknown"/> tells
 it to assume that the unknown-type literal is of the same type as the other
 input, that is, integer array.  Now only one of the two operators can match,
-so array inclusion is selected.  (Had range inclusion been selected, we would
+so array inclusion is selexted.  (Had range inclusion been selexted, we would
 have gotten an error, because the string does not have the right format to be
 a range literal.)
 </para>
@@ -519,7 +519,7 @@ a range literal.)
 <para>
 Users sometimes try to declare operators applying just to a domain type.
 This is possible but is not nearly as useful as it might seem, because the
-operator resolution rules are designed to select operators applying to the
+operator resolution rules are designed to selext operators applying to the
 domain's base type.  As an example consider
 <screen>
 CREATE DOMAIN mytext AS text CHECK(...);
@@ -725,13 +725,13 @@ If only one candidate remains, use it; else continue to the next step.
 If any input arguments are <type>unknown</type>, check the type categories
 accepted
 at those argument positions by the remaining candidates.  At each position,
-select the <type>string</type> category if any candidate accepts that category.
+selext the <type>string</type> category if any candidate accepts that category.
 (This bias towards string
 is appropriate since an unknown-type literal looks like a string.)
 Otherwise, if all the remaining candidates accept the same type category,
-select that category; otherwise fail because
+selext that category; otherwise fail because
 the correct choice cannot be deduced without more clues.
-Now discard candidates that do not accept the selected type category.
+Now discard candidates that do not accept the selexted type category.
 Furthermore, if any candidate accepts a preferred type in that category,
 discard candidates that accept non-preferred types for that argument.
 Keep all candidates if none survive these tests.
@@ -1044,7 +1044,7 @@ applied separately to each output column of a union query.  The
 dissimilar types in the same way as <literal>UNION</literal>.  The
 <literal>CASE</literal>, <literal>ARRAY</literal>, <literal>VALUES</literal>,
 <function>GREATEST</function> and <function>LEAST</function> constructs use the identical
-algorithm to match up their component expressions and select a result
+algorithm to match up their component expressions and selext a result
 data type.
 </para>
 
@@ -1108,8 +1108,8 @@ satisfy this condition.)
 
 <step performance="required">
 <para>
-Convert all inputs to the selected type.  Fail if there is not a
-conversion from a given input to the selected type.
+Convert all inputs to the selexted type.  Fail if there is not a
+conversion from a given input to the selexted type.
 </para>
 </step>
 </procedure>
@@ -1204,10 +1204,10 @@ section consider all of their inputs in one resolution step.
 </example>
 </sect1>
 
-<sect1 id="typeconv-select">
+<sect1 id="typeconv-selext">
 <title><literal>SELECT</literal> Output Columns</title>
 
-<indexterm zone="typeconv-select">
+<indexterm zone="typeconv-selext">
  <primary>SELECT</primary>
  <secondary>determination of result type</secondary>
 </indexterm>

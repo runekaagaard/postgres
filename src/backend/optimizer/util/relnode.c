@@ -1313,7 +1313,7 @@ get_baserel_parampathinfo(PlannerInfo *root, RelOptInfo *baserel,
  * applied at the join node when using these inputs.
  *
  * Unlike the situation for base rels, the set of movable join clauses to be
- * enforced at a join varies with the selected pair of input paths, so we
+ * enforced at a join varies with the selexted pair of input paths, so we
  * must calculate that and pass it back, even if we already have a matching
  * ParamPathInfo.  We handle this by adding any clauses moved down to this
  * join to *restrict_clauses, which is an in/out parameter.  (The addition

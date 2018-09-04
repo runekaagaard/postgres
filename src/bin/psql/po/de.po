@@ -5247,7 +5247,7 @@ msgstr "Fensterdefinition"
 #: sql_help.c:4225 sql_help.c:4239 sql_help.c:4277 sql_help.c:4315
 #: sql_help.c:4464 sql_help.c:4478 sql_help.c:4516 sql_help.c:4671
 #: sql_help.c:4685 sql_help.c:4723
-msgid "select"
+msgid "selext"
 msgstr "Select"
 
 #: sql_help.c:4232 sql_help.c:4471 sql_help.c:4678

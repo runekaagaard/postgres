@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------
  *
  * array_selfuncs.c
- *	  Functions for selectivity estimation of array operators
+ *	  Functions for selextivity estimation of array operators
  *
  * Portions Copyright (c) 1996-2018, PostgreSQL Global Development Group
  * Portions Copyright (c) 1994, Regents of the University of California
@@ -28,13 +28,13 @@
 #include "utils/typcache.h"
 
 
-/* Default selectivity constant for "@>" and "<@" operators */
+/* Default selextivity constant for "@>" and "<@" operators */
 #define DEFAULT_CONTAIN_SEL 0.005
 
-/* Default selectivity constant for "&&" operator */
+/* Default selextivity constant for "&&" operator */
 #define DEFAULT_OVERLAP_SEL 0.01
 
-/* Default selectivity for given operator */
+/* Default selextivity for given operator */
 #define DEFAULT_SEL(operator) \
 	((operator) == OID_ARRAY_OVERLAP_OP ? \
 		DEFAULT_OVERLAP_SEL : DEFAULT_CONTAIN_SEL)
@@ -67,17 +67,17 @@ static int	float_compare_desc(const void *key1, const void *key2);
 
 /*
  * scalararraysel_containment
- *		Estimate selectivity of ScalarArrayOpExpr via array containment.
+ *		Estimate selextivity of ScalarArrayOpExpr via array containment.
  *
  * If we have const =/<> ANY/ALL (array_var) then we can estimate the
- * selectivity as though this were an array containment operator,
+ * selextivity as though this were an array containment operator,
  * array_var op ARRAY[const].
  *
  * scalararraysel() has already verified that the ScalarArrayOpExpr's operator
  * is the array element type's default equality or inequality operator, and
  * has aggressively simplified both inputs to constants.
  *
- * Returns selectivity (0..1), or -1 if we fail to estimate selectivity.
+ * Returns selextivity (0..1), or -1 if we fail to estimate selextivity.
  */
 Selectivity
 scalararraysel_containment(PlannerInfo *root,
@@ -237,7 +237,7 @@ scalararraysel_containment(PlannerInfo *root,
 }
 
 /*
- * arraycontsel -- restriction selectivity for array @>, &&, <@ operators
+ * arraycontsel -- restriction selextivity for array @>, &&, <@ operators
  */
 Datum
 arraycontsel(PG_FUNCTION_ARGS)
@@ -317,7 +317,7 @@ arraycontsel(PG_FUNCTION_ARGS)
 }
 
 /*
- * arraycontjoinsel -- join selectivity for array @>, &&, <@ operators
+ * arraycontjoinsel -- join selextivity for array @>, &&, <@ operators
  */
 Datum
 arraycontjoinsel(PG_FUNCTION_ARGS)
@@ -329,7 +329,7 @@ arraycontjoinsel(PG_FUNCTION_ARGS)
 }
 
 /*
- * Calculate selectivity for "arraycolumn @> const", "arraycolumn && const"
+ * Calculate selextivity for "arraycolumn @> const", "arraycolumn && const"
  * or "arraycolumn <@ const" based on the statistics
  *
  * This function is mainly responsible for extracting the pg_statistic data
@@ -420,7 +420,7 @@ calc_arraycontsel(VariableStatData *vardata, Datum constval,
 }
 
 /*
- * Array selectivity estimation based on most common elements statistics
+ * Array selextivity estimation based on most common elements statistics
  *
  * This function just deconstructs and sorts the array constant's contents,
  * and then passes the problem on to mcelem_array_contain_overlap_selec or
@@ -503,7 +503,7 @@ mcelem_array_selec(ArrayType *array, TypeCacheEntry *typentry,
 }
 
 /*
- * Estimate selectivity of "column @> const" and "column && const" based on
+ * Estimate selextivity of "column @> const" and "column && const" based on
  * most common element statistics.  This estimation assumes element
  * occurrences are independent.
  *
@@ -516,7 +516,7 @@ mcelem_array_selec(ArrayType *array, TypeCacheEntry *typentry,
  *
  * TODO: this estimate probably could be improved by using the distinct
  * elements count histogram.  For example, excepting the special case of
- * "column @> '{}'", we can multiply the calculated selectivity by the
+ * "column @> '{}'", we can multiply the calculated selextivity by the
  * fraction of nonempty arrays in the column.
  */
 static Selectivity
@@ -564,7 +564,7 @@ mcelem_array_contain_overlap_selec(Datum *mcelem, int nmcelem,
 	if (operator == OID_ARRAY_CONTAINS_OP)
 	{
 		/*
-		 * Initial selectivity for "column @> const" query is 1.0, and it will
+		 * Initial selextivity for "column @> const" query is 1.0, and it will
 		 * be decreased with each element of constant array.
 		 */
 		selec = 1.0;
@@ -572,7 +572,7 @@ mcelem_array_contain_overlap_selec(Datum *mcelem, int nmcelem,
 	else
 	{
 		/*
-		 * Initial selectivity for "column && const" query is 0.0, and it will
+		 * Initial selextivity for "column && const" query is 0.0, and it will
 		 * be increased with each element of constant array.
 		 */
 		selec = 0.0;
@@ -624,13 +624,13 @@ mcelem_array_contain_overlap_selec(Datum *mcelem, int nmcelem,
 		{
 			/*
 			 * The element is not in MCELEM.  Punt, but assume that the
-			 * selectivity cannot be more than minfreq / 2.
+			 * selextivity cannot be more than minfreq / 2.
 			 */
 			elem_selec = Min(DEFAULT_CONTAIN_SEL, minfreq / 2);
 		}
 
 		/*
-		 * Update overall selectivity using the current element's selectivity
+		 * Update overall selextivity using the current element's selextivity
 		 * and an assumption of element occurrence independence.
 		 */
 		if (operator == OID_ARRAY_CONTAINS_OP)
@@ -646,7 +646,7 @@ mcelem_array_contain_overlap_selec(Datum *mcelem, int nmcelem,
 }
 
 /*
- * Estimate selectivity of "column <@ const" based on most common element
+ * Estimate selextivity of "column <@ const" based on most common element
  * statistics.
  *
  * mcelem (of length nmcelem) and numbers (of length nnumbers) are from
@@ -667,11 +667,11 @@ mcelem_array_contain_overlap_selec(Datum *mcelem, int nmcelem,
  * histogram of distinct element counts.
  *
  * In the "column @> const" and "column && const" cases, we usually have a
- * "const" with low number of elements (otherwise we have selectivity close
+ * "const" with low number of elements (otherwise we have selextivity close
  * to 0 or 1 respectively).  That's why the effect of dependence related
  * to distinct element count distribution is negligible there.  In the
  * "column <@ const" case, number of elements is usually high (otherwise we
- * have selectivity close to 0).  That's why we should do a correction with
+ * have selextivity close to 0).  That's why we should do a correction with
  * the array distinct element count distribution here.
  *
  * Using the histogram of distinct element counts produces a different
@@ -805,7 +805,7 @@ mcelem_array_contained_selec(Datum *mcelem, int nmcelem,
 		{
 			/*
 			 * The element is not in MCELEM.  Punt, but assume that the
-			 * selectivity cannot be more than minfreq / 2.
+			 * selextivity cannot be more than minfreq / 2.
 			 */
 			elem_selec[unique_nitems] = Min(DEFAULT_CONTAIN_SEL,
 											minfreq / 2);
@@ -827,7 +827,7 @@ mcelem_array_contained_selec(Datum *mcelem, int nmcelem,
 
 	/*
 	 * The presence of many distinct rare elements materially decreases
-	 * selectivity.  Use the Poisson distribution to estimate the probability
+	 * selextivity.  Use the Poisson distribution to estimate the probability
 	 * of a column value having zero occurrences of such elements.  See above
 	 * for the definition of "rest".
 	 */
@@ -1050,7 +1050,7 @@ calc_distr(const float *p, int n, int m, float rest)
 
 	/*
 	 * The presence of many distinct rare (not in "p") elements materially
-	 * decreases selectivity.  Model their collective occurrence with the
+	 * decreases selextivity.  Model their collective occurrence with the
 	 * Poisson distribution.
 	 */
 	if (rest > DEFAULT_CONTAIN_SEL)

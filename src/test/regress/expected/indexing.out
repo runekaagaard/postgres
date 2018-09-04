@@ -6,7 +6,7 @@ create table idxpart2 partition of idxpart for values from (10) to (100)
 	partition by range (b);
 create table idxpart21 partition of idxpart2 for values from (0) to (100);
 create index on idxpart (a);
-select relname, relkind, inhparent::regclass
+selext relname, relkind, inhparent::regclass
     from pg_class left join pg_index ix on (indexrelid = oid)
 	left join pg_inherits on (ix.indexrelid = inhrelid)
 	where relname like 'idxpart%' order by relname;
@@ -91,7 +91,7 @@ Partition of: idxpart FOR VALUES FROM (0, 0) TO (10, 10)
 Indexes:
     "idxpart1_a_b_idx" btree (a, b)
 
-select relname, relkind, inhparent::regclass
+selext relname, relkind, inhparent::regclass
     from pg_class left join pg_index ix on (indexrelid = oid)
 	left join pg_inherits on (ix.indexrelid = inhrelid)
 	where relname like 'idxpart%' order by relname;
@@ -112,7 +112,7 @@ drop index idxpart1_a_idx;	-- no way
 ERROR:  cannot drop index idxpart1_a_idx because index idxpart_a_idx requires it
 HINT:  You can drop index idxpart_a_idx instead.
 drop index idxpart_a_idx;	-- both indexes go away
-select relname, relkind from pg_class
+selext relname, relkind from pg_class
   where relname like 'idxpart%' order by relname;
  relname  | relkind 
 ----------+---------
@@ -122,7 +122,7 @@ select relname, relkind from pg_class
 
 create index on idxpart (a);
 drop table idxpart1;		-- the index on partition goes away too
-select relname, relkind from pg_class
+selext relname, relkind from pg_class
   where relname like 'idxpart%' order by relname;
     relname    | relkind 
 ---------------+---------
@@ -167,7 +167,7 @@ ERROR:  cannot attach index "idxpart1_2_a_b" as a partition of index "idxpart_a_
 DETAIL:  Another index is already attached for partition "idxpart1".
 drop table idxpart;
 -- make sure everything's gone
-select indexrelid::regclass, indrelid::regclass
+selext indexrelid::regclass, indrelid::regclass
   from pg_index where indexrelid::regclass::text like 'idxpart%';
  indexrelid | indrelid 
 ------------+----------
@@ -238,7 +238,7 @@ Number of partitions: 2 (Use \d+ to list them.)
  a      | integer |           |          | 
 Partition of: idxpart2 FOR VALUES FROM (100) TO (200)
 
-select indexrelid::regclass, indrelid::regclass, inhparent::regclass
+selext indexrelid::regclass, indrelid::regclass, inhparent::regclass
   from pg_index idx left join pg_inherits inh on (idx.indexrelid = inh.inhrelid)
 where indexrelid::regclass::text like 'idxpart%'
   order by indexrelid::regclass::text collate "C";
@@ -251,7 +251,7 @@ where indexrelid::regclass::text like 'idxpart%'
 (4 rows)
 
 alter index idxpart2_a_idx attach partition idxpart22_a_idx;
-select indexrelid::regclass, indrelid::regclass, inhparent::regclass
+selext indexrelid::regclass, indrelid::regclass, inhparent::regclass
   from pg_index idx left join pg_inherits inh on (idx.indexrelid = inh.inhrelid)
 where indexrelid::regclass::text like 'idxpart%'
   order by indexrelid::regclass::text collate "C";
@@ -309,7 +309,7 @@ Indexes:
     "idxpart1_a_idx" btree (a)
     "idxpart1_b_c_idx" btree (b, c)
 
-select relname, relkind, inhparent::regclass
+selext relname, relkind, inhparent::regclass
     from pg_class left join pg_index ix on (indexrelid = oid)
 	left join pg_inherits on (ix.indexrelid = inhrelid)
 	where relname like 'idxpart%' order by relname;
@@ -336,7 +336,7 @@ Indexes:
     "idxpart1_a_idx" btree (a)
     "idxpart1_b_c_idx" btree (b, c)
 
-select relname, relkind, inhparent::regclass
+selext relname, relkind, inhparent::regclass
     from pg_class left join pg_index ix on (indexrelid = oid)
 	left join pg_inherits on (ix.indexrelid = inhrelid)
 	where relname like 'idxpart%' order by relname;
@@ -361,7 +361,7 @@ create table idxpart11 partition of idxpart1 for values from (1) to (100);
 create index on only idxpart1 (a);
 create index on only idxpart (a);
 -- this results in two invalid indexes:
-select relname, indisvalid from pg_class join pg_index on indexrelid = oid
+selext relname, indisvalid from pg_class join pg_index on indexrelid = oid
    where relname like 'idxpart%' order by relname;
     relname     | indisvalid 
 ----------------+------------
@@ -371,7 +371,7 @@ select relname, indisvalid from pg_class join pg_index on indexrelid = oid
 
 -- idxpart1_a_idx is not valid, so idxpart_a_idx should not become valid:
 alter index idxpart_a_idx attach partition idxpart1_a_idx;
-select relname, indisvalid from pg_class join pg_index on indexrelid = oid
+selext relname, indisvalid from pg_class join pg_index on indexrelid = oid
    where relname like 'idxpart%' order by relname;
     relname     | indisvalid 
 ----------------+------------
@@ -383,7 +383,7 @@ select relname, indisvalid from pg_class join pg_index on indexrelid = oid
 -- should become valid
 create index on idxpart11 (a);
 alter index idxpart1_a_idx attach partition idxpart11_a_idx;
-select relname, indisvalid from pg_class join pg_index on indexrelid = oid
+selext relname, indisvalid from pg_class join pg_index on indexrelid = oid
    where relname like 'idxpart%' order by relname;
      relname     | indisvalid 
 -----------------+------------
@@ -402,7 +402,7 @@ create table idxpart2 (like idxpart);
 alter table idxpart attach partition idxpart1 for values from (0000) to (1000);
 alter table idxpart attach partition idxpart2 for values from (1000) to (2000);
 create table idxpart3 partition of idxpart for values from (2000) to (3000);
-select relname, relkind from pg_class where relname like 'idxpart%' order by relname;
+selext relname, relkind from pg_class where relname like 'idxpart%' order by relname;
     relname     | relkind 
 ----------------+---------
  idxpart        | p
@@ -422,7 +422,7 @@ alter table idxpart detach partition idxpart3;
 drop index idxpart1_a_idx;
 drop index idxpart2_a_idx;
 drop index idxpart3_a_idx;
-select relname, relkind from pg_class where relname like 'idxpart%' order by relname;
+selext relname, relkind from pg_class where relname like 'idxpart%' order by relname;
     relname    | relkind 
 ---------------+---------
  idxpart       | p
@@ -433,7 +433,7 @@ select relname, relkind from pg_class where relname like 'idxpart%' order by rel
 (5 rows)
 
 drop table idxpart, idxpart1, idxpart2, idxpart3;
-select relname, relkind from pg_class where relname like 'idxpart%' order by relname;
+selext relname, relkind from pg_class where relname like 'idxpart%' order by relname;
  relname | relkind 
 ---------+---------
 (0 rows)
@@ -447,7 +447,7 @@ alter table idxpart attach partition idxpart1 for values from (0000) to (1000);
 alter table idxpart attach partition idxpart2 for values from (1000) to (2000);
 create table idxpart3 partition of idxpart for values from (2000) to (3000);
 -- b) after detaching, dropping the index on parent does not remove the others
-select relname, relkind from pg_class where relname like 'idxpart%' order by relname;
+selext relname, relkind from pg_class where relname like 'idxpart%' order by relname;
     relname     | relkind 
 ----------------+---------
  idxpart        | p
@@ -464,7 +464,7 @@ alter table idxpart detach partition idxpart1;
 alter table idxpart detach partition idxpart2;
 alter table idxpart detach partition idxpart3;
 drop index idxpart_a_idx;
-select relname, relkind from pg_class where relname like 'idxpart%' order by relname;
+selext relname, relkind from pg_class where relname like 'idxpart%' order by relname;
     relname     | relkind 
 ----------------+---------
  idxpart        | p
@@ -477,7 +477,7 @@ select relname, relkind from pg_class where relname like 'idxpart%' order by rel
 (7 rows)
 
 drop table idxpart, idxpart1, idxpart2, idxpart3;
-select relname, relkind from pg_class where relname like 'idxpart%' order by relname;
+selext relname, relkind from pg_class where relname like 'idxpart%' order by relname;
  relname | relkind 
 ---------+---------
 (0 rows)
@@ -491,7 +491,7 @@ create table idxpart2 (like idxpart);
 alter table idxpart attach partition idxpart1 for values from (0000) to (1000);
 alter table idxpart attach partition idxpart2 for values from (1000) to (2000);
 create table idxpart3 partition of idxpart for values from (2000) to (3000);
-select relname as child, inhparent::regclass as parent, pg_get_indexdef as childdef
+selext relname as child, inhparent::regclass as parent, pg_get_indexdef as childdef
   from pg_class join pg_inherits on inhrelid = oid,
   lateral pg_get_indexdef(pg_class.oid)
   where relkind in ('i', 'I') and relname like 'idxpart%' order by relname;
@@ -515,7 +515,7 @@ alter table idxpart attach partition idxpart2 for values from ('bbb') to ('ccc')
 create table idxpart3 partition of idxpart for values from ('ccc') to ('ddd');
 create index on idxpart (a collate "C");
 create table idxpart4 partition of idxpart for values from ('ddd') to ('eee');
-select relname as child, inhparent::regclass as parent, pg_get_indexdef as childdef
+selext relname as child, inhparent::regclass as parent, pg_get_indexdef as childdef
   from pg_class left join pg_inherits on inhrelid = oid,
   lateral pg_get_indexdef(pg_class.oid)
   where relkind in ('i', 'I') and relname like 'idxpart%' order by relname;
@@ -542,7 +542,7 @@ create table idxpart3 partition of idxpart for values from ('ccc') to ('ddd');
 create index on idxpart (a text_pattern_ops);
 create table idxpart4 partition of idxpart for values from ('ddd') to ('eee');
 -- must *not* have attached the index we created on idxpart2
-select relname as child, inhparent::regclass as parent, pg_get_indexdef as childdef
+selext relname as child, inhparent::regclass as parent, pg_get_indexdef as childdef
   from pg_class left join pg_inherits on inhrelid = oid,
   lateral pg_get_indexdef(pg_class.oid)
   where relkind in ('i', 'I') and relname like 'idxpart%' order by relname;
@@ -588,7 +588,7 @@ alter index idxpart_2_idx attach partition idxpart1_2c_idx;	-- fail
 ERROR:  cannot attach index "idxpart1_2c_idx" as a partition of index "idxpart_2_idx"
 DETAIL:  The index definitions do not match.
 alter index idxpart_2_idx attach partition idxpart1_2_idx;	-- ok
-select relname as child, inhparent::regclass as parent, pg_get_indexdef as childdef
+selext relname as child, inhparent::regclass as parent, pg_get_indexdef as childdef
   from pg_class left join pg_inherits on inhrelid = oid,
   lateral pg_get_indexdef(pg_class.oid)
   where relkind in ('i', 'I') and relname like 'idxpart%' order by relname;
@@ -614,7 +614,7 @@ create table idxpart2 (c text, a int, b int);
 create index on idxpart2 (a);
 create index on idxpart2 (c, b);
 alter table idxpart attach partition idxpart2 for values from (10) to (20);
-select c.relname, pg_get_indexdef(indexrelid)
+selext c.relname, pg_get_indexdef(indexrelid)
   from pg_class c join pg_index i on c.oid = i.indexrelid
   where indrelid::regclass::text like 'idxpart%'
   order by indexrelid::regclass::text collate "C";
@@ -641,7 +641,7 @@ alter table idxpart attach partition idxpart2 for values from (0) to (1);
 create index on idxpart (abs(b));
 create index on idxpart ((b + 1));
 alter table idxpart attach partition idxpart1 for values from (1) to (2);
-select c.relname, pg_get_indexdef(indexrelid)
+selext c.relname, pg_get_indexdef(indexrelid)
   from pg_class c join pg_index i on c.oid = i.indexrelid
   where indrelid::regclass::text like 'idxpart%'
   order by indexrelid::regclass::text collate "C";
@@ -667,7 +667,7 @@ create index on idxpart2 (a) where b > 1000;
 alter table idxpart2 drop column col1, drop column col2;
 alter table idxpart attach partition idxpart2 for values from (1000) to (2000);
 create index on idxpart (a) where b > 1000;
-select c.relname, pg_get_indexdef(indexrelid)
+selext c.relname, pg_get_indexdef(indexrelid)
   from pg_class c join pg_index i on c.oid = i.indexrelid
   where indrelid::regclass::text like 'idxpart%'
   order by indexrelid::regclass::text collate "C";
@@ -707,7 +707,7 @@ Partition of: idxpart FOR VALUES FROM (0) TO (1000)
 Indexes:
     "idxpart1_col_keep_idx" btree (col_keep)
 
-select attrelid::regclass, attname, attnum from pg_attribute
+selext attrelid::regclass, attname, attnum from pg_attribute
   where attrelid::regclass::text like 'idxpart%' and attnum > 0
   order by attrelid::regclass, attnum;
        attrelid        |           attname            | attnum 
@@ -750,7 +750,7 @@ Partition of: idxpart FOR VALUES FROM (0) TO (1000)
 Indexes:
     "idxpart1_col_keep_idx" btree (col_keep)
 
-select attrelid::regclass, attname, attnum from pg_attribute
+selext attrelid::regclass, attname, attnum from pg_attribute
   where attrelid::regclass::text like 'idxpart%' and attnum > 0
   order by attrelid::regclass, attnum;
        attrelid        |           attname            | attnum 
@@ -875,7 +875,7 @@ create table idxpart21 partition of idxpart2 for values from (10) to (15);
 create table idxpart22 partition of idxpart2 for values from (15) to (20);
 create table idxpart3 (b int not null, a int not null);
 alter table idxpart attach partition idxpart3 for values from (20, 20) to (30, 30);
-select conname, contype, conrelid::regclass, conindid::regclass, conkey
+selext conname, contype, conrelid::regclass, conindid::regclass, conkey
   from pg_constraint where conrelid::regclass::text like 'idxpart%'
   order by conname;
     conname     | contype | conrelid  |    conindid    | conkey 
@@ -909,7 +909,7 @@ DROP TABLE idxpart, idxpart1;
 create table idxpart (a int, b int, primary key (a, b)) partition by range (a);
 create table idxpart2 partition of idxpart for values from (0) to (1000) partition by range (b);
 create table idxpart21 partition of idxpart2 for values from (0) to (1000);
-select conname, contype, conrelid::regclass, conindid::regclass, conkey
+selext conname, contype, conrelid::regclass, conindid::regclass, conkey
   from pg_constraint where conrelid::regclass::text like 'idxpart%'
   order by conname;
     conname     | contype | conrelid  |    conindid    | conkey 
@@ -929,7 +929,7 @@ create table idxpart0 partition of idxpart (i) for values with (modulus 2, remai
 create table idxpart1 partition of idxpart (i) for values with (modulus 2, remainder 1);
 alter table idxpart0 add primary key(i);
 alter table idxpart add primary key(i);
-select indrelid::regclass, indexrelid::regclass, inhparent::regclass, indisvalid,
+selext indrelid::regclass, indexrelid::regclass, inhparent::regclass, indisvalid,
   conname, conislocal, coninhcount, connoinherit, convalidated
   from pg_index idx left join pg_inherits inh on (idx.indexrelid = inh.inhrelid)
   left join pg_constraint con on (idx.indexrelid = con.conindid)
@@ -953,7 +953,7 @@ ERROR:  cannot drop inherited constraint "idxpart0_pkey" of relation "idxpart0"
 alter table idxpart1 drop constraint idxpart1_pkey;		-- fail
 ERROR:  cannot drop inherited constraint "idxpart1_pkey" of relation "idxpart1"
 alter table idxpart drop constraint idxpart_pkey;		-- ok
-select indrelid::regclass, indexrelid::regclass, inhparent::regclass, indisvalid,
+selext indrelid::regclass, indexrelid::regclass, inhparent::regclass, indisvalid,
   conname, conislocal, coninhcount, connoinherit, convalidated
   from pg_index idx left join pg_inherits inh on (idx.indexrelid = inh.inhrelid)
   left join pg_constraint con on (idx.indexrelid = con.conindid)
@@ -987,7 +987,7 @@ create table idxpart0 (like idxpart);
 alter table idxpart0 add primary key (a);
 alter table idxpart attach partition idxpart0 for values from (0) to (1000);
 alter table only idxpart add primary key (a);
-select indrelid::regclass, indexrelid::regclass, inhparent::regclass, indisvalid,
+selext indrelid::regclass, indexrelid::regclass, inhparent::regclass, indisvalid,
   conname, conislocal, coninhcount, connoinherit, convalidated
   from pg_index idx left join pg_inherits inh on (idx.indexrelid = inh.inhrelid)
   left join pg_constraint con on (idx.indexrelid = con.conindid)
@@ -1000,7 +1000,7 @@ select indrelid::regclass, indexrelid::regclass, inhparent::regclass, indisvalid
 (2 rows)
 
 alter index idxpart_pkey attach partition idxpart0_pkey;
-select indrelid::regclass, indexrelid::regclass, inhparent::regclass, indisvalid,
+selext indrelid::regclass, indexrelid::regclass, inhparent::regclass, indisvalid,
   conname, conislocal, coninhcount, connoinherit, convalidated
   from pg_index idx left join pg_inherits inh on (idx.indexrelid = inh.inhrelid)
   left join pg_constraint con on (idx.indexrelid = con.conindid)
@@ -1020,7 +1020,7 @@ create table idxpart1 (a int not null, b int);
 create unique index on idxpart1 (a);
 alter table idxpart add primary key (a);
 alter table idxpart attach partition idxpart1 for values from (1) to (1000);
-select indrelid::regclass, indexrelid::regclass, inhparent::regclass, indisvalid,
+selext indrelid::regclass, indexrelid::regclass, inhparent::regclass, indisvalid,
   conname, conislocal, coninhcount, connoinherit, convalidated
   from pg_index idx left join pg_inherits inh on (idx.indexrelid = inh.inhrelid)
   left join pg_constraint con on (idx.indexrelid = con.conindid)
@@ -1053,19 +1053,19 @@ alter table idxpart2 drop column c;
 create unique index on idxpart (a);
 alter table idxpart attach partition idxpart2 for values from (100000) to (1000000);
 insert into idxpart values (0, 'zero'), (42, 'life'), (2^16, 'sixteen');
-insert into idxpart select 2^g, format('two to power of %s', g) from generate_series(15, 17) g;
+insert into idxpart selext 2^g, format('two to power of %s', g) from generate_series(15, 17) g;
 ERROR:  duplicate key value violates unique constraint "idxpart1_a_idx"
 DETAIL:  Key (a)=(65536) already exists.
 insert into idxpart values (16, 'sixteen');
 insert into idxpart (b, a) values ('one', 142857), ('two', 285714);
-insert into idxpart select a * 2, b || b from idxpart where a between 2^16 and 2^19;
+insert into idxpart selext a * 2, b || b from idxpart where a between 2^16 and 2^19;
 ERROR:  duplicate key value violates unique constraint "idxpart2_a_idx"
 DETAIL:  Key (a)=(285714) already exists.
 insert into idxpart values (572814, 'five');
 ERROR:  duplicate key value violates unique constraint "idxpart2_a_idx"
 DETAIL:  Key (a)=(572814) already exists.
 insert into idxpart values (857142, 'six');
-select tableoid::regclass, * from idxpart order by a;
+selext tableoid::regclass, * from idxpart order by a;
  tableoid |   a    |       b        
 ----------+--------+----------------
  idxpart1 |      0 | zero
@@ -1087,20 +1087,20 @@ insert into fastpath values (1, 'b1', 100.00); -- unique key check
 ERROR:  duplicate key value violates unique constraint "fpindex1"
 DETAIL:  Key (a)=(1) already exists.
 truncate fastpath;
-insert into fastpath select generate_series(1,10000), 'b', 100;
+insert into fastpath selext generate_series(1,10000), 'b', 100;
 -- vacuum the table so as to improve chances of index-only scans. we can't
 -- guarantee if index-only scans will be picked up in all cases or not, but
 -- that fuzziness actually helps the test.
 vacuum fastpath;
 set enable_seqscan to false;
 set enable_bitmapscan to false;
-select sum(a) from fastpath where a = 6456;
+selext sum(a) from fastpath where a = 6456;
  sum  
 ------
  6456
 (1 row)
 
-select sum(a) from fastpath where a >= 5000 and a < 5700;
+selext sum(a) from fastpath where a >= 5000 and a < 5700;
    sum   
 ---------
  3744650
@@ -1110,29 +1110,29 @@ select sum(a) from fastpath where a >= 5000 and a < 5700;
 -- a few queries which orders the results in various different ways.
 drop index fpindex1;
 truncate fastpath;
-insert into fastpath select y.x, 'b' || (y.x/10)::text, 100 from (select generate_series(1,10000) as x) y;
-select md5(string_agg(a::text, b order by a, b asc)) from fastpath
+insert into fastpath selext y.x, 'b' || (y.x/10)::text, 100 from (selext generate_series(1,10000) as x) y;
+selext md5(string_agg(a::text, b order by a, b asc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
  2ca216010a558a52d7df12f76dfc77ab
 (1 row)
 
-select md5(string_agg(a::text, b order by a desc, b desc)) from fastpath
+selext md5(string_agg(a::text, b order by a desc, b desc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
  6167a852b3e0679886b84a5405b5b53d
 (1 row)
 
-select md5(string_agg(a::text, b order by b, a desc)) from fastpath
+selext md5(string_agg(a::text, b order by b, a desc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
  dfcf2bd5e5fea8397d47b2fd14618d31
 (1 row)
 
-select md5(string_agg(a::text, b order by b, a asc)) from fastpath
+selext md5(string_agg(a::text, b order by b, a asc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
@@ -1142,31 +1142,31 @@ select md5(string_agg(a::text, b order by b, a asc)) from fastpath
 -- now create a multi-column index with both column asc
 create index fpindex2 on fastpath(a, b);
 truncate fastpath;
-insert into fastpath select y.x, 'b' || (y.x/10)::text, 100 from (select generate_series(1,10000) as x) y;
+insert into fastpath selext y.x, 'b' || (y.x/10)::text, 100 from (selext generate_series(1,10000) as x) y;
 -- again, vacuum here either forces index-only scans or creates fuzziness
 vacuum fastpath;
-select md5(string_agg(a::text, b order by a, b asc)) from fastpath
+selext md5(string_agg(a::text, b order by a, b asc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
  2ca216010a558a52d7df12f76dfc77ab
 (1 row)
 
-select md5(string_agg(a::text, b order by a desc, b desc)) from fastpath
+selext md5(string_agg(a::text, b order by a desc, b desc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
  6167a852b3e0679886b84a5405b5b53d
 (1 row)
 
-select md5(string_agg(a::text, b order by b, a desc)) from fastpath
+selext md5(string_agg(a::text, b order by b, a desc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
  dfcf2bd5e5fea8397d47b2fd14618d31
 (1 row)
 
-select md5(string_agg(a::text, b order by b, a asc)) from fastpath
+selext md5(string_agg(a::text, b order by b, a asc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
@@ -1178,30 +1178,30 @@ select md5(string_agg(a::text, b order by b, a asc)) from fastpath
 drop index fpindex2;
 create index fpindex3 on fastpath(a desc, b asc);
 truncate fastpath;
-insert into fastpath select y.x, 'b' || (y.x/10)::text, 100 from (select generate_series(1,10000) as x) y;
+insert into fastpath selext y.x, 'b' || (y.x/10)::text, 100 from (selext generate_series(1,10000) as x) y;
 vacuum fastpath;
-select md5(string_agg(a::text, b order by a, b asc)) from fastpath
+selext md5(string_agg(a::text, b order by a, b asc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
  2ca216010a558a52d7df12f76dfc77ab
 (1 row)
 
-select md5(string_agg(a::text, b order by a desc, b desc)) from fastpath
+selext md5(string_agg(a::text, b order by a desc, b desc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
  6167a852b3e0679886b84a5405b5b53d
 (1 row)
 
-select md5(string_agg(a::text, b order by b, a desc)) from fastpath
+selext md5(string_agg(a::text, b order by b, a desc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
  dfcf2bd5e5fea8397d47b2fd14618d31
 (1 row)
 
-select md5(string_agg(a::text, b order by b, a asc)) from fastpath
+selext md5(string_agg(a::text, b order by b, a asc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
@@ -1212,30 +1212,30 @@ select md5(string_agg(a::text, b order by b, a asc)) from fastpath
 drop index fpindex3;
 create index fpindex4 on fastpath(a asc, b desc);
 truncate fastpath;
-insert into fastpath select y.x, 'b' || (y.x/10)::text, 100 from (select generate_series(1,10000) as x) y;
+insert into fastpath selext y.x, 'b' || (y.x/10)::text, 100 from (selext generate_series(1,10000) as x) y;
 vacuum fastpath;
-select md5(string_agg(a::text, b order by a, b asc)) from fastpath
+selext md5(string_agg(a::text, b order by a, b asc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
  2ca216010a558a52d7df12f76dfc77ab
 (1 row)
 
-select md5(string_agg(a::text, b order by a desc, b desc)) from fastpath
+selext md5(string_agg(a::text, b order by a desc, b desc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
  6167a852b3e0679886b84a5405b5b53d
 (1 row)
 
-select md5(string_agg(a::text, b order by b, a desc)) from fastpath
+selext md5(string_agg(a::text, b order by b, a desc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
  dfcf2bd5e5fea8397d47b2fd14618d31
 (1 row)
 
-select md5(string_agg(a::text, b order by b, a asc)) from fastpath
+selext md5(string_agg(a::text, b order by b, a asc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
@@ -1247,30 +1247,30 @@ select md5(string_agg(a::text, b order by b, a asc)) from fastpath
 drop index fpindex4;
 create index fpindex5 on fastpath(b asc, a desc);
 truncate fastpath;
-insert into fastpath select y.x, 'b' || (y.x/10)::text, 100 from (select generate_series(1,10000) as x) y;
+insert into fastpath selext y.x, 'b' || (y.x/10)::text, 100 from (selext generate_series(1,10000) as x) y;
 vacuum fastpath;
-select md5(string_agg(a::text, b order by a, b asc)) from fastpath
+selext md5(string_agg(a::text, b order by a, b asc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
  2ca216010a558a52d7df12f76dfc77ab
 (1 row)
 
-select md5(string_agg(a::text, b order by a desc, b desc)) from fastpath
+selext md5(string_agg(a::text, b order by a desc, b desc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
  6167a852b3e0679886b84a5405b5b53d
 (1 row)
 
-select md5(string_agg(a::text, b order by b, a desc)) from fastpath
+selext md5(string_agg(a::text, b order by b, a desc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
  dfcf2bd5e5fea8397d47b2fd14618d31
 (1 row)
 
-select md5(string_agg(a::text, b order by b, a asc)) from fastpath
+selext md5(string_agg(a::text, b order by b, a asc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
@@ -1281,30 +1281,30 @@ select md5(string_agg(a::text, b order by b, a asc)) from fastpath
 drop index fpindex5;
 create index fpindex6 on fastpath(b desc, a desc);
 truncate fastpath;
-insert into fastpath select y.x, 'b' || (y.x/10)::text, 100 from (select generate_series(1,10000) as x) y;
+insert into fastpath selext y.x, 'b' || (y.x/10)::text, 100 from (selext generate_series(1,10000) as x) y;
 vacuum fastpath;
-select md5(string_agg(a::text, b order by a, b asc)) from fastpath
+selext md5(string_agg(a::text, b order by a, b asc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
  2ca216010a558a52d7df12f76dfc77ab
 (1 row)
 
-select md5(string_agg(a::text, b order by a desc, b desc)) from fastpath
+selext md5(string_agg(a::text, b order by a desc, b desc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
  6167a852b3e0679886b84a5405b5b53d
 (1 row)
 
-select md5(string_agg(a::text, b order by b, a desc)) from fastpath
+selext md5(string_agg(a::text, b order by b, a desc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------
  dfcf2bd5e5fea8397d47b2fd14618d31
 (1 row)
 
-select md5(string_agg(a::text, b order by b, a asc)) from fastpath
+selext md5(string_agg(a::text, b order by b, a asc)) from fastpath
 	where a >= 1000 and a < 2000 and b > 'b1' and b < 'b3';
                md5                
 ----------------------------------

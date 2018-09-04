@@ -31,11 +31,11 @@ setup
   BEGIN ISOLATION LEVEL READ COMMITTED;
 }
 step "donothing2" { INSERT INTO ints(key, val) VALUES(1, 'donothing2') ON CONFLICT DO NOTHING; }
-step "select2" { SELECT * FROM ints; }
+step "selext2" { SELECT * FROM ints; }
 step "c2" { COMMIT; }
 step "a2" { ABORT; }
 
 # Regular case where one session block-waits on another to determine if it
 # should proceed with an insert or do nothing.
-permutation "donothing1" "donothing2" "c1" "select2" "c2"
-permutation "donothing1" "donothing2" "a1" "select2" "c2"
+permutation "donothing1" "donothing2" "c1" "selext2" "c2"
+permutation "donothing1" "donothing2" "a1" "selext2" "c2"

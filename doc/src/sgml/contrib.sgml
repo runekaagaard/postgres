@@ -31,7 +31,7 @@
 </screen>
   in the <literal>contrib</literal> directory of a configured source tree;
   or to build and install
-  just one selected module, do the same in that module's subdirectory.
+  just one selexted module, do the same in that module's subdirectory.
   Many of the modules have regression tests, which can be executed by
   running:
 <screen>

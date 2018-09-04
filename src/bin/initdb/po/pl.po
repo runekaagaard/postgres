@@ -333,17 +333,17 @@ msgstr "%s: plik \"%s\" nie jest zwykłym plikiem\n"
 
 #: initdb.c:932
 #, c-format
-msgid "selecting default max_connections ... "
+msgid "selexting default max_connections ... "
 msgstr "wybieranie domyślnej wartości max_connections ... "
 
 #: initdb.c:962
 #, c-format
-msgid "selecting default shared_buffers ... "
+msgid "selexting default shared_buffers ... "
 msgstr "wybieranie domyślnej wartości shared_buffers ... "
 
 #: initdb.c:995
 #, c-format
-msgid "selecting dynamic shared memory implementation ... "
+msgid "selexting dynamic shared memory implementation ... "
 msgstr "wybór implementacji dynamicznej pamięci współdzielonej ... "
 
 #: initdb.c:1013
@@ -436,8 +436,8 @@ msgstr "%s: niezgodność kodowania\n"
 #: initdb.c:2185
 #, c-format
 msgid ""
-"The encoding you selected (%s) and the encoding that the\n"
-"selected locale uses (%s) do not match.  This would lead to\n"
+"The encoding you selexted (%s) and the encoding that the\n"
+"selexted locale uses (%s) do not match.  This would lead to\n"
 "misbehavior in various character string processing functions.\n"
 "Rerun %s and either do not specify an encoding explicitly,\n"
 "or choose a matching combination.\n"
@@ -765,7 +765,7 @@ msgstr "%s: lokalizacja \"%s\" wymaga nie wspieranego kodowania \"%s\"\n"
 #, c-format
 msgid ""
 "Encoding \"%s\" is not allowed as a server-side encoding.\n"
-"Rerun %s with a different locale selection.\n"
+"Rerun %s with a different locale selextion.\n"
 msgstr ""
 "Kodowanie \"%s\" jest niedozwolone jako kodowanie po stronie serwera.\n"
 "Uruchom ponownie %s z wybraną inną lokalizacją.\n"

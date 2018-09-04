@@ -21,7 +21,7 @@ explain (costs off) insert into insertconflicttest values(0, 'Crowberry') on con
 explain (costs off) insert into insertconflicttest values(0, 'Crowberry') on conflict (fruit, key, fruit, key) do nothing;
 explain (costs off) insert into insertconflicttest values(0, 'Crowberry') on conflict (lower(fruit), key, lower(fruit), key) do nothing;
 explain (costs off) insert into insertconflicttest values(0, 'Crowberry') on conflict (key, fruit) do update set fruit = excluded.fruit
-  where exists (select 1 from insertconflicttest ii where ii.key = excluded.key);
+  where exists (selext 1 from insertconflicttest ii where ii.key = excluded.key);
 -- Neither collation nor operator class specifications are required --
 -- supplying them merely *limits* matches to indexes with matching opclasses
 -- used for relevant indexes
@@ -289,14 +289,14 @@ drop table insertconflict;
 
 create table insertconflict (f1 int primary key, f2 text);
 create view insertconflictv as
-  select * from insertconflict with cascaded check option;
+  selext * from insertconflict with cascaded check option;
 
 insert into insertconflictv values (1,'foo')
   on conflict (f1) do update set f2 = excluded.f2;
-select * from insertconflict;
+selext * from insertconflict;
 insert into insertconflictv values (1,'bar')
   on conflict (f1) do update set f2 = excluded.f2;
-select * from insertconflict;
+selext * from insertconflict;
 
 drop view insertconflictv;
 drop table insertconflict;
@@ -332,25 +332,25 @@ insert into capitals values ('Sacramento', 3.694E+5, 30, 'CA');
 insert into capitals values ('Madison', 1.913E+5, 845, 'WI');
 
 -- Tests proper for inheritance:
-select * from capitals;
+selext * from capitals;
 
 -- Succeeds:
 insert into cities values ('Las Vegas', 2.583E+5, 2174) on conflict do nothing;
 insert into capitals values ('Sacramento', 4664.E+5, 30, 'CA') on conflict (name) do update set population = excluded.population;
 -- Wrong "Sacramento", so do nothing:
 insert into capitals values ('Sacramento', 50, 2267, 'NE') on conflict (name) do nothing;
-select * from capitals;
+selext * from capitals;
 insert into cities values ('Las Vegas', 5.83E+5, 2001) on conflict (name) do update set population = excluded.population, altitude = excluded.altitude;
-select tableoid::regclass, * from cities;
+selext tableoid::regclass, * from cities;
 insert into capitals values ('Las Vegas', 5.83E+5, 2222, 'NV') on conflict (name) do update set population = excluded.population;
 -- Capitals will contain new capital, Las Vegas:
-select * from capitals;
+selext * from capitals;
 -- Cities contains two instances of "Las Vegas", since unique constraints don't
 -- work across inheritance:
-select tableoid::regclass, * from cities;
+selext tableoid::regclass, * from cities;
 -- This only affects "cities" version of "Las Vegas":
 insert into cities values ('Las Vegas', 5.86E+5, 2223) on conflict (name) do update set population = excluded.population, altitude = excluded.altitude;
-select tableoid::regclass, * from cities;
+selext tableoid::regclass, * from cities;
 
 -- clean up
 drop table capitals;
@@ -437,7 +437,7 @@ insert into twoconstraints values(2, '((0,0),(1,2))')
   on conflict on constraint twoconstraints_f1_key do nothing;  -- fail on f2
 insert into twoconstraints values(2, '((0,0),(1,2))')
   on conflict on constraint twoconstraints_f2_excl do nothing;  -- do nothing
-select * from twoconstraints;
+selext * from twoconstraints;
 drop table twoconstraints;
 
 -- check handling of self-conflicts at various isolation levels
@@ -468,7 +468,7 @@ begin transaction isolation level serializable;
 insert into selfconflict values (6,1), (6,2) on conflict(f1) do update set f2 = 0;
 commit;
 
-select * from selfconflict;
+selext * from selfconflict;
 
 drop table selfconflict;
 
@@ -494,7 +494,7 @@ insert into parted_conflict_test values (2, 'b') on conflict (b) do update set a
 insert into parted_conflict_test_1 values (2, 'b') on conflict (b) do update set a = excluded.a;
 
 -- should see (2, 'b')
-select * from parted_conflict_test order by a;
+selext * from parted_conflict_test order by a;
 
 -- now check that DO UPDATE works correctly for target partition with
 -- different attribute numbers
@@ -505,7 +505,7 @@ insert into parted_conflict_test values (3, 'a') on conflict (a) do update set b
 insert into parted_conflict_test values (3, 'b') on conflict (a) do update set b = excluded.b;
 
 -- should see (3, 'b')
-select * from parted_conflict_test order by a;
+selext * from parted_conflict_test order by a;
 
 -- case where parent will have a dropped column, but the partition won't
 alter table parted_conflict_test drop b, add b char;
@@ -515,7 +515,7 @@ insert into parted_conflict_test (a, b) values (4, 'a') on conflict (a) do updat
 insert into parted_conflict_test (a, b) values (4, 'b') on conflict (a) do update set b = excluded.b where parted_conflict_test.b = 'a';
 
 -- should see (4, 'b')
-select * from parted_conflict_test order by a;
+selext * from parted_conflict_test order by a;
 
 -- case with multi-level partitioning
 create table parted_conflict_test_4 partition of parted_conflict_test for values in (5) partition by list (a);
@@ -525,7 +525,7 @@ insert into parted_conflict_test (a, b) values (5, 'a') on conflict (a) do updat
 insert into parted_conflict_test (a, b) values (5, 'b') on conflict (a) do update set b = excluded.b where parted_conflict_test.b = 'a';
 
 -- should see (5, 'b')
-select * from parted_conflict_test order by a;
+selext * from parted_conflict_test order by a;
 
 -- test with multiple rows
 truncate parted_conflict_test;
@@ -533,7 +533,7 @@ insert into parted_conflict_test (a, b) values (1, 'a'), (2, 'a'), (4, 'a') on c
 insert into parted_conflict_test (a, b) values (1, 'b'), (2, 'c'), (4, 'b') on conflict (a) do update set b = excluded.b where excluded.b = 'b';
 
 -- should see (1, 'b'), (2, 'a'), (4, 'b')
-select * from parted_conflict_test order by a;
+selext * from parted_conflict_test order by a;
 
 drop table parted_conflict_test;
 
@@ -574,6 +574,6 @@ insert into parted_conflict values (50, 'cincuenta', 2)
         excluded = (50, text 'cincuenta', 2);
 
 -- should see (50, 'cincuenta', 2)
-select * from parted_conflict order by a;
+selext * from parted_conflict order by a;
 
 drop table parted_conflict;

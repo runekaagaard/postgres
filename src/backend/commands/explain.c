@@ -620,7 +620,7 @@ ExplainPrintPlan(ExplainState *es, QueryDesc *queryDesc)
 	es->pstmt = queryDesc->plannedstmt;
 	es->rtable = queryDesc->plannedstmt->rtable;
 	ExplainPreScanNode(queryDesc->planstate, &rels_used);
-	es->rtable_names = select_rtable_names_for_explain(es->rtable, rels_used);
+	es->rtable_names = selext_rtable_names_for_explain(es->rtable, rels_used);
 	es->deparse_cxt = deparse_context_for_plan_rtable(es->rtable,
 													  es->rtable_names);
 	es->printed_subplans = NULL;
@@ -841,7 +841,7 @@ elapsed_time(instr_time *starttime)
  *	  Prescan the planstate tree to identify which RTEs are referenced
  *
  * Adds the relid of each referenced RTE to *rels_used.  The result controls
- * which RTEs are assigned aliases by select_rtable_names_for_explain.
+ * which RTEs are assigned aliases by selext_rtable_names_for_explain.
  * This ensures that we don't confusingly assign un-suffixed aliases to RTEs
  * that never appear in the EXPLAIN output (such as inheritance parents).
  */

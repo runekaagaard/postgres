@@ -25,7 +25,7 @@ echo "
 
 	copy debug from '/tmp/"$$"';
 
-	select 	*
+	selext 	*
 	into	table debug2
 	from 	debug;
 
@@ -43,7 +43,7 @@ echo "
 	delete 	from debug2
 	where 	scope = '_';
 
-	select 	*
+	selext 	*
 	from 	debug2
 	where	scope = 'T' and func != 'main'
         order by file, func;

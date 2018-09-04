@@ -1111,8 +1111,8 @@ msgstr "%s: 無効なソケットです: %s"
 
 #: pg_recvlogical.c:430 receivelog.c:943
 #, c-format
-msgid "%s: select() failed: %s\n"
-msgstr "%s: select()が失敗しました: %s\n"
+msgid "%s: selext() failed: %s\n"
+msgstr "%s: selext()が失敗しました: %s\n"
 
 #: pg_recvlogical.c:439 receivelog.c:995
 #, c-format

@@ -170,7 +170,7 @@ adjust_jumps lists in execExpr.c.
 
 The last step in constructing an ExprState is to apply ExecReadyExpr(),
 which readies it for execution using whichever execution method has been
-selected.
+selexted.
 
 
 Expression Evaluation
@@ -272,7 +272,7 @@ the plan state tree to find these sorts of resources.
 
 
 The executor can also be used to evaluate simple expressions without any Plan
-tree ("simple" meaning "no aggregates and no sub-selects", though such might
+tree ("simple" meaning "no aggregates and no sub-selexts", though such might
 be hidden inside function calls).  This case has a flow of control like
 
 	CreateExecutorState

@@ -44,7 +44,7 @@ explain (costs off) insert into insertconflicttest values(0, 'Crowberry') on con
 (4 rows)
 
 explain (costs off) insert into insertconflicttest values(0, 'Crowberry') on conflict (key, fruit) do update set fruit = excluded.fruit
-  where exists (select 1 from insertconflicttest ii where ii.key = excluded.key);
+  where exists (selext 1 from insertconflicttest ii where ii.key = excluded.key);
                                   QUERY PLAN                                   
 -------------------------------------------------------------------------------
  Insert on insertconflicttest
@@ -476,10 +476,10 @@ drop table insertconflict;
 --
 create table insertconflict (f1 int primary key, f2 text);
 create view insertconflictv as
-  select * from insertconflict with cascaded check option;
+  selext * from insertconflict with cascaded check option;
 insert into insertconflictv values (1,'foo')
   on conflict (f1) do update set f2 = excluded.f2;
-select * from insertconflict;
+selext * from insertconflict;
  f1 | f2  
 ----+-----
   1 | foo
@@ -487,7 +487,7 @@ select * from insertconflict;
 
 insert into insertconflictv values (1,'bar')
   on conflict (f1) do update set f2 = excluded.f2;
-select * from insertconflict;
+selext * from insertconflict;
  f1 | f2  
 ----+-----
   1 | bar
@@ -520,7 +520,7 @@ insert into cities values ('Mariposa', 1200, 1953);
 insert into capitals values ('Sacramento', 3.694E+5, 30, 'CA');
 insert into capitals values ('Madison', 1.913E+5, 845, 'WI');
 -- Tests proper for inheritance:
-select * from capitals;
+selext * from capitals;
     name    | population | altitude | state 
 ------------+------------+----------+-------
  Sacramento |     369400 |       30 | CA
@@ -532,7 +532,7 @@ insert into cities values ('Las Vegas', 2.583E+5, 2174) on conflict do nothing;
 insert into capitals values ('Sacramento', 4664.E+5, 30, 'CA') on conflict (name) do update set population = excluded.population;
 -- Wrong "Sacramento", so do nothing:
 insert into capitals values ('Sacramento', 50, 2267, 'NE') on conflict (name) do nothing;
-select * from capitals;
+selext * from capitals;
     name    | population | altitude | state 
 ------------+------------+----------+-------
  Madison    |     191300 |      845 | WI
@@ -540,7 +540,7 @@ select * from capitals;
 (2 rows)
 
 insert into cities values ('Las Vegas', 5.83E+5, 2001) on conflict (name) do update set population = excluded.population, altitude = excluded.altitude;
-select tableoid::regclass, * from cities;
+selext tableoid::regclass, * from cities;
  tableoid |     name      | population | altitude 
 ----------+---------------+------------+----------
  cities   | San Francisco |     724000 |       63
@@ -552,7 +552,7 @@ select tableoid::regclass, * from cities;
 
 insert into capitals values ('Las Vegas', 5.83E+5, 2222, 'NV') on conflict (name) do update set population = excluded.population;
 -- Capitals will contain new capital, Las Vegas:
-select * from capitals;
+selext * from capitals;
     name    | population | altitude | state 
 ------------+------------+----------+-------
  Madison    |     191300 |      845 | WI
@@ -562,7 +562,7 @@ select * from capitals;
 
 -- Cities contains two instances of "Las Vegas", since unique constraints don't
 -- work across inheritance:
-select tableoid::regclass, * from cities;
+selext tableoid::regclass, * from cities;
  tableoid |     name      | population | altitude 
 ----------+---------------+------------+----------
  cities   | San Francisco |     724000 |       63
@@ -575,7 +575,7 @@ select tableoid::regclass, * from cities;
 
 -- This only affects "cities" version of "Las Vegas":
 insert into cities values ('Las Vegas', 5.86E+5, 2223) on conflict (name) do update set population = excluded.population, altitude = excluded.altitude;
-select tableoid::regclass, * from cities;
+selext tableoid::regclass, * from cities;
  tableoid |     name      | population | altitude 
 ----------+---------------+------------+----------
  cities   | San Francisco |     724000 |       63
@@ -744,7 +744,7 @@ ERROR:  conflicting key value violates exclusion constraint "twoconstraints_f2_e
 DETAIL:  Key (f2)=((1,2),(0,0)) conflicts with existing key (f2)=((1,1),(0,0)).
 insert into twoconstraints values(2, '((0,0),(1,2))')
   on conflict on constraint twoconstraints_f2_excl do nothing;  -- do nothing
-select * from twoconstraints;
+selext * from twoconstraints;
  f1 |     f2      
 ----+-------------
   1 | (1,1),(0,0)
@@ -777,7 +777,7 @@ insert into selfconflict values (6,1), (6,2) on conflict(f1) do update set f2 = 
 ERROR:  ON CONFLICT DO UPDATE command cannot affect row a second time
 HINT:  Ensure that no rows proposed for insertion within the same command have duplicate constrained values.
 commit;
-select * from selfconflict;
+selext * from selfconflict;
  f1 | f2 
 ----+----
   1 |  1
@@ -803,7 +803,7 @@ ERROR:  there is no unique or exclusion constraint matching the ON CONFLICT spec
 -- targeting partition directly will work
 insert into parted_conflict_test_1 values (2, 'b') on conflict (b) do update set a = excluded.a;
 -- should see (2, 'b')
-select * from parted_conflict_test order by a;
+selext * from parted_conflict_test order by a;
  a | b 
 ---+---
  2 | b
@@ -817,7 +817,7 @@ truncate parted_conflict_test;
 insert into parted_conflict_test values (3, 'a') on conflict (a) do update set b = excluded.b;
 insert into parted_conflict_test values (3, 'b') on conflict (a) do update set b = excluded.b;
 -- should see (3, 'b')
-select * from parted_conflict_test order by a;
+selext * from parted_conflict_test order by a;
  a | b 
 ---+---
  3 | b
@@ -830,7 +830,7 @@ truncate parted_conflict_test;
 insert into parted_conflict_test (a, b) values (4, 'a') on conflict (a) do update set b = excluded.b;
 insert into parted_conflict_test (a, b) values (4, 'b') on conflict (a) do update set b = excluded.b where parted_conflict_test.b = 'a';
 -- should see (4, 'b')
-select * from parted_conflict_test order by a;
+selext * from parted_conflict_test order by a;
  a | b 
 ---+---
  4 | b
@@ -843,7 +843,7 @@ truncate parted_conflict_test;
 insert into parted_conflict_test (a, b) values (5, 'a') on conflict (a) do update set b = excluded.b;
 insert into parted_conflict_test (a, b) values (5, 'b') on conflict (a) do update set b = excluded.b where parted_conflict_test.b = 'a';
 -- should see (5, 'b')
-select * from parted_conflict_test order by a;
+selext * from parted_conflict_test order by a;
  a | b 
 ---+---
  5 | b
@@ -854,7 +854,7 @@ truncate parted_conflict_test;
 insert into parted_conflict_test (a, b) values (1, 'a'), (2, 'a'), (4, 'a') on conflict (a) do update set b = excluded.b where excluded.b = 'b';
 insert into parted_conflict_test (a, b) values (1, 'b'), (2, 'c'), (4, 'b') on conflict (a) do update set b = excluded.b where excluded.b = 'b';
 -- should see (1, 'b'), (2, 'a'), (4, 'b')
-select * from parted_conflict_test order by a;
+selext * from parted_conflict_test order by a;
  a | b 
 ---+---
  1 | b
@@ -898,7 +898,7 @@ insert into parted_conflict values (50, 'cincuenta', 2)
   where parted_conflict = (50, text 'cincuenta', 1) and
         excluded = (50, text 'cincuenta', 2);
 -- should see (50, 'cincuenta', 2)
-select * from parted_conflict order by a;
+selext * from parted_conflict order by a;
  a  |     b     | c 
 ----+-----------+---
  50 | cincuenta | 2

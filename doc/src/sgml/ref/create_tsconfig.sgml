@@ -101,7 +101,7 @@ CREATE TEXT SEARCH CONFIGURATION <replaceable class="parameter">name</replaceabl
   <para>
    The <literal>PARSER</literal> and <literal>COPY</literal> options are mutually
    exclusive, because when an existing configuration is copied, its
-   parser selection is copied too.
+   parser selextion is copied too.
   </para>
 
  </refsect1>

@@ -438,19 +438,19 @@ SELECT p.name, p.age FROM person* p ORDER BY age using >, name;
 --
 -- Test some cases involving whole-row Var referencing a subquery
 --
-select foo from (select 1) as foo;
+selext foo from (selext 1) as foo;
  foo 
 -----
  (1)
 (1 row)
 
-select foo from (select null) as foo;
+selext foo from (selext null) as foo;
  foo 
 -----
  ()
 (1 row)
 
-select foo from (select 'xyzzy',1,null) as foo;
+selext foo from (selext 'xyzzy',1,null) as foo;
     foo     
 ------------
  (xyzzy,1,)
@@ -459,7 +459,7 @@ select foo from (select 'xyzzy',1,null) as foo;
 --
 -- Test VALUES lists
 --
-select * from onek, (values(147, 'RFAAAA'), (931, 'VJAAAA')) as v (i, j)
+selext * from onek, (values(147, 'RFAAAA'), (931, 'VJAAAA')) as v (i, j)
     WHERE onek.unique1 = v.i and onek.stringu1 = v.j;
  unique1 | unique2 | two | four | ten | twenty | hundred | thousand | twothousand | fivethous | tenthous | odd | even | stringu1 | stringu2 | string4 |  i  |   j    
 ---------+---------+-----+------+-----+--------+---------+----------+-------------+-----------+----------+-----+------+----------+----------+---------+-----+--------
@@ -469,9 +469,9 @@ select * from onek, (values(147, 'RFAAAA'), (931, 'VJAAAA')) as v (i, j)
 
 -- a more complex case
 -- looks like we're coding lisp :-)
-select * from onek,
-  (values ((select i from
-    (values(10000), (2), (389), (1000), (2000), ((select 10029))) as foo(i)
+selext * from onek,
+  (values ((selext i from
+    (values(10000), (2), (389), (1000), (2000), ((selext 10029))) as foo(i)
     order by i asc limit 1))) bar (i)
   where onek.unique1 = bar.i;
  unique1 | unique2 | two | four | ten | twenty | hundred | thousand | twothousand | fivethous | tenthous | odd | even | stringu1 | stringu2 | string4 | i 
@@ -480,7 +480,7 @@ select * from onek,
 (1 row)
 
 -- try VALUES in a subquery
-select * from onek
+selext * from onek
     where (unique1,ten) in (values (1,1), (20,0), (99,9), (17,99))
     order by unique1;
  unique1 | unique2 | two | four | ten | twenty | hundred | thousand | twothousand | fivethous | tenthous | odd | even | stringu1 | stringu2 | string4 
@@ -738,7 +738,7 @@ SELECT * FROM foo ORDER BY f1 DESC NULLS LAST;
 --
 -- partial index is usable
 explain (costs off)
-select * from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
+selext * from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
                QUERY PLAN                
 -----------------------------------------
  Index Scan using onek2_u2_prtl on onek2
@@ -746,7 +746,7 @@ select * from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
    Filter: (stringu1 = 'ATAAAA'::name)
 (3 rows)
 
-select * from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
+selext * from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
  unique1 | unique2 | two | four | ten | twenty | hundred | thousand | twothousand | fivethous | tenthous | odd | even | stringu1 | stringu2 | string4 
 ---------+---------+-----+------+-----+--------+---------+----------+-------------+-----------+----------+-----+------+----------+----------+---------
      494 |      11 |   0 |    2 |   4 |     14 |       4 |       94 |          94 |       494 |      494 |   8 |    9 | ATAAAA   | LAAAAA   | VVVVxx
@@ -754,7 +754,7 @@ select * from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
 
 -- actually run the query with an analyze to use the partial index
 explain (costs off, analyze on, timing off, summary off)
-select * from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
+selext * from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
                            QUERY PLAN                            
 -----------------------------------------------------------------
  Index Scan using onek2_u2_prtl on onek2 (actual rows=1 loops=1)
@@ -763,7 +763,7 @@ select * from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
 (3 rows)
 
 explain (costs off)
-select unique2 from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
+selext unique2 from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
                QUERY PLAN                
 -----------------------------------------
  Index Scan using onek2_u2_prtl on onek2
@@ -771,7 +771,7 @@ select unique2 from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
    Filter: (stringu1 = 'ATAAAA'::name)
 (3 rows)
 
-select unique2 from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
+selext unique2 from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
  unique2 
 ---------
       11
@@ -779,28 +779,28 @@ select unique2 from onek2 where unique2 = 11 and stringu1 = 'ATAAAA';
 
 -- partial index predicate implies clause, so no need for retest
 explain (costs off)
-select * from onek2 where unique2 = 11 and stringu1 < 'B';
+selext * from onek2 where unique2 = 11 and stringu1 < 'B';
                QUERY PLAN                
 -----------------------------------------
  Index Scan using onek2_u2_prtl on onek2
    Index Cond: (unique2 = 11)
 (2 rows)
 
-select * from onek2 where unique2 = 11 and stringu1 < 'B';
+selext * from onek2 where unique2 = 11 and stringu1 < 'B';
  unique1 | unique2 | two | four | ten | twenty | hundred | thousand | twothousand | fivethous | tenthous | odd | even | stringu1 | stringu2 | string4 
 ---------+---------+-----+------+-----+--------+---------+----------+-------------+-----------+----------+-----+------+----------+----------+---------
      494 |      11 |   0 |    2 |   4 |     14 |       4 |       94 |          94 |       494 |      494 |   8 |    9 | ATAAAA   | LAAAAA   | VVVVxx
 (1 row)
 
 explain (costs off)
-select unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
+selext unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
                   QUERY PLAN                  
 ----------------------------------------------
  Index Only Scan using onek2_u2_prtl on onek2
    Index Cond: (unique2 = 11)
 (2 rows)
 
-select unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
+selext unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
  unique2 
 ---------
       11
@@ -808,7 +808,7 @@ select unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
 
 -- but if it's an update target, must retest anyway
 explain (costs off)
-select unique2 from onek2 where unique2 = 11 and stringu1 < 'B' for update;
+selext unique2 from onek2 where unique2 = 11 and stringu1 < 'B' for update;
                   QUERY PLAN                   
 -----------------------------------------------
  LockRows
@@ -817,7 +817,7 @@ select unique2 from onek2 where unique2 = 11 and stringu1 < 'B' for update;
          Filter: (stringu1 < 'B'::name)
 (4 rows)
 
-select unique2 from onek2 where unique2 = 11 and stringu1 < 'B' for update;
+selext unique2 from onek2 where unique2 = 11 and stringu1 < 'B' for update;
  unique2 
 ---------
       11
@@ -825,14 +825,14 @@ select unique2 from onek2 where unique2 = 11 and stringu1 < 'B' for update;
 
 -- partial index is not applicable
 explain (costs off)
-select unique2 from onek2 where unique2 = 11 and stringu1 < 'C';
+selext unique2 from onek2 where unique2 = 11 and stringu1 < 'C';
                       QUERY PLAN                       
 -------------------------------------------------------
  Seq Scan on onek2
    Filter: ((stringu1 < 'C'::name) AND (unique2 = 11))
 (2 rows)
 
-select unique2 from onek2 where unique2 = 11 and stringu1 < 'C';
+selext unique2 from onek2 where unique2 = 11 and stringu1 < 'C';
  unique2 
 ---------
       11
@@ -841,7 +841,7 @@ select unique2 from onek2 where unique2 = 11 and stringu1 < 'C';
 -- partial index implies clause, but bitmap scan must recheck predicate anyway
 SET enable_indexscan TO off;
 explain (costs off)
-select unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
+selext unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
                          QUERY PLAN                          
 -------------------------------------------------------------
  Bitmap Heap Scan on onek2
@@ -850,7 +850,7 @@ select unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
          Index Cond: (unique2 = 11)
 (4 rows)
 
-select unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
+selext unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
  unique2 
 ---------
       11
@@ -859,7 +859,7 @@ select unique2 from onek2 where unique2 = 11 and stringu1 < 'B';
 RESET enable_indexscan;
 -- check multi-index cases too
 explain (costs off)
-select unique1, unique2 from onek2
+selext unique1, unique2 from onek2
   where (unique2 = 11 or unique1 = 0) and stringu1 < 'B';
                                    QUERY PLAN                                   
 --------------------------------------------------------------------------------
@@ -873,7 +873,7 @@ select unique1, unique2 from onek2
                Index Cond: (unique1 = 0)
 (8 rows)
 
-select unique1, unique2 from onek2
+selext unique1, unique2 from onek2
   where (unique2 = 11 or unique1 = 0) and stringu1 < 'B';
  unique1 | unique2 
 ---------+---------
@@ -882,7 +882,7 @@ select unique1, unique2 from onek2
 (2 rows)
 
 explain (costs off)
-select unique1, unique2 from onek2
+selext unique1, unique2 from onek2
   where (unique2 = 11 and stringu1 < 'B') or unique1 = 0;
                                    QUERY PLAN                                   
 --------------------------------------------------------------------------------
@@ -895,7 +895,7 @@ select unique1, unique2 from onek2
                Index Cond: (unique1 = 0)
 (7 rows)
 
-select unique1, unique2 from onek2
+selext unique1, unique2 from onek2
   where (unique2 = 11 and stringu1 < 'B') or unique1 = 0;
  unique1 | unique2 
 ---------+---------
@@ -916,7 +916,7 @@ SELECT 1 AS x ORDER BY x;
 -- But ORDER BY on a set-valued expression does
 create function sillysrf(int) returns setof int as
   'values (1),(10),(2),($1)' language sql immutable;
-select sillysrf(42);
+selext sillysrf(42);
  sillysrf 
 ----------
         1
@@ -925,7 +925,7 @@ select sillysrf(42);
        42
 (4 rows)
 
-select sillysrf(-1) order by 1;
+selext sillysrf(-1) order by 1;
  sillysrf 
 ----------
        -1
@@ -937,14 +937,14 @@ select sillysrf(-1) order by 1;
 drop function sillysrf(int);
 -- X = X isn't a no-op, it's effectively X IS NOT NULL assuming = is strict
 -- (see bug #5084)
-select * from (values (2),(null),(1)) v(k) where k = k order by k;
+selext * from (values (2),(null),(1)) v(k) where k = k order by k;
  k 
 ---
  1
  2
 (2 rows)
 
-select * from (values (2),(null),(1)) v(k) where k = k;
+selext * from (values (2),(null),(1)) v(k) where k = k;
  k 
 ---
  2
@@ -956,7 +956,7 @@ select * from (values (2),(null),(1)) v(k) where k = k;
 create table list_parted_tbl (a int,b int) partition by list (a);
 create table list_parted_tbl1 partition of list_parted_tbl
   for values in (1) partition by list(b);
-explain (costs off) select * from list_parted_tbl;
+explain (costs off) selext * from list_parted_tbl;
         QUERY PLAN        
 --------------------------
  Result

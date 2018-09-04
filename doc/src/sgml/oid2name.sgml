@@ -175,7 +175,7 @@
   </para>
 
   <para>
-   To display specific tables, select which tables to show by
+   To display specific tables, selext which tables to show by
    using <option>-o</option>, <option>-f</option> and/or <option>-t</option>.
    <option>-o</option> takes an OID,
    <option>-f</option> takes a filenode,

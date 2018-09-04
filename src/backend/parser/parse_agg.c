@@ -558,7 +558,7 @@ check_agglevels_and_constraints(ParseState *pstate, Node *expr)
 /*
  * check_agg_arguments
  *	  Scan the arguments of an aggregate function to determine the
- *	  aggregate's semantic level (zero is the current select's level,
+ *	  aggregate's semantic level (zero is the current selext's level,
  *	  one is its parent, etc).
  *
  * The aggregate's level is the same as the level of the lowest-level variable
@@ -723,7 +723,7 @@ check_agg_arguments_walker(Node *node,
 
 	/*
 	 * SRFs and window functions can be rejected immediately, unless we are
-	 * within a sub-select within the aggregate's arguments; in that case
+	 * within a sub-selext within the aggregate's arguments; in that case
 	 * they're OK.
 	 */
 	if (context->sublevels_up == 0)
@@ -744,7 +744,7 @@ check_agg_arguments_walker(Node *node,
 	}
 	if (IsA(node, Query))
 	{
-		/* Recurse into subselects */
+		/* Recurse into subselexts */
 		bool		result;
 
 		context->sublevels_up++;
@@ -1396,7 +1396,7 @@ check_ungrouped_columns_walker(Node *node,
 
 	if (IsA(node, Query))
 	{
-		/* Recurse into subselects */
+		/* Recurse into subselexts */
 		bool		result;
 
 		context->sublevels_up++;
@@ -1569,7 +1569,7 @@ finalize_grouping_exprs_walker(Node *node,
 
 	if (IsA(node, Query))
 	{
-		/* Recurse into subselects */
+		/* Recurse into subselexts */
 		bool		result;
 
 		context->sublevels_up++;

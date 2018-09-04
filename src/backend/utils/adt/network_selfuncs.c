@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------
  *
  * network_selfuncs.c
- *	  Functions for selectivity estimation of inet/cidr operators
+ *	  Functions for selextivity estimation of inet/cidr operators
  *
  * This module provides estimators for the subnet inclusion and overlap
  * operators.  Estimates are based on null fraction, most common values,
@@ -29,18 +29,18 @@
 #include "utils/selfuncs.h"
 
 
-/* Default selectivity for the inet overlap operator */
+/* Default selextivity for the inet overlap operator */
 #define DEFAULT_OVERLAP_SEL 0.01
 
-/* Default selectivity for the various inclusion operators */
+/* Default selextivity for the various inclusion operators */
 #define DEFAULT_INCLUSION_SEL 0.005
 
-/* Default selectivity for specified operator */
+/* Default selextivity for specified operator */
 #define DEFAULT_SEL(operator) \
 	((operator) == OID_INET_OVERLAP_OP ? \
 	 DEFAULT_OVERLAP_SEL : DEFAULT_INCLUSION_SEL)
 
-/* Maximum number of items to consider in join selectivity calculations */
+/* Maximum number of items to consider in join selextivity calculations */
 #define MAX_CONSIDERED_ELEMS 1024
 
 static Selectivity networkjoinsel_inner(Oid operator,
@@ -133,17 +133,17 @@ networksel(PG_FUNCTION_ARGS)
 	/*
 	 * If we have most-common-values info, add up the fractions of the MCV
 	 * entries that satisfy MCV OP CONST.  These fractions contribute directly
-	 * to the result selectivity.  Also add up the total fraction represented
+	 * to the result selextivity.  Also add up the total fraction represented
 	 * by MCV entries.
 	 */
 	fmgr_info(get_opcode(operator), &proc);
-	mcv_selec = mcv_selectivity(&vardata, &proc, constvalue, varonleft,
+	mcv_selec = mcv_selextivity(&vardata, &proc, constvalue, varonleft,
 								&sumcommon);
 
 	/*
 	 * If we have a histogram, use it to estimate the proportion of the
 	 * non-MCV population that satisfies the clause.  If we don't, apply the
-	 * default selectivity to that population.
+	 * default selextivity to that population.
 	 */
 	if (get_attstatsslot(&hslot, vardata.statsTuple,
 						 STATISTIC_KIND_HISTOGRAM, InvalidOid,
@@ -162,7 +162,7 @@ networksel(PG_FUNCTION_ARGS)
 	else
 		non_mcv_selec = DEFAULT_SEL(operator);
 
-	/* Combine selectivities for MCV and non-MCV populations */
+	/* Combine selextivities for MCV and non-MCV populations */
 	selec = mcv_selec + (1.0 - nullfrac - sumcommon) * non_mcv_selec;
 
 	/* Result should be in range, but make sure... */
@@ -174,7 +174,7 @@ networksel(PG_FUNCTION_ARGS)
 }
 
 /*
- * Join selectivity estimation for the subnet inclusion/overlap operators
+ * Join selextivity estimation for the subnet inclusion/overlap operators
  *
  * This function has the same structure as eqjoinsel() in selfuncs.c.
  *
@@ -247,16 +247,16 @@ networkjoinsel(PG_FUNCTION_ARGS)
 }
 
 /*
- * Inner join selectivity estimation for subnet inclusion/overlap operators
+ * Inner join selextivity estimation for subnet inclusion/overlap operators
  *
  * Calculates MCV vs MCV, MCV vs histogram and histogram vs histogram
- * selectivity for join using the subnet inclusion operators.  Unlike the
- * join selectivity function for the equality operator, eqjoinsel_inner(),
+ * selextivity for join using the subnet inclusion operators.  Unlike the
+ * join selextivity function for the equality operator, eqjoinsel_inner(),
  * one to one matching of the values is not enough.  Network inclusion
  * operators are likely to match many to many, so we must check all pairs.
  * (Note: it might be possible to exploit understanding of the histogram's
  * btree ordering to reduce the work needed, but we don't currently try.)
- * Also, MCV vs histogram selectivity is not neglected as in eqjoinsel_inner().
+ * Also, MCV vs histogram selextivity is not neglected as in eqjoinsel_inner().
  */
 static Selectivity
 networkjoinsel_inner(Oid operator,
@@ -327,7 +327,7 @@ networkjoinsel_inner(Oid operator,
 	opr_codenum = inet_opr_codenum(operator);
 
 	/*
-	 * Calculate selectivity for MCV vs MCV matches.
+	 * Calculate selextivity for MCV vs MCV matches.
 	 */
 	if (mcv1_exists && mcv2_exists)
 		selec += inet_mcv_join_sel(mcv1_slot.values, mcv1_slot.numbers,
@@ -337,7 +337,7 @@ networkjoinsel_inner(Oid operator,
 								   operator);
 
 	/*
-	 * Add in selectivities for MCV vs histogram matches, scaling according to
+	 * Add in selextivities for MCV vs histogram matches, scaling according to
 	 * the fractions of the populations represented by the histograms. Note
 	 * that the second case needs to commute the operator.
 	 */
@@ -353,7 +353,7 @@ networkjoinsel_inner(Oid operator,
 							  -opr_codenum);
 
 	/*
-	 * Add in selectivity for histogram vs histogram matches, again scaling
+	 * Add in selextivity for histogram vs histogram matches, again scaling
 	 * appropriately.
 	 */
 	if (hist1_exists && hist2_exists)
@@ -380,10 +380,10 @@ networkjoinsel_inner(Oid operator,
 }
 
 /*
- * Semi join selectivity estimation for subnet inclusion/overlap operators
+ * Semi join selextivity estimation for subnet inclusion/overlap operators
  *
  * Calculates MCV vs MCV, MCV vs histogram, histogram vs MCV, and histogram vs
- * histogram selectivity for semi/anti join cases.
+ * histogram selextivity for semi/anti join cases.
  */
 static Selectivity
 networkjoinsel_semi(Oid operator,
@@ -549,7 +549,7 @@ mcv_population(float4 *mcv_numbers, int mcv_nvalues)
 }
 
 /*
- * Inet histogram vs single value selectivity estimation
+ * Inet histogram vs single value selextivity estimation
  *
  * Estimate the fraction of the histogram population that satisfies
  * "value OPR CONST".  (The result needs to be scaled to reflect the
@@ -663,7 +663,7 @@ inet_hist_value_sel(Datum *values, int nvalues, Datum constvalue,
 }
 
 /*
- * Inet MCV vs MCV join selectivity estimation
+ * Inet MCV vs MCV join selextivity estimation
  *
  * We simply add up the fractions of the populations that satisfy the clause.
  * The result is exact and does not need to be scaled further.
@@ -692,7 +692,7 @@ inet_mcv_join_sel(Datum *mcv1_values, float4 *mcv1_numbers, int mcv1_nvalues,
 }
 
 /*
- * Inet MCV vs histogram join selectivity estimation
+ * Inet MCV vs histogram join selextivity estimation
  *
  * For each MCV on the lefthand side, estimate the fraction of the righthand's
  * histogram population that satisfies the join clause, and add those up,
@@ -724,7 +724,7 @@ inet_mcv_hist_sel(Datum *mcv_values, float4 *mcv_numbers, int mcv_nvalues,
 }
 
 /*
- * Inet histogram vs histogram join selectivity estimation
+ * Inet histogram vs histogram join selextivity estimation
  *
  * Here, we take all values listed in the second histogram (except for the
  * first and last elements, which are excluded on the grounds of possibly
@@ -765,7 +765,7 @@ inet_hist_inclusion_join_sel(Datum *hist1_values, int hist1_nvalues,
 }
 
 /*
- * Inet semi join selectivity estimation for one value
+ * Inet semi join selextivity estimation for one value
  *
  * The function calculates the probability that there is at least one row
  * in the RHS table that satisfies the "lhs_value op column" condition.
@@ -847,7 +847,7 @@ inet_opr_codenum(Oid operator)
 		case OID_INET_SUB_OP:
 			return 2;
 		default:
-			elog(ERROR, "unrecognized operator %u for inet selectivity",
+			elog(ERROR, "unrecognized operator %u for inet selextivity",
 				 operator);
 	}
 	return 0;					/* unreached, but keep compiler quiet */

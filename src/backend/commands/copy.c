@@ -144,9 +144,9 @@ typedef struct CopyStateData
 	bool	   *force_notnull_flags;	/* per-column CSV FNN flags */
 	List	   *force_null;		/* list of column names */
 	bool	   *force_null_flags;	/* per-column CSV FN flags */
-	bool		convert_selectively;	/* do selective binary conversion? */
-	List	   *convert_select; /* list of column names (can be NIL) */
-	bool	   *convert_select_flags;	/* per-column CSV/TEXT CS flags */
+	bool		convert_selextively;	/* do selextive binary conversion? */
+	List	   *convert_selext; /* list of column names (can be NIL) */
+	bool	   *convert_selext_flags;	/* per-column CSV/TEXT CS flags */
 
 	/* these are just for error messages, see CopyFromErrorCallback */
 	const char *cur_relname;	/* table name for error messages */
@@ -859,7 +859,7 @@ DoCopy(ParseState *pstate, const CopyStmt *stmt,
 			if (is_from)
 				rte->insertedCols = bms_add_member(rte->insertedCols, attno);
 			else
-				rte->selectedCols = bms_add_member(rte->selectedCols, attno);
+				rte->selextedCols = bms_add_member(rte->selextedCols, attno);
 		}
 		ExecCheckRTPerms(pstate->p_rtable, true);
 
@@ -879,7 +879,7 @@ DoCopy(ParseState *pstate, const CopyStmt *stmt,
 		 */
 		if (check_enable_rls(rte->relid, InvalidOid, false) == RLS_ENABLED)
 		{
-			SelectStmt *select;
+			SelectStmt *selext;
 			ColumnRef  *cr;
 			ResTarget  *target;
 			RangeVar   *from;
@@ -954,12 +954,12 @@ DoCopy(ParseState *pstate, const CopyStmt *stmt,
 								-1);
 
 			/* Build query */
-			select = makeNode(SelectStmt);
-			select->targetList = targetList;
-			select->fromClause = list_make1(from);
+			selext = makeNode(SelectStmt);
+			selext->targetList = targetList;
+			selext->fromClause = list_make1(from);
 
 			query = makeNode(RawStmt);
-			query->stmt = (Node *) select;
+			query->stmt = (Node *) selext;
 			query->stmt_location = stmt_location;
 			query->stmt_len = stmt_len;
 
@@ -1189,21 +1189,21 @@ ProcessCopyOptions(ParseState *pstate,
 								defel->defname),
 						 parser_errposition(pstate, defel->location)));
 		}
-		else if (strcmp(defel->defname, "convert_selectively") == 0)
+		else if (strcmp(defel->defname, "convert_selextively") == 0)
 		{
 			/*
 			 * Undocumented, not-accessible-from-SQL option: convert only the
 			 * named columns to binary form, storing the rest as NULLs. It's
 			 * allowed for the column list to be NIL.
 			 */
-			if (cstate->convert_selectively)
+			if (cstate->convert_selextively)
 				ereport(ERROR,
 						(errcode(ERRCODE_SYNTAX_ERROR),
 						 errmsg("conflicting or redundant options"),
 						 parser_errposition(pstate, defel->location)));
-			cstate->convert_selectively = true;
+			cstate->convert_selextively = true;
 			if (defel->arg == NULL || IsA(defel->arg, List))
-				cstate->convert_select = castNode(List, defel->arg);
+				cstate->convert_selext = castNode(List, defel->arg);
 			else
 				ereport(ERROR,
 						(errcode(ERRCODE_INVALID_PARAMETER_VALUE),
@@ -1663,15 +1663,15 @@ BeginCopy(ParseState *pstate,
 		}
 	}
 
-	/* Convert convert_selectively name list to per-column flags */
-	if (cstate->convert_selectively)
+	/* Convert convert_selextively name list to per-column flags */
+	if (cstate->convert_selextively)
 	{
 		List	   *attnums;
 		ListCell   *cur;
 
-		cstate->convert_select_flags = (bool *) palloc0(num_phys_attrs * sizeof(bool));
+		cstate->convert_selext_flags = (bool *) palloc0(num_phys_attrs * sizeof(bool));
 
-		attnums = CopyGetAttnums(tupDesc, cstate->rel, cstate->convert_select);
+		attnums = CopyGetAttnums(tupDesc, cstate->rel, cstate->convert_selext);
 
 		foreach(cur, attnums)
 		{
@@ -1681,9 +1681,9 @@ BeginCopy(ParseState *pstate,
 			if (!list_member_int(cstate->attnumlist, attnum))
 				ereport(ERROR,
 						(errcode(ERRCODE_INVALID_COLUMN_REFERENCE),
-						 errmsg_internal("selected column \"%s\" not referenced by COPY",
+						 errmsg_internal("selexted column \"%s\" not referenced by COPY",
 										 NameStr(attr->attname))));
-			cstate->convert_select_flags[attnum - 1] = true;
+			cstate->convert_selext_flags[attnum - 1] = true;
 		}
 	}
 
@@ -3157,8 +3157,8 @@ CopyFromInsertBatch(CopyState cstate, EState *estate, CommandId mycid,
  *
  * 'rel': Used as a template for the tuples
  * 'filename': Name of server-local file to read
- * 'attnamelist': List of char *, columns to include. NIL selects all cols.
- * 'options': List of DefElem. See copy_opt_item in gram.y for selections.
+ * 'attnamelist': List of char *, columns to include. NIL selexts all cols.
+ * 'options': List of DefElem. See copy_opt_item in gram.y for selextions.
  *
  * Returns a CopyState, to be passed to NextCopyFrom and related functions.
  */
@@ -3561,8 +3561,8 @@ NextCopyFrom(CopyState cstate, ExprContext *econtext,
 								NameStr(att->attname))));
 			string = field_strings[fieldno++];
 
-			if (cstate->convert_select_flags &&
-				!cstate->convert_select_flags[m])
+			if (cstate->convert_selext_flags &&
+				!cstate->convert_selext_flags[m])
 			{
 				/* ignore input field, leaving column as NULL */
 				continue;

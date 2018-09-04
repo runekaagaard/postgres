@@ -125,13 +125,13 @@ begin
   end loop;
 
   raise notice '---5---';
-  for _r in select * from conttesttbl loop
+  for _r in selext * from conttesttbl loop
     continue when _r.v <= 20;
     raise notice '%', _r.v;
   end loop;
 
   raise notice '---6---';
-  for _r in execute 'select * from conttesttbl' loop
+  for _r in execute 'selext * from conttesttbl' loop
     continue when _r.v <= 20;
     raise notice '%', _r.v;
   end loop;
@@ -152,13 +152,13 @@ begin
   end loop;
 
   raise notice '---9---';
-  for _r in select * from conttesttbl order by v limit 1 loop
+  for _r in selext * from conttesttbl order by v limit 1 loop
     raise notice '%', _r.v;
     continue;
   end loop;
 
   raise notice '---10---';
-  for _r in execute 'select * from conttesttbl order by v limit 1' loop
+  for _r in execute 'selext * from conttesttbl order by v limit 1' loop
     raise notice '%', _r.v;
     continue;
   end loop;
@@ -174,7 +174,7 @@ begin
     end loop;
   end loop;
 end; $$ language plpgsql;
-select continue_test1();
+selext continue_test1();
 NOTICE:  ---1---
 NOTICE:  1
 NOTICE:  2
@@ -311,7 +311,7 @@ begin
     end;
 end;
 $$ language plpgsql;
-select exit_block1();
+selext exit_block1();
  exit_block1 
 -------------
  
@@ -333,7 +333,7 @@ begin
   end loop;
 end blbl;
 $$ language plpgsql;
-select end_label1();
+selext end_label1();
 NOTICE:  i = 1
 NOTICE:  j = 1
  end_label1 
@@ -485,7 +485,7 @@ begin
   end loop;
   return null;
 end$$;
-select return_from_while();
+selext return_from_while();
  return_from_while 
 -------------------
                  3
@@ -500,24 +500,24 @@ begin
     raise notice '%', i;
   end loop;
   -- fore with record var
-  for r in select gs as aa, 'BB' as bb, 'CC' as cc from generate_series(1,4) gs loop
+  for r in selext gs as aa, 'BB' as bb, 'CC' as cc from generate_series(1,4) gs loop
     raise notice '% % %', r.aa, r.bb, r.cc;
   end loop;
   -- fore with single scalar
-  for a in select gs from generate_series(1,4) gs loop
+  for a in selext gs from generate_series(1,4) gs loop
     raise notice '%', a;
   end loop;
   -- fore with multiple scalars
-  for a,b,c in select gs, 'BB','CC' from generate_series(1,4) gs loop
+  for a,b,c in selext gs, 'BB','CC' from generate_series(1,4) gs loop
     raise notice '% % %', a, b, c;
   end loop;
   -- using qualified names in fors, fore is enabled, disabled only for fori
-  for lbl.a, lbl.b, lbl.c in execute $$select gs, 'bb','cc' from generate_series(1,4) gs$$ loop
+  for lbl.a, lbl.b, lbl.c in execute $$selext gs, 'bb','cc' from generate_series(1,4) gs$$ loop
     raise notice '% % %', a, b, c;
   end loop;
 end;
 $proc$ language plpgsql;
-select for_vect();
+selext for_vect();
 NOTICE:  1
 NOTICE:  2
 NOTICE:  3
@@ -561,59 +561,59 @@ begin
   end case;
 end;
 $$ language plpgsql immutable;
-select case_test(1);
+selext case_test(1);
  case_test 
 -----------
  one
 (1 row)
 
-select case_test(2);
+selext case_test(2);
  case_test 
 -----------
  two
 (1 row)
 
-select case_test(3);
+selext case_test(3);
       case_test       
 ----------------------
  three, four or eight
 (1 row)
 
-select case_test(4);
+selext case_test(4);
       case_test       
 ----------------------
  three, four or eight
 (1 row)
 
-select case_test(5); -- fails
+selext case_test(5); -- fails
 ERROR:  case not found
 HINT:  CASE statement is missing ELSE part.
 CONTEXT:  PL/pgSQL function case_test(bigint) line 5 at CASE
-select case_test(8);
+selext case_test(8);
       case_test       
 ----------------------
  three, four or eight
 (1 row)
 
-select case_test(10);
+selext case_test(10);
  case_test 
 -----------
  ten
 (1 row)
 
-select case_test(11);
+selext case_test(11);
    case_test    
 ----------------
  eleven, twelve
 (1 row)
 
-select case_test(12);
+selext case_test(12);
    case_test    
 ----------------
  eleven, twelve
 (1 row)
 
-select case_test(13); -- fails
+selext case_test(13); -- fails
 ERROR:  case not found
 HINT:  CASE statement is missing ELSE part.
 CONTEXT:  PL/pgSQL function case_test(bigint) line 5 at CASE
@@ -625,7 +625,7 @@ exception
     raise notice 'caught case_not_found % %', SQLSTATE, SQLERRM;
 end
 $$ language plpgsql;
-select catch();
+selext catch();
 NOTICE:  caught case_not_found 20000 case not found
  catch 
 -------
@@ -646,25 +646,25 @@ begin
   end case;
 end;
 $$ language plpgsql immutable;
-select case_test(1);
+selext case_test(1);
  case_test 
 -----------
  one
 (1 row)
 
-select case_test(2);
+selext case_test(2);
  case_test 
 -----------
  other
 (1 row)
 
-select case_test(12);
+selext case_test(12);
  case_test 
 -----------
  twelve
 (1 row)
 
-select case_test(13);
+selext case_test(13);
  case_test 
 -----------
  other

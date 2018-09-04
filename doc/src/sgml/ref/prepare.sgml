@@ -147,7 +147,7 @@ PREPARE <replaceable class="parameter">name</replaceable> [ ( <replaceable class
    if statistics record three distinct column values, a generic plan
    assumes a column equality comparison will match 33% of processed rows.
    Column statistics also allow generic plans to accurately compute the
-   selectivity of unique columns.  Comparisons on non-uniformly-distributed
+   selextivity of unique columns.  Comparisons on non-uniformly-distributed
    columns and specification of non-existent values affects the average
    plan cost, and hence if and when a generic plan is chosen.
   </para>
@@ -159,7 +159,7 @@ PREPARE <replaceable class="parameter">name</replaceable> [ ( <replaceable class
    If a generic plan is in use, it will contain parameter symbols
    <literal>$<replaceable>n</replaceable></literal>, while a custom plan will have the
    supplied parameter values substituted into it.
-   The row estimates in the generic plan reflect the selectivity
+   The row estimates in the generic plan reflect the selextivity
    computed for the parameters.
   </para>
 

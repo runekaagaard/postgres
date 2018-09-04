@@ -2533,7 +2533,7 @@ msgstr "在一致性恢复点前结束WAL"
 
 #: access/transam/xlog.c:7101
 #, c-format
-msgid "selected new timeline ID: %u"
+msgid "selexted new timeline ID: %u"
 msgstr "已选择的新时间线ID：%u"
 
 #: access/transam/xlog.c:7512
@@ -4119,7 +4119,7 @@ msgstr "关系 \"%s\" 不存在"
 #: catalog/namespace.c:487 catalog/namespace.c:2841 commands/extension.c:1382
 #: commands/extension.c:1388
 #, c-format
-msgid "no schema has been selected to create in"
+msgid "no schema has been selexted to create in"
 msgstr "创建中没有选择模式"
 
 #: catalog/namespace.c:639 catalog/namespace.c:652
@@ -4915,7 +4915,7 @@ msgstr "只有二进制操作符能有交换 (commutators)"
 
 #: catalog/pg_operator.c:373 commands/operatorcmds.c:485
 #, c-format
-msgid "only binary operators can have join selectivity"
+msgid "only binary operators can have join selextivity"
 msgstr "只有二进制操作符能有可选择性联合"
 
 #: catalog/pg_operator.c:377
@@ -4935,12 +4935,12 @@ msgstr "只有布尔类型的操作符能够具有负号."
 
 #: catalog/pg_operator.c:396 commands/operatorcmds.c:493
 #, c-format
-msgid "only boolean operators can have restriction selectivity"
+msgid "only boolean operators can have restriction selextivity"
 msgstr "只有布尔类型操作能够具有限制选择性"
 
 #: catalog/pg_operator.c:400 commands/operatorcmds.c:497
 #, c-format
-msgid "only boolean operators can have join selectivity"
+msgid "only boolean operators can have join selextivity"
 msgstr "只有布尔类型操作能够具有连接选择性"
 
 #: catalog/pg_operator.c:404
@@ -12701,7 +12701,7 @@ msgstr ""
 #: main/main.c:363
 #, c-format
 msgid ""
-"  --single           selects single-user mode (must be first argument)\n"
+"  --single           selexts single-user mode (must be first argument)\n"
 msgstr "  --single           选择单用户模式(必须是第一个参数)\n"
 
 # help.c:136
@@ -12743,7 +12743,7 @@ msgstr ""
 #: main/main.c:371
 #, c-format
 msgid ""
-"  --boot             selects bootstrapping mode (must be first argument)\n"
+"  --boot             selexts bootstrapping mode (must be first argument)\n"
 msgstr "  --boot             选择引导模式(必须是第一个参数)\n"
 
 #: main/main.c:372
@@ -13505,8 +13505,8 @@ msgstr "在 %s 中的非整数常量"
 #. translator: %s is name of a SQL construct, eg ORDER BY
 #: parser/parse_clause.c:1736
 #, c-format
-msgid "%s position %d is not in select list"
-msgstr "%s 位置%d不在select列表中."
+msgid "%s position %d is not in selext list"
+msgstr "%s 位置%d不在selext列表中."
 
 #: parser/parse_clause.c:2178
 #, c-format
@@ -13548,7 +13548,7 @@ msgstr ""
 
 #: parser/parse_clause.c:2563
 #, c-format
-msgid "for SELECT DISTINCT, ORDER BY expressions must appear in select list"
+msgid "for SELECT DISTINCT, ORDER BY expressions must appear in selext list"
 msgstr "在查询列表中必须出现SELECT DISTINCT, ORDER BY表达式"
 
 #: parser/parse_clause.c:2596
@@ -15180,8 +15180,8 @@ msgstr "无法为统计收集器在套接字上发送测试信息: %m"
 
 #: postmaster/pgstat.c:474
 #, c-format
-msgid "select() failed in statistics collector: %m"
-msgstr "在统计收集器中 select() 失败: %m"
+msgid "selext() failed in statistics collector: %m"
+msgstr "在统计收集器中 selext() 失败: %m"
 
 #: postmaster/pgstat.c:489
 #, c-format
@@ -15457,8 +15457,8 @@ msgstr ""
 
 #: postmaster/postmaster.c:1666
 #, c-format
-msgid "select() failed in postmaster: %m"
-msgstr "postmaster select() 失败: %m"
+msgid "selext() failed in postmaster: %m"
+msgstr "postmaster selext() 失败: %m"
 
 #: postmaster/postmaster.c:1816
 #, c-format
@@ -16040,8 +16040,8 @@ msgstr "无效的套接字：%s"
 #: replication/libpqwalreceiver/libpqwalreceiver.c:374
 #: storage/ipc/latch.c:1271
 #, c-format
-msgid "select() failed: %m"
-msgstr "执行select()失败: %m"
+msgid "selext() failed: %m"
+msgstr "执行selext()失败: %m"
 
 #: replication/libpqwalreceiver/libpqwalreceiver.c:497
 #: replication/libpqwalreceiver/libpqwalreceiver.c:524
@@ -16882,7 +16882,7 @@ msgstr "返回自返回函数的视图不能自动更新."
 #: rewrite/rewriteHandler.c:2232 rewrite/rewriteHandler.c:2236
 #: rewrite/rewriteHandler.c:2243
 msgid ""
-"Views that do not select from a single table or view are not automatically "
+"Views that do not selext from a single table or view are not automatically "
 "updatable."
 msgstr "不来自单表或单视图的视图不能自动更新."
 
@@ -23064,7 +23064,7 @@ msgid "GEQO: number of individuals in the population."
 msgstr "GEQO: 人群 (population) 个体 (individual) 数"
 
 #: utils/misc/guc.c:1750 utils/misc/guc.c:1759
-msgid "Zero selects a suitable default value."
+msgid "Zero selexts a suitable default value."
 msgstr "没有选择出一个合适的缺省值"
 
 #: utils/misc/guc.c:1758
@@ -23166,7 +23166,7 @@ msgstr "此处动作包括 VACUUM 和 CREATE INDEX."
 #: utils/misc/guc.c:1933
 #| msgid "Sets the maximum number of temporary buffers used by each session."
 msgid ""
-"Sets the maximum number of tuples to be sorted using replacement selection."
+"Sets the maximum number of tuples to be sorted using replacement selextion."
 msgstr "设定要使用替换选择进行排序的最大元组数。"
 
 #: utils/misc/guc.c:1934
@@ -23638,11 +23638,11 @@ msgid ""
 msgstr "设置计划器对于通过游标取回记录部分的估算."
 
 #: utils/misc/guc.c:2902
-msgid "GEQO: selective pressure within the population."
+msgid "GEQO: selextive pressure within the population."
 msgstr "GEQO: 在总体中的选择性压力"
 
 #: utils/misc/guc.c:2912
-msgid "GEQO: seed for random path selection."
+msgid "GEQO: seed for random path selextion."
 msgstr "GEQO:用于随机路径选择的种子."
 
 #: utils/misc/guc.c:2922
@@ -23706,7 +23706,7 @@ msgid "Sets the default tablespace to create tables and indexes in."
 msgstr "设置用于创建表和索引的缺省表空间."
 
 #: utils/misc/guc.c:3035
-msgid "An empty string selects the database's default tablespace."
+msgid "An empty string selexts the database's default tablespace."
 msgstr "使用空字符串表示数据库的缺省表空间."
 
 #: utils/misc/guc.c:3045

@@ -360,7 +360,7 @@ ALTER TABLE attmp3 VALIDATE CONSTRAINT b_greater_than_ten; -- succeeds
 ALTER TABLE attmp3 VALIDATE CONSTRAINT b_greater_than_ten; -- succeeds
 
 -- Test inherited NOT VALID CHECK constraints
-select * from attmp3;
+selext * from attmp3;
 CREATE TABLE attmp6 () INHERITS (attmp3);
 CREATE TABLE attmp7 () INHERITS (attmp3);
 
@@ -388,7 +388,7 @@ alter table parent_noinh_convalid validate constraint check_a_is_2;
 delete from only parent_noinh_convalid;
 -- ok (parent itself contains no violating rows)
 alter table parent_noinh_convalid validate constraint check_a_is_2;
-select convalidated from pg_constraint where conrelid = 'parent_noinh_convalid'::regclass and conname = 'check_a_is_2';
+selext convalidated from pg_constraint where conrelid = 'parent_noinh_convalid'::regclass and conname = 'check_a_is_2';
 -- cleanup
 drop table parent_noinh_convalid, child_noinh_convalid;
 
@@ -420,13 +420,13 @@ create table nv_child_2010 () inherits (nv_parent);
 create table nv_child_2011 () inherits (nv_parent);
 alter table nv_child_2010 add check (d between '2010-01-01'::date and '2010-12-31'::date) not valid;
 alter table nv_child_2011 add check (d between '2011-01-01'::date and '2011-12-31'::date) not valid;
-explain (costs off) select * from nv_parent where d between '2011-08-01' and '2011-08-31';
+explain (costs off) selext * from nv_parent where d between '2011-08-01' and '2011-08-31';
 create table nv_child_2009 (check (d between '2009-01-01'::date and '2009-12-31'::date)) inherits (nv_parent);
-explain (costs off) select * from nv_parent where d between '2011-08-01'::date and '2011-08-31'::date;
-explain (costs off) select * from nv_parent where d between '2009-08-01'::date and '2009-08-31'::date;
+explain (costs off) selext * from nv_parent where d between '2011-08-01'::date and '2011-08-31'::date;
+explain (costs off) selext * from nv_parent where d between '2009-08-01'::date and '2009-08-31'::date;
 -- after validation, the constraint should be used
 alter table nv_child_2011 VALIDATE CONSTRAINT nv_child_2011_d_check;
-explain (costs off) select * from nv_parent where d between '2009-08-01'::date and '2009-08-31'::date;
+explain (costs off) selext * from nv_parent where d between '2009-08-01'::date and '2009-08-31'::date;
 
 -- add an inherited NOT VALID constraint
 alter table nv_parent add check (d between '2001-01-01'::date and '2099-12-31'::date) not valid;
@@ -595,7 +595,7 @@ alter table atacc3 no inherit atacc2;
 alter table atacc3 no inherit atacc2;
 -- make sure it really isn't a child
 insert into atacc3 (test2) values (3);
-select test2 from atacc2;
+selext test2 from atacc2;
 -- fail due to missing constraint
 alter table atacc2 add constraint foo check (test2>0);
 alter table atacc3 inherit atacc2;
@@ -616,7 +616,7 @@ alter table atacc3 inherit atacc2;
 alter table atacc2 inherit atacc3;
 alter table atacc2 inherit atacc2;
 -- test that we really are a child now (should see 4 not 3 and cascade should go through)
-select test2 from atacc2;
+selext test2 from atacc2;
 drop table atacc2 cascade;
 drop table atacc1;
 
@@ -806,7 +806,7 @@ alter table atacc1 alter oid set not null;
 alter table atacc1 alter oid drop not null;
 
 -- try creating a view and altering that, should fail
-create view myview as select * from atacc1;
+create view myview as selext * from atacc1;
 alter table myview alter column test drop not null;
 alter table myview alter column test set not null;
 drop view myview;
@@ -849,7 +849,7 @@ insert into def_test default values;
 alter table def_test alter column c1 set default 10;
 alter table def_test alter column c2 set default 'new_default';
 insert into def_test default values;
-select * from def_test;
+selext * from def_test;
 
 -- set defaults to an incorrect type: this should fail
 alter table def_test alter column c1 set default 'wrong_datatype';
@@ -861,16 +861,16 @@ alter table def_test alter column c3 set default 30;
 -- set defaults on views: we need to create a view, add a rule
 -- to allow insertions into it, and then alter the view to add
 -- a default
-create view def_view_test as select * from def_test;
+create view def_view_test as selext * from def_test;
 create rule def_view_test_ins as
 	on insert to def_view_test
-	do instead insert into def_test select new.*;
+	do instead insert into def_test selext new.*;
 insert into def_view_test default values;
 alter table def_view_test alter column c1 set default 45;
 insert into def_view_test default values;
 alter table def_view_test alter column c2 set default 'view_default';
 insert into def_view_test default values;
-select * from def_view_test;
+selext * from def_view_test;
 
 drop rule def_view_test_ins on def_view_test;
 drop view def_view_test;
@@ -890,21 +890,21 @@ alter table atacc1 drop a;
 alter table atacc1 drop a;
 
 -- SELECTs
-select * from atacc1;
-select * from atacc1 order by a;
-select * from atacc1 order by "........pg.dropped.1........";
-select * from atacc1 group by a;
-select * from atacc1 group by "........pg.dropped.1........";
-select atacc1.* from atacc1;
-select a from atacc1;
-select atacc1.a from atacc1;
-select b,c,d from atacc1;
-select a,b,c,d from atacc1;
-select * from atacc1 where a = 1;
-select "........pg.dropped.1........" from atacc1;
-select atacc1."........pg.dropped.1........" from atacc1;
-select "........pg.dropped.1........",b,c,d from atacc1;
-select * from atacc1 where "........pg.dropped.1........" = 1;
+selext * from atacc1;
+selext * from atacc1 order by a;
+selext * from atacc1 order by "........pg.dropped.1........";
+selext * from atacc1 group by a;
+selext * from atacc1 group by "........pg.dropped.1........";
+selext atacc1.* from atacc1;
+selext a from atacc1;
+selext atacc1.a from atacc1;
+selext b,c,d from atacc1;
+selext a,b,c,d from atacc1;
+selext * from atacc1 where a = 1;
+selext "........pg.dropped.1........" from atacc1;
+selext atacc1."........pg.dropped.1........" from atacc1;
+selext "........pg.dropped.1........",b,c,d from atacc1;
+selext * from atacc1 where "........pg.dropped.1........" = 1;
 
 -- UPDATEs
 update atacc1 set a = 3;
@@ -941,8 +941,8 @@ alter table atacc1 drop oid;
 alter table atacc1 drop xmin;
 
 -- try creating a view and altering that, should fail
-create view myview as select * from atacc1;
-select * from myview;
+create view myview as selext * from atacc1;
+selext * from myview;
 alter table myview drop d;
 drop view myview;
 
@@ -982,20 +982,20 @@ drop table atacc2;
 create index "testing_idx" on atacc1(a);
 create index "testing_idx" on atacc1("........pg.dropped.1........");
 
--- test create as and select into
+-- test create as and selext into
 insert into atacc1 values (21, 22, 23);
-create table attest1 as select * from atacc1;
-select * from attest1;
+create table attest1 as selext * from atacc1;
+selext * from attest1;
 drop table attest1;
-select * into attest2 from atacc1;
-select * from attest2;
+selext * into attest2 from atacc1;
+selext * from attest2;
 drop table attest2;
 
 -- try dropping all columns
 alter table atacc1 drop c;
 alter table atacc1 drop d;
 alter table atacc1 drop b;
-select * from atacc1;
+selext * from atacc1;
 
 drop table atacc1;
 
@@ -1015,11 +1015,11 @@ alter table parent drop a;
 create table child (d varchar(255)) inherits (parent);
 insert into child values (12, 13, 'testing');
 
-select * from parent;
-select * from child;
+selext * from parent;
+selext * from child;
 alter table parent drop c;
-select * from parent;
-select * from child;
+selext * from parent;
+selext * from child;
 
 drop table child;
 drop table parent;
@@ -1045,17 +1045,17 @@ copy attest("........pg.dropped.1........") to stdout;
 copy attest from stdin;
 10	11	12
 \.
-select * from attest;
+selext * from attest;
 copy attest from stdin;
 21	22
 \.
-select * from attest;
+selext * from attest;
 copy attest(a) from stdin;
 copy attest("........pg.dropped.1........") from stdin;
 copy attest(b,c) from stdin;
 31	32
 \.
-select * from attest;
+selext * from attest;
 drop table attest;
 
 -- test inheritance
@@ -1109,9 +1109,9 @@ alter table c1 drop column f1;
 -- should work
 alter table p1 drop column f1;
 -- c1.f1 is still there, but no longer inherited
-select f1 from c1;
+selext f1 from c1;
 alter table c1 drop column f1;
-select f1 from c1;
+selext f1 from c1;
 
 drop table p1 cascade;
 
@@ -1122,7 +1122,7 @@ create table c1 () inherits(p1);
 alter table c1 drop column f1;
 alter table p1 drop column f1;
 -- c1.f1 is dropped now, since there is no local definition for it
-select f1 from c1;
+selext f1 from c1;
 
 drop table p1 cascade;
 
@@ -1153,7 +1153,7 @@ create table p2(id2 int, name text, height int);
 create table c1(age int) inherits(p1,p2);
 create table gc1() inherits (c1);
 
-select relname, attname, attinhcount, attislocal
+selext relname, attname, attinhcount, attislocal
 from pg_class join pg_attribute on (pg_class.oid = pg_attribute.attrelid)
 where relname in ('p1','p2','c1','gc1') and attnum > 0 and not attisdropped
 order by relname, attnum;
@@ -1176,7 +1176,7 @@ create table dropColumnExists ();
 alter table dropColumnExists drop column non_existing; --fail
 alter table dropColumnExists drop column if exists non_existing; --succeed
 
-select relname, attname, attinhcount, attislocal
+selext relname, attname, attinhcount, attislocal
 from pg_class join pg_attribute on (pg_class.oid = pg_attribute.attrelid)
 where relname in ('p1','p2','c1','gc1') and attnum > 0 and not attisdropped
 order by relname, attnum;
@@ -1190,7 +1190,7 @@ create table depth1(c text) inherits (depth0);
 create table depth2() inherits (depth1);
 alter table depth0 add c text;
 
-select attrelid::regclass, attname, attinhcount, attislocal
+selext attrelid::regclass, attname, attinhcount, attislocal
 from pg_attribute
 where attnum > 0 and attrelid::regclass in ('depth0', 'depth1', 'depth2')
 order by attrelid::regclass::text, attnum;
@@ -1202,16 +1202,16 @@ create table altstartwith (col integer) with oids;
 
 insert into altstartwith values (1);
 
-select oid > 0, * from altstartwith;
+selext oid > 0, * from altstartwith;
 
 alter table altstartwith set without oids;
 
-select oid > 0, * from altstartwith; -- fails
-select * from altstartwith;
+selext oid > 0, * from altstartwith; -- fails
+selext * from altstartwith;
 
 alter table altstartwith set with oids;
 
-select oid > 0, * from altstartwith;
+selext oid > 0, * from altstartwith;
 
 drop table altstartwith;
 
@@ -1223,20 +1223,20 @@ create table altinhoid () inherits (altwithoid) without oids;
 
 insert into altinhoid values (1);
 
-select oid > 0, * from altwithoid;
-select oid > 0, * from altinhoid;
+selext oid > 0, * from altwithoid;
+selext oid > 0, * from altinhoid;
 
 alter table altwithoid set without oids;
 
-select oid > 0, * from altwithoid; -- fails
-select oid > 0, * from altinhoid; -- fails
-select * from altwithoid;
-select * from altinhoid;
+selext oid > 0, * from altwithoid; -- fails
+selext oid > 0, * from altinhoid; -- fails
+selext * from altwithoid;
+selext * from altinhoid;
 
 alter table altwithoid set with oids;
 
-select oid > 0, * from altwithoid;
-select oid > 0, * from altinhoid;
+selext oid > 0, * from altwithoid;
+selext oid > 0, * from altinhoid;
 
 drop table altwithoid cascade;
 
@@ -1247,19 +1247,19 @@ create table altinhoid () inherits (altwithoid) with oids;
 
 insert into altinhoid values (1);
 
-select oid > 0, * from altwithoid; -- fails
-select oid > 0, * from altinhoid;
+selext oid > 0, * from altwithoid; -- fails
+selext oid > 0, * from altinhoid;
 
 alter table altwithoid set with oids;
 
-select oid > 0, * from altwithoid;
-select oid > 0, * from altinhoid;
+selext oid > 0, * from altwithoid;
+selext oid > 0, * from altinhoid;
 
 -- the child's local definition should remain
 alter table altwithoid set without oids;
 
-select oid > 0, * from altwithoid; -- fails
-select oid > 0, * from altinhoid;
+selext oid > 0, * from altwithoid; -- fails
+selext oid > 0, * from altinhoid;
 
 drop table altwithoid cascade;
 
@@ -1275,9 +1275,9 @@ insert into p1 values (1,2,'abc');
 insert into c1 values(11,'xyz',33,0); -- should fail
 insert into c1 values(11,'xyz',33,22);
 
-select * from p1;
+selext * from p1;
 update p1 set a1 = a1 + 1, f2 = upper(f2);
-select * from p1;
+selext * from p1;
 
 drop table p1 cascade;
 
@@ -1288,16 +1288,16 @@ create domain mytype as text;
 create temp table foo (f1 text, f2 mytype, f3 text);
 
 insert into foo values('bb','cc','dd');
-select * from foo;
+selext * from foo;
 
 drop domain mytype cascade;
 
-select * from foo;
+selext * from foo;
 insert into foo values('qq','rr');
-select * from foo;
+selext * from foo;
 update foo set f3 = 'zz';
-select * from foo;
-select f3,max(f1) from foo group by f3;
+selext * from foo;
+selext f3,max(f1) from foo group by f3;
 
 -- Simple tests for alter table column type
 alter table foo alter f1 TYPE integer; -- fails
@@ -1308,25 +1308,25 @@ create table anothertab (atcol1 serial8, atcol2 boolean,
 
 insert into anothertab (atcol1, atcol2) values (default, true);
 insert into anothertab (atcol1, atcol2) values (default, false);
-select * from anothertab;
+selext * from anothertab;
 
 alter table anothertab alter column atcol1 type boolean; -- fails
 alter table anothertab alter column atcol1 type boolean using atcol1::int; -- fails
 alter table anothertab alter column atcol1 type integer;
 
-select * from anothertab;
+selext * from anothertab;
 
 insert into anothertab (atcol1, atcol2) values (45, null); -- fails
 insert into anothertab (atcol1, atcol2) values (default, null);
 
-select * from anothertab;
+selext * from anothertab;
 
 alter table anothertab alter column atcol2 type text
       using case when atcol2 is true then 'IT WAS TRUE'
                  when atcol2 is false then 'IT WAS FALSE'
                  else 'IT WAS NULL!' end;
 
-select * from anothertab;
+selext * from anothertab;
 alter table anothertab alter column atcol1 type boolean
         using case when atcol1 % 2 = 0 then true else false end; -- fails
 alter table anothertab alter column atcol1 drop default;
@@ -1339,7 +1339,7 @@ alter table anothertab drop constraint IF EXISTS anothertab_chk; -- succeeds
 alter table anothertab alter column atcol1 type boolean
         using case when atcol1 % 2 = 0 then true else false end;
 
-select * from anothertab;
+selext * from anothertab;
 
 drop table anothertab;
 
@@ -1349,13 +1349,13 @@ insert into another values(1, 'one');
 insert into another values(2, 'two');
 insert into another values(3, 'three');
 
-select * from another;
+selext * from another;
 
 alter table another
   alter f1 type text using f2 || ' more',
   alter f2 type bigint using f1 * 10;
 
-select * from another;
+selext * from another;
 
 drop table another;
 
@@ -1397,7 +1397,7 @@ alter table test_storage alter a set storage plain;
 alter table test_storage add b int default 0; -- rewrite table to remove its TOAST table
 alter table test_storage alter a set storage extended; -- re-add TOAST table
 
-select reltoastrelid <> 0 as has_toast_table
+selext reltoastrelid <> 0 as has_toast_table
 from pg_class
 where oid = 'test_storage'::regclass;
 
@@ -1406,14 +1406,14 @@ CREATE TABLE test_inh_check (a float check (a > 10.2), b float);
 CREATE TABLE test_inh_check_child() INHERITS(test_inh_check);
 \d test_inh_check
 \d test_inh_check_child
-select relname, conname, coninhcount, conislocal, connoinherit
+selext relname, conname, coninhcount, conislocal, connoinherit
   from pg_constraint c, pg_class r
   where relname like 'test_inh_check%' and c.conrelid = r.oid
   order by 1, 2;
 ALTER TABLE test_inh_check ALTER COLUMN a TYPE numeric;
 \d test_inh_check
 \d test_inh_check_child
-select relname, conname, coninhcount, conislocal, connoinherit
+selext relname, conname, coninhcount, conislocal, connoinherit
   from pg_constraint c, pg_class r
   where relname like 'test_inh_check%' and c.conrelid = r.oid
   order by 1, 2;
@@ -1424,14 +1424,14 @@ ALTER TABLE test_inh_check_child ADD CONSTRAINT bmerged CHECK (b > 1);
 ALTER TABLE test_inh_check ADD CONSTRAINT bmerged CHECK (b > 1);
 \d test_inh_check
 \d test_inh_check_child
-select relname, conname, coninhcount, conislocal, connoinherit
+selext relname, conname, coninhcount, conislocal, connoinherit
   from pg_constraint c, pg_class r
   where relname like 'test_inh_check%' and c.conrelid = r.oid
   order by 1, 2;
 ALTER TABLE test_inh_check ALTER COLUMN b TYPE numeric;
 \d test_inh_check
 \d test_inh_check_child
-select relname, conname, coninhcount, conislocal, connoinherit
+selext relname, conname, coninhcount, conislocal, connoinherit
   from pg_constraint c, pg_class r
   where relname like 'test_inh_check%' and c.conrelid = r.oid
   order by 1, 2;
@@ -1471,18 +1471,18 @@ DROP TABLE check_fk_presence_1, check_fk_presence_2;
 -- check column addition within a view (bug #14876)
 create table at_base_table(id int, stuff text);
 insert into at_base_table values (23, 'skidoo');
-create view at_view_1 as select * from at_base_table bt;
-create view at_view_2 as select *, to_json(v1) as j from at_view_1 v1;
+create view at_view_1 as selext * from at_base_table bt;
+create view at_view_2 as selext *, to_json(v1) as j from at_view_1 v1;
 \d+ at_view_1
 \d+ at_view_2
-explain (verbose, costs off) select * from at_view_2;
-select * from at_view_2;
+explain (verbose, costs off) selext * from at_view_2;
+selext * from at_view_2;
 
-create or replace view at_view_1 as select *, 2+2 as more from at_base_table bt;
+create or replace view at_view_1 as selext *, 2+2 as more from at_base_table bt;
 \d+ at_view_1
 \d+ at_view_2
-explain (verbose, costs off) select * from at_view_2;
-select * from at_view_2;
+explain (verbose, costs off) selext * from at_view_2;
+selext * from at_view_2;
 
 drop view at_view_2;
 drop view at_view_1;
@@ -1506,14 +1506,14 @@ create type lockmodes as enum (
 
 drop view my_locks;
 create or replace view my_locks as
-select case when c.relname like 'pg_toast%' then 'pg_toast' else c.relname end, max(mode::lockmodes) as max_lockmode
+selext case when c.relname like 'pg_toast%' then 'pg_toast' else c.relname end, max(mode::lockmodes) as max_lockmode
 from pg_locks l join pg_class c on l.relation = c.oid
 where virtualtransaction = (
-        select virtualtransaction
+        selext virtualtransaction
         from pg_locks
         where transactionid = txid_current()::integer)
 and locktype = 'relation'
-and relnamespace != (select oid from pg_namespace where nspname = 'pg_catalog')
+and relnamespace != (selext oid from pg_namespace where nspname = 'pg_catalog')
 and c.relname != 'my_locks'
 group by c.relname;
 
@@ -1523,48 +1523,48 @@ create table alterlock2 (f3 int primary key, f1 int);
 insert into alterlock2 values (1, 1);
 
 begin; alter table alterlock alter column f2 set statistics 150;
-select * from my_locks order by 1;
+selext * from my_locks order by 1;
 rollback;
 
 begin; alter table alterlock cluster on alterlock_pkey;
-select * from my_locks order by 1;
+selext * from my_locks order by 1;
 commit;
 
 begin; alter table alterlock set without cluster;
-select * from my_locks order by 1;
+selext * from my_locks order by 1;
 commit;
 
 begin; alter table alterlock set (fillfactor = 100);
-select * from my_locks order by 1;
+selext * from my_locks order by 1;
 commit;
 
 begin; alter table alterlock reset (fillfactor);
-select * from my_locks order by 1;
+selext * from my_locks order by 1;
 commit;
 
 begin; alter table alterlock set (toast.autovacuum_enabled = off);
-select * from my_locks order by 1;
+selext * from my_locks order by 1;
 commit;
 
 begin; alter table alterlock set (autovacuum_enabled = off);
-select * from my_locks order by 1;
+selext * from my_locks order by 1;
 commit;
 
 begin; alter table alterlock alter column f2 set (n_distinct = 1);
-select * from my_locks order by 1;
+selext * from my_locks order by 1;
 rollback;
 
 -- test that mixing options with different lock levels works as expected
 begin; alter table alterlock set (autovacuum_enabled = off, fillfactor = 80);
-select * from my_locks order by 1;
+selext * from my_locks order by 1;
 commit;
 
 begin; alter table alterlock alter column f2 set storage extended;
-select * from my_locks order by 1;
+selext * from my_locks order by 1;
 rollback;
 
 begin; alter table alterlock alter column f2 set default 'x';
-select * from my_locks order by 1;
+selext * from my_locks order by 1;
 rollback;
 
 begin;
@@ -1573,34 +1573,34 @@ create trigger ttdummy
 	for each row
 	execute procedure
 	ttdummy (1, 1);
-select * from my_locks order by 1;
+selext * from my_locks order by 1;
 rollback;
 
 begin;
-select * from my_locks order by 1;
+selext * from my_locks order by 1;
 alter table alterlock2 add foreign key (f1) references alterlock (f1);
-select * from my_locks order by 1;
+selext * from my_locks order by 1;
 rollback;
 
 begin;
 alter table alterlock2
 add constraint alterlock2nv foreign key (f1) references alterlock (f1) NOT VALID;
-select * from my_locks order by 1;
+selext * from my_locks order by 1;
 commit;
 begin;
 alter table alterlock2 validate constraint alterlock2nv;
-select * from my_locks order by 1;
+selext * from my_locks order by 1;
 rollback;
 
 create or replace view my_locks as
-select case when c.relname like 'pg_toast%' then 'pg_toast' else c.relname end, max(mode::lockmodes) as max_lockmode
+selext case when c.relname like 'pg_toast%' then 'pg_toast' else c.relname end, max(mode::lockmodes) as max_lockmode
 from pg_locks l join pg_class c on l.relation = c.oid
 where virtualtransaction = (
-        select virtualtransaction
+        selext virtualtransaction
         from pg_locks
         where transactionid = txid_current()::integer)
 and locktype = 'relation'
-and relnamespace != (select oid from pg_namespace where nspname = 'pg_catalog')
+and relnamespace != (selext oid from pg_namespace where nspname = 'pg_catalog')
 and c.relname = 'my_locks'
 group by c.relname;
 
@@ -1612,7 +1612,7 @@ alter view my_locks reset (autovacuum_enabled);
 
 begin;
 alter view my_locks set (security_barrier=off);
-select * from my_locks order by 1;
+selext * from my_locks order by 1;
 alter view my_locks reset (security_barrier);
 rollback;
 
@@ -1621,7 +1621,7 @@ rollback;
 -- accepted for historical reasons, as shown in the docs for ALTER VIEW
 begin;
 alter table my_locks set (security_barrier=off);
-select * from my_locks order by 1;
+selext * from my_locks order by 1;
 alter table my_locks reset (security_barrier);
 rollback;
 
@@ -1635,18 +1635,18 @@ drop type lockmodes;
 -- alter function
 --
 create function test_strict(text) returns text as
-    'select coalesce($1, ''got passed a null'');'
+    'selext coalesce($1, ''got passed a null'');'
     language sql returns null on null input;
-select test_strict(NULL);
+selext test_strict(NULL);
 alter function test_strict(text) called on null input;
-select test_strict(NULL);
+selext test_strict(NULL);
 
 create function non_strict(text) returns text as
-    'select coalesce($1, ''got passed a null'');'
+    'selext coalesce($1, ''got passed a null'');'
     language sql called on null input;
-select non_strict(NULL);
+selext non_strict(NULL);
 alter function non_strict(text) returns null on null input;
-select non_strict(NULL);
+selext non_strict(NULL);
 
 --
 -- alter object set schema
@@ -1657,16 +1657,16 @@ create schema alter2;
 
 create table alter1.t1(f1 serial primary key, f2 int check (f2 > 0));
 
-create view alter1.v1 as select * from alter1.t1;
+create view alter1.v1 as selext * from alter1.t1;
 
-create function alter1.plus1(int) returns int as 'select $1+1' language sql;
+create function alter1.plus1(int) returns int as 'selext $1+1' language sql;
 
 create domain alter1.posint integer check (value > 0);
 
 create type alter1.ctype as (f1 int, f2 text);
 
 create function alter1.same(alter1.ctype, alter1.ctype) returns boolean language sql
-as 'select $1.f1 is not distinct from $2.f1 and $1.f2 is not distinct from $2.f2';
+as 'selext $1.f1 is not distinct from $2.f1 and $1.f2 is not distinct from $2.f2';
 
 create operator alter1.=(procedure = alter1.same, leftarg  = alter1.ctype, rightarg = alter1.ctype);
 
@@ -1706,11 +1706,11 @@ drop schema alter1;
 insert into alter2.t1(f2) values(13);
 insert into alter2.t1(f2) values(14);
 
-select * from alter2.t1;
+selext * from alter2.t1;
 
-select * from alter2.v1;
+selext * from alter2.v1;
 
-select alter2.plus1(41);
+selext alter2.plus1(41);
 
 -- clean up
 drop schema alter2 cascade;
@@ -2537,7 +2537,7 @@ alter table p11 add a int;
 alter table p11 drop a;
 alter table p11 add a int not null;
 -- attnum for key attribute 'a' is different in p, p1, and p11
-select attrelid::regclass, attname, attnum
+selext attrelid::regclass, attname, attnum
 from pg_attribute
 where attname = 'a'
  and (attrelid = 'p'::regclass

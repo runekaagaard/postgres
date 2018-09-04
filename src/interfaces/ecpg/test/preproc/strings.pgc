@@ -12,7 +12,7 @@ int main(void)
 
   exec sql set standard_conforming_strings to on;
 
-  exec sql select 'abcdef',
+  exec sql selext 'abcdef',
                   N'abcdef' AS foo,
                   E'abc\bdef' AS "foo",
                   U&'d\0061t\0061' AS U&"foo",

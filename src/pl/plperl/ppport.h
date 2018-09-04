@@ -1118,7 +1118,7 @@ ck_return|||
 ck_rfun|||
 ck_rvconst|||
 ck_sassign|||
-ck_select|||
+ck_selext|||
 ck_shift|||
 ck_sort|||
 ck_spair|||

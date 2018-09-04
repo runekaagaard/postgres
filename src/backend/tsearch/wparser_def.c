@@ -2046,7 +2046,7 @@ mark_fragment(HeadlineParsedText *prs, int highlight, int startpos, int endpos)
 	for (i = startpos; i <= endpos; i++)
 	{
 		if (prs->words[i].item)
-			prs->words[i].selected = 1;
+			prs->words[i].selexted = 1;
 		if (highlight == 0)
 		{
 			if (HLIDREPLACE(prs->words[i].type))
@@ -2417,7 +2417,7 @@ mark_hl_words(HeadlineParsedText *prs, TSQuery query, int highlight,
 	for (i = bestb; i <= beste; i++)
 	{
 		if (prs->words[i].item)
-			prs->words[i].selected = 1;
+			prs->words[i].selexted = 1;
 		if (highlight == 0)
 		{
 			if (HLIDREPLACE(prs->words[i].type))

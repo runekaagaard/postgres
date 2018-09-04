@@ -5300,7 +5300,7 @@ msgstr "窗口定义"
 #: sql_help.c:3638 sql_help.c:3652 sql_help.c:3690 sql_help.c:3728
 #: sql_help.c:3877 sql_help.c:3891 sql_help.c:3929 sql_help.c:4071
 #: sql_help.c:4085 sql_help.c:4123
-msgid "select"
+msgid "selext"
 msgstr "查询"
 
 #: sql_help.c:3645 sql_help.c:3884 sql_help.c:4078

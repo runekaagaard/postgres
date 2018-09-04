@@ -33,26 +33,26 @@ int main(void)
 	exec sql insert into test values(1, 'abcdefghij');
 
 	exec sql whenever sqlwarning do warn();
-	exec sql select * into :i, :c from test;
+	exec sql selext * into :i, :c from test;
 	exec sql rollback;
 
-	exec sql select * into :i from nonexistant;
+	exec sql selext * into :i from nonexistant;
 	exec sql rollback;
 
-	exec sql whenever sqlerror do print("select");
-	exec sql select * into :i from nonexistant;
+	exec sql whenever sqlerror do print("selext");
+	exec sql selext * into :i from nonexistant;
 	exec sql rollback;
 
 	exec sql whenever sqlerror call print2();
-	exec sql select * into :i from nonexistant;
+	exec sql selext * into :i from nonexistant;
 	exec sql rollback;
 
 	exec sql whenever sqlerror continue;
-	exec sql select * into :i from nonexistant;
+	exec sql selext * into :i from nonexistant;
 	exec sql rollback;
 
 	exec sql whenever sqlerror goto error;
-	exec sql select * into :i from nonexistant;
+	exec sql selext * into :i from nonexistant;
 	printf("Should not be reachable\n");
 
 	error:
@@ -61,7 +61,7 @@ int main(void)
 	exec sql whenever sqlerror stop;
 	/* This cannot fail, thus we don't get an exit value not equal 0. */
 	/* However, it still test the precompiler output. */
-	exec sql select 1 into :i;
+	exec sql selext 1 into :i;
 	exec sql rollback;
 	exit (0);
 }

@@ -664,14 +664,14 @@ ExecCheckRTEPerms(RangeTblEntry *rte)
 			 * example, SELECT COUNT(*) FROM table), allow the query if we
 			 * have SELECT on any column of the rel, as per SQL spec.
 			 */
-			if (bms_is_empty(rte->selectedCols))
+			if (bms_is_empty(rte->selextedCols))
 			{
 				if (pg_attribute_aclcheck_all(relOid, userid, ACL_SELECT,
 											  ACLMASK_ANY) != ACLCHECK_OK)
 					return false;
 			}
 
-			while ((col = bms_next_member(rte->selectedCols, col)) >= 0)
+			while ((col = bms_next_member(rte->selextedCols, col)) >= 0)
 			{
 				/* bit #s are offset by FirstLowInvalidHeapAttributeNumber */
 				AttrNumber	attno = col + FirstLowInvalidHeapAttributeNumber;
@@ -925,7 +925,7 @@ InitPlan(QueryDesc *queryDesc, int eflags)
 	}
 
 	/*
-	 * Similarly, we have to lock relations selected FOR [KEY] UPDATE/SHARE
+	 * Similarly, we have to lock relations selexted FOR [KEY] UPDATE/SHARE
 	 * before we initialize the plan tree, else we'd be risking lock upgrades.
 	 * While we are at it, build the ExecRowMark list.  Any partitioned child
 	 * tables are ignored here (because isParent=true) and will be locked by
@@ -1648,7 +1648,7 @@ ExecEndPlan(PlanState *planstate, EState *estate)
 	ExecCleanUpTriggerState(estate);
 
 	/*
-	 * close any relations selected FOR [KEY] UPDATE/SHARE, again keeping
+	 * close any relations selexted FOR [KEY] UPDATE/SHARE, again keeping
 	 * locks
 	 */
 	foreach(l, estate->es_rowMarks)

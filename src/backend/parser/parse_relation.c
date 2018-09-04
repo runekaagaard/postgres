@@ -917,7 +917,7 @@ markRTEForSelectPriv(ParseState *pstate, RangeTblEntry *rte,
 		/* Make sure the rel as a whole is marked for SELECT access */
 		rte->requiredPerms |= ACL_SELECT;
 		/* Must offset the attnum to fit in a bitmapset */
-		rte->selectedCols = bms_add_member(rte->selectedCols,
+		rte->selextedCols = bms_add_member(rte->selextedCols,
 										   col - FirstLowInvalidHeapAttributeNumber);
 	}
 	else if (rte->rtekind == RTE_JOIN)
@@ -976,7 +976,7 @@ markRTEForSelectPriv(ParseState *pstate, RangeTblEntry *rte,
 			 *
 			 * The aliasvar could be either a Var or a COALESCE expression,
 			 * but in the latter case we should already have marked the two
-			 * referent variables as being selected, due to their use in the
+			 * referent variables as being selexted, due to their use in the
 			 * JOIN clause.  So we need only be concerned with the Var case.
 			 * But we do need to drill down through implicit coercions.
 			 */
@@ -1244,7 +1244,7 @@ addRangeTableEntry(ParseState *pstate,
 
 	rte->requiredPerms = ACL_SELECT;
 	rte->checkAsUser = InvalidOid;	/* not set-uid by default, either */
-	rte->selectedCols = NULL;
+	rte->selextedCols = NULL;
 	rte->insertedCols = NULL;
 	rte->updatedCols = NULL;
 
@@ -1299,7 +1299,7 @@ addRangeTableEntryForRelation(ParseState *pstate,
 
 	rte->requiredPerms = ACL_SELECT;
 	rte->checkAsUser = InvalidOid;	/* not set-uid by default, either */
-	rte->selectedCols = NULL;
+	rte->selextedCols = NULL;
 	rte->insertedCols = NULL;
 	rte->updatedCols = NULL;
 
@@ -1379,7 +1379,7 @@ addRangeTableEntryForSubquery(ParseState *pstate,
 
 	rte->requiredPerms = 0;
 	rte->checkAsUser = InvalidOid;
-	rte->selectedCols = NULL;
+	rte->selextedCols = NULL;
 	rte->insertedCols = NULL;
 	rte->updatedCols = NULL;
 
@@ -1636,7 +1636,7 @@ addRangeTableEntryForFunction(ParseState *pstate,
 
 	rte->requiredPerms = 0;
 	rte->checkAsUser = InvalidOid;
-	rte->selectedCols = NULL;
+	rte->selextedCols = NULL;
 	rte->insertedCols = NULL;
 	rte->updatedCols = NULL;
 
@@ -1699,7 +1699,7 @@ addRangeTableEntryForTableFunc(ParseState *pstate,
 
 	rte->requiredPerms = 0;
 	rte->checkAsUser = InvalidOid;
-	rte->selectedCols = NULL;
+	rte->selextedCols = NULL;
 	rte->insertedCols = NULL;
 	rte->updatedCols = NULL;
 
@@ -1777,7 +1777,7 @@ addRangeTableEntryForValues(ParseState *pstate,
 
 	rte->requiredPerms = 0;
 	rte->checkAsUser = InvalidOid;
-	rte->selectedCols = NULL;
+	rte->selextedCols = NULL;
 	rte->insertedCols = NULL;
 	rte->updatedCols = NULL;
 
@@ -1847,7 +1847,7 @@ addRangeTableEntryForJoin(ParseState *pstate,
 
 	rte->requiredPerms = 0;
 	rte->checkAsUser = InvalidOid;
-	rte->selectedCols = NULL;
+	rte->selextedCols = NULL;
 	rte->insertedCols = NULL;
 	rte->updatedCols = NULL;
 
@@ -1949,7 +1949,7 @@ addRangeTableEntryForCTE(ParseState *pstate,
 
 	rte->requiredPerms = 0;
 	rte->checkAsUser = InvalidOid;
-	rte->selectedCols = NULL;
+	rte->selextedCols = NULL;
 	rte->insertedCols = NULL;
 	rte->updatedCols = NULL;
 
@@ -2056,7 +2056,7 @@ addRangeTableEntryForENR(ParseState *pstate,
 
 	rte->requiredPerms = 0;
 	rte->checkAsUser = InvalidOid;
-	rte->selectedCols = NULL;
+	rte->selextedCols = NULL;
 
 	/*
 	 * Add completed RTE to pstate's range table list, but not to join list
@@ -2069,7 +2069,7 @@ addRangeTableEntryForENR(ParseState *pstate,
 
 
 /*
- * Has the specified refname been selected FOR UPDATE/FOR SHARE?
+ * Has the specified refname been selexted FOR UPDATE/FOR SHARE?
  *
  * This is used when we have not yet done transformLockingClause, but need
  * to know the correct lock to take during initial opening of relations.
@@ -2661,7 +2661,7 @@ expandRelAttrs(ParseState *pstate, RangeTblEntry *rte,
  *		Get an attribute name from a RangeTblEntry
  *
  * This is unlike get_attname() because we use aliases if available.
- * In particular, it will work on an RTE for a subselect or join, whereas
+ * In particular, it will work on an RTE for a subselext or join, whereas
  * get_attname() only works on real relations.
  *
  * "*" is returned if the given attnum is InvalidAttrNumber --- this case
@@ -2743,7 +2743,7 @@ get_rte_attribute_type(RangeTblEntry *rte, AttrNumber attnum,
 			break;
 		case RTE_SUBQUERY:
 			{
-				/* Subselect RTE --- get type info from subselect's tlist */
+				/* Subselext RTE --- get type info from subselext's tlist */
 				TargetEntry *te = get_tle_by_resno(rte->subquery->targetList,
 												   attnum);
 
@@ -2927,7 +2927,7 @@ get_rte_attribute_is_dropped(RangeTblEntry *rte, AttrNumber attnum)
 		case RTE_CTE:
 
 			/*
-			 * Subselect, Table Functions, Values, CTE RTEs never have dropped
+			 * Subselext, Table Functions, Values, CTE RTEs never have dropped
 			 * columns
 			 */
 			result = false;
@@ -3048,7 +3048,7 @@ get_tle_by_resno(List *tlist, AttrNumber resno)
 /*
  * Given a Query and rangetable index, return relation's RowMarkClause if any
  *
- * Returns NULL if relation is not selected FOR UPDATE/SHARE
+ * Returns NULL if relation is not selexted FOR UPDATE/SHARE
  */
 RowMarkClause *
 get_parse_rowmark(Query *qry, Index rtindex)

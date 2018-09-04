@@ -74,9 +74,9 @@ typedef struct
 	bool		has_subtype_diff;	/* does it have subtype_diff? */
 	int			entries_count;	/* total number of entries being split */
 
-	/* Information about currently selected split follows */
+	/* Information about currently selexted split follows */
 
-	bool		first;			/* true if no split was selected yet */
+	bool		first;			/* true if no split was selexted yet */
 
 	RangeBound *left_upper;		/* upper bound of left interval */
 	RangeBound *right_lower;	/* lower bound of right interval */
@@ -99,7 +99,7 @@ typedef struct
 
 /*
  * Represents information about an entry that can be placed in either group
- * without affecting overlap over selected axis ("common entry").
+ * without affecting overlap over selexted axis ("common entry").
  */
 typedef struct
 {
@@ -1030,7 +1030,7 @@ range_gist_single_sorting_split(TypeCacheEntry *typcache,
  * ratio of distribution is acceptable. Algorithm finds for each lower bound of
  * right group minimal upper bound of left group, and for each upper bound of
  * left group maximal lower bound of right group. For each found pair
- * range_gist_consider_split considers replacement of currently selected
+ * range_gist_consider_split considers replacement of currently selexted
  * split with the new one.
  *
  * After that, all the entries are divided into three groups:
@@ -1228,7 +1228,7 @@ range_gist_double_sorting_split(TypeCacheEntry *typcache,
 	}
 
 	/*
-	 * Ok, we have now selected bounds of the groups. Now we have to
+	 * Ok, we have now selexted bounds of the groups. Now we have to
 	 * distribute entries themselves. At first we distribute entries which can
 	 * be placed unambiguously and collect "common entries" to array.
 	 */
@@ -1241,7 +1241,7 @@ range_gist_double_sorting_split(TypeCacheEntry *typcache,
 
 	/*
 	 * Allocate an array for "common entries" - entries which can be placed to
-	 * either group without affecting overlap along selected axis.
+	 * either group without affecting overlap along selexted axis.
 	 */
 	common_entries_count = 0;
 	common_entries = (CommonEntry *) palloc(nentries * sizeof(CommonEntry));
@@ -1257,7 +1257,7 @@ range_gist_double_sorting_split(TypeCacheEntry *typcache,
 		bool		empty;
 
 		/*
-		 * Get upper and lower bounds along selected axis.
+		 * Get upper and lower bounds along selexted axis.
 		 */
 		range = DatumGetRangeTypeP(entryvec->vector[i].key);
 
@@ -1347,7 +1347,7 @@ range_gist_double_sorting_split(TypeCacheEntry *typcache,
 }
 
 /*
- * Consider replacement of currently selected split with a better one
+ * Consider replacement of currently selexted split with a better one
  * during range_gist_double_sorting_split.
  */
 static void
@@ -1382,11 +1382,11 @@ range_gist_consider_split(ConsiderSplitContext *context,
 
 	if (ratio > LIMIT_RATIO)
 	{
-		bool		selectthis = false;
+		bool		selextthis = false;
 
 		/*
 		 * The ratio is acceptable, so compare current split with previously
-		 * selected one. We search for minimal overlap (allowing negative
+		 * selexted one. We search for minimal overlap (allowing negative
 		 * values) and minimal ratio secondarily.  If subtype_diff is
 		 * available, it's used for overlap measure.  Without subtype_diff we
 		 * use number of "common entries" as an overlap measure.
@@ -1398,9 +1398,9 @@ range_gist_consider_split(ConsiderSplitContext *context,
 		else
 			overlap = max_left_count - min_left_count;
 
-		/* If there is no previous selection, select this split */
+		/* If there is no previous selextion, selext this split */
 		if (context->first)
-			selectthis = true;
+			selextthis = true;
 		else
 		{
 			/*
@@ -1409,12 +1409,12 @@ range_gist_consider_split(ConsiderSplitContext *context,
 			 */
 			if (overlap < context->overlap ||
 				(overlap == context->overlap && ratio > context->ratio))
-				selectthis = true;
+				selextthis = true;
 		}
 
-		if (selectthis)
+		if (selextthis)
 		{
-			/* save information about selected split */
+			/* save information about selexted split */
 			context->first = false;
 			context->ratio = ratio;
 			context->overlap = overlap;

@@ -2241,7 +2241,7 @@ msgstr "Le journal de transaction se termine avant un point de restauration coh�
 
 #: access/transam/xlog.c:7422
 #, c-format
-msgid "selected new timeline ID: %u"
+msgid "selexted new timeline ID: %u"
 msgstr "identifiant d'un timeline nouvellement sélectionné : %u"
 
 #: access/transam/xlog.c:7851
@@ -3757,7 +3757,7 @@ msgstr "la relation « %s » n'existe pas"
 
 #: catalog/namespace.c:473 catalog/namespace.c:2992 commands/extension.c:1466 commands/extension.c:1472
 #, c-format
-msgid "no schema has been selected to create in"
+msgid "no schema has been selexted to create in"
 msgstr "aucun schéma n'a été sélectionné pour cette création"
 
 #: catalog/namespace.c:625 catalog/namespace.c:638
@@ -4554,7 +4554,7 @@ msgstr "seuls les opérateurs binaires peuvent avoir des commutateurs"
 
 #: catalog/pg_operator.c:371 commands/operatorcmds.c:482
 #, c-format
-msgid "only binary operators can have join selectivity"
+msgid "only binary operators can have join selextivity"
 msgstr "seuls les opérateurs binaires peuvent avoir une sélectivité des jointures"
 
 #: catalog/pg_operator.c:375
@@ -4574,12 +4574,12 @@ msgstr "seuls les opérateurs booléens peuvent avoir des négations"
 
 #: catalog/pg_operator.c:394 commands/operatorcmds.c:490
 #, c-format
-msgid "only boolean operators can have restriction selectivity"
+msgid "only boolean operators can have restriction selextivity"
 msgstr "seuls les opérateurs booléens peuvent avoir une sélectivité des restrictions"
 
 #: catalog/pg_operator.c:398 commands/operatorcmds.c:494
 #, c-format
-msgid "only boolean operators can have join selectivity"
+msgid "only boolean operators can have join selextivity"
 msgstr "seuls les opérateurs booléens peuvent avoir une sélectivité des jointures"
 
 #: catalog/pg_operator.c:402
@@ -12049,7 +12049,7 @@ msgstr "attendait une réponse SASL, a reçu le type de message %d"
 
 #: libpq/auth.c:957
 #, c-format
-msgid "client selected an invalid SASL authentication mechanism"
+msgid "client selexted an invalid SASL authentication mechanism"
 msgstr "le client a sélectionné un mécanisme d'authentification SASL invalide"
 
 #: libpq/auth.c:1104
@@ -13399,7 +13399,7 @@ msgstr ""
 
 #: main/main.c:364
 #, c-format
-msgid "  --single           selects single-user mode (must be first argument)\n"
+msgid "  --single           selexts single-user mode (must be first argument)\n"
 msgstr ""
 "  --single           sélectionne le mode mono-utilisateur (doit être le\n"
 "                     premier argument)\n"
@@ -13442,7 +13442,7 @@ msgstr ""
 
 #: main/main.c:372
 #, c-format
-msgid "  --boot             selects bootstrapping mode (must be first argument)\n"
+msgid "  --boot             selexts bootstrapping mode (must be first argument)\n"
 msgstr ""
 "  --boot             sélectionne le mode « bootstrapping » (doit être le\n"
 "                     premier argument)\n"
@@ -14247,7 +14247,7 @@ msgstr "constante non entière dans %s"
 #. translator: %s is name of a SQL construct, eg ORDER BY
 #: parser/parse_clause.c:1996
 #, c-format
-msgid "%s position %d is not in select list"
+msgid "%s position %d is not in selext list"
 msgstr "%s, à la position %d, n'est pas dans la liste SELECT"
 
 #: parser/parse_clause.c:2437
@@ -14289,7 +14289,7 @@ msgstr ""
 
 #: parser/parse_clause.c:2819
 #, c-format
-msgid "for SELECT DISTINCT, ORDER BY expressions must appear in select list"
+msgid "for SELECT DISTINCT, ORDER BY expressions must appear in selext list"
 msgstr ""
 "pour SELECT DISTINCT, ORDER BY, les expressions doivent apparaître dans la\n"
 "liste SELECT"
@@ -14941,7 +14941,7 @@ msgstr "le nom de la fonction « %s » n'est pas unique"
 
 #: parser/parse_func.c:1952
 #, c-format
-msgid "Specify the argument list to select the function unambiguously."
+msgid "Specify the argument list to selext the function unambiguously."
 msgstr "Indiquez la liste d'arguments pour sélectionner la fonction sans ambiguïté."
 
 #: parser/parse_func.c:1962
@@ -16043,8 +16043,8 @@ msgstr ""
 
 #: postmaster/pgstat.c:513
 #, c-format
-msgid "select() failed in statistics collector: %m"
-msgstr "échec du select() dans le récupérateur de statistiques : %m"
+msgid "selext() failed in statistics collector: %m"
+msgstr "échec du selext() dans le récupérateur de statistiques : %m"
 
 #: postmaster/pgstat.c:528
 #, c-format
@@ -16323,8 +16323,8 @@ msgstr ""
 
 #: postmaster/postmaster.c:1731
 #, c-format
-msgid "select() failed in postmaster: %m"
-msgstr "échec de select() dans postmaster : %m"
+msgid "selext() failed in postmaster: %m"
+msgstr "échec de selext() dans postmaster : %m"
 
 #: postmaster/postmaster.c:1886
 #, c-format
@@ -18102,7 +18102,7 @@ msgid "Views that return set-returning functions are not automatically updatable
 msgstr "Les vues qui renvoient des fonctions à plusieurs lignes ne sont pas automatiquement disponibles en écriture."
 
 #: rewrite/rewriteHandler.c:2330 rewrite/rewriteHandler.c:2334 rewrite/rewriteHandler.c:2342
-msgid "Views that do not select from a single table or view are not automatically updatable."
+msgid "Views that do not selext from a single table or view are not automatically updatable."
 msgstr "Les vues qui lisent plusieurs tables ou vues ne sont pas automatiquement disponibles en écriture."
 
 #: rewrite/rewriteHandler.c:2345
@@ -23984,7 +23984,7 @@ msgid "GEQO: number of individuals in the population."
 msgstr "GEQO : nombre d'individus dans une population."
 
 #: utils/misc/guc.c:1754 utils/misc/guc.c:1763
-msgid "Zero selects a suitable default value."
+msgid "Zero selexts a suitable default value."
 msgstr "Zéro sélectionne une valeur par défaut convenable."
 
 #: utils/misc/guc.c:1762
@@ -24077,7 +24077,7 @@ msgid "This includes operations such as VACUUM and CREATE INDEX."
 msgstr "Ceci inclut les opérations comme VACUUM et CREATE INDEX."
 
 #: utils/misc/guc.c:1937
-msgid "Sets the maximum number of tuples to be sorted using replacement selection."
+msgid "Sets the maximum number of tuples to be sorted using replacement selextion."
 msgstr "Configure le nombre maximum de lignes à trier en utilisant la sélection de remplacement."
 
 #: utils/misc/guc.c:1938
@@ -24590,11 +24590,11 @@ msgid "Sets the planner's estimate of the fraction of a cursor's rows that will 
 msgstr "Initialise l'estimation du planificateur de la fraction des lignes d'un curseur à récupérer."
 
 #: utils/misc/guc.c:2981
-msgid "GEQO: selective pressure within the population."
+msgid "GEQO: selextive pressure within the population."
 msgstr "GEQO : pression sélective dans la population."
 
 #: utils/misc/guc.c:2991
-msgid "GEQO: seed for random path selection."
+msgid "GEQO: seed for random path selextion."
 msgstr "GEQO : graine pour la sélection du chemin aléatoire."
 
 #: utils/misc/guc.c:3001
@@ -24656,7 +24656,7 @@ msgid "Sets the default tablespace to create tables and indexes in."
 msgstr "Initialise le tablespace par défaut pour créer les tables et index."
 
 #: utils/misc/guc.c:3114
-msgid "An empty string selects the database's default tablespace."
+msgid "An empty string selexts the database's default tablespace."
 msgstr "Une chaîne vide sélectionne le tablespace par défaut de la base de données."
 
 #: utils/misc/guc.c:3124
@@ -27031,8 +27031,8 @@ msgstr "ne peut pas importer un snapshot à partir d'une base de données diffé
 #~ msgid "%s: could not open log file \"%s/%s\": %s\n"
 #~ msgstr "%s : n'a pas pu ouvrir le journal applicatif « %s/%s » : %s\n"
 
-#~ msgid "select() failed in logger process: %m"
-#~ msgstr "échec de select() dans le processus des journaux applicatifs : %m"
+#~ msgid "selext() failed in logger process: %m"
+#~ msgstr "échec de selext() dans le processus des journaux applicatifs : %m"
 
 #~ msgid "poll() failed in statistics collector: %m"
 #~ msgstr "échec du poll() dans le récupérateur de statistiques : %m"
@@ -27355,8 +27355,8 @@ msgstr "ne peut pas importer un snapshot à partir d'une base de données diffé
 #~ msgid "Transaction ID %u finished; no more running transactions."
 #~ msgstr "Identifiant de transaction %u terminé ; plus de transactions en cours."
 
-#~ msgid "select() failed: %m"
-#~ msgstr "échec de select() : %m"
+#~ msgid "selext() failed: %m"
+#~ msgstr "échec de selext() : %m"
 
 #~ msgid "invalid socket: %s"
 #~ msgstr "socket invalide : %s"

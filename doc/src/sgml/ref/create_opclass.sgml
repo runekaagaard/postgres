@@ -40,7 +40,7 @@ CREATE OPERATOR CLASS <replaceable class="parameter">name</replaceable> [ DEFAUL
    particular roles or <quote>strategies</quote> for this data type and this
    index method.  The operator class also specifies the support functions to
    be used by
-   the index method when the operator class is selected for an
+   the index method when the operator class is selexted for an
    index column.  All the operators and functions used by an operator
    class must be defined before the operator class can be created.
   </para>

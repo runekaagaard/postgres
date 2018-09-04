@@ -272,7 +272,7 @@ COPY weather FROM '/home/user/weather.txt';
   </sect1>
 
 
-  <sect1 id="tutorial-select">
+  <sect1 id="tutorial-selext">
    <title>Querying a Table</title>
 
    <para>
@@ -282,7 +282,7 @@ COPY weather FROM '/home/user/weather.txt';
     To retrieve data from a table, the table is
     <firstterm>queried</firstterm>.  An <acronym>SQL</acronym>
     <command>SELECT</command> statement is used to do this.  The
-    statement is divided into a select list (the part that lists the
+    statement is divided into a selext list (the part that lists the
     columns to be returned), a table list (the part that lists the
     tables from which to retrieve the data), and an optional
     qualification (the part that specifies any restrictions).  For
@@ -318,7 +318,7 @@ SELECT city, temp_lo, temp_hi, prcp, date FROM weather;
 
    <para>
     You can write expressions, not just simple column references, in the
-    select list.  For example, you can do:
+    selext list.  For example, you can do:
 <programlisting>
 SELECT city, (temp_hi+temp_lo)/2 AS temp_avg, date FROM weather;
 </programlisting>
@@ -449,7 +449,7 @@ SELECT DISTINCT city
     associated city.  To do that, we need to compare the <structfield>city</structfield>
     column of each row of the <structname>weather</structname> table with the
     <structfield>name</structfield> column of all rows in the <structname>cities</structname>
-    table, and select the pairs of rows where these values match.
+    table, and selext the pairs of rows where these values match.
     <note>
      <para>
       This  is only a conceptual model.  The join is usually performed
@@ -772,10 +772,10 @@ SELECT city, max(temp_lo)
     It is important to understand the interaction between aggregates and
     <acronym>SQL</acronym>'s <literal>WHERE</literal> and <literal>HAVING</literal> clauses.
     The fundamental difference between <literal>WHERE</literal> and
-    <literal>HAVING</literal> is this: <literal>WHERE</literal> selects
+    <literal>HAVING</literal> is this: <literal>WHERE</literal> selexts
     input rows before groups and aggregates are computed (thus, it controls
     which rows go into the aggregate computation), whereas
-    <literal>HAVING</literal> selects group rows after groups and
+    <literal>HAVING</literal> selexts group rows after groups and
     aggregates are computed.  Thus, the
     <literal>WHERE</literal> clause must not contain aggregate functions;
     it makes no sense to try to use an aggregate to determine which rows

@@ -419,8 +419,8 @@ msgstr "n'a pas pu écrire dans le canal de communication: %s\n"
 
 #: parallel.c:1635
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "échec de select() : %s\n"
+msgid "selext() failed: %s\n"
+msgstr "échec de selext() : %s\n"
 
 #: parallel.c:1760
 #, c-format
@@ -2951,7 +2951,7 @@ msgstr ""
 #, c-format
 msgid ""
 "  -L, --use-list=FILENAME      use table of contents from this file for\n"
-"                               selecting/ordering output\n"
+"                               selexting/ordering output\n"
 msgstr ""
 "  -L, --use-list=NOMFICHIER    utilise la table des matières à partir\n"
 "                               de ce fichier pour sélectionner/trier\n"
@@ -3078,7 +3078,7 @@ msgid ""
 "\n"
 "The options -I, -n, -P, -t, -T, and --section can be combined and "
 "specified\n"
-"multiple times to select multiple objects.\n"
+"multiple times to selext multiple objects.\n"
 msgstr ""
 "\n"
 "Les options -I, -n, -P, -t, -T et --section peuvent être combinées et "
@@ -3125,7 +3125,7 @@ msgstr ""
 #~ msgstr "erreur lors de la sauvegarde\n"
 
 #~ msgid ""
-#~ "server version must be at least 7.3 to use schema selection switches\n"
+#~ "server version must be at least 7.3 to use schema selextion switches\n"
 #~ msgstr ""
 #~ "le serveur doit être de version 7.3 ou supérieure pour utiliser les "
 #~ "options\n"

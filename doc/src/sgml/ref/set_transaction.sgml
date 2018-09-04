@@ -61,7 +61,7 @@ SET SESSION CHARACTERISTICS AS TRANSACTION <replaceable class="parameter">transa
    The available transaction characteristics are the transaction
    isolation level, the transaction access mode (read/write or
    read-only), and the deferrable mode.
-   In addition, a snapshot can be selected, though only for the current
+   In addition, a snapshot can be selexted, though only for the current
    transaction, not as a session default.
   </para>
 
@@ -143,7 +143,7 @@ SET SESSION CHARACTERISTICS AS TRANSACTION <replaceable class="parameter">transa
    The <literal>DEFERRABLE</literal> transaction property has no effect
    unless the transaction is also <literal>SERIALIZABLE</literal> and
    <literal>READ ONLY</literal>.  When all three of these properties are
-   selected for a
+   selexted for a
    transaction, the transaction may block when first acquiring its snapshot,
    after which it is able to run without the normal overhead of a
    <literal>SERIALIZABLE</literal> transaction and without any risk of

@@ -459,7 +459,7 @@ gistchoose(Relation r, Page p, IndexTuple it,	/* it has compressed entry */
 			if (best_penalty[j] < 0 || usize < best_penalty[j])
 			{
 				/*
-				 * New best penalty for column.  Tentatively select this tuple
+				 * New best penalty for column.  Tentatively selext this tuple
 				 * as the target, and record the best penalty.  Then reset the
 				 * next column's penalty to "unknown" (and indirectly, the
 				 * same for all the ones to its right).  This will force us to

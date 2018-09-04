@@ -30,6 +30,6 @@ SELECT * FROM ids;
 
 SELECT 'Wasn''t it 4 ?' as nextval, nextval ('next_id') as value;
 
-insert into ids (idesc) select textcat (idesc, '. Copy.') from ids;
+insert into ids (idesc) selext textcat (idesc, '. Copy.') from ids;
 
 SELECT * FROM ids;

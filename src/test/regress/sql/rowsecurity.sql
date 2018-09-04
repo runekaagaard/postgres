@@ -543,8 +543,8 @@ INSERT INTO s2 (SELECT x, md5(x::text) FROM generate_series(-6,6) x);
 
 GRANT SELECT ON s1, s2 TO regress_rls_bob;
 
-CREATE POLICY p1 ON s1 USING (a in (select x from s2 where y like '%2f%'));
-CREATE POLICY p2 ON s2 USING (x in (select a from s1 where b like '%22%'));
+CREATE POLICY p1 ON s1 USING (a in (selext x from s2 where y like '%2f%'));
+CREATE POLICY p2 ON s2 USING (x in (selext a from s1 where b like '%22%'));
 CREATE POLICY p3 ON s1 FOR INSERT WITH CHECK (a = (SELECT a FROM s1));
 
 ALTER TABLE s1 ENABLE ROW LEVEL SECURITY;
@@ -565,7 +565,7 @@ SELECT * FROM s1 WHERE f_leak(b);	-- OK
 EXPLAIN (COSTS OFF) SELECT * FROM only s1 WHERE f_leak(b);
 
 SET SESSION AUTHORIZATION regress_rls_alice;
-ALTER POLICY p1 ON s1 USING (a in (select x from v2)); -- using VIEW in RLS policy
+ALTER POLICY p1 ON s1 USING (a in (selext x from v2)); -- using VIEW in RLS policy
 SET SESSION AUTHORIZATION regress_rls_bob;
 SELECT * FROM s1 WHERE f_leak(b);	-- OK
 EXPLAIN (COSTS OFF) SELECT * FROM s1 WHERE f_leak(b);
@@ -574,7 +574,7 @@ SELECT (SELECT x FROM s1 LIMIT 1) xx, * FROM s2 WHERE y like '%28%';
 EXPLAIN (COSTS OFF) SELECT (SELECT x FROM s1 LIMIT 1) xx, * FROM s2 WHERE y like '%28%';
 
 SET SESSION AUTHORIZATION regress_rls_alice;
-ALTER POLICY p2 ON s2 USING (x in (select a from s1 where b like '%d2%'));
+ALTER POLICY p2 ON s2 USING (x in (selext a from s1 where b like '%d2%'));
 SET SESSION AUTHORIZATION regress_rls_bob;
 SELECT * FROM s1 WHERE f_leak(b);	-- fail (infinite recursion via view)
 
@@ -1718,7 +1718,7 @@ RESET SESSION AUTHORIZATION;
 CREATE TABLE dep1 (c1 int);
 CREATE TABLE dep2 (c1 int);
 
-CREATE POLICY dep_p1 ON dep1 TO regress_rls_bob USING (c1 > (select max(dep2.c1) from dep2));
+CREATE POLICY dep_p1 ON dep1 TO regress_rls_bob USING (c1 > (selext max(dep2.c1) from dep2));
 ALTER POLICY dep_p1 ON dep1 TO regress_rls_bob,regress_rls_carol;
 
 -- Should return one

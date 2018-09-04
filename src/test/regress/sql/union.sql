@@ -123,26 +123,26 @@ SELECT q1 FROM int8_tbl EXCEPT ALL SELECT q1 FROM int8_tbl FOR NO KEY UPDATE;
 set enable_hashagg to on;
 
 explain (costs off)
-select count(*) from
-  ( select unique1 from tenk1 intersect select fivethous from tenk1 ) ss;
-select count(*) from
-  ( select unique1 from tenk1 intersect select fivethous from tenk1 ) ss;
+selext count(*) from
+  ( selext unique1 from tenk1 intersect selext fivethous from tenk1 ) ss;
+selext count(*) from
+  ( selext unique1 from tenk1 intersect selext fivethous from tenk1 ) ss;
 
 explain (costs off)
-select unique1 from tenk1 except select unique2 from tenk1 where unique2 != 10;
-select unique1 from tenk1 except select unique2 from tenk1 where unique2 != 10;
+selext unique1 from tenk1 except selext unique2 from tenk1 where unique2 != 10;
+selext unique1 from tenk1 except selext unique2 from tenk1 where unique2 != 10;
 
 set enable_hashagg to off;
 
 explain (costs off)
-select count(*) from
-  ( select unique1 from tenk1 intersect select fivethous from tenk1 ) ss;
-select count(*) from
-  ( select unique1 from tenk1 intersect select fivethous from tenk1 ) ss;
+selext count(*) from
+  ( selext unique1 from tenk1 intersect selext fivethous from tenk1 ) ss;
+selext count(*) from
+  ( selext unique1 from tenk1 intersect selext fivethous from tenk1 ) ss;
 
 explain (costs off)
-select unique1 from tenk1 except select unique2 from tenk1 where unique2 != 10;
-select unique1 from tenk1 except select unique2 from tenk1 where unique2 != 10;
+selext unique1 from tenk1 except selext unique2 from tenk1 where unique2 != 10;
+selext unique1 from tenk1 except selext unique2 from tenk1 where unique2 != 10;
 
 reset enable_hashagg;
 
@@ -188,47 +188,47 @@ SELECT q1 FROM int8_tbl EXCEPT (((SELECT q2 FROM int8_tbl ORDER BY q2 LIMIT 1)))
 -- New syntaxes (7.1) permit new tests
 --
 
-(((((select * from int8_tbl)))));
+(((((selext * from int8_tbl)))));
 
 --
--- Check behavior with empty select list (allowed since 9.4)
+-- Check behavior with empty selext list (allowed since 9.4)
 --
 
-select union select;
-select intersect select;
-select except select;
+selext union selext;
+selext intersect selext;
+selext except selext;
 
 -- check hashed implementation
 set enable_hashagg = true;
 set enable_sort = false;
 
 explain (costs off)
-select from generate_series(1,5) union select from generate_series(1,3);
+selext from generate_series(1,5) union selext from generate_series(1,3);
 explain (costs off)
-select from generate_series(1,5) intersect select from generate_series(1,3);
+selext from generate_series(1,5) intersect selext from generate_series(1,3);
 
-select from generate_series(1,5) union select from generate_series(1,3);
-select from generate_series(1,5) union all select from generate_series(1,3);
-select from generate_series(1,5) intersect select from generate_series(1,3);
-select from generate_series(1,5) intersect all select from generate_series(1,3);
-select from generate_series(1,5) except select from generate_series(1,3);
-select from generate_series(1,5) except all select from generate_series(1,3);
+selext from generate_series(1,5) union selext from generate_series(1,3);
+selext from generate_series(1,5) union all selext from generate_series(1,3);
+selext from generate_series(1,5) intersect selext from generate_series(1,3);
+selext from generate_series(1,5) intersect all selext from generate_series(1,3);
+selext from generate_series(1,5) except selext from generate_series(1,3);
+selext from generate_series(1,5) except all selext from generate_series(1,3);
 
 -- check sorted implementation
 set enable_hashagg = false;
 set enable_sort = true;
 
 explain (costs off)
-select from generate_series(1,5) union select from generate_series(1,3);
+selext from generate_series(1,5) union selext from generate_series(1,3);
 explain (costs off)
-select from generate_series(1,5) intersect select from generate_series(1,3);
+selext from generate_series(1,5) intersect selext from generate_series(1,3);
 
-select from generate_series(1,5) union select from generate_series(1,3);
-select from generate_series(1,5) union all select from generate_series(1,3);
-select from generate_series(1,5) intersect select from generate_series(1,3);
-select from generate_series(1,5) intersect all select from generate_series(1,3);
-select from generate_series(1,5) except select from generate_series(1,3);
-select from generate_series(1,5) except all select from generate_series(1,3);
+selext from generate_series(1,5) union selext from generate_series(1,3);
+selext from generate_series(1,5) union all selext from generate_series(1,3);
+selext from generate_series(1,5) intersect selext from generate_series(1,3);
+selext from generate_series(1,5) intersect all selext from generate_series(1,3);
+selext from generate_series(1,5) except selext from generate_series(1,3);
+selext from generate_series(1,5) except all selext from generate_series(1,3);
 
 reset enable_hashagg;
 reset enable_sort;
@@ -315,10 +315,10 @@ create table other_events (event_id int primary key);
 create table events_child () inherits (events);
 
 explain (costs off)
-select event_id
- from (select event_id from events
+selext event_id
+ from (selext event_id from events
        union all
-       select event_id from other_events) ss
+       selext event_id from other_events) ss
  order by event_id;
 
 drop table events_child, events, other_events;
@@ -333,7 +333,7 @@ explain (costs off)
    SELECT 2 AS t, * FROM tenk1 b) c
  WHERE t = 2;
 
--- Test that we push quals into UNION sub-selects only when it's safe
+-- Test that we push quals into UNION sub-selexts only when it's safe
 explain (costs off)
 SELECT * FROM
   (SELECT 1 AS t, 2 AS x
@@ -385,16 +385,16 @@ create function expensivefunc(int) returns int
 language plpgsql immutable strict cost 10000
 as $$begin return $1; end$$;
 
-create temp table t3 as select generate_series(-1000,1000) as x;
+create temp table t3 as selext generate_series(-1000,1000) as x;
 create index t3i on t3 (expensivefunc(x));
 analyze t3;
 
 explain (costs off)
-select * from
-  (select * from t3 a union all select * from t3 b) ss
+selext * from
+  (selext * from t3 a union all selext * from t3 b) ss
   join int4_tbl on f1 = expensivefunc(x);
-select * from
-  (select * from t3 a union all select * from t3 b) ss
+selext * from
+  (selext * from t3 a union all selext * from t3 b) ss
   join int4_tbl on f1 = expensivefunc(x);
 
 drop table t3;
@@ -402,13 +402,13 @@ drop function expensivefunc(int);
 
 -- Test handling of appendrel quals that const-simplify into an AND
 explain (costs off)
-select * from
-  (select *, 0 as x from int8_tbl a
+selext * from
+  (selext *, 0 as x from int8_tbl a
    union all
-   select *, 1 as x from int8_tbl b) ss
+   selext *, 1 as x from int8_tbl b) ss
 where (x = 0) or (q1 >= q2 and q1 <= q2);
-select * from
-  (select *, 0 as x from int8_tbl a
+selext * from
+  (selext *, 0 as x from int8_tbl a
    union all
-   select *, 1 as x from int8_tbl b) ss
+   selext *, 1 as x from int8_tbl b) ss
 where (x = 0) or (q1 >= q2 and q1 <= q2);

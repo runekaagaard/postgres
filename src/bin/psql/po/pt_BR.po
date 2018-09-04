@@ -4500,7 +4500,7 @@ msgstr "definição_deslizante"
 #: sql_help.c:3629 sql_help.c:3643 sql_help.c:3681 sql_help.c:3719
 #: sql_help.c:3868 sql_help.c:3882 sql_help.c:3920 sql_help.c:4062
 #: sql_help.c:4076 sql_help.c:4114
-msgid "select"
+msgid "selext"
 msgstr "seleção"
 
 #: sql_help.c:3636 sql_help.c:3875 sql_help.c:4069

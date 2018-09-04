@@ -77,11 +77,11 @@
 # see "man 7 tcp" for details
 
 #tcp_keepalives_idle = 0		# TCP_KEEPIDLE, in seconds;
-					# 0 selects the system default
+					# 0 selexts the system default
 #tcp_keepalives_interval = 0		# TCP_KEEPINTVL, in seconds;
-					# 0 selects the system default
+					# 0 selexts the system default
 #tcp_keepalives_count = 0		# TCP_KEEPCNT;
-					# 0 selects the system default
+					# 0 selexts the system default
 
 # - Authentication -
 
@@ -336,9 +336,9 @@
 #geqo = on
 #geqo_threshold = 12
 #geqo_effort = 5			# range 1-10
-#geqo_pool_size = 0			# selects default based on effort
-#geqo_generations = 0			# selects default based on effort
-#geqo_selection_bias = 2.0		# range 1.5-2.0
+#geqo_pool_size = 0			# selexts default based on effort
+#geqo_generations = 0			# selexts default based on effort
+#geqo_selextion_bias = 2.0		# range 1.5-2.0
 #geqo_seed = 0.0			# range 0.0-1.0
 
 # - Other Planner Options -

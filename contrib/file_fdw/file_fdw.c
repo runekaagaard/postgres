@@ -149,7 +149,7 @@ static void fileGetOptions(Oid foreigntableid,
 			   bool *is_program,
 			   List **other_options);
 static List *get_file_fdw_attribute_options(Oid relid);
-static bool check_selective_binary_conversion(RelOptInfo *baserel,
+static bool check_selextive_binary_conversion(RelOptInfo *baserel,
 								  Oid foreigntableid,
 								  List **columns);
 static void estimate_size(PlannerInfo *root, RelOptInfo *baserel,
@@ -541,11 +541,11 @@ fileGetForeignPaths(PlannerInfo *root,
 	List	   *columns;
 	List	   *coptions = NIL;
 
-	/* Decide whether to selectively perform binary conversion */
-	if (check_selective_binary_conversion(baserel,
+	/* Decide whether to selextively perform binary conversion */
+	if (check_selextive_binary_conversion(baserel,
 										  foreigntableid,
 										  &columns))
-		coptions = list_make1(makeDefElem("convert_selectively",
+		coptions = list_make1(makeDefElem("convert_selextively",
 										  (Node *) columns, -1));
 
 	/* Estimate costs */
@@ -554,7 +554,7 @@ fileGetForeignPaths(PlannerInfo *root,
 
 	/*
 	 * Create a ForeignPath node and add it as only possible path.  We use the
-	 * fdw_private list of the path to carry the convert_selectively option;
+	 * fdw_private list of the path to carry the convert_selextively option;
 	 * it will be propagated into the fdw_private list of the Plan node.
 	 */
 	add_path(baserel, (Path *)
@@ -666,7 +666,7 @@ fileBeginForeignScan(ForeignScanState *node, int eflags)
 	fileGetOptions(RelationGetRelid(node->ss.ss_currentRelation),
 				   &filename, &is_program, &options);
 
-	/* Add any options from the plan (currently only convert_selectively) */
+	/* Add any options from the plan (currently only convert_selextively) */
 	options = list_concat(options, plan->fdw_private);
 
 	/*
@@ -835,7 +835,7 @@ fileIsForeignScanParallelSafe(PlannerInfo *root, RelOptInfo *rel,
 }
 
 /*
- * check_selective_binary_conversion
+ * check_selextive_binary_conversion
  *
  * Check to see if it's useful to convert only a subset of the file's columns
  * to binary.  If so, construct a list of the column names to be converted,
@@ -844,7 +844,7 @@ fileIsForeignScanParallelSafe(PlannerInfo *root, RelOptInfo *rel,
  * query.  So we can't use returning a NIL list to indicate failure.)
  */
 static bool
-check_selective_binary_conversion(RelOptInfo *baserel,
+check_selextive_binary_conversion(RelOptInfo *baserel,
 								  Oid foreigntableid,
 								  List **columns)
 {
@@ -1024,7 +1024,7 @@ estimate_size(PlannerInfo *root, RelOptInfo *baserel,
 	 * baserestrictinfo quals.
 	 */
 	nrows = ntuples *
-		clauselist_selectivity(root,
+		clauselist_selextivity(root,
 							   baserel->baserestrictinfo,
 							   0,
 							   JOIN_INNER,
@@ -1075,7 +1075,7 @@ estimate_costs(PlannerInfo *root, RelOptInfo *baserel,
  *
  * Selected rows are returned in the caller-allocated array rows[],
  * which must have at least targrows entries.
- * The actual number of rows selected is returned as the function result.
+ * The actual number of rows selexted is returned as the function result.
  * We also count the total number of rows in the file and return it into
  * *totalrows.  Note that *totaldeadrows is always set to 0.
  *
@@ -1129,7 +1129,7 @@ file_acquire_sample_rows(Relation onerel, int elevel,
 									   ALLOCSET_DEFAULT_SIZES);
 
 	/* Prepare for sampling rows */
-	reservoir_init_selection_state(&rstate, targrows);
+	reservoir_init_selextion_state(&rstate, targrows);
 
 	/* Set up callback to identify error line number. */
 	errcallback.callback = CopyFromErrorCallback;

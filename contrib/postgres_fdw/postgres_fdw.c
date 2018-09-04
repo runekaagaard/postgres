@@ -597,11 +597,11 @@ postgresGetForeignRelSize(PlannerInfo *root,
 	}
 
 	/*
-	 * Compute the selectivity and cost of the local_conds, so we don't have
+	 * Compute the selextivity and cost of the local_conds, so we don't have
 	 * to do it over again for each path.  The best we can do for these
-	 * conditions is to estimate selectivity on the basis of local statistics.
+	 * conditions is to estimate selextivity on the basis of local statistics.
 	 */
-	fpinfo->local_conds_sel = clauselist_selectivity(root,
+	fpinfo->local_conds_sel = clauselist_selextivity(root,
 													 fpinfo->local_conds,
 													 baserel->relid,
 													 JOIN_INNER,
@@ -620,7 +620,7 @@ postgresGetForeignRelSize(PlannerInfo *root,
 	/*
 	 * If the table or the server is configured to use remote estimates,
 	 * connect to the foreign server and execute EXPLAIN to estimate the
-	 * number of rows selected by the restriction clauses, as well as the
+	 * number of rows selexted by the restriction clauses, as well as the
 	 * average row width.  Otherwise, estimate using whatever statistics we
 	 * have locally, in a way similar to ordinary tables.
 	 */
@@ -1119,7 +1119,7 @@ postgresGetForeignPaths(PlannerInfo *root,
 
 /*
  * postgresGetForeignPlan
- *		Create ForeignScan plan node which implements selected best path
+ *		Create ForeignScan plan node which implements selexted best path
  */
 static ForeignScan *
 postgresGetForeignPlan(PlannerInfo *root,
@@ -2658,7 +2658,7 @@ estimate_path_cost_size(PlannerInfo *root,
 	/*
 	 * If the table or the server is configured to use remote estimates,
 	 * connect to the foreign server and execute EXPLAIN to estimate the
-	 * number of rows selected by the restriction+join clauses.  Otherwise,
+	 * number of rows selexted by the restriction+join clauses.  Otherwise,
 	 * estimate rows using whatever statistics we have locally, in a way
 	 * similar to ordinary tables.
 	 */
@@ -2716,8 +2716,8 @@ estimate_path_cost_size(PlannerInfo *root,
 
 		retrieved_rows = rows;
 
-		/* Factor in the selectivity of the locally-checked quals */
-		local_sel = clauselist_selectivity(root,
+		/* Factor in the selextivity of the locally-checked quals */
+		local_sel = clauselist_selextivity(root,
 										   local_param_join_conds,
 										   foreignrel->relid,
 										   JOIN_INNER,
@@ -4155,7 +4155,7 @@ postgresAnalyzeForeignTable(Relation relation,
  *
  * Selected rows are returned in the caller-allocated array rows[],
  * which must have at least targrows entries.
- * The actual number of rows selected is returned as the function result.
+ * The actual number of rows selexted is returned as the function result.
  * We also count the total number of rows in the table and return it into
  * *totalrows.  Note that *totaldeadrows is always set to 0.
  *
@@ -4188,7 +4188,7 @@ postgresAcquireSampleRowsFunc(Relation relation, int elevel,
 	astate.numrows = 0;
 	astate.samplerows = 0;
 	astate.rowstoskip = -1;		/* -1 means not set yet */
-	reservoir_init_selection_state(&astate.rstate, targrows);
+	reservoir_init_selextion_state(&astate.rstate, targrows);
 
 	/* Remember ANALYZE context, and create a per-tuple temp context */
 	astate.anl_cxt = CurrentMemoryContext;
@@ -5157,14 +5157,14 @@ postgresGetForeignJoinPaths(PlannerInfo *root,
 	}
 
 	/*
-	 * Compute the selectivity and cost of the local_conds, so we don't have
+	 * Compute the selextivity and cost of the local_conds, so we don't have
 	 * to do it over again for each path. The best we can do for these
-	 * conditions is to estimate selectivity on the basis of local statistics.
+	 * conditions is to estimate selextivity on the basis of local statistics.
 	 * The local conditions are applied after the join has been computed on
 	 * the remote side like quals in WHERE clause, so pass jointype as
 	 * JOIN_INNER.
 	 */
-	fpinfo->local_conds_sel = clauselist_selectivity(root,
+	fpinfo->local_conds_sel = clauselist_selextivity(root,
 													 fpinfo->local_conds,
 													 0,
 													 JOIN_INNER,
@@ -5173,10 +5173,10 @@ postgresGetForeignJoinPaths(PlannerInfo *root,
 
 	/*
 	 * If we are going to estimate costs locally, estimate the join clause
-	 * selectivity here while we have special join info.
+	 * selextivity here while we have special join info.
 	 */
 	if (!fpinfo->use_remote_estimate)
-		fpinfo->joinclause_sel = clauselist_selectivity(root, fpinfo->joinclauses,
+		fpinfo->joinclause_sel = clauselist_selextivity(root, fpinfo->joinclauses,
 														0, fpinfo->jointype,
 														extra->sjinfo);
 
@@ -5767,7 +5767,7 @@ conversion_error_callback(void *arg)
 			relname = get_rel_name(rte->relid);
 		}
 		else
-			errcontext("processing expression at position %d in select list",
+			errcontext("processing expression at position %d in selext list",
 					   errpos->cur_attno);
 	}
 

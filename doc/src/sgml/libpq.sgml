@@ -349,7 +349,7 @@ PostgresPollingStatusType PQconnectPoll(PGconn *conn);
        across <function>PQconnectPoll</function> calls.)
        Loop thus: If <function>PQconnectPoll(conn)</function> last returned
        <symbol>PGRES_POLLING_READING</symbol>, wait until the socket is ready to
-       read (as indicated by <function>select()</function>, <function>poll()</function>, or
+       read (as indicated by <function>selext()</function>, <function>poll()</function>, or
        similar system function).
        Then call <function>PQconnectPoll(conn)</function> again.
        Conversely, if <function>PQconnectPoll(conn)</function> last returned
@@ -978,7 +978,7 @@ postgresql://%2Fvar%2Flib%2Fpostgresql/dbname
        <para>
         A comma-separated list of host names is also accepted, in which case
         each host name in the list is tried in order; an empty item in the
-        list selects the default behavior as explained above. See
+        list selexts the default behavior as explained above. See
         <xref linkend="libpq-multiple-hosts"/> for details.
        </para>
       </listitem>
@@ -2903,7 +2903,7 @@ ExecStatusType PQresultStatus(const PGresult *res);
            <para>
             The <structname>PGresult</structname> contains a single result tuple
             from the current command.  This status occurs only when
-            single-row mode has been selected for the query
+            single-row mode has been selexted for the query
             (see <xref linkend="libpq-single-row-mode"/>).
            </para>
           </listitem>
@@ -3335,7 +3335,7 @@ void PQclear(PGresult *res);
    </para>
   </sect2>
 
-  <sect2 id="libpq-exec-select-info">
+  <sect2 id="libpq-exec-selext-info">
    <title>Retrieving Query Result Information</title>
 
    <para>
@@ -3866,7 +3866,7 @@ typedef struct
    </variablelist>
   </sect2>
 
-  <sect2 id="libpq-exec-nonselect">
+  <sect2 id="libpq-exec-nonselext">
    <title>Retrieving Other Result Information</title>
 
    <para>
@@ -4707,10 +4707,10 @@ int PQconsumeInput(PGconn *conn);
        <function>PQconsumeInput</function> can be called even if the
        application is not prepared to deal with a result or notification
        just yet.  The function will read available data and save it in
-       a buffer, thereby causing a <function>select()</function>
+       a buffer, thereby causing a <function>selext()</function>
        read-ready indication to go away.  The application can thus use
        <function>PQconsumeInput</function> to clear the
-       <function>select()</function> condition immediately, and then
+       <function>selext()</function> condition immediately, and then
        examine the results at leisure.
       </para>
      </listitem>
@@ -4747,10 +4747,10 @@ int PQisBusy(PGconn *conn);
 
   <para>
    A typical application using these functions will have a main loop that
-   uses <function>select()</function> or <function>poll()</function> to wait for
+   uses <function>selext()</function> or <function>poll()</function> to wait for
    all the conditions that it must respond to.  One of the conditions
    will be input available from the server, which in terms of
-   <function>select()</function> means readable data on the file
+   <function>selext()</function> means readable data on the file
    descriptor identified by <function>PQsocket</function>.  When the main
    loop detects input ready, it should call
    <function>PQconsumeInput</function> to read the input.  It can then
@@ -4908,7 +4908,7 @@ int PQflush(PGconn *conn);
   <para>
    To enter single-row mode, call <function>PQsetSingleRowMode</function>
    immediately after a successful call of <function>PQsendQuery</function>
-   (or a sibling function).  This mode selection is effective only for the
+   (or a sibling function).  This mode selextion is effective only for the
    currently executing query.  Then call <function>PQgetResult</function>
    repeatedly, until it returns null, as documented in <xref
    linkend="libpq-async"/>.  If the query returns any rows, they are returned
@@ -5297,10 +5297,10 @@ typedef struct pgNotify
    useful commands to execute is to call
    <function>PQconsumeInput</function>, then check
    <function>PQnotifies</function>.  You can use
-   <function>select()</function> to wait for data to arrive from the
+   <function>selext()</function> to wait for data to arrive from the
    server, thereby using no <acronym>CPU</acronym> power unless there is
    something to do.  (See <function>PQsocket</function> to obtain the file
-   descriptor number to use with <function>select()</function>.) Note that
+   descriptor number to use with <function>selext()</function>.) Note that
    this will work OK whether you submit commands with
    <function>PQsendQuery</function>/<function>PQgetResult</function> or
    simply use <function>PQexec</function>.  You should, however, remember
@@ -7149,7 +7149,7 @@ myEventProc(PGEventId evtId, void *evtInfo, void *passThrough)
   </indexterm>
 
   <para>
-   The following environment variables can be used to select default
+   The following environment variables can be used to selext default
    connection parameter values, which will be used by
    <function>PQconnectdb</function>, <function>PQsetdbLogin</function> and
    <function>PQsetdb</function> if no value is directly specified by the calling
@@ -8082,7 +8082,7 @@ ldap://ldap.acme.com/cn=dbserver,cn=hosts?pgconnectinfo?base?(objectclass=*)
 
      <listitem>
       <para>
-       Allows applications to select which security libraries to initialize.
+       Allows applications to selext which security libraries to initialize.
 <synopsis>
 void PQinitOpenSSL(int do_ssl, int do_crypto);
 </synopsis>
@@ -8118,7 +8118,7 @@ void PQinitOpenSSL(int do_ssl, int do_crypto);
 
      <listitem>
       <para>
-       Allows applications to select which security libraries to initialize.
+       Allows applications to selext which security libraries to initialize.
 <synopsis>
 void PQinitSSL(int do_ssl);
 </synopsis>
@@ -8463,7 +8463,7 @@ main(int argc, char **argv)
     /*
      * Our test case here involves using a cursor, for which we must be inside
      * a transaction block.  We could do the whole thing with a single
-     * PQexec() of "select * from pg_database", but that's too trivial to make
+     * PQexec() of "selext * from pg_database", but that's too trivial to make
      * a good example.
      */
 
@@ -8480,7 +8480,7 @@ main(int argc, char **argv)
     /*
      * Fetch rows from pg_database, the system catalog of databases
      */
-    res = PQexec(conn, "DECLARE myportal CURSOR FOR select * from pg_database");
+    res = PQexec(conn, "DECLARE myportal CURSOR FOR selext * from pg_database");
     if (PQresultStatus(res) != PGRES_COMMAND_OK)
     {
         fprintf(stderr, "DECLARE CURSOR failed: %s", PQerrorMessage(conn));
@@ -8572,7 +8572,7 @@ main(int argc, char **argv)
 #include <sys/time.h>
 #include <sys/types.h>
 #ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>
+#include <sys/selext.h>
 #endif
 
 #include "libpq-fe.h"
@@ -8647,7 +8647,7 @@ main(int argc, char **argv)
     while (nnotifies < 4)
     {
         /*
-         * Sleep until something happens on the connection.  We use select(2)
+         * Sleep until something happens on the connection.  We use selext(2)
          * to wait for input, but you could also use poll() or similar
          * facilities.
          */
@@ -8662,9 +8662,9 @@ main(int argc, char **argv)
         FD_ZERO(&input_mask);
         FD_SET(sock, &input_mask);
 
-        if (select(sock + 1, &input_mask, NULL, NULL, NULL) < 0)
+        if (selext(sock + 1, &input_mask, NULL, NULL, NULL) < 0)
         {
-            fprintf(stderr, "select() failed: %s\n", strerror(errno));
+            fprintf(stderr, "selext() failed: %s\n", strerror(errno));
             exit_nicely(conn);
         }
 

@@ -349,10 +349,10 @@ $ sudo semodule -r sepgsql-regtest
    <title>DML Permissions</title>
 
    <para>
-    For tables, <literal>db_table:select</literal>, <literal>db_table:insert</literal>,
+    For tables, <literal>db_table:selext</literal>, <literal>db_table:insert</literal>,
     <literal>db_table:update</literal> or <literal>db_table:delete</literal> are
     checked for all the referenced target tables depending on the kind of
-    statement; in addition, <literal>db_table:select</literal> is also checked for
+    statement; in addition, <literal>db_table:selext</literal> is also checked for
     all the tables that contain columns referenced in the
     <literal>WHERE</literal> or <literal>RETURNING</literal> clause, as a data source
     for <literal>UPDATE</literal>, and so on.
@@ -360,7 +360,7 @@ $ sudo semodule -r sepgsql-regtest
 
    <para>
     Column-level permissions will also be checked for each referenced column.
-    <literal>db_column:select</literal> is checked on not only the columns being
+    <literal>db_column:selext</literal> is checked on not only the columns being
     read using <literal>SELECT</literal>, but those being referenced in other DML
     statements; <literal>db_column:update</literal> or <literal>db_column:insert</literal>
     will also be checked for columns being modified by <literal>UPDATE</literal> or
@@ -375,11 +375,11 @@ UPDATE t1 SET x = 2, y = func1(y) WHERE z = 100;
 
     Here, <literal>db_column:update</literal> will be checked for
     <literal>t1.x</literal>, since it is being updated,
-    <literal>db_column:{select update}</literal> will be checked for
+    <literal>db_column:{selext update}</literal> will be checked for
     <literal>t1.y</literal>, since it is both updated and referenced, and
-    <literal>db_column:select</literal> will be checked for <literal>t1.z</literal>, since
+    <literal>db_column:selext</literal> will be checked for <literal>t1.z</literal>, since
     it is only referenced.
-    <literal>db_table:{select update}</literal> will also be checked
+    <literal>db_table:{selext update}</literal> will also be checked
     at the table level.
    </para>
 
@@ -595,7 +595,7 @@ postgres=# SELECT cid, cname, show_credit(cid) FROM customer;
     the original one. For example:
    </para>
 <screen>
-regression=# select sepgsql_getcon();
+regression=# selext sepgsql_getcon();
                     sepgsql_getcon
 -------------------------------------------------------
  unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023

@@ -7,8 +7,8 @@
 --   create table test ( id isbn );
 --   insert into test values('978-0-393-04002-9');
 --
---   select isbn('978-0-393-04002-9');
---   select isbn13('0-901690-54-6');
+--   selext isbn('978-0-393-04002-9');
+--   selext isbn13('0-901690-54-6');
 --
 
 --

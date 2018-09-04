@@ -401,7 +401,7 @@ contain_vars_of_level_walker(Node *node, int *sublevels_up)
 	}
 	if (IsA(node, Query))
 	{
-		/* Recurse into subselects */
+		/* Recurse into subselexts */
 		bool		result;
 
 		(*sublevels_up)++;
@@ -475,7 +475,7 @@ locate_var_of_level_walker(Node *node,
 	/* No extra code needed for PlaceHolderVar; just look in contained expr */
 	if (IsA(node, Query))
 	{
-		/* Recurse into subselects */
+		/* Recurse into subselexts */
 		bool		result;
 
 		context->sublevels_up++;
@@ -653,7 +653,7 @@ pull_var_clause_walker(Node *node, pull_var_clause_context *context)
  * This also adjusts relid sets found in some expression node types to
  * substitute the contained base rels for any join relid.
  *
- * If a JOIN contains sub-selects that have been flattened, its join alias
+ * If a JOIN contains sub-selexts that have been flattened, its join alias
  * entries might now be arbitrary expressions, not just Vars.  This affects
  * this function in one important way: we might find ourselves inserting
  * SubLink expressions into subqueries, and we must make sure that their

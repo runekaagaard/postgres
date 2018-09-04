@@ -141,7 +141,7 @@ CREATE INDEX
   </para>
 
   <para>
-   So the planner will usually select an index scan if possible.
+   So the planner will usually selext an index scan if possible.
    With a btree index, we get results like this:
 <programlisting>
 =# EXPLAIN ANALYZE SELECT * FROM tbloom WHERE i2 = 898732 AND i5 = 123451;
@@ -173,7 +173,7 @@ CREATE INDEX
 (8 rows)
 </programlisting>
    Note the relatively large number of false positives: 2439 rows were
-   selected to be visited in the heap, but none actually matched the
+   selexted to be visited in the heap, but none actually matched the
    query.  We could reduce that by specifying a larger signature length.
    In this example, creating the index with <literal>length=200</literal>
    reduced the number of false positives to 55; but it doubled the index size

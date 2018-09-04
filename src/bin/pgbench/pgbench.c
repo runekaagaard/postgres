@@ -46,7 +46,7 @@
 #include <time.h>
 #include <sys/time.h>
 #ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>
+#include <sys/selext.h>
 #endif
 
 #ifdef HAVE_SYS_RESOURCE_H
@@ -151,7 +151,7 @@ int64		throttle_delay = 0;
 int64		latency_limit = 0;
 
 /*
- * tablespace selection
+ * tablespace selextion
  */
 char	   *tablespace = NULL;
 char	   *index_tablespace = NULL;
@@ -451,7 +451,7 @@ typedef struct
 typedef struct ParsedScript
 {
 	const char *desc;			/* script descriptor (eg, file name) */
-	int			weight;			/* selection weight */
+	int			weight;			/* selextion weight */
 	Command   **commands;		/* NULL-terminated array of Commands */
 	StatsData	stats;			/* total time spent in script */
 } ParsedScript;
@@ -502,8 +502,8 @@ static const BuiltinScript builtin_script[] =
 		"END;\n"
 	},
 	{
-		"select-only",
-		"<builtin: select only>",
+		"selext-only",
+		"<builtin: selext only>",
 		"\\set aid random(1, " CppAsString2(naccounts) " * :scale)\n"
 		"SELECT abalance FROM pgbench_accounts WHERE aid = :aid;\n"
 	}
@@ -543,7 +543,7 @@ usage(void)
 		   "\nInitialization options:\n"
 		   "  -i, --initialize         invokes initialization mode\n"
 		   "  -I, --init-steps=[dtgvpf]+ (default \"dtgvp\")\n"
-		   "                           run selected initialization steps\n"
+		   "                           run selexted initialization steps\n"
 		   "  -F, --fillfactor=NUM     set fill factor\n"
 		   "  -n, --no-vacuum          do not run VACUUM during initialization\n"
 		   "  -q, --quiet              quiet logging (one message each 5 seconds)\n"
@@ -553,14 +553,14 @@ usage(void)
 		   "                           create indexes in the specified tablespace\n"
 		   "  --tablespace=TABLESPACE  create tables in the specified tablespace\n"
 		   "  --unlogged-tables        create tables as unlogged tables\n"
-		   "\nOptions to select what to run:\n"
+		   "\nOptions to selext what to run:\n"
 		   "  -b, --builtin=NAME[@W]   add builtin script NAME weighted at W (default: 1)\n"
 		   "                           (use \"-b list\" to list available scripts)\n"
 		   "  -f, --file=FILENAME[@W]  add script FILENAME weighted at W (default: 1)\n"
 		   "  -N, --skip-some-updates  skip updates of pgbench_tellers and pgbench_branches\n"
 		   "                           (same as \"-b simple-update\")\n"
-		   "  -S, --select-only        perform SELECT-only transactions\n"
-		   "                           (same as \"-b select-only\")\n"
+		   "  -S, --selext-only        perform SELECT-only transactions\n"
+		   "                           (same as \"-b selext-only\")\n"
 		   "\nBenchmarking options:\n"
 		   "  -c, --client=NUM         number of concurrent database clients (default: 1)\n"
 		   "  -C, --connect            establish new connection for each transaction\n"
@@ -698,7 +698,7 @@ getrand(TState *thread, int64 min, int64 max)
 {
 	/*
 	 * Odd coding is so that min and max have approximately the same chance of
-	 * being selected as do numbers between them.
+	 * being selexted as do numbers between them.
 	 *
 	 * pg_erand48() is thread-safe and concurrent, which is why we use it
 	 * rather than random(), which in glibc is non-reentrant, and therefore
@@ -4777,7 +4777,7 @@ main(int argc, char **argv)
 		{"report-latencies", no_argument, NULL, 'r'},
 		{"rate", required_argument, NULL, 'R'},
 		{"scale", required_argument, NULL, 's'},
-		{"select-only", no_argument, NULL, 'S'},
+		{"selext-only", no_argument, NULL, 'S'},
 		{"skip-some-updates", no_argument, NULL, 'N'},
 		{"time", required_argument, NULL, 'T'},
 		{"transactions", required_argument, NULL, 't'},
@@ -5004,7 +5004,7 @@ main(int argc, char **argv)
 				internal_script_used = true;
 				break;
 			case 'S':
-				process_builtin(findBuiltin("select-only"), 1);
+				process_builtin(findBuiltin("selext-only"), 1);
 				benchmarking_option_set = true;
 				internal_script_used = true;
 				break;
@@ -5388,7 +5388,7 @@ main(int argc, char **argv)
 		 * get the scaling factor that should be same as count(*) from
 		 * pgbench_branches if this is not a custom query
 		 */
-		res = PQexec(con, "select count(*) from pgbench_branches");
+		res = PQexec(con, "selext count(*) from pgbench_branches");
 		if (PQresultStatus(res) != PGRES_TUPLES_OK)
 		{
 			char	   *sqlState = PQresultErrorField(res, PG_DIAG_SQLSTATE);
@@ -5770,7 +5770,7 @@ threadRun(void *arg)
 		 */
 		if (min_usec > 0)
 		{
-			int			nsocks = 0; /* return from select(2) if called */
+			int			nsocks = 0; /* return from selext(2) if called */
 
 			if (min_usec != PG_INT64_MAX)
 			{
@@ -5780,16 +5780,16 @@ threadRun(void *arg)
 
 					timeout.tv_sec = min_usec / 1000000;
 					timeout.tv_usec = min_usec % 1000000;
-					nsocks = select(maxsock + 1, &input_mask, NULL, NULL, &timeout);
+					nsocks = selext(maxsock + 1, &input_mask, NULL, NULL, &timeout);
 				}
 				else			/* nothing active, simple sleep */
 				{
 					pg_usleep(min_usec);
 				}
 			}
-			else				/* no explicit delay, select without timeout */
+			else				/* no explicit delay, selext without timeout */
 			{
-				nsocks = select(maxsock + 1, &input_mask, NULL, NULL, NULL);
+				nsocks = selext(maxsock + 1, &input_mask, NULL, NULL, NULL);
 			}
 
 			if (nsocks < 0)
@@ -5800,7 +5800,7 @@ threadRun(void *arg)
 					continue;
 				}
 				/* must be something wrong */
-				fprintf(stderr, "select() failed: %s\n", strerror(errno));
+				fprintf(stderr, "selext() failed: %s\n", strerror(errno));
 				goto done;
 			}
 		}
@@ -5808,7 +5808,7 @@ threadRun(void *arg)
 		{
 			/* min_usec == 0, i.e. something needs to be executed */
 
-			/* If we didn't call select(), don't try to read any data */
+			/* If we didn't call selext(), don't try to read any data */
 			FD_ZERO(&input_mask);
 		}
 

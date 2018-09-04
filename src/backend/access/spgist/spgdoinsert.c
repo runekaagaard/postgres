@@ -580,9 +580,9 @@ setRedirectionTuple(SPPageDesc *current, OffsetNumber position,
  * Test to see if the user-defined picksplit function failed to do its job,
  * ie, it put all the leaf tuples into the same node.
  * If so, randomly divide the tuples into several nodes (all with the same
- * label) and return true to select allTheSame mode for this inner tuple.
+ * label) and return true to selext allTheSame mode for this inner tuple.
  *
- * (This code is also used to forcibly select allTheSame mode for nulls.)
+ * (This code is also used to forcibly selext allTheSame mode for nulls.)
  *
  * If we know that the leaf tuples wouldn't all fit on one page, then we
  * exclude the last tuple (which is the incoming new tuple that forced a split)
@@ -605,7 +605,7 @@ checkAllTheSame(spgPickSplitIn *in, spgPickSplitOut *out, bool tooBig,
 	/* For the moment, assume we can include the new leaf tuple */
 	*includeNew = true;
 
-	/* If there's only the new leaf tuple, don't select allTheSame mode */
+	/* If there's only the new leaf tuple, don't selext allTheSame mode */
 	if (in->nTuples <= 1)
 		return false;
 
@@ -869,7 +869,7 @@ doPickSplit(Relation index, SpGistState *state,
 
 	/*
 	 * Check to see if the picksplit function failed to separate the values,
-	 * ie, it put them all into the same child node.  If so, select allTheSame
+	 * ie, it put them all into the same child node.  If so, selext allTheSame
 	 * mode and create a random split instead.  See comments for
 	 * checkAllTheSame as to why we need to know if the new leaf tuples could
 	 * fit on one page.

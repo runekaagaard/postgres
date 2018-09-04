@@ -104,7 +104,7 @@ any moment.  Here is a simplified insertion algorithm specification
         end if
     else
         switch (chooseFn())
-            case MatchNode  - descend through selected node
+            case MatchNode  - descend through selexted node
             case AddNode    - add node and then retry chooseFn (3, 6)
             case SplitTuple - split inner tuple to prefix and postfix, then
                               retry chooseFn with the prefix tuple (4, 6)

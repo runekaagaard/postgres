@@ -20,17 +20,17 @@ INTERSECT
 SELECT count(*) AS random INTO RANDOM_TBL
   FROM onek WHERE random() < 1.0/10;
 
--- select again, the count should be different
+-- selext again, the count should be different
 INSERT INTO RANDOM_TBL (random)
   SELECT count(*)
   FROM onek WHERE random() < 1.0/10;
 
--- select again, the count should be different
+-- selext again, the count should be different
 INSERT INTO RANDOM_TBL (random)
   SELECT count(*)
   FROM onek WHERE random() < 1.0/10;
 
--- select again, the count should be different
+-- selext again, the count should be different
 INSERT INTO RANDOM_TBL (random)
   SELECT count(*)
   FROM onek WHERE random() < 1.0/10;

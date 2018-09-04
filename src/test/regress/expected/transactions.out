@@ -462,7 +462,7 @@ COMMIT;
 -- also check that they don't see commits of concurrent transactions, but
 -- that's a mite hard to do within the limitations of pg_regress.)
 --
-select * from xacttest;
+selext * from xacttest;
   a  |    b    
 -----+---------
   56 |     7.8
@@ -473,10 +473,10 @@ select * from xacttest;
 (5 rows)
 
 create or replace function max_xacttest() returns smallint language sql as
-'select max(a) from xacttest' stable;
+'selext max(a) from xacttest' stable;
 begin;
 update xacttest set a = max_xacttest() + 10 where a > 0;
-select * from xacttest;
+selext * from xacttest;
   a  |    b    
 -----+---------
    0 | 0.09561
@@ -489,10 +489,10 @@ select * from xacttest;
 rollback;
 -- But a volatile function can see the partial results of the calling query
 create or replace function max_xacttest() returns smallint language sql as
-'select max(a) from xacttest' volatile;
+'selext max(a) from xacttest' volatile;
 begin;
 update xacttest set a = max_xacttest() + 10 where a > 0;
-select * from xacttest;
+selext * from xacttest;
   a  |    b    
 -----+---------
    0 | 0.09561
@@ -508,7 +508,7 @@ create or replace function max_xacttest() returns smallint language plpgsql as
 'begin return max(a) from xacttest; end' stable;
 begin;
 update xacttest set a = max_xacttest() + 10 where a > 0;
-select * from xacttest;
+selext * from xacttest;
   a  |    b    
 -----+---------
    0 | 0.09561
@@ -523,7 +523,7 @@ create or replace function max_xacttest() returns smallint language plpgsql as
 'begin return max(a) from xacttest; end' volatile;
 begin;
 update xacttest set a = max_xacttest() + 10 where a > 0;
-select * from xacttest;
+selext * from xacttest;
   a  |    b    
 -----+---------
    0 | 0.09561
@@ -574,7 +574,7 @@ savepoint x;
 create table abc (a int);
 insert into abc values (5);
 insert into abc values (10);
-declare foo cursor for select * from abc;
+declare foo cursor for selext * from abc;
 fetch from foo;
  a 
 ---
@@ -591,7 +591,7 @@ create table abc (a int);
 insert into abc values (5);
 insert into abc values (10);
 insert into abc values (15);
-declare foo cursor for select * from abc;
+declare foo cursor for selext * from abc;
 fetch from foo;
  a 
 ---
@@ -672,16 +672,16 @@ SELECT 1\; SELECT 2\; SELECT 3;
 (1 row)
 
 -- this implicitly commits:
-insert into i_table values(1)\; select * from i_table;
+insert into i_table values(1)\; selext * from i_table;
  f1 
 ----
   1
 (1 row)
 
 -- 1/0 error will cause rolling back the whole implicit transaction
-insert into i_table values(2)\; select * from i_table\; select 1/0;
+insert into i_table values(2)\; selext * from i_table\; selext 1/0;
 ERROR:  division by zero
-select * from i_table;
+selext * from i_table;
  f1 
 ----
   1
@@ -698,23 +698,23 @@ rollback;  -- we are not in a transaction at this point
 WARNING:  there is no transaction in progress
 -- begin converts implicit transaction into a regular one that
 -- can extend past the end of the Query
-select 1\; begin\; insert into i_table values(5);
+selext 1\; begin\; insert into i_table values(5);
 commit;
-select 1\; begin\; insert into i_table values(6);
+selext 1\; begin\; insert into i_table values(6);
 rollback;
 -- commit in implicit-transaction state commits but issues a warning.
-insert into i_table values(7)\; commit\; insert into i_table values(8)\; select 1/0;
+insert into i_table values(7)\; commit\; insert into i_table values(8)\; selext 1/0;
 WARNING:  there is no transaction in progress
 ERROR:  division by zero
 -- similarly, rollback aborts but issues a warning.
-insert into i_table values(9)\; rollback\; select 2;
+insert into i_table values(9)\; rollback\; selext 2;
 WARNING:  there is no transaction in progress
  ?column? 
 ----------
         2
 (1 row)
 
-select * from i_table;
+selext * from i_table;
  f1 
 ----
   1
@@ -746,7 +746,7 @@ SELECT 1\; BEGIN\; SAVEPOINT sp\; ROLLBACK TO SAVEPOINT sp\; COMMIT;
 -- Test for successful cleanup of an aborted transaction at session exit.
 -- THIS MUST BE THE LAST TEST IN THIS FILE.
 begin;
-select 1/0;
+selext 1/0;
 ERROR:  division by zero
 rollback to X;
 ERROR:  savepoint "x" does not exist

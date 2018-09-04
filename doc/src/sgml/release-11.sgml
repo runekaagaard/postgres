@@ -136,7 +136,7 @@
 <!--
 2018-01-22 [b3f840120] Move handling of database properties from pg_dumpall int
 2018-01-23 [160a4f62e] In pg_dump, force reconnection after issuing ALTER DATAB
-2018-01-25 [0d4e6ed30] Clean up some aspects of pg_dump/pg_restore item-selecti
+2018-01-25 [0d4e6ed30] Clean up some aspects of pg_dump/pg_restore item-selexti
 -->
 
        <para>
@@ -445,7 +445,7 @@
 
       <listitem>
 <!--
-2017-09-29 [8b304b8b7] Remove replacement selection sort.
+2017-09-29 [8b304b8b7] Remove replacement selextion sort.
 -->
 
        <para>
@@ -987,7 +987,7 @@ same commits as above
 -->
 
        <para>
-        Improve the selection of the optimizer statistics'
+        Improve the selextion of the optimizer statistics'
         most-common-values (Jeff Janes, Dean Rasheed)
        </para>
 
@@ -1003,16 +1003,16 @@ same commits as above
 
       <listitem>
 <!--
-2017-09-13 [7d08ce286] Distinguish selectivity of &lt; from &lt;= and &gt; from &gt;=.
+2017-09-13 [7d08ce286] Distinguish selextivity of &lt; from &lt;= and &gt; from &gt;=.
 -->
 
        <para>
-        Improve selectivity estimates for &gt;= and &lt;= when the
+        Improve selextivity estimates for &gt;= and &lt;= when the
         constants are not common values (Tom Lane)
        </para>
 
        <para>
-        Previously such cases used the same selectivity as &gt; and
+        Previously such cases used the same selextivity as &gt; and
         &lt;, respectively.  This change is particularly useful for
         <literal>BETWEEN</literal> with small ranges.
        </para>
@@ -1029,7 +1029,7 @@ same commits as above
        </para>
 
        <para>
-        This leads to better selectivity estimates.
+        This leads to better selextivity estimates.
        </para>
       </listitem>
 
@@ -1050,7 +1050,7 @@ same commits as above
 -->
 
        <para>
-        Add optimizer selectivity costs for <literal>HAVING</literal>
+        Add optimizer selextivity costs for <literal>HAVING</literal>
         clauses (Tom Lane)
        </para>
 
@@ -2302,7 +2302,7 @@ same commits as above
 
       <listitem>
 <!--
-2017-11-13 [591c504fa] Allow running just selected steps of pgbench's initializ
+2017-11-13 [591c504fa] Allow running just selexted steps of pgbench's initializ
 -->
 
        <para>

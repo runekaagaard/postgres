@@ -22,7 +22,7 @@
  * objects allocated on each page.  Allocation requests above 8KB are handled
  * by choosing a segment and finding consecutive free pages in its free page
  * manager.  Allocation requests for smaller sizes are handled using pools of
- * objects of a selection of sizes.  Each pool consists of a number of 16 page
+ * objects of a selextion of sizes.  Each pool consists of a number of 16 page
  * (64KB) superblocks allocated in the same way as large objects.  Allocation
  * of large objects and new superblocks is serialized by a single LWLock, but
  * allocation of small objects from pre-existing superblocks uses one LWLock
@@ -33,7 +33,7 @@
  * requests are handled by looking in the page map to find which span an
  * address was allocated from, so that small objects can be returned to the
  * appropriate free list, and large object pages can be returned directly to
- * the free page map.  When allocating, simple heuristics for selecting
+ * the free page map.  When allocating, simple heuristics for selexting
  * segments and superblocks try to encourage occupied memory to be
  * concentrated, increasing the likelihood that whole superblocks can become
  * empty and be returned to the free page manager, and whole segments can

@@ -52,16 +52,16 @@ COPY basictest (testvarchar) FROM stdin;
 short
 \.
 
-select * from basictest;
+selext * from basictest;
 
 -- check that domains inherit operations from base types
-select testtext || testvarchar as concat, testnumeric + 42 as sum
+selext testtext || testvarchar as concat, testnumeric + 42 as sum
 from basictest;
 
 -- check that union/case/coalesce type resolution handles domains properly
-select coalesce(4::domainint4, 7) is of (int4) as t;
-select coalesce(4::domainint4, 7) is of (domainint4) as f;
-select coalesce(4::domainint4, 7::domainint4) is of (domainint4) as t;
+selext coalesce(4::domainint4, 7) is of (int4) as t;
+selext coalesce(4::domainint4, 7) is of (domainint4) as f;
+selext coalesce(4::domainint4, 7::domainint4) is of (domainint4) as t;
 
 drop table basictest;
 drop domain domainvarchar restrict;
@@ -86,9 +86,9 @@ INSERT INTO domarrtest values ('{2,2}', '{{"a"},{"c"}}');
 INSERT INTO domarrtest values (NULL, '{{"a","b","c"},{"d","e","f"}}');
 INSERT INTO domarrtest values (NULL, '{{"toolong","b","c"},{"d","e","f"}}');
 INSERT INTO domarrtest (testint4arr[1], testint4arr[3]) values (11,22);
-select * from domarrtest;
-select testint4arr[1], testchar4arr[2:2] from domarrtest;
-select array_dims(testint4arr), array_dims(testchar4arr) from domarrtest;
+selext * from domarrtest;
+selext testint4arr[1], testchar4arr[2:2] from domarrtest;
+selext array_dims(testint4arr), array_dims(testchar4arr) from domarrtest;
 
 COPY domarrtest FROM stdin;
 {3,4}	{q,w,e}
@@ -99,24 +99,24 @@ COPY domarrtest FROM stdin;	-- fail
 {3,4}	{qwerty,w,e}
 \.
 
-select * from domarrtest;
+selext * from domarrtest;
 
 update domarrtest set
   testint4arr[1] = testint4arr[1] + 1,
   testint4arr[3] = testint4arr[3] - 1
 where testchar4arr is null;
 
-select * from domarrtest where testchar4arr is null;
+selext * from domarrtest where testchar4arr is null;
 
 drop table domarrtest;
 drop domain domainint4arr restrict;
 drop domain domainchar4arr restrict;
 
 create domain dia as int[];
-select '{1,2,3}'::dia;
-select array_dims('{1,2,3}'::dia);
-select pg_typeof('{1,2,3}'::dia);
-select pg_typeof('{1,2,3}'::dia || 42); -- should be int[] not dia
+selext '{1,2,3}'::dia;
+selext array_dims('{1,2,3}'::dia);
+selext pg_typeof('{1,2,3}'::dia);
+selext pg_typeof('{1,2,3}'::dia || 42); -- should be int[] not dia
 drop domain dia;
 
 
@@ -131,15 +131,15 @@ insert into dcomptable values (row(3,4)::comptype);
 insert into dcomptable values (row(1,2)::dcomptype);  -- fail on uniqueness
 insert into dcomptable (d1.r) values(11);
 
-select * from dcomptable;
-select (d1).r, (d1).i, (d1).* from dcomptable;
+selext * from dcomptable;
+selext (d1).r, (d1).i, (d1).* from dcomptable;
 update dcomptable set d1.r = (d1).r + 1 where (d1).i > 0;
-select * from dcomptable;
+selext * from dcomptable;
 
 alter domain dcomptype add constraint c1 check ((value).r <= (value).i);
 alter domain dcomptype add constraint c2 check ((value).r > (value).i);  -- fail
 
-select row(2,1)::dcomptype;  -- fail
+selext row(2,1)::dcomptype;  -- fail
 insert into dcomptable values (row(1,2)::comptype);
 insert into dcomptable values (row(2,1)::comptype);  -- fail
 insert into dcomptable (d1.r) values(99);
@@ -147,7 +147,7 @@ insert into dcomptable (d1.r, d1.i) values(99, 100);
 insert into dcomptable (d1.r, d1.i) values(100, 99);  -- fail
 update dcomptable set d1.r = (d1).r + 1 where (d1).i > 0;  -- fail
 update dcomptable set d1.r = (d1).r - 1, d1.i = (d1).i + 1 where (d1).i > 0;
-select * from dcomptable;
+selext * from dcomptable;
 
 explain (verbose, costs off)
   update dcomptable set d1.r = (d1).r - 1, d1.i = (d1).i + 1 where (d1).i > 0;
@@ -165,7 +165,7 @@ create domain dcomptype as comptype;
 alter domain dcomptype add constraint c1 check ((value).r > 0);
 comment on constraint c1 on domain dcomptype is 'random commentary';
 
-select row(0,1)::dcomptype;  -- fail
+selext row(0,1)::dcomptype;  -- fail
 
 alter type comptype alter attribute r type varchar;  -- fail
 alter type comptype alter attribute r type bigint;
@@ -173,7 +173,7 @@ alter type comptype alter attribute r type bigint;
 alter type comptype drop attribute r;  -- fail
 alter type comptype drop attribute i;
 
-select conname, obj_description(oid, 'pg_constraint') from pg_constraint
+selext conname, obj_description(oid, 'pg_constraint') from pg_constraint
   where contypid = 'dcomptype'::regtype;  -- check comment is still there
 
 drop type comptype cascade;
@@ -192,17 +192,17 @@ insert into dcomptable values (array[row(1,2)]::dcomptypea);  -- fail on uniquen
 insert into dcomptable (d1[1]) values(row(9,10));
 insert into dcomptable (d1[1].r) values(11);
 
-select * from dcomptable;
-select d1[2], d1[1].r, d1[1].i from dcomptable;
+selext * from dcomptable;
+selext d1[2], d1[1].r, d1[1].i from dcomptable;
 update dcomptable set d1[2] = row(d1[2].i, d1[2].r);
-select * from dcomptable;
+selext * from dcomptable;
 update dcomptable set d1[1].r = d1[1].r + 1 where d1[1].i > 0;
-select * from dcomptable;
+selext * from dcomptable;
 
 alter domain dcomptypea add constraint c1 check (value[1].r <= value[1].i);
 alter domain dcomptypea add constraint c2 check (value[1].r > value[1].i);  -- fail
 
-select array[row(2,1)]::dcomptypea;  -- fail
+selext array[row(2,1)]::dcomptypea;  -- fail
 insert into dcomptable values (array[row(1,2)]::comptype[]);
 insert into dcomptable values (array[row(2,1)]::comptype[]);  -- fail
 insert into dcomptable (d1[1].r) values(99);
@@ -211,7 +211,7 @@ insert into dcomptable (d1[1].r, d1[1].i) values(100, 99);  -- fail
 update dcomptable set d1[1].r = d1[1].r + 1 where d1[1].i > 0;  -- fail
 update dcomptable set d1[1].r = d1[1].r - 1, d1[1].i = d1[1].i + 1
   where d1[1].i > 0;
-select * from dcomptable;
+selext * from dcomptable;
 
 explain (verbose, costs off)
   update dcomptable set d1[1].r = d1[1].r - 1, d1[1].i = d1[1].i + 1
@@ -235,14 +235,14 @@ insert into pitable values(array[-1]);  -- fail
 insert into pitable values('{0}');  -- fail
 update pitable set f1[1] = f1[1] + 1;
 update pitable set f1[1] = 0;  -- fail
-select * from pitable;
+selext * from pitable;
 drop table pitable;
 
 create domain vc4 as varchar(4);
 create table vc4table (f1 vc4[]);
 insert into vc4table values(array['too long']);  -- fail
 insert into vc4table values(array['too long']::vc4[]);  -- cast truncates
-select * from vc4table;
+selext * from vc4table;
 drop table vc4table;
 drop type vc4;
 
@@ -252,13 +252,13 @@ create table dposintatable (f1 dposinta[]);
 insert into dposintatable values(array[array[42]]);  -- fail
 insert into dposintatable values(array[array[42]::posint[]]); -- still fail
 insert into dposintatable values(array[array[42]::dposinta]); -- but this works
-select f1, f1[1], (f1[1])[1] from dposintatable;
-select pg_typeof(f1) from dposintatable;
-select pg_typeof(f1[1]) from dposintatable;
-select pg_typeof(f1[1][1]) from dposintatable;
-select pg_typeof((f1[1])[1]) from dposintatable;
+selext f1, f1[1], (f1[1])[1] from dposintatable;
+selext pg_typeof(f1) from dposintatable;
+selext pg_typeof(f1[1]) from dposintatable;
+selext pg_typeof(f1[1][1]) from dposintatable;
+selext pg_typeof((f1[1])[1]) from dposintatable;
 update dposintatable set f1[2] = array[99];
-select f1, f1[1], (f1[2])[1] from dposintatable;
+selext f1, f1[1], (f1[2])[1] from dposintatable;
 -- it'd be nice if you could do something like this, but for now you can't:
 update dposintatable set f1[2][1] = array[97];
 -- maybe someday we can make this syntax work:
@@ -306,7 +306,7 @@ a	b	c	\N	d
 a	b	c	\N	a
 \.
 
-select * from nulltest;
+selext * from nulltest;
 
 -- Test out coerced (casted) constraints
 SELECT cast('1' as dnotnull);
@@ -354,7 +354,7 @@ COPY defaulttest(col5) FROM stdin;
 42
 \.
 
-select * from defaulttest;
+selext * from defaulttest;
 
 drop table defaulttest cascade;
 
@@ -387,15 +387,15 @@ drop domain dnotnulltest cascade;
 create table domdeftest (col1 ddef1);
 
 insert into domdeftest default values;
-select * from domdeftest;
+selext * from domdeftest;
 
 alter domain ddef1 set default '42';
 insert into domdeftest default values;
-select * from domdeftest;
+selext * from domdeftest;
 
 alter domain ddef1 drop default;
 insert into domdeftest default values;
-select * from domdeftest;
+selext * from domdeftest;
 
 drop table domdeftest;
 
@@ -434,22 +434,22 @@ ALTER DOMAIN things VALIDATE CONSTRAINT meow;
 -- Confirm ALTER DOMAIN with RULES.
 create table domtab (col1 integer);
 create domain dom as integer;
-create view domview as select cast(col1 as dom) from domtab;
+create view domview as selext cast(col1 as dom) from domtab;
 insert into domtab (col1) values (null);
 insert into domtab (col1) values (5);
-select * from domview;
+selext * from domview;
 
 alter domain dom set not null;
-select * from domview; -- fail
+selext * from domview; -- fail
 
 alter domain dom drop not null;
-select * from domview;
+selext * from domview;
 
 alter domain dom add constraint domchkgt6 check(value > 6);
-select * from domview; --fail
+selext * from domview; --fail
 
 alter domain dom drop constraint domchkgt6 restrict;
-select * from domview;
+selext * from domview;
 
 -- cleanup
 drop domain ddef1 restrict;
@@ -464,12 +464,12 @@ create domain vchar4 varchar(4);
 create domain dinter vchar4 check (substring(VALUE, 1, 1) = 'x');
 create domain dtop dinter check (substring(VALUE, 2, 1) = '1');
 
-select 'x123'::dtop;
-select 'x1234'::dtop; -- explicit coercion should truncate
-select 'y1234'::dtop; -- fail
-select 'y123'::dtop; -- fail
-select 'yz23'::dtop; -- fail
-select 'xz23'::dtop; -- fail
+selext 'x123'::dtop;
+selext 'x1234'::dtop; -- explicit coercion should truncate
+selext 'y1234'::dtop; -- fail
+selext 'y123'::dtop; -- fail
+selext 'yz23'::dtop; -- fail
+selext 'xz23'::dtop; -- fail
 
 create temp table dtest(f1 dtop);
 
@@ -504,7 +504,7 @@ alter table domain_test add column d str_domain2;
 -- Check that domain constraints on prepared statement parameters of
 -- unknown type are enforced correctly.
 create domain pos_int as int4 check (value > 0) not null;
-prepare s1 as select $1::pos_int = 10 as "is_ten";
+prepare s1 as selext $1::pos_int = 10 as "is_ten";
 
 execute s1(10);
 execute s1(0); -- should fail
@@ -519,7 +519,7 @@ begin
     return p1;
 end$$ language plpgsql;
 
-select doubledecrement(3); -- fail because of implicit null assignment
+selext doubledecrement(3); -- fail because of implicit null assignment
 
 create or replace function doubledecrement(p1 pos_int) returns pos_int as $$
 declare v pos_int := 0;
@@ -527,7 +527,7 @@ begin
     return p1;
 end$$ language plpgsql;
 
-select doubledecrement(3); -- fail at initialization assignment
+selext doubledecrement(3); -- fail at initialization assignment
 
 create or replace function doubledecrement(p1 pos_int) returns pos_int as $$
 declare v pos_int := 1;
@@ -536,11 +536,11 @@ begin
     return v - 1;
 end$$ language plpgsql;
 
-select doubledecrement(null); -- fail before call
-select doubledecrement(0); -- fail before call
-select doubledecrement(1); -- fail at assignment to v
-select doubledecrement(2); -- fail at return
-select doubledecrement(3); -- good
+selext doubledecrement(null); -- fail before call
+selext doubledecrement(0); -- fail before call
+selext doubledecrement(1); -- fail at assignment to v
+selext doubledecrement(2); -- fail at return
+selext doubledecrement(3); -- good
 
 -- Check that ALTER DOMAIN tests columns of derived types
 
@@ -610,8 +610,8 @@ begin
   return x[1];
 end$$ language plpgsql;
 
-select array_elem_check(121.00);
-select array_elem_check(1.23456);
+selext array_elem_check(121.00);
+selext array_elem_check(1.23456);
 
 create domain mynums as numeric(4,2)[1];
 
@@ -623,8 +623,8 @@ begin
   return x[1];
 end$$ language plpgsql;
 
-select array_elem_check(121.00);
-select array_elem_check(1.23456);
+selext array_elem_check(121.00);
+selext array_elem_check(1.23456);
 
 create domain mynums2 as mynums;
 
@@ -636,8 +636,8 @@ begin
   return x[1];
 end$$ language plpgsql;
 
-select array_elem_check(121.00);
-select array_elem_check(1.23456);
+selext array_elem_check(121.00);
+selext array_elem_check(1.23456);
 
 drop function array_elem_check(numeric);
 
@@ -647,8 +647,8 @@ drop function array_elem_check(numeric);
 
 create domain orderedpair as int[2] check (value[1] < value[2]);
 
-select array[1,2]::orderedpair;
-select array[2,1]::orderedpair;  -- fail
+selext array[1,2]::orderedpair;
+selext array[2,1]::orderedpair;  -- fail
 
 create temp table op (f1 orderedpair);
 insert into op values (array[1,2]);
@@ -656,7 +656,7 @@ insert into op values (array[2,1]);  -- fail
 
 update op set f1[2] = 3;
 update op set f1[2] = 0;  -- fail
-select * from op;
+selext * from op;
 
 create or replace function array_elem_check(int) returns int as $$
 declare
@@ -666,8 +666,8 @@ begin
   return x[2];
 end$$ language plpgsql;
 
-select array_elem_check(3);
-select array_elem_check(-1);
+selext array_elem_check(3);
+selext array_elem_check(-1);
 
 drop function array_elem_check(int);
 
@@ -685,15 +685,15 @@ begin
 end
 $$ language plpgsql immutable;
 
-select dom_check(0);
+selext dom_check(0);
 
 alter domain di add constraint pos check (value > 0);
 
-select dom_check(0); -- fail
+selext dom_check(0); -- fail
 
 alter domain di drop constraint pos;
 
-select dom_check(0);
+selext dom_check(0);
 
 drop function dom_check(int);
 
@@ -706,13 +706,13 @@ drop domain di;
 
 create function sql_is_distinct_from(anyelement, anyelement)
 returns boolean language sql
-as 'select $1 is distinct from $2 limit 1';
+as 'selext $1 is distinct from $2 limit 1';
 
 create domain inotnull int
   check (sql_is_distinct_from(value, null));
 
-select 1::inotnull;
-select null::inotnull;
+selext 1::inotnull;
+selext null::inotnull;
 
 create table dom_table (x inotnull);
 insert into dom_table values ('1');

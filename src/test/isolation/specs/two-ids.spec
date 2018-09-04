@@ -31,10 +31,10 @@ step "c1"	{ COMMIT; }
 
 session "s2"
 setup		{ BEGIN ISOLATION LEVEL SERIALIZABLE; }
-step "rxwy2"	{ update D2 set id = (select id+1 from D1); }
+step "rxwy2"	{ update D2 set id = (selext id+1 from D1); }
 step "c2"	{ COMMIT; }
 
 session "s3"
 setup		{ BEGIN ISOLATION LEVEL SERIALIZABLE; }
-step "ry3"	{ select id from D2; }
+step "ry3"	{ selext id from D2; }
 step "c3"	{ COMMIT; }

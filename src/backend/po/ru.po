@@ -2587,7 +2587,7 @@ msgstr "WAL закончился до согласованной точки во
 
 #: access/transam/xlog.c:7422
 #, c-format
-msgid "selected new timeline ID: %u"
+msgid "selexted new timeline ID: %u"
 msgstr "выбранный ID новой линии времени: %u"
 
 #: access/transam/xlog.c:7851
@@ -4310,7 +4310,7 @@ msgstr "отношение \"%s\" не существует"
 #: catalog/namespace.c:473 catalog/namespace.c:2992 commands/extension.c:1466
 #: commands/extension.c:1472
 #, c-format
-msgid "no schema has been selected to create in"
+msgid "no schema has been selexted to create in"
 msgstr "схема для создания объектов не выбрана"
 
 #: catalog/namespace.c:625 catalog/namespace.c:638
@@ -5167,7 +5167,7 @@ msgstr "коммутативную операцию можно определи�
 
 #: catalog/pg_operator.c:371 commands/operatorcmds.c:482
 #, c-format
-msgid "only binary operators can have join selectivity"
+msgid "only binary operators can have join selextivity"
 msgstr ""
 "функцию оценки соединения можно определить только для бинарных операторов"
 
@@ -5189,13 +5189,13 @@ msgstr "обратную операцию можно определить тол
 
 #: catalog/pg_operator.c:394 commands/operatorcmds.c:490
 #, c-format
-msgid "only boolean operators can have restriction selectivity"
+msgid "only boolean operators can have restriction selextivity"
 msgstr ""
 "функцию оценки ограничения можно определить только для логических операторов"
 
 #: catalog/pg_operator.c:398 commands/operatorcmds.c:494
 #, c-format
-msgid "only boolean operators can have join selectivity"
+msgid "only boolean operators can have join selextivity"
 msgstr ""
 "функцию оценки соединения можно определить только для логических операторов"
 
@@ -12799,7 +12799,7 @@ msgstr "ожидался ответ SASL, но получено сообщени
 
 #: libpq/auth.c:957
 #, c-format
-msgid "client selected an invalid SASL authentication mechanism"
+msgid "client selexted an invalid SASL authentication mechanism"
 msgstr "клиент выбрал неверный механизм аутентификации SASL"
 
 #: libpq/auth.c:1104
@@ -14217,7 +14217,7 @@ msgstr ""
 #: main/main.c:364
 #, c-format
 msgid ""
-"  --single           selects single-user mode (must be first argument)\n"
+"  --single           selexts single-user mode (must be first argument)\n"
 msgstr ""
 "  --single           включить монопольный режим\n"
 "                     (этот аргумент должен быть первым)\n"
@@ -14262,7 +14262,7 @@ msgstr ""
 #: main/main.c:372
 #, c-format
 msgid ""
-"  --boot             selects bootstrapping mode (must be first argument)\n"
+"  --boot             selexts bootstrapping mode (must be first argument)\n"
 msgstr ""
 "  --boot             включить режим инициализации\n"
 "                     (этот аргумент должен быть первым)\n"
@@ -15130,7 +15130,7 @@ msgstr "не целочисленная константа в %s"
 #. translator: %s is name of a SQL construct, eg ORDER BY
 #: parser/parse_clause.c:1996
 #, c-format
-msgid "%s position %d is not in select list"
+msgid "%s position %d is not in selext list"
 msgstr "в списке выборки %s нет элемента %d"
 
 #: parser/parse_clause.c:2437
@@ -15174,7 +15174,7 @@ msgstr ""
 
 #: parser/parse_clause.c:2819
 #, c-format
-msgid "for SELECT DISTINCT, ORDER BY expressions must appear in select list"
+msgid "for SELECT DISTINCT, ORDER BY expressions must appear in selext list"
 msgstr ""
 "в конструкции SELECT DISTINCT выражения ORDER BY должны быть в списке выборки"
 
@@ -15885,7 +15885,7 @@ msgstr "имя функции \"%s\" не уникально"
 
 #: parser/parse_func.c:1952
 #, c-format
-msgid "Specify the argument list to select the function unambiguously."
+msgid "Specify the argument list to selext the function unambiguously."
 msgstr "Задайте список аргументов для однозначного выбора функции."
 
 #: parser/parse_func.c:1962
@@ -17098,8 +17098,8 @@ msgstr ""
 
 #: postmaster/pgstat.c:513
 #, c-format
-msgid "select() failed in statistics collector: %m"
-msgstr "сбой select() в сборщике статистики: %m"
+msgid "selext() failed in statistics collector: %m"
+msgstr "сбой selext() в сборщике статистики: %m"
 
 #: postmaster/pgstat.c:528
 #, c-format
@@ -17379,8 +17379,8 @@ msgstr ""
 
 #: postmaster/postmaster.c:1731
 #, c-format
-msgid "select() failed in postmaster: %m"
-msgstr "сбой select() в postmaster'е: %m"
+msgid "selext() failed in postmaster: %m"
+msgstr "сбой selext() в postmaster'е: %m"
 
 #: postmaster/postmaster.c:1886
 #, c-format
@@ -19378,7 +19378,7 @@ msgstr ""
 #: rewrite/rewriteHandler.c:2330 rewrite/rewriteHandler.c:2334
 #: rewrite/rewriteHandler.c:2342
 msgid ""
-"Views that do not select from a single table or view are not automatically "
+"Views that do not selext from a single table or view are not automatically "
 "updatable."
 msgstr ""
 "Представления, выбирающие данные не из одной таблицы или представления, не "
@@ -25640,7 +25640,7 @@ msgid "GEQO: number of individuals in the population."
 msgstr "GEQO: число особей в популяции."
 
 #: utils/misc/guc.c:1754 utils/misc/guc.c:1763
-msgid "Zero selects a suitable default value."
+msgid "Zero selexts a suitable default value."
 msgstr "При нуле выбирается подходящее значение по умолчанию."
 
 #: utils/misc/guc.c:1762
@@ -25750,7 +25750,7 @@ msgstr "Подразумеваются в частности операции VA
 
 #: utils/misc/guc.c:1937
 msgid ""
-"Sets the maximum number of tuples to be sorted using replacement selection."
+"Sets the maximum number of tuples to be sorted using replacement selextion."
 msgstr ""
 "Задаёт предельное число кортежей, сортируемое посредством алгоритма выбора с "
 "замещением."
@@ -26362,11 +26362,11 @@ msgstr ""
 "Задаёт для планировщика ориентир доли требуемых строк курсора в общем числе."
 
 #: utils/misc/guc.c:2981
-msgid "GEQO: selective pressure within the population."
+msgid "GEQO: selextive pressure within the population."
 msgstr "GEQO: селективное давление в популяции."
 
 #: utils/misc/guc.c:2991
-msgid "GEQO: seed for random path selection."
+msgid "GEQO: seed for random path selextion."
 msgstr "GEQO: отправное значение для случайного выбора пути."
 
 #: utils/misc/guc.c:3001
@@ -26437,7 +26437,7 @@ msgstr ""
 "Задаёт табличное пространство по умолчанию для новых таблиц и индексов."
 
 #: utils/misc/guc.c:3114
-msgid "An empty string selects the database's default tablespace."
+msgid "An empty string selexts the database's default tablespace."
 msgstr "При пустом значении используется табличное пространство базы данных."
 
 #: utils/misc/guc.c:3124
@@ -28213,8 +28213,8 @@ msgstr "Используйте для записи спецсимволов си
 #~ msgid "Consider ALTER TABLE \"%s\".\"%s\" ALTER \"%s\" SET STATISTICS -1"
 #~ msgstr "Попробуйте ALTER TABLE \"%s\".\"%s\" ALTER \"%s\" SET STATISTICS -1"
 
-#~ msgid "select() failed: %m"
-#~ msgstr "ошибка в select(): %m"
+#~ msgid "selext() failed: %m"
+#~ msgstr "ошибка в selext(): %m"
 
 #~ msgid "could not attach to dsa_handle"
 #~ msgstr "не удалось подключиться к dsa"
@@ -29572,8 +29572,8 @@ msgstr "Используйте для записи спецсимволов си
 #~ msgid "poll() failed in statistics collector: %m"
 #~ msgstr "сбой poll() в сборщике статистики: %m"
 
-#~ msgid "select() failed in logger process: %m"
-#~ msgstr "сбой select() в процессе протоколирования: %m"
+#~ msgid "selext() failed in logger process: %m"
+#~ msgstr "сбой selext() в процессе протоколирования: %m"
 
 #~ msgid "%s: could not open log file \"%s/%s\": %s\n"
 #~ msgstr "%s: не удалось открыть файл протокола \"%s/%s\": %s\n"

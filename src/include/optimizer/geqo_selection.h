@@ -1,12 +1,12 @@
 /*-------------------------------------------------------------------------
  *
- * geqo_selection.h
- *	  prototypes for selection routines in optimizer/geqo
+ * geqo_selextion.h
+ *	  prototypes for selextion routines in optimizer/geqo
  *
  * Portions Copyright (c) 1996-2018, PostgreSQL Global Development Group
  * Portions Copyright (c) 1994, Regents of the University of California
  *
- * src/include/optimizer/geqo_selection.h
+ * src/include/optimizer/geqo_selextion.h
  *
  *-------------------------------------------------------------------------
  */
@@ -26,7 +26,7 @@
 #include "optimizer/geqo.h"
 
 
-extern void geqo_selection(PlannerInfo *root,
+extern void geqo_selextion(PlannerInfo *root,
 			   Chromosome *momma, Chromosome *daddy,
 			   Pool *pool, double bias);
 

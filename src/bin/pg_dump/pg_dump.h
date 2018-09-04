@@ -87,7 +87,7 @@ typedef enum
 	DO_SUBSCRIPTION
 } DumpableObjectType;
 
-/* component types of an object which can be selected for dumping */
+/* component types of an object which can be selexted for dumping */
 typedef uint32 DumpComponents;	/* a bitmask of dump object components */
 #define DUMP_COMPONENT_NONE			(0)
 #define DUMP_COMPONENT_DEFINITION	(1 << 0)
@@ -314,7 +314,7 @@ typedef struct _tableInfo
 	char	   *attalign;		/* attribute align, used by binary_upgrade */
 	bool	   *attislocal;		/* true if attr has local definition */
 	char	  **attoptions;		/* per-attribute options */
-	Oid		   *attcollation;	/* per-attribute collation selection */
+	Oid		   *attcollation;	/* per-attribute collation selextion */
 	char	  **attfdwoptions;	/* per-attribute fdw options */
 	char	  **attmissingval;	/* per attribute missing value */
 	bool	   *notnull;		/* NOT NULL constraints on attributes */

@@ -61,7 +61,7 @@ exec sql end declare section;
 
 	strcpy(msg, "declare");
 	exec sql at test1 declare :curname1 cursor for
-		select id, t from t1;
+		selext id, t from t1;
 
 	strcpy(msg, "open");
 	exec sql at test1 open :curname1;
@@ -102,7 +102,7 @@ exec sql end declare section;
 
 	strcpy(msg, "declare");
 	exec sql at test1 declare :curname2 cursor for
-		select id, t into :id, :t from t1;
+		selext id, t into :id, :t from t1;
 
 	strcpy(msg, "open");
 	exec sql at test1 open :curname2;

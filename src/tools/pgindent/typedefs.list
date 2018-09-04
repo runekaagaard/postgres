@@ -1875,7 +1875,7 @@ RangeBox
 RangeFunction
 RangeIOData
 RangeQueryClause
-RangeSubselect
+RangeSubselext
 RangeTableFunc
 RangeTableFuncCol
 RangeTableSample

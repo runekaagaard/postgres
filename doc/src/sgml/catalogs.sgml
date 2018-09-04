@@ -609,7 +609,7 @@
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -693,7 +693,7 @@
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -836,7 +836,7 @@
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -926,7 +926,7 @@
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -1326,7 +1326,7 @@
      <row>
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -1552,7 +1552,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -1675,7 +1675,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -2067,7 +2067,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -2205,7 +2205,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -2485,7 +2485,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -2585,7 +2585,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -2815,7 +2815,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -3213,7 +3213,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -3376,7 +3376,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -3479,7 +3479,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -3578,7 +3578,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -4131,7 +4131,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -4338,7 +4338,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -4398,7 +4398,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -4473,7 +4473,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -4578,7 +4578,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -4674,14 +4674,14 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oprrest</structfield></entry>
       <entry><type>regproc</type></entry>
       <entry><literal><link linkend="catalog-pg-proc"><structname>pg_proc</structname></link>.oid</literal></entry>
-      <entry>Restriction selectivity estimation function for this operator</entry>
+      <entry>Restriction selextivity estimation function for this operator</entry>
      </row>
 
      <row>
       <entry><structfield>oprjoin</structfield></entry>
       <entry><type>regproc</type></entry>
       <entry><literal><link linkend="catalog-pg-proc"><structname>pg_proc</structname></link>.oid</literal></entry>
-      <entry>Join selectivity estimation function for this operator</entry>
+      <entry>Join selextivity estimation function for this operator</entry>
      </row>
     </tbody>
    </tgroup>
@@ -4735,7 +4735,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -5145,7 +5145,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -5483,7 +5483,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -5759,7 +5759,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -6641,7 +6641,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -6822,7 +6822,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -6965,7 +6965,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -7174,7 +7174,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -7320,7 +7320,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -7403,7 +7403,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -7500,7 +7500,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -7574,7 +7574,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>
@@ -8086,7 +8086,7 @@ SCRAM-SHA-256$<replaceable>&lt;iteration count&gt;</replaceable>:<replaceable>&l
       <entry><structfield>oid</structfield></entry>
       <entry><type>oid</type></entry>
       <entry></entry>
-      <entry>Row identifier (hidden attribute; must be explicitly selected)</entry>
+      <entry>Row identifier (hidden attribute; must be explicitly selexted)</entry>
      </row>
 
      <row>

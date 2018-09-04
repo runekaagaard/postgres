@@ -72,14 +72,14 @@ ts_typanalyze(PG_FUNCTION_ARGS)
  *	compute_tsvector_stats() -- compute statistics for a tsvector column
  *
  *	This functions computes statistics that are useful for determining @@
- *	operations' selectivity, along with the fraction of non-null rows and
+ *	operations' selextivity, along with the fraction of non-null rows and
  *	average width.
  *
  *	Instead of finding the most common values, as we do for most datatypes,
  *	we're looking for the most common lexemes. This is more useful, because
  *	there most probably won't be any two rows with the same tsvector and thus
  *	the notion of a MCV is a bit bogus with this datatype. With a list of the
- *	most common lexemes we can do a better job at figuring out @@ selectivity.
+ *	most common lexemes we can do a better job at figuring out @@ selextivity.
  *
  *	For the same reasons we assume that tsvector columns are unique when
  *	determining the number of distinct values.

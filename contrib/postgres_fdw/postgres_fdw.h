@@ -38,7 +38,7 @@ typedef struct PgFdwRelationInfo
 	/*
 	 * Restriction clauses, divided into safe and unsafe to pushdown subsets.
 	 * All entries in these lists should have RestrictInfo wrappers; that
-	 * improves efficiency of selectivity and cost estimation.
+	 * improves efficiency of selextivity and cost estimation.
 	 */
 	List	   *remote_conds;
 	List	   *local_conds;
@@ -49,7 +49,7 @@ typedef struct PgFdwRelationInfo
 	/* Bitmap of attr numbers we need to fetch from the remote server. */
 	Bitmapset  *attrs_used;
 
-	/* Cost and selectivity of local_conds. */
+	/* Cost and selextivity of local_conds. */
 	QualCost	local_conds_cost;
 	Selectivity local_conds_sel;
 

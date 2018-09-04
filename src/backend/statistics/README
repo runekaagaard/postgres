@@ -1,7 +1,7 @@
 Extended statistics
 ===================
 
-When estimating various quantities (e.g. condition selectivities) the default
+When estimating various quantities (e.g. condition selextivities) the default
 approach relies on the assumption of independence. In practice that's often
 not true, resulting in estimation errors.
 
@@ -28,7 +28,7 @@ Each type of statistics may be used to estimate some subset of clause types.
 
 Currently, only OpExprs in the form Var op Const, or Const op Var are
 supported, however it's feasible to expand the code later to also estimate the
-selectivities on clauses such as Var op Var.
+selextivities on clauses such as Var op Var.
 
 
 Complex clauses
@@ -46,7 +46,7 @@ may be estimated using statistics on (a,b,c,d). If we only have statistics on
 (b,c,d) we may estimate the second part, and estimate (a=1) using simple stats.
 
 If we only have statistics on (a,b,c) we can't apply it at all at this point,
-but it's worth pointing out clauselist_selectivity() works recursively and when
+but it's worth pointing out clauselist_selextivity() works recursively and when
 handling the second part (the OR-clause), we'll be able to apply the statistics.
 
 Note: The multi-statistics estimation patch also makes it possible to pass some
@@ -56,8 +56,8 @@ clauses as 'conditions' into the deeper parts of the expression tree.
 Selectivity estimation
 ----------------------
 
-Throughout the planner clauselist_selectivity() still remains in charge of
-most selectivity estimate requests. clauselist_selectivity() can be instructed
+Throughout the planner clauselist_selextivity() still remains in charge of
+most selextivity estimate requests. clauselist_selextivity() can be instructed
 to try to make use of any extended statistics on the given RelOptInfo, which
 it will do if:
 
@@ -67,8 +67,8 @@ it will do if:
     (b) The relation given actually has any extended statistics defined which
         are actually built.
 
-When the above conditions are met, clauselist_selectivity() first attempts to
-pass the clause list off to the extended statistics selectivity estimation
+When the above conditions are met, clauselist_selextivity() first attempts to
+pass the clause list off to the extended statistics selextivity estimation
 function. This functions may not find any clauses which is can perform any
 estimations on. In such cases these clauses are simply ignored. When actual
 estimation work is performed in these functions they're expected to mark which

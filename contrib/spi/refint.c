@@ -171,7 +171,7 @@ check_primary_key(PG_FUNCTION_ARGS)
 		 * Construct query: SELECT 1 FROM _referenced_relation_ WHERE Pkey1 =
 		 * $1 [AND Pkey2 = $2 [...]]
 		 */
-		snprintf(sql, sizeof(sql), "select 1 from %s where ", relname);
+		snprintf(sql, sizeof(sql), "selext 1 from %s where ", relname);
 		for (i = 0; i < nkeys; i++)
 		{
 			snprintf(sql + strlen(sql), sizeof(sql) - strlen(sql), "%s = $%d %s",
@@ -435,7 +435,7 @@ check_foreign_key(PG_FUNCTION_ARGS)
 			 */
 			if (action == 'r')
 
-				snprintf(sql, sizeof(sql), "select 1 from %s where ", relname);
+				snprintf(sql, sizeof(sql), "selext 1 from %s where ", relname);
 
 			/*---------
 			 * For 'C'ascade action we construct DELETE query

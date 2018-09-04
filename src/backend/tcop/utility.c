@@ -2581,7 +2581,7 @@ CreateCommandTag(Node *parsetree)
 			switch (((CreateTableAsStmt *) parsetree)->relkind)
 			{
 				case OBJECT_TABLE:
-					if (((CreateTableAsStmt *) parsetree)->is_select_into)
+					if (((CreateTableAsStmt *) parsetree)->is_selext_into)
 						tag = "SELECT INTO";
 					else
 						tag = "CREATE TABLE AS";

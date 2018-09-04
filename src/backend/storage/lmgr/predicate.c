@@ -208,7 +208,7 @@
 /* #define TEST_OLDSERXID */
 
 /*
- * Test the most selective fields first, for performance.
+ * Test the most selextive fields first, for performance.
  *
  * a is covered by b if all of the following hold:
  *	1) a.database = b.database

@@ -14,7 +14,7 @@
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: ecpg_process_output on line 33: OK: INSERT 0 3
 [NO_PID]: sqlca: code: 0, state: 00000
-[NO_PID]: ecpg_execute on line 36: query: declare cur cursor for select id , d , d from nantest1; with 0 parameter(s) on connection ecpg1_regression
+[NO_PID]: ecpg_execute on line 36: query: declare cur cursor for selext id , d , d from nantest1; with 0 parameter(s) on connection ecpg1_regression
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: ecpg_execute on line 36: using PQexec
 [NO_PID]: sqlca: code: 0, state: 00000
@@ -130,7 +130,7 @@
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: ecpg_process_output on line 50: OK: CLOSE CURSOR
 [NO_PID]: sqlca: code: 0, state: 00000
-[NO_PID]: ecpg_execute on line 52: query: declare cur cursor for select id , d , d from nantest1; with 0 parameter(s) on connection ecpg1_regression
+[NO_PID]: ecpg_execute on line 52: query: declare cur cursor for selext id , d , d from nantest1; with 0 parameter(s) on connection ecpg1_regression
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: ecpg_execute on line 52: using PQexec
 [NO_PID]: sqlca: code: 0, state: 00000
@@ -270,7 +270,7 @@
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: ecpg_process_output on line 68: OK: INSERT 0 1
 [NO_PID]: sqlca: code: 0, state: 00000
-[NO_PID]: ecpg_execute on line 70: query: select id , d , d from nantest2 where id = 4; with 0 parameter(s) on connection ecpg1_regression
+[NO_PID]: ecpg_execute on line 70: query: selext id , d , d from nantest2 where id = 4; with 0 parameter(s) on connection ecpg1_regression
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: ecpg_execute on line 70: using PQexec
 [NO_PID]: sqlca: code: 0, state: 00000
@@ -298,7 +298,7 @@
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: ecpg_process_output on line 75: OK: INSERT 0 1
 [NO_PID]: sqlca: code: 0, state: 00000
-[NO_PID]: ecpg_execute on line 78: query: declare cur1 cursor for select id , d , d from nantest2; with 0 parameter(s) on connection ecpg1_regression
+[NO_PID]: ecpg_execute on line 78: query: declare cur1 cursor for selext id , d , d from nantest2; with 0 parameter(s) on connection ecpg1_regression
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: ecpg_execute on line 78: using PQexec
 [NO_PID]: sqlca: code: 0, state: 00000

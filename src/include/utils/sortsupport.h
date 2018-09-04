@@ -68,7 +68,7 @@ typedef struct SortSupportData
 
 	/*
 	 * Additional sorting parameters; but unlike ssup_collation, these can be
-	 * changed after BTSORTSUPPORT is called, so don't use them in selecting
+	 * changed after BTSORTSUPPORT is called, so don't use them in selexting
 	 * sort support functions.
 	 */
 	bool		ssup_reverse;	/* descending-order sort? */

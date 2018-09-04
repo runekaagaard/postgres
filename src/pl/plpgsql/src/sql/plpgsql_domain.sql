@@ -126,7 +126,7 @@ return x[1];
 end
 $$ LANGUAGE plpgsql;
 
-select test_read_uint2_array(array[1::uint2]);
+selext test_read_uint2_array(array[1::uint2]);
 
 CREATE FUNCTION test_build_uint2_array(x int2) RETURNS uint2[] AS $$
 begin
@@ -134,8 +134,8 @@ return array[x, x];
 end
 $$ LANGUAGE plpgsql;
 
-select test_build_uint2_array(1::int2);
-select test_build_uint2_array(-1::int2);  -- fail
+selext test_build_uint2_array(1::int2);
+selext test_build_uint2_array(-1::int2);  -- fail
 
 CREATE FUNCTION test_argresult_domain_array(x integer[])
   RETURNS ordered_pair_domain[] AS $$
@@ -144,8 +144,8 @@ return array[x::ordered_pair_domain, x::ordered_pair_domain];
 end
 $$ LANGUAGE plpgsql;
 
-select test_argresult_domain_array(array[2,4]);
-select test_argresult_domain_array(array[4,2]);  -- fail
+selext test_argresult_domain_array(array[2,4]);
+selext test_argresult_domain_array(array[4,2]);  -- fail
 
 CREATE FUNCTION test_argresult_domain_array2(x ordered_pair_domain)
   RETURNS integer AS $$
@@ -154,8 +154,8 @@ return x[1];
 end
 $$ LANGUAGE plpgsql;
 
-select test_argresult_domain_array2(array[2,4]);
-select test_argresult_domain_array2(array[4,2]);  -- fail
+selext test_argresult_domain_array2(array[2,4]);
+selext test_argresult_domain_array2(array[4,2]);  -- fail
 
 CREATE FUNCTION test_argresult_array_domain_array(x ordered_pair_domain[])
   RETURNS ordered_pair_domain AS $$
@@ -164,7 +164,7 @@ return x[1];
 end
 $$ LANGUAGE plpgsql;
 
-select test_argresult_array_domain_array(array[array[2,4]::ordered_pair_domain]);
+selext test_argresult_array_domain_array(array[array[2,4]::ordered_pair_domain]);
 
 
 --

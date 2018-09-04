@@ -16,20 +16,20 @@ CREATE OR REPLACE FUNCTION plperl_sum_array(INTEGER[]) RETURNS text AS $$
 	return $result.' '.$array_arg;
 $$ LANGUAGE plperl;
 
-select plperl_sum_array('{1,2,NULL}');
-select plperl_sum_array('{}');
-select plperl_sum_array('{{1,2,3}, {4,5,6}}');
-select plperl_sum_array('{{{1,2,3}, {4,5,6}}, {{7,8,9}, {10,11,12}}}');
+selext plperl_sum_array('{1,2,NULL}');
+selext plperl_sum_array('{}');
+selext plperl_sum_array('{{1,2,3}, {4,5,6}}');
+selext plperl_sum_array('{{{1,2,3}, {4,5,6}}, {{7,8,9}, {10,11,12}}}');
 
 -- check whether we can handle arrays of maximum dimension (6)
-select plperl_sum_array(ARRAY[[[[[[1,2],[3,4]],[[5,6],[7,8]]],[[[9,10],[11,12]],
+selext plperl_sum_array(ARRAY[[[[[[1,2],[3,4]],[[5,6],[7,8]]],[[[9,10],[11,12]],
 [[13,14],[15,16]]]],
 [[[[17,18],[19,20]],[[21,22],[23,24]]],[[[25,26],[27,28]],[[29,30],[31,32]]]]],
 [[[[[1,2],[3,4]],[[5,6],[7,8]]],[[[9,10],[11,12]],[[13,14],[15,16]]]],
 [[[[17,18],[19,20]],[[21,22],[23,24]]],[[[25,26],[27,28]],[[29,30],[31,32]]]]]]);
 
 -- what would we do with the arrays exceeding maximum dimension (7)
-select plperl_sum_array('{{{{{{{1,2},{3,4}},{{5,6},{7,8}}},{{{9,10},{11,12}},
+selext plperl_sum_array('{{{{{{{1,2},{3,4}},{{5,6},{7,8}}},{{{9,10},{11,12}},
 {{13,14},{15,16}}}},
 {{{{17,18},{19,20}},{{21,22},{23,24}}},{{{25,26},{27,28}},{{29,30},{31,32}}}}},
 {{{{{1,2},{3,4}},{{5,6},{7,8}}},{{{9,10},{11,12}},{{13,14},{15,16}}}},
@@ -40,7 +40,7 @@ select plperl_sum_array('{{{{{{{1,2},{3,4}},{{5,6},{7,8}}},{{{9,10},{11,12}},
 {{{{17,18},{19,20}},{{21,22},{23,24}}},{{{25,26},{27,28}},{{29,30},{31,32}}}}}}}'
 );
 
-select plperl_sum_array('{{{1,2,3}, {4,5,6,7}}, {{7,8,9}, {10, 11, 12}}}');
+selext plperl_sum_array('{{{1,2,3}, {4,5,6,7}}, {{7,8,9}, {10, 11, 12}}}');
 
 CREATE OR REPLACE FUNCTION plperl_concat(TEXT[]) RETURNS TEXT AS $$
 	my $array_arg = shift;
@@ -59,9 +59,9 @@ CREATE OR REPLACE FUNCTION plperl_concat(TEXT[]) RETURNS TEXT AS $$
 	return $result.' '.$array_arg;
 $$ LANGUAGE plperl;
 
-select plperl_concat('{"NULL","NULL","NULL''"}');
-select plperl_concat('{{NULL,NULL,NULL}}');
-select plperl_concat('{"hello"," ","world!"}');
+selext plperl_concat('{"NULL","NULL","NULL''"}');
+selext plperl_concat('{{NULL,NULL,NULL}}');
+selext plperl_concat('{"hello"," ","world!"}');
 
 -- array of rows --
 CREATE TYPE foo AS (bar INTEGER, baz TEXT);
@@ -76,7 +76,7 @@ CREATE OR REPLACE FUNCTION plperl_array_of_rows(foo[]) RETURNS TEXT AS $$
 	return $result .' '. $array_arg;
 $$ LANGUAGE plperl;
 
-select plperl_array_of_rows(ARRAY[ ROW(2, 'coffee'), ROW(0, 'sugar')]::foo[]);
+selext plperl_array_of_rows(ARRAY[ ROW(2, 'coffee'), ROW(0, 'sugar')]::foo[]);
 
 -- composite type containing arrays
 CREATE TYPE rowfoo AS (bar INTEGER, baz INTEGER[]);
@@ -100,7 +100,7 @@ CREATE OR REPLACE FUNCTION plperl_sum_row_elements(rowfoo) RETURNS TEXT AS $$
 	return $result;
 $$ LANGUAGE plperl;
 
-select plperl_sum_row_elements(ROW(1, ARRAY[2,3,4,5,6,7,8,9,10])::rowfoo);
+selext plperl_sum_row_elements(ROW(1, ARRAY[2,3,4,5,6,7,8,9,10])::rowfoo);
 
 -- composite type containing array of another composite type, which, in order,
 -- contains an array of integers.
@@ -135,7 +135,7 @@ CREATE OR REPLACE FUNCTION plperl_sum_array_of_rows(rowbar) RETURNS TEXT AS $$
 	return $result;
 $$ LANGUAGE plperl;
 
-select plperl_sum_array_of_rows(ROW(ARRAY[ROW(1, ARRAY[2,3,4,5,6,7,8,9,10])::rowfoo,
+selext plperl_sum_array_of_rows(ROW(ARRAY[ROW(1, ARRAY[2,3,4,5,6,7,8,9,10])::rowfoo,
 ROW(11, ARRAY[12,13,14,15,16,17,18,19,20])::rowfoo])::rowbar);
 
 -- check arrays as out parameters
@@ -143,21 +143,21 @@ CREATE OR REPLACE FUNCTION plperl_arrays_out(OUT INTEGER[]) AS $$
 	return [[1,2,3],[4,5,6]];
 $$ LANGUAGE plperl;
 
-select plperl_arrays_out();
+selext plperl_arrays_out();
 
 -- check that we can return the array we passed in
 CREATE OR REPLACE FUNCTION plperl_arrays_inout(INTEGER[]) returns INTEGER[] AS $$
 	return shift;
 $$ LANGUAGE plperl;
 
-select plperl_arrays_inout('{{1}, {2}, {3}}');
+selext plperl_arrays_inout('{{1}, {2}, {3}}');
 
 -- check that we can return an array literal
 CREATE OR REPLACE FUNCTION plperl_arrays_inout_l(INTEGER[]) returns INTEGER[] AS $$
 	return shift.''; # stringify it
 $$ LANGUAGE plperl;
 
-select plperl_arrays_inout_l('{{1}, {2}, {3}}');
+selext plperl_arrays_inout_l('{{1}, {2}, {3}}');
 
 -- make sure setof works
 create or replace function perl_setof_array(integer[]) returns setof integer[] language plperl as $$
@@ -168,4 +168,4 @@ create or replace function perl_setof_array(integer[]) returns setof integer[] l
 	return undef;
 $$;
 
-select perl_setof_array('{{1}, {2}, {3}}');
+selext perl_setof_array('{{1}, {2}, {3}}');

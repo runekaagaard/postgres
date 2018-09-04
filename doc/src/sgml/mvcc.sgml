@@ -712,8 +712,8 @@ ERROR:  could not serialize access due to read/write dependencies among transact
     that <emphasis>all</emphasis> Serializable transactions that insert potentially
     conflicting keys explicitly check if they can do so first.  For example,
     imagine an application that asks the user for a new key and then checks
-    that it doesn't exist already by trying to select it first, or generates
-    a new key by selecting the maximum existing key and adding one.  If some
+    that it doesn't exist already by trying to selext it first, or generates
+    a new key by selexting the maximum existing key and adding one.  If some
     Serializable transactions insert new keys directly without following this
     protocol, unique constraints violations might be reported even in cases
     where they could not occur in a serial execution of the concurrent
@@ -881,7 +881,7 @@ ERROR:  could not serialize access due to read/write dependencies among transact
          <command>SELECT FOR SHARE</command> commands acquire a
          lock of this mode on the target table(s) (in addition to
          <literal>ACCESS SHARE</literal> locks on any other tables
-         that are referenced but not selected
+         that are referenced but not selexted
          <option>FOR UPDATE/FOR SHARE</option>).
         </para>
        </listitem>
@@ -1278,7 +1278,7 @@ ERROR:  could not serialize access due to read/write dependencies among transact
      information about modified rows in memory, so there is no limit on
      the number of rows locked at one time.  However, locking a row
      might cause a disk write, e.g., <command>SELECT FOR
-     UPDATE</command> modifies selected rows to mark them locked, and so
+     UPDATE</command> modifies selexted rows to mark them locked, and so
      will result in disk writes.
     </para>
 
@@ -1629,7 +1629,7 @@ SELECT pg_advisory_lock(q.id) FROM
     <para>
      Also of note to those converting from other environments is the fact
      that <command>SELECT FOR UPDATE</command> does not ensure that a
-     concurrent transaction will not update or delete a selected row.
+     concurrent transaction will not update or delete a selexted row.
      To do that in <productname>PostgreSQL</productname> you must actually
      update the row, even if no values need to be changed.
      <command>SELECT FOR UPDATE</command> <emphasis>temporarily blocks</emphasis>

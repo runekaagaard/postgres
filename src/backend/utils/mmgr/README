@@ -31,7 +31,7 @@ allocated in.
 
 At all times there is a "current" context denoted by the
 CurrentMemoryContext global variable.  palloc() implicitly allocates space
-in that context.  The MemoryContextSwitchTo() operation selects a new current
+in that context.  The MemoryContextSwitchTo() operation selexts a new current
 context (and returns the previous context, so that the caller can restore the
 previous context before exiting).
 

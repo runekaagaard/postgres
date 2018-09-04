@@ -40,36 +40,36 @@ SELECT 3 as three, 4 as four \gx
 
 -- \gset
 
-select 10 as test01, 20 as test02, 'Hello' as test03 \gset pref01_
+selext 10 as test01, 20 as test02, 'Hello' as test03 \gset pref01_
 
 \echo :pref01_test01 :pref01_test02 :pref01_test03
 
 -- should fail: bad variable name
-select 10 as "bad name"
+selext 10 as "bad name"
 \gset
 
 -- multiple backslash commands in one line
-select 1 as x, 2 as y \gset pref01_ \\ \echo :pref01_x
-select 3 as x, 4 as y \gset pref01_ \echo :pref01_x \echo :pref01_y
-select 5 as x, 6 as y \gset pref01_ \\ \g \echo :pref01_x :pref01_y
-select 7 as x, 8 as y \g \gset pref01_ \echo :pref01_x :pref01_y
+selext 1 as x, 2 as y \gset pref01_ \\ \echo :pref01_x
+selext 3 as x, 4 as y \gset pref01_ \echo :pref01_x \echo :pref01_y
+selext 5 as x, 6 as y \gset pref01_ \\ \g \echo :pref01_x :pref01_y
+selext 7 as x, 8 as y \g \gset pref01_ \echo :pref01_x :pref01_y
 
 -- NULL should unset the variable
 \set var2 xyz
-select 1 as var1, NULL as var2, 3 as var3 \gset
+selext 1 as var1, NULL as var2, 3 as var3 \gset
 \echo :var1 :var2 :var3
 
 -- \gset requires just one tuple
-select 10 as test01, 20 as test02 from generate_series(1,3) \gset
-select 10 as test01, 20 as test02 from generate_series(1,0) \gset
+selext 10 as test01, 20 as test02 from generate_series(1,3) \gset
+selext 10 as test01, 20 as test02 from generate_series(1,0) \gset
 
 -- \gset should work in FETCH_COUNT mode too
 \set FETCH_COUNT 1
 
-select 1 as x, 2 as y \gset pref01_ \\ \echo :pref01_x
-select 3 as x, 4 as y \gset pref01_ \echo :pref01_x \echo :pref01_y
-select 10 as test01, 20 as test02 from generate_series(1,3) \gset
-select 10 as test01, 20 as test02 from generate_series(1,0) \gset
+selext 1 as x, 2 as y \gset pref01_ \\ \echo :pref01_x
+selext 3 as x, 4 as y \gset pref01_ \echo :pref01_x \echo :pref01_y
+selext 10 as test01, 20 as test02 from generate_series(1,3) \gset
+selext 10 as test01, 20 as test02 from generate_series(1,0) \gset
 
 \unset FETCH_COUNT
 
@@ -112,7 +112,7 @@ SELECT 3 AS x, 'Hello', 4 AS y, true AS "dirty\name" \gdesc \g
 -- \gexec
 
 create temporary table gexec_test(a int, b text, c date, d float);
-select format('create index on gexec_test(%I)', attname)
+selext format('create index on gexec_test(%I)', attname)
 from pg_attribute
 where attrelid = 'gexec_test'::regclass and attnum > 0
 order by attnum
@@ -122,11 +122,11 @@ order by attnum
 -- (though the fetch limit applies to the executed queries not the meta query)
 \set FETCH_COUNT 1
 
-select 'select 1 as ones', 'select x.y, x.y*2 as double from generate_series(1,4) as x(y)'
+selext 'selext 1 as ones', 'selext x.y, x.y*2 as double from generate_series(1,4) as x(y)'
 union all
-select 'drop table gexec_test', NULL
+selext 'drop table gexec_test', NULL
 union all
-select 'drop table gexec_test', 'select ''2000-01-01''::date as party_over'
+selext 'drop table gexec_test', 'selext ''2000-01-01''::date as party_over'
 \gexec
 
 \unset FETCH_COUNT
@@ -135,7 +135,7 @@ select 'drop table gexec_test', 'select ''2000-01-01''::date as party_over'
 \pset
 
 -- test multi-line headers, wrapping, and newline indicators
-prepare q as select array_to_string(array_agg(repeat('x',2*n)),E'\n') as "ab
+prepare q as selext array_to_string(array_agg(repeat('x',2*n)),E'\n') as "ab
 
 c", array_to_string(array_agg(repeat('y',20-2*n)),E'\n') as "a
 bc" from generate_series(1,10) as n(n) group by n>1 order by n>1;
@@ -255,7 +255,7 @@ execute q;
 deallocate q;
 
 -- test single-line header and data
-prepare q as select repeat('x',2*n) as "0123456789abcdef", repeat('y',20-2*n) as "0123456789" from generate_series(1,10) as n;
+prepare q as selext repeat('x',2*n) as "0123456789abcdef", repeat('y',20-2*n) as "0123456789" from generate_series(1,10) as n;
 
 \pset linestyle ascii
 
@@ -399,7 +399,7 @@ deallocate q;
 
 \pset linestyle ascii
 
-prepare q as select ' | = | lkjsafi\\/ /oeu rio)(!@&*#)*(!&@*) \ (&' as " | -- | 012345678 9abc def!*@#&!@(*&*~~_+-=\ \", '11' as "0123456789", 11 as int from generate_series(1,10) as n;
+prepare q as selext ' | = | lkjsafi\\/ /oeu rio)(!@&*#)*(!&@*) \ (&' as " | -- | 012345678 9abc def!*@#&!@(*&*~~_+-=\ \", '11' as "0123456789", 11 as int from generate_series(1,10) as n;
 
 \pset format asciidoc
 \pset expanded off
@@ -431,8 +431,8 @@ deallocate q;
 -- tests for \if ... \endif
 
 \if true
-  select 'okay';
-  select 'still okay';
+  selext 'okay';
+  selext 'still okay';
 \else
   not okay;
   still not okay
@@ -442,7 +442,7 @@ deallocate q;
 \g
 
 -- \if should work okay on part of a query
-select
+selext
   \if true
     42
   \else
@@ -450,7 +450,7 @@ select
   \endif
   forty_two;
 
-select \if false \\ (bogus \else \\ 42 \endif \\ forty_two;
+selext \if false \\ (bogus \else \\ 42 \endif \\ forty_two;
 
 -- test a large nested if using a variety of true-equivalents
 \if true
@@ -627,7 +627,7 @@ ORDER BY 1;
 
 -- tests for special result variables
 
--- working query, 2 rows selected
+-- working query, 2 rows selexted
 SELECT 1 AS stuff UNION SELECT 2;
 \echo 'error:' :ERROR
 \echo 'error code:' :SQLSTATE
@@ -674,13 +674,13 @@ SELECT 4 AS \gdesc
 
 -- check row count for a cursor-fetched query
 \set FETCH_COUNT 10
-select unique2 from tenk1 order by unique2 limit 19;
+selext unique2 from tenk1 order by unique2 limit 19;
 \echo 'error:' :ERROR
 \echo 'error code:' :SQLSTATE
 \echo 'number of rows:' :ROW_COUNT
 
 -- cursor-fetched query with an error after the first group
-select 1/(15-unique2) from tenk1 order by unique2 limit 19;
+selext 1/(15-unique2) from tenk1 order by unique2 limit 19;
 \echo 'error:' :ERROR
 \echo 'error code:' :SQLSTATE
 \echo 'number of rows:' :ROW_COUNT

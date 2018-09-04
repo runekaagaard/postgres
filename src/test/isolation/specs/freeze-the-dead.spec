@@ -20,14 +20,14 @@ step "s1_begin"		{ BEGIN; }
 step "s1_update"	{ UPDATE tab_freeze SET x = x + 1 WHERE id = 3; }
 step "s1_commit"	{ COMMIT; }
 step "s1_vacuum"	{ VACUUM FREEZE tab_freeze; }
-step "s1_selectone"	{
+step "s1_selextone"	{
     BEGIN;
     SET LOCAL enable_seqscan = false;
     SET LOCAL enable_bitmapscan = false;
     SELECT * FROM tab_freeze WHERE id = 3;
     COMMIT;
 }
-step "s1_selectall"	{ SELECT * FROM tab_freeze ORDER BY name, id; }
+step "s1_selextall"	{ SELECT * FROM tab_freeze ORDER BY name, id; }
 step "s1_reindex"	{ REINDEX TABLE tab_freeze; }
 
 session "s2"
@@ -53,7 +53,7 @@ permutation "s1_begin" "s2_begin" "s3_begin" # start transactions
    "s1_update" # create additional row version that has multis
    "s1_commit" "s2_commit" # commit both updater and share locker
    "s2_vacuum" # due to bug in freezing logic, we used to *not* prune updated row, and then froze it
-   "s1_selectone" # if hot chain is broken, the row can't be found via index scan
+   "s1_selextone" # if hot chain is broken, the row can't be found via index scan
    "s3_commit" # commit remaining open xact
    "s2_vacuum" # pruning / freezing in broken hot chains would unset xmax, reviving rows
-   "s1_selectall" # show borkedness
+   "s1_selextall" # show borkedness

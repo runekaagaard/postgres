@@ -604,7 +604,7 @@ call_pltcl_start_proc(Oid prolang, bool pltrusted)
 	FunctionCallInfoData fcinfo;
 	PgStat_FunctionCallUsage fcusage;
 
-	/* select appropriate GUC */
+	/* selext appropriate GUC */
 	start_proc = pltrusted ? pltcl_start_proc : pltclu_start_proc;
 	gucname = pltrusted ? "pltcl.start_proc" : "pltclu.start_proc";
 

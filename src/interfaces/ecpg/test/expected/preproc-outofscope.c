@@ -189,7 +189,7 @@ get_var1(MYTYPE **myvar0, MYNULLTYPE **mynullvar0)
 
 	ECPGset_var( 0, ( myvar ), __LINE__);\
  ECPGset_var( 1, ( mynullvar ), __LINE__);\
- /* declare mycur cursor for select * from a1 */
+ /* declare mycur cursor for selext * from a1 */
 #line 28 "outofscope.pgc"
 
 
@@ -203,7 +203,7 @@ get_var1(MYTYPE **myvar0, MYNULLTYPE **mynullvar0)
 static void
 open_cur1(void)
 {
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare mycur cursor for select * from a1", ECPGt_EOIT, 
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare mycur cursor for selext * from a1", ECPGt_EOIT, 
 	ECPGt_int,&((*( MYTYPE  *)(ECPGget_var( 0)) ).id),(long)1,(long)1,sizeof( struct mytype ), 
 	ECPGt_int,&((*( MYNULLTYPE  *)(ECPGget_var( 1)) ).id),(long)1,(long)1,sizeof( struct mynulltype ), 
 	ECPGt_char,&((*( MYTYPE  *)(ECPGget_var( 0)) ).t),(long)64,(long)1,sizeof( struct mytype ), 

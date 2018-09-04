@@ -999,7 +999,7 @@ static NUMCacheEntry *NUM_cache_fetch(const char *str);
 
 
 /* ----------
- * Fast sequential search, use index for data selection which
+ * Fast sequential search, use index for data selextion which
  * go to seq. cycle (it is very fast for unwanted strings)
  * (can't be used binary search in format parsing)
  * ----------
@@ -3264,7 +3264,7 @@ DCH_from_char(FormatNode *node, char *in, TmFromChar *out)
 	}
 }
 
-/* select a DCHCacheEntry to hold the given format picture */
+/* selext a DCHCacheEntry to hold the given format picture */
 static DCHCacheEntry *
 DCH_cache_getnew(const char *str)
 {
@@ -3943,7 +3943,7 @@ do { \
 	(_n)->zero_end		= 0;	\
 } while(0)
 
-/* select a NUMCacheEntry to hold the given format picture */
+/* selext a NUMCacheEntry to hold the given format picture */
 static NUMCacheEntry *
 NUM_cache_getnew(const char *str)
 {

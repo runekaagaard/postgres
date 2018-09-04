@@ -170,7 +170,7 @@ ExecInitSampleScan(SampleScan *node, EState *estate, int eflags)
 		ExecInitExpr(tsc->repeatable, (PlanState *) scanstate);
 
 	/*
-	 * If we don't have a REPEATABLE clause, select a random seed.  We want to
+	 * If we don't have a REPEATABLE clause, selext a random seed.  We want to
 	 * do this just once, since the seed shouldn't change over rescans.
 	 */
 	if (tsc->repeatable == NULL)
@@ -306,7 +306,7 @@ tablesample_init(SampleScanState *scanstate)
 	}
 	else
 	{
-		/* Use the seed selected by ExecInitSampleScan */
+		/* Use the seed selexted by ExecInitSampleScan */
 		seed = scanstate->seed;
 	}
 
@@ -541,7 +541,7 @@ SampleTupleVisible(HeapTuple tuple, OffsetNumber tupoffset, HeapScanDesc scan)
 		 * so just look at the info it left in rs_vistuples[].
 		 *
 		 * We use a binary search over the known-sorted array.  Note: we could
-		 * save some effort if we insisted that NextSampleTuple select tuples
+		 * save some effort if we insisted that NextSampleTuple selext tuples
 		 * in increasing order, but it's not clear that there would be enough
 		 * gain to justify the restriction.
 		 */

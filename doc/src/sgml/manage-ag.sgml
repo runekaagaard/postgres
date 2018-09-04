@@ -463,7 +463,7 @@ CREATE TABLE foo(i int);
    The tablespace associated with a database is used to store the system
    catalogs of that database.  Furthermore, it is the default tablespace
    used for tables, indexes, and temporary files created within the database,
-   if no <literal>TABLESPACE</literal> clause is given and no other selection is
+   if no <literal>TABLESPACE</literal> clause is given and no other selextion is
    specified by <varname>default_tablespace</varname> or
    <varname>temp_tablespaces</varname> (as appropriate).
    If a database is created without specifying a tablespace for it,

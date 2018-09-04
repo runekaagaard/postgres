@@ -733,8 +733,8 @@ msgstr "שקע לא חוקי\n"
 
 #: fe-misc.c:1081
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "נכשל select(): %s\n"
+msgid "selext() failed: %s\n"
+msgstr "נכשל selext(): %s\n"
 
 #: fe-protocol2.c:91
 #, c-format

@@ -424,7 +424,7 @@ _equalSubLink(const SubLink *a, const SubLink *b)
 	COMPARE_SCALAR_FIELD(subLinkId);
 	COMPARE_NODE_FIELD(testexpr);
 	COMPARE_NODE_FIELD(operName);
-	COMPARE_NODE_FIELD(subselect);
+	COMPARE_NODE_FIELD(subselext);
 	COMPARE_LOCATION_FIELD(location);
 
 	return true;
@@ -998,7 +998,7 @@ _equalInsertStmt(const InsertStmt *a, const InsertStmt *b)
 {
 	COMPARE_NODE_FIELD(relation);
 	COMPARE_NODE_FIELD(cols);
-	COMPARE_NODE_FIELD(selectStmt);
+	COMPARE_NODE_FIELD(selextStmt);
 	COMPARE_NODE_FIELD(onConflictClause);
 	COMPARE_NODE_FIELD(returningList);
 	COMPARE_NODE_FIELD(withClause);
@@ -1698,7 +1698,7 @@ _equalCreateTableAsStmt(const CreateTableAsStmt *a, const CreateTableAsStmt *b)
 	COMPARE_NODE_FIELD(query);
 	COMPARE_NODE_FIELD(into);
 	COMPARE_SCALAR_FIELD(relkind);
-	COMPARE_SCALAR_FIELD(is_select_into);
+	COMPARE_SCALAR_FIELD(is_selext_into);
 	COMPARE_SCALAR_FIELD(if_not_exists);
 
 	return true;
@@ -2467,7 +2467,7 @@ _equalWindowDef(const WindowDef *a, const WindowDef *b)
 }
 
 static bool
-_equalRangeSubselect(const RangeSubselect *a, const RangeSubselect *b)
+_equalRangeSubselext(const RangeSubselext *a, const RangeSubselext *b)
 {
 	COMPARE_SCALAR_FIELD(lateral);
 	COMPARE_NODE_FIELD(subquery);
@@ -2654,7 +2654,7 @@ _equalRangeTblEntry(const RangeTblEntry *a, const RangeTblEntry *b)
 	COMPARE_SCALAR_FIELD(inFromCl);
 	COMPARE_SCALAR_FIELD(requiredPerms);
 	COMPARE_SCALAR_FIELD(checkAsUser);
-	COMPARE_BITMAPSET_FIELD(selectedCols);
+	COMPARE_BITMAPSET_FIELD(selextedCols);
 	COMPARE_BITMAPSET_FIELD(insertedCols);
 	COMPARE_BITMAPSET_FIELD(updatedCols);
 	COMPARE_NODE_FIELD(securityQuals);
@@ -3603,8 +3603,8 @@ equal(const void *a, const void *b)
 		case T_WindowDef:
 			retval = _equalWindowDef(a, b);
 			break;
-		case T_RangeSubselect:
-			retval = _equalRangeSubselect(a, b);
+		case T_RangeSubselext:
+			retval = _equalRangeSubselext(a, b);
 			break;
 		case T_RangeFunction:
 			retval = _equalRangeFunction(a, b);

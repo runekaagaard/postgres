@@ -204,7 +204,7 @@
   <para>
    <application>vacuumlo</application> works by the following method:
    First, <application>vacuumlo</application> builds a temporary table which contains all
-   of the OIDs of the large objects in the selected database.  It then scans
+   of the OIDs of the large objects in the selexted database.  It then scans
    through all columns in the database that are of type
    <type>oid</type> or <type>lo</type>, and removes matching entries from the temporary
    table.  (Note: Only types with these names are considered; in particular,

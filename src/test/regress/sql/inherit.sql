@@ -116,17 +116,17 @@ insert into bar2 values(2,2,2);
 insert into bar2 values(3,3,3);
 insert into bar2 values(4,4,4);
 
-update bar set f2 = f2 + 100 where f1 in (select f1 from foo);
+update bar set f2 = f2 + 100 where f1 in (selext f1 from foo);
 
-select tableoid::regclass::text as relname, bar.* from bar order by 1,2;
+selext tableoid::regclass::text as relname, bar.* from bar order by 1,2;
 
 -- Check UPDATE with inherited target and an appendrel subquery
 update bar set f2 = f2 + 100
 from
-  ( select f1 from foo union all select f1+3 from foo ) ss
+  ( selext f1 from foo union all selext f1+3 from foo ) ss
 where bar.f1 = ss.f1;
 
-select tableoid::regclass::text as relname, bar.* from bar order by 1,2;
+selext tableoid::regclass::text as relname, bar.* from bar order by 1,2;
 
 -- Check UPDATE with *partitioned* inherited target and an appendrel subquery
 create table some_tab (a int);
@@ -141,17 +141,17 @@ insert into parted_tab values (1, 'a'), (2, 'a'), (3, 'a');
 
 update parted_tab set b = 'b'
 from
-  (select a from some_tab union all select a+1 from some_tab) ss (a)
+  (selext a from some_tab union all selext a+1 from some_tab) ss (a)
 where parted_tab.a = ss.a;
-select tableoid::regclass::text as relname, parted_tab.* from parted_tab order by 1,2;
+selext tableoid::regclass::text as relname, parted_tab.* from parted_tab order by 1,2;
 
 truncate parted_tab;
 insert into parted_tab values (1, 'a'), (2, 'a'), (3, 'a');
 update parted_tab set b = 'b'
 from
-  (select 0 from parted_tab union all select 1 from parted_tab) ss (a)
+  (selext 0 from parted_tab union all selext 1 from parted_tab) ss (a)
 where parted_tab.a = ss.a;
-select tableoid::regclass::text as relname, parted_tab.* from parted_tab order by 1,2;
+selext tableoid::regclass::text as relname, parted_tab.* from parted_tab order by 1,2;
 
 drop table parted_tab;
 
@@ -166,9 +166,9 @@ insert into mlparted_tab values (1, 'a'), (2, 'a'), (2, 'b'), (3, 'a');
 
 update mlparted_tab mlp set c = 'xxx'
 from
-  (select a from some_tab union all select a+1 from some_tab) ss (a)
+  (selext a from some_tab union all selext a+1 from some_tab) ss (a)
 where (mlp.a = ss.a and mlp.b = 'b') or mlp.a = 3;
-select tableoid::regclass::text as relname, mlparted_tab.* from mlparted_tab order by 1,2;
+selext tableoid::regclass::text as relname, mlparted_tab.* from mlparted_tab order by 1,2;
 
 drop table mlparted_tab;
 drop table some_tab cascade;
@@ -188,30 +188,30 @@ DROP TABLE firstparent, secondparent, jointchild, thirdparent, otherchild;
 -- Test changing the type of inherited columns
 insert into d values('test','one','two','three');
 alter table a alter column aa type integer using bit_length(aa);
-select * from d;
+selext * from d;
 
 -- check that oid column is handled properly during alter table inherit
 create table oid_parent (a int) with oids;
 
 create table oid_child () inherits (oid_parent);
-select attinhcount, attislocal from pg_attribute
+selext attinhcount, attislocal from pg_attribute
   where attrelid = 'oid_child'::regclass and attname = 'oid';
 drop table oid_child;
 
 create table oid_child (a int) without oids;
 alter table oid_child inherit oid_parent;  -- fail
 alter table oid_child set with oids;
-select attinhcount, attislocal from pg_attribute
+selext attinhcount, attislocal from pg_attribute
   where attrelid = 'oid_child'::regclass and attname = 'oid';
 alter table oid_child inherit oid_parent;
-select attinhcount, attislocal from pg_attribute
+selext attinhcount, attislocal from pg_attribute
   where attrelid = 'oid_child'::regclass and attname = 'oid';
 alter table oid_child set without oids;  -- fail
 alter table oid_parent set without oids;
-select attinhcount, attislocal from pg_attribute
+selext attinhcount, attislocal from pg_attribute
   where attrelid = 'oid_child'::regclass and attname = 'oid';
 alter table oid_child set without oids;
-select attinhcount, attislocal from pg_attribute
+selext attinhcount, attislocal from pg_attribute
   where attrelid = 'oid_child'::regclass and attname = 'oid';
 
 drop table oid_parent cascade;
@@ -221,7 +221,7 @@ create table p1(ff1 int);
 alter table p1 add constraint p1chk check (ff1 > 0) no inherit;
 alter table p1 add constraint p2chk check (ff1 > 10);
 -- connoinherit should be true for NO INHERIT constraint
-select pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.connoinherit from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname = 'p1' order by 1,2;
+selext pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.connoinherit from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname = 'p1' order by 1,2;
 
 -- Test that child does not inherit NO INHERIT constraints
 create table c1 () inherits (p1);
@@ -238,17 +238,17 @@ drop table p1 cascade;
 create table base (i integer);
 create table derived () inherits (base);
 insert into derived (i) values (0);
-select derived::base from derived;
-select NULL::derived::base;
+selext derived::base from derived;
+selext NULL::derived::base;
 drop table derived;
 drop table base;
 
 create table p1(ff1 int);
 create table p2(f1 text);
-create function p2text(p2) returns text as 'select $1.f1' language sql;
+create function p2text(p2) returns text as 'selext $1.f1' language sql;
 create table c1(f3 int) inherits(p1,p2);
 insert into c1 values(123456789, 'hi', 42);
-select p2text(c1.*) from c1;
+selext p2text(c1.*) from c1;
 drop function p2text(p2);
 drop table c1;
 drop table p2;
@@ -257,40 +257,40 @@ drop table p1;
 CREATE TABLE ac (aa TEXT);
 alter table ac add constraint ac_check check (aa is not null);
 CREATE TABLE bc (bb TEXT) INHERITS (ac);
-select pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc') order by 1,2;
+selext pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc') order by 1,2;
 
 insert into ac (aa) values (NULL);
 insert into bc (aa) values (NULL);
 
 alter table bc drop constraint ac_check;  -- fail, disallowed
 alter table ac drop constraint ac_check;
-select pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc') order by 1,2;
+selext pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc') order by 1,2;
 
 -- try the unnamed-constraint case
 alter table ac add check (aa is not null);
-select pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc') order by 1,2;
+selext pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc') order by 1,2;
 
 insert into ac (aa) values (NULL);
 insert into bc (aa) values (NULL);
 
 alter table bc drop constraint ac_aa_check;  -- fail, disallowed
 alter table ac drop constraint ac_aa_check;
-select pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc') order by 1,2;
+selext pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc') order by 1,2;
 
 alter table ac add constraint ac_check check (aa is not null);
 alter table bc no inherit ac;
-select pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc') order by 1,2;
+selext pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc') order by 1,2;
 alter table bc drop constraint ac_check;
-select pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc') order by 1,2;
+selext pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc') order by 1,2;
 alter table ac drop constraint ac_check;
-select pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc') order by 1,2;
+selext pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc') order by 1,2;
 
 drop table bc;
 drop table ac;
 
 create table ac (a int constraint check_a check (a <> 0));
 create table bc (a int constraint check_a check (a <> 0), b int constraint check_b check (b <> 0)) inherits (ac);
-select pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc') order by 1,2;
+selext pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc') order by 1,2;
 
 drop table bc;
 drop table ac;
@@ -298,10 +298,10 @@ drop table ac;
 create table ac (a int constraint check_a check (a <> 0));
 create table bc (b int constraint check_b check (b <> 0));
 create table cc (c int constraint check_c check (c <> 0)) inherits (ac, bc);
-select pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc', 'cc') order by 1,2;
+selext pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc', 'cc') order by 1,2;
 
 alter table cc no inherit bc;
-select pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc', 'cc') order by 1,2;
+selext pc.relname, pgc.conname, pgc.contype, pgc.conislocal, pgc.coninhcount, pgc.consrc from pg_class as pc inner join pg_constraint as pgc on (pgc.conrelid = pc.oid) where pc.relname in ('ac', 'bc', 'cc') order by 1,2;
 
 drop table cc;
 drop table bc;
@@ -417,8 +417,8 @@ insert into inh_fk_2 values (11, 1), (22, 2), (33, 3);
 create table inh_fk_2_child () inherits (inh_fk_2);
 insert into inh_fk_2_child values (111, 1), (222, 2);
 delete from inh_fk_1 where a = 1;
-select * from inh_fk_1 order by 1;
-select * from inh_fk_2 order by 1, 2;
+selext * from inh_fk_1 order by 1;
+selext * from inh_fk_2 order by 1, 2;
 drop table inh_fk_1, inh_fk_2, inh_fk_2_child;
 
 -- Test that parent and child CHECK constraints can be created in either order
@@ -431,7 +431,7 @@ alter table p1_c1 add constraint inh_check_constraint1 check (f1 > 0);
 alter table p1_c1 add constraint inh_check_constraint2 check (f1 < 10);
 alter table p1 add constraint inh_check_constraint2 check (f1 < 10);
 
-select conrelid::regclass::text as relname, conname, conislocal, coninhcount
+selext conrelid::regclass::text as relname, conname, conislocal, coninhcount
 from pg_constraint where conname like 'inh\_check\_constraint%'
 order by 1, 2;
 
@@ -453,7 +453,7 @@ alter table invalid_check_con add constraint inh_check_constraint check(f1 > 0) 
 insert into invalid_check_con values(0); -- fail
 insert into invalid_check_con_child values(0); -- fail
 
-select conrelid::regclass::text as relname, conname,
+selext conrelid::regclass::text as relname, conname,
        convalidated, conislocal, coninhcount, connoinherit
 from pg_constraint where conname like 'inh\_check\_constraint%'
 order by 1, 2;
@@ -465,13 +465,13 @@ order by 1, 2;
 --
 
 create temp table patest0 (id, x) as
-  select x, x from generate_series(0,1000) x;
+  selext x, x from generate_series(0,1000) x;
 create temp table patest1() inherits (patest0);
 insert into patest1
-  select x, x from generate_series(0,1000) x;
+  selext x, x from generate_series(0,1000) x;
 create temp table patest2() inherits (patest0);
 insert into patest2
-  select x, x from generate_series(0,1000) x;
+  selext x, x from generate_series(0,1000) x;
 create index patest0i on patest0(id);
 create index patest1i on patest1(id);
 create index patest2i on patest2(id);
@@ -480,14 +480,14 @@ analyze patest1;
 analyze patest2;
 
 explain (costs off)
-select * from patest0 join (select f1 from int4_tbl limit 1) ss on id = f1;
-select * from patest0 join (select f1 from int4_tbl limit 1) ss on id = f1;
+selext * from patest0 join (selext f1 from int4_tbl limit 1) ss on id = f1;
+selext * from patest0 join (selext f1 from int4_tbl limit 1) ss on id = f1;
 
 drop index patest2i;
 
 explain (costs off)
-select * from patest0 join (select f1 from int4_tbl limit 1) ss on id = f1;
-select * from patest0 join (select f1 from int4_tbl limit 1) ss on id = f1;
+selext * from patest0 join (selext f1 from int4_tbl limit 1) ss on id = f1;
+selext * from patest0 join (selext f1 from int4_tbl limit 1) ss on id = f1;
 
 drop table patest0 cascade;
 
@@ -513,18 +513,18 @@ insert into matest3 (name) values ('Test 5');
 insert into matest3 (name) values ('Test 6');
 
 set enable_indexscan = off;  -- force use of seqscan/sort, so no merge
-explain (verbose, costs off) select * from matest0 order by 1-id;
-select * from matest0 order by 1-id;
-explain (verbose, costs off) select min(1-id) from matest0;
-select min(1-id) from matest0;
+explain (verbose, costs off) selext * from matest0 order by 1-id;
+selext * from matest0 order by 1-id;
+explain (verbose, costs off) selext min(1-id) from matest0;
+selext min(1-id) from matest0;
 reset enable_indexscan;
 
 set enable_seqscan = off;  -- plan with fewest seqscans should be merge
 set enable_parallel_append = off; -- Don't let parallel-append interfere
-explain (verbose, costs off) select * from matest0 order by 1-id;
-select * from matest0 order by 1-id;
-explain (verbose, costs off) select min(1-id) from matest0;
-select min(1-id) from matest0;
+explain (verbose, costs off) selext * from matest0 order by 1-id;
+selext * from matest0 order by 1-id;
+explain (verbose, costs off) selext min(1-id) from matest0;
+selext min(1-id) from matest0;
 reset enable_seqscan;
 reset enable_parallel_append;
 
@@ -543,7 +543,7 @@ create index matest1i on matest1 (b, c);
 set enable_nestloop = off;  -- we want a plan with two MergeAppends
 
 explain (costs off)
-select t1.* from matest0 t1, matest0 t2
+selext t1.* from matest0 t1, matest0 t2
 where t1.b = t2.b and t2.c = t2.d
 order by t1.b limit 10;
 
@@ -631,8 +631,8 @@ create table cnullchild (check (f1 = 1 or f1 = null)) inherits(cnullparent);
 insert into cnullchild values(1);
 insert into cnullchild values(2);
 insert into cnullchild values(null);
-select * from cnullparent;
-select * from cnullparent where f1 = 2;
+selext * from cnullparent;
+selext * from cnullparent where f1 = 2;
 drop table cnullparent cascade;
 
 --
@@ -647,8 +647,8 @@ insert into inh_perm_parent values (1);
 insert into inh_temp_parent values (2);
 insert into inh_temp_child values (3);
 insert into inh_temp_child_2 values (4);
-select tableoid::regclass, a1 from inh_perm_parent;
-select tableoid::regclass, a1 from inh_temp_parent;
+selext tableoid::regclass, a1 from inh_perm_parent;
+selext tableoid::regclass, a1 from inh_temp_parent;
 drop table inh_perm_parent cascade;
 drop table inh_temp_parent cascade;
 
@@ -663,12 +663,12 @@ create table part_ab_cd partition of list_parted for values in ('ab', 'cd');
 create table part_ef_gh partition of list_parted for values in ('ef', 'gh');
 create table part_null_xy partition of list_parted for values in (null, 'xy');
 
-explain (costs off) select * from list_parted;
-explain (costs off) select * from list_parted where a is null;
-explain (costs off) select * from list_parted where a is not null;
-explain (costs off) select * from list_parted where a in ('ab', 'cd', 'ef');
-explain (costs off) select * from list_parted where a = 'ab' or a in (null, 'cd');
-explain (costs off) select * from list_parted where a = 'ab';
+explain (costs off) selext * from list_parted;
+explain (costs off) selext * from list_parted where a is null;
+explain (costs off) selext * from list_parted where a is not null;
+explain (costs off) selext * from list_parted where a in ('ab', 'cd', 'ef');
+explain (costs off) selext * from list_parted where a = 'ab' or a in (null, 'cd');
+explain (costs off) selext * from list_parted where a = 'ab';
 
 create table range_list_parted (
 	a	int,
@@ -688,18 +688,18 @@ create table part_40_inf_ab partition of part_40_inf for values in ('ab');
 create table part_40_inf_cd partition of part_40_inf for values in ('cd');
 create table part_40_inf_null partition of part_40_inf for values in (null);
 
-explain (costs off) select * from range_list_parted;
-explain (costs off) select * from range_list_parted where a = 5;
-explain (costs off) select * from range_list_parted where b = 'ab';
-explain (costs off) select * from range_list_parted where a between 3 and 23 and b in ('ab');
+explain (costs off) selext * from range_list_parted;
+explain (costs off) selext * from range_list_parted where a = 5;
+explain (costs off) selext * from range_list_parted where b = 'ab';
+explain (costs off) selext * from range_list_parted where a between 3 and 23 and b in ('ab');
 
-/* Should select no rows because range partition key cannot be null */
-explain (costs off) select * from range_list_parted where a is null;
+/* Should selext no rows because range partition key cannot be null */
+explain (costs off) selext * from range_list_parted where a is null;
 
-/* Should only select rows from the null-accepting partition */
-explain (costs off) select * from range_list_parted where b is null;
-explain (costs off) select * from range_list_parted where a is not null and a < 67;
-explain (costs off) select * from range_list_parted where a >= 30;
+/* Should only selext rows from the null-accepting partition */
+explain (costs off) selext * from range_list_parted where b is null;
+explain (costs off) selext * from range_list_parted where a is not null and a < 67;
+explain (costs off) selext * from range_list_parted where a >= 30;
 
 drop table list_parted;
 drop table range_list_parted;
@@ -714,13 +714,13 @@ create table mcrparted2 partition of mcrparted for values from (10, 5, 10) to (1
 create table mcrparted3 partition of mcrparted for values from (11, 1, 1) to (20, 10, 10);
 create table mcrparted4 partition of mcrparted for values from (20, 10, 10) to (20, 20, 20);
 create table mcrparted5 partition of mcrparted for values from (20, 20, 20) to (maxvalue, maxvalue, maxvalue);
-explain (costs off) select * from mcrparted where a = 0;	-- scans mcrparted0, mcrparted_def
-explain (costs off) select * from mcrparted where a = 10 and abs(b) < 5;	-- scans mcrparted1, mcrparted_def
-explain (costs off) select * from mcrparted where a = 10 and abs(b) = 5;	-- scans mcrparted1, mcrparted2, mcrparted_def
-explain (costs off) select * from mcrparted where abs(b) = 5;	-- scans all partitions
-explain (costs off) select * from mcrparted where a > -1;	-- scans all partitions
-explain (costs off) select * from mcrparted where a = 20 and abs(b) = 10 and c > 10;	-- scans mcrparted4
-explain (costs off) select * from mcrparted where a = 20 and c > 20; -- scans mcrparted3, mcrparte4, mcrparte5, mcrparted_def
+explain (costs off) selext * from mcrparted where a = 0;	-- scans mcrparted0, mcrparted_def
+explain (costs off) selext * from mcrparted where a = 10 and abs(b) < 5;	-- scans mcrparted1, mcrparted_def
+explain (costs off) selext * from mcrparted where a = 10 and abs(b) = 5;	-- scans mcrparted1, mcrparted2, mcrparted_def
+explain (costs off) selext * from mcrparted where abs(b) = 5;	-- scans all partitions
+explain (costs off) selext * from mcrparted where a > -1;	-- scans all partitions
+explain (costs off) selext * from mcrparted where a = 20 and abs(b) = 10 and c > 10;	-- scans mcrparted4
+explain (costs off) selext * from mcrparted where a = 20 and c > 20; -- scans mcrparted3, mcrparte4, mcrparte5, mcrparted_def
 drop table mcrparted;
 
 -- check that partitioned table Appends cope with being referenced in
@@ -729,6 +729,6 @@ create table parted_minmax (a int, b varchar(16)) partition by range (a);
 create table parted_minmax1 partition of parted_minmax for values from (1) to (10);
 create index parted_minmax1i on parted_minmax1 (a, b);
 insert into parted_minmax values (1,'12345');
-explain (costs off) select min(a), max(a) from parted_minmax where b = '12345';
-select min(a), max(a) from parted_minmax where b = '12345';
+explain (costs off) selext min(a), max(a) from parted_minmax where b = '12345';
+selext min(a), max(a) from parted_minmax where b = '12345';
 drop table parted_minmax;

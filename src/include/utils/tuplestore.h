@@ -61,7 +61,7 @@ extern void tuplestore_putvalues(Tuplestorestate *state, TupleDesc tdesc,
 
 extern int	tuplestore_alloc_read_pointer(Tuplestorestate *state, int eflags);
 
-extern void tuplestore_select_read_pointer(Tuplestorestate *state, int ptr);
+extern void tuplestore_selext_read_pointer(Tuplestorestate *state, int ptr);
 
 extern void tuplestore_copy_read_pointer(Tuplestorestate *state,
 							 int srcptr, int destptr);

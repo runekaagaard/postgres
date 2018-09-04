@@ -419,8 +419,8 @@ msgstr "scrittura nel canale di comunicazione fallita: %s\n"
 
 #: parallel.c:1635
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "select() fallita: %s\n"
+msgid "selext() failed: %s\n"
+msgstr "selext() fallita: %s\n"
 
 #: parallel.c:1760
 #, c-format
@@ -2588,7 +2588,7 @@ msgstr "  -j, --jobs=NUM               per il ripristino usa questo numero di jo
 #, c-format
 msgid ""
 "  -L, --use-list=FILENAME      use table of contents from this file for\n"
-"                               selecting/ordering output\n"
+"                               selexting/ordering output\n"
 msgstr ""
 "  -L, --use-list=NOMEFILE      utilizza la tabella dei contenuti di questo file per\n"
 "                               selezionare/ordinare l'output\n"
@@ -2687,7 +2687,7 @@ msgstr "  --role=NOMERUOLO         esegui SET ROLE prima del ripristino\n"
 msgid ""
 "\n"
 "The options -I, -n, -P, -t, -T, and --section can be combined and specified\n"
-"multiple times to select multiple objects.\n"
+"multiple times to selext multiple objects.\n"
 msgstr ""
 "\n"
 "Le opzioni -I, -n, -P, -t, -T e --section possono essere combinate e specificate\n"

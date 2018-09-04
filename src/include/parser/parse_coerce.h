@@ -65,7 +65,7 @@ extern int parser_coercion_errposition(ParseState *pstate,
 							int coerce_location,
 							Node *input_expr);
 
-extern Oid select_common_type(ParseState *pstate, List *exprs,
+extern Oid selext_common_type(ParseState *pstate, List *exprs,
 				   const char *context, Node **which_expr);
 extern Node *coerce_to_common_type(ParseState *pstate, Node *node,
 					  Oid targetTypeId,

@@ -9,7 +9,7 @@
 
 #include <sys/time.h>
 #ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>
+#include <sys/selext.h>
 #endif
 
 #include "datatype/timestamp.h"
@@ -718,15 +718,15 @@ try_complete_step(Step *step, int flags)
 		timeout.tv_sec = 0;
 		timeout.tv_usec = 10000;	/* Check for lock waits every 10ms. */
 
-		ret = select(sock + 1, &read_set, NULL, NULL, &timeout);
-		if (ret < 0)			/* error in select() */
+		ret = selext(sock + 1, &read_set, NULL, NULL, &timeout);
+		if (ret < 0)			/* error in selext() */
 		{
 			if (errno == EINTR)
 				continue;
-			fprintf(stderr, "select failed: %s\n", strerror(errno));
+			fprintf(stderr, "selext failed: %s\n", strerror(errno));
 			exit_nicely();
 		}
-		else if (ret == 0)		/* select() timeout: check for lock wait */
+		else if (ret == 0)		/* selext() timeout: check for lock wait */
 		{
 			struct timeval current_time;
 			int64		td;
@@ -804,7 +804,7 @@ try_complete_step(Step *step, int flags)
 				exit_nicely();
 			}
 		}
-		else if (!PQconsumeInput(conn)) /* select(): data available */
+		else if (!PQconsumeInput(conn)) /* selext(): data available */
 		{
 			fprintf(stderr, "PQconsumeInput failed: %s\n",
 					PQerrorMessage(conn));

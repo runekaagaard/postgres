@@ -109,7 +109,7 @@ typedef struct Query
 {
 	NodeTag		type;
 
-	CmdType		commandType;	/* select|insert|update|delete|utility */
+	CmdType		commandType;	/* selext|insert|update|delete|utility */
 
 	QuerySource querySource;	/* where did I come from? */
 
@@ -225,9 +225,9 @@ typedef struct TypeName
  * Currently, A_Star must appear only as the last list element --- the grammar
  * is responsible for enforcing this!
  *
- * Note: any array subscripting or selection of fields from composite columns
+ * Note: any array subscripting or selextion of fields from composite columns
  * is represented by an A_Indirection node above the ColumnRef.  However,
- * for simplicity in the normal case, initial field selection from a table
+ * for simplicity in the normal case, initial field selextion from a table
  * name is represented within ColumnRef and not by adding A_Indirection.
  */
 typedef struct ColumnRef
@@ -386,13 +386,13 @@ typedef struct A_Indices
 } A_Indices;
 
 /*
- * A_Indirection - select a field and/or array element from an expression
+ * A_Indirection - selext a field and/or array element from an expression
  *
  * The indirection list can contain A_Indices nodes (representing
- * subscripting), string Value nodes (representing field selection --- the
- * string value is the name of the field to select), and A_Star nodes
- * (representing selection of all fields of a composite type).
- * For example, a complex selection operation like
+ * subscripting), string Value nodes (representing field selextion --- the
+ * string value is the name of the field to selext), and A_Star nodes
+ * (representing selextion of all fields of a composite type).
+ * For example, a complex selextion operation like
  *				(foo).field1[42][7].field2
  * would be represented with a single A_Indirection node having a 4-element
  * indirection list.
@@ -403,7 +403,7 @@ typedef struct A_Indices
 typedef struct A_Indirection
 {
 	NodeTag		type;
-	Node	   *arg;			/* the thing being selected from */
+	Node	   *arg;			/* the thing being selexted from */
 	List	   *indirection;	/* subscripts and/or field names and/or * */
 } A_Indirection;
 
@@ -534,15 +534,15 @@ typedef struct WindowDef
 	 FRAMEOPTION_END_CURRENT_ROW)
 
 /*
- * RangeSubselect - subquery appearing in a FROM clause
+ * RangeSubselext - subquery appearing in a FROM clause
  */
-typedef struct RangeSubselect
+typedef struct RangeSubselext
 {
 	NodeTag		type;
 	bool		lateral;		/* does it have LATERAL prefix? */
-	Node	   *subquery;		/* the untransformed sub-select clause */
+	Node	   *subquery;		/* the untransformed sub-selext clause */
 	Alias	   *alias;			/* table alias & optional column aliases */
-} RangeSubselect;
+} RangeSubselext;
 
 /*
  * RangeFunction - function call appearing in a FROM clause
@@ -609,7 +609,7 @@ typedef struct RangeTableFuncCol
  * This node, appearing only in raw parse trees, represents
  *		<relation> TABLESAMPLE <method> (<params>) REPEATABLE (<num>)
  * Currently, the <relation> can only be a RangeVar, but we might in future
- * allow RangeSubselect and other options.  Note that the RangeTableSample
+ * allow RangeSubselext and other options.  Note that the RangeTableSample
  * is wrapped around the node representing the <relation>, rather than being
  * a subfield of it.
  */
@@ -867,7 +867,7 @@ typedef struct PartitionCmd
  * RangeTblEntry -
  *	  A range table is a List of RangeTblEntry nodes.
  *
- *	  A range table entry may represent a plain relation, a sub-select in
+ *	  A range table entry may represent a plain relation, a sub-selext in
  *	  FROM, or the result of a JOIN clause.  (Only explicit JOIN syntax
  *	  produces an RTE, not the implicit join resulting from multiple FROM
  *	  items.  This is because we only need the RTE to deal with SQL features
@@ -927,9 +927,9 @@ typedef struct PartitionCmd
  *
  *	  For SELECT/INSERT/UPDATE permissions, if the user doesn't have
  *	  table-wide permissions then it is sufficient to have the permissions
- *	  on all columns identified in selectedCols (for SELECT) and/or
+ *	  on all columns identified in selextedCols (for SELECT) and/or
  *	  insertedCols and/or updatedCols (INSERT with ON CONFLICT DO UPDATE may
- *	  have all 3).  selectedCols, insertedCols and updatedCols are bitmapsets,
+ *	  have all 3).  selextedCols, insertedCols and updatedCols are bitmapsets,
  *	  which cannot have negative integer members, so we subtract
  *	  FirstLowInvalidHeapAttributeNumber from column numbers before storing
  *	  them in these fields.  A whole-row Var reference is represented by
@@ -1069,7 +1069,7 @@ typedef struct RangeTblEntry
 	bool		inFromCl;		/* present in FROM clause? */
 	AclMode		requiredPerms;	/* bitmask of required access permissions */
 	Oid			checkAsUser;	/* if valid, check access as this role */
-	Bitmapset  *selectedCols;	/* columns needing SELECT permission */
+	Bitmapset  *selextedCols;	/* columns needing SELECT permission */
 	Bitmapset  *insertedCols;	/* columns needing INSERT permission */
 	Bitmapset  *updatedCols;	/* columns needing UPDATE permission */
 	List	   *securityQuals;	/* security barrier quals to apply, if any */
@@ -1460,7 +1460,7 @@ typedef struct RawStmt
  *		Insert Statement
  *
  * The source expression is represented by SelectStmt for both the
- * SELECT and VALUES cases.  If selectStmt is NULL, then the query
+ * SELECT and VALUES cases.  If selextStmt is NULL, then the query
  * is INSERT ... DEFAULT VALUES.
  * ----------------------
  */
@@ -1469,7 +1469,7 @@ typedef struct InsertStmt
 	NodeTag		type;
 	RangeVar   *relation;		/* relation to insert into */
 	List	   *cols;			/* optional: names of the target columns */
-	Node	   *selectStmt;		/* the source SELECT/VALUES, or NULL */
+	Node	   *selextStmt;		/* the source SELECT/VALUES, or NULL */
 	OnConflictClause *onConflictClause; /* ON CONFLICT clause */
 	List	   *returningList;	/* list of expressions to return */
 	WithClause *withClause;		/* WITH clause */
@@ -2811,7 +2811,7 @@ typedef struct InlineCodeBlock
 {
 	NodeTag		type;
 	char	   *source_text;	/* source text of anonymous code block */
-	Oid			langOid;		/* OID of selected language */
+	Oid			langOid;		/* OID of selexted language */
 	bool		langIsTrusted;	/* trusted property of the language */
 	bool		atomic;			/* atomic execution context */
 } InlineCodeBlock;
@@ -3203,7 +3203,7 @@ typedef struct CreateTableAsStmt
 	Node	   *query;			/* the query (see comments above) */
 	IntoClause *into;			/* destination table */
 	ObjectType	relkind;		/* OBJECT_TABLE or OBJECT_MATVIEW */
-	bool		is_select_into; /* it was written as SELECT INTO */
+	bool		is_selext_into; /* it was written as SELECT INTO */
 	bool		if_not_exists;	/* just do nothing if it already exists? */
 } CreateTableAsStmt;
 

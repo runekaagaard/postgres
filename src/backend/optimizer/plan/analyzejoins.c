@@ -692,7 +692,7 @@ rel_is_distinct_for(PlannerInfo *root, RelOptInfo *rel, List *clause_list)
 			 * (This might be a cross-type operator and thus not exactly the
 			 * same operator the subquery would consider; that's all right
 			 * since query_is_distinct_for can resolve such cases.)  The
-			 * caller's mergejoinability test should have selected only
+			 * caller's mergejoinability test should have selexted only
 			 * OpExprs.
 			 */
 			op = castNode(OpExpr, rinfo->clause)->opno;
@@ -925,7 +925,7 @@ query_is_distinct_for(Query *query, List *colnos, List *opids)
  *
  * If colno is in colnos, return the corresponding element of opids,
  * else return InvalidOid.  (Ordinarily colnos would not contain duplicates,
- * but if it does, we arbitrarily select the first match.)
+ * but if it does, we arbitrarily selext the first match.)
  */
 static Oid
 distinct_col_search(int colno, List *colnos, List *opids)

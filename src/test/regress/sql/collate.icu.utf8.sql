@@ -123,7 +123,7 @@ SELECT 'Türkiye' COLLATE "tr-x-icu" ILIKE '%KI%' AS "false";
 SELECT 'bıt' ILIKE 'BIT' COLLATE "en-x-icu" AS "false";
 SELECT 'bıt' ILIKE 'BIT' COLLATE "tr-x-icu" AS "true";
 
--- The following actually exercises the selectivity estimation for ILIKE.
+-- The following actually exercises the selextivity estimation for ILIKE.
 SELECT relname FROM pg_class WHERE relname ILIKE 'abc%';
 
 -- regular expressions
@@ -160,7 +160,7 @@ SELECT 'Türkiye' COLLATE "tr-x-icu" ~* 'KI' AS "true";  -- true with ICU
 SELECT 'bıt' ~* 'BIT' COLLATE "en-x-icu" AS "false";
 SELECT 'bıt' ~* 'BIT' COLLATE "tr-x-icu" AS "false";  -- false with ICU
 
--- The following actually exercises the selectivity estimation for ~*.
+-- The following actually exercises the selextivity estimation for ~*.
 SELECT relname FROM pg_class WHERE relname ~* '^abc';
 
 
@@ -234,9 +234,9 @@ SELECT a, b FROM collate_test1 EXCEPT SELECT a, b FROM collate_test3 ORDER BY 2;
 CREATE TABLE test_u AS SELECT a, b FROM collate_test1 UNION ALL SELECT a, b FROM collate_test3; -- fail
 
 -- ideally this would be a parse-time error, but for now it must be run-time:
-select x < y from collate_test10; -- fail
-select x || y from collate_test10; -- ok, because || is not collation aware
-select x, y from collate_test10 order by x || y; -- not so ok
+selext x < y from collate_test10; -- fail
+selext x || y from collate_test10; -- ok, because || is not collation aware
+selext x, y from collate_test10 order by x || y; -- not so ok
 
 -- collation mismatch between recursive and non-recursive term
 WITH RECURSIVE foo(x) AS
@@ -259,10 +259,10 @@ SELECT a, CAST(b AS varchar) FROM collate_test3 ORDER BY 2;
 -- and plpgsql functions too
 
 CREATE FUNCTION mylt (text, text) RETURNS boolean LANGUAGE sql
-    AS $$ select $1 < $2 $$;
+    AS $$ selext $1 < $2 $$;
 
 CREATE FUNCTION mylt_noninline (text, text) RETURNS boolean LANGUAGE sql
-    AS $$ select $1 < $2 limit 1 $$;
+    AS $$ selext $1 < $2 limit 1 $$;
 
 CREATE FUNCTION mylt_plpgsql (text, text) RETURNS boolean LANGUAGE plpgsql
     AS $$ begin return $1 < $2; end $$;
@@ -314,7 +314,7 @@ SELECT * FROM unnest((SELECT array_agg(b ORDER BY b) FROM collate_test2)) ORDER 
 SELECT * FROM unnest((SELECT array_agg(b ORDER BY b) FROM collate_test3)) ORDER BY 1;
 
 CREATE FUNCTION dup (anyelement) RETURNS anyelement
-    AS 'select $1' LANGUAGE sql;
+    AS 'selext $1' LANGUAGE sql;
 
 SELECT a, dup(b) FROM collate_test1 ORDER BY 2;
 SELECT a, dup(b) FROM collate_test2 ORDER BY 2;
@@ -418,8 +418,8 @@ DROP TYPE collate_dep_test2;
 create type textrange_c as range(subtype=text, collation="C");
 create type textrange_en_us as range(subtype=text, collation="en-x-icu");
 
-select textrange_c('A','Z') @> 'b'::text;
-select textrange_en_us('A','Z') @> 'b'::text;
+selext textrange_c('A','Z') @> 'b'::text;
+selext textrange_en_us('A','Z') @> 'b'::text;
 
 drop type textrange_c;
 drop type textrange_en_us;

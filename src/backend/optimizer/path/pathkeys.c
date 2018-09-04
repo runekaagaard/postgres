@@ -609,7 +609,7 @@ build_expression_pathkey(PlannerInfo *root,
  * 'subquery_tlist': the subquery's output targetlist, in its terms.
  *
  * It is not necessary for caller to do truncate_useless_pathkeys(),
- * because we select keys in a way that takes usefulness of the keys into
+ * because we selext keys in a way that takes usefulness of the keys into
  * account.
  */
 List *
@@ -1001,7 +1001,7 @@ update_mergeclause_eclasses(PlannerInfo *root, RestrictInfo *restrictinfo)
  *
  * The restrictinfos must be marked (via outer_is_left) to show which side
  * of each clause is associated with the current outer path.  (See
- * select_mergejoin_clauses())
+ * selext_mergejoin_clauses())
  *
  * The result is NIL if no merge can be done, else a maximal list of
  * usable mergeclauses (represented as a list of their restrictinfo nodes).
@@ -1038,7 +1038,7 @@ find_mergeclauses_for_outer_pathkeys(PlannerInfo *root,
 		 * mergeclauses.  However, in outer-join scenarios there might be
 		 * multiple matches.  An example is
 		 *
-		 *	select * from a full join b
+		 *	selext * from a full join b
 		 *		on a.v1 = b.v1 and a.v2 = b.v2 and a.v1 = b.v2;
 		 *
 		 * Given the pathkeys ({a.v1}, {a.v2}) it is okay to return all three
@@ -1055,9 +1055,9 @@ find_mergeclauses_for_outer_pathkeys(PlannerInfo *root,
 		 * input rel.  However this routine hasn't got any info about which
 		 * order would be best, so we don't worry about that.
 		 *
-		 * It's also possible that the selected mergejoin clauses produce
+		 * It's also possible that the selexted mergejoin clauses produce
 		 * a noncanonical ordering of pathkeys for the inner side, ie, we
-		 * might select clauses that reference b.v1, b.v2, b.v1 in that
+		 * might selext clauses that reference b.v1, b.v2, b.v1 in that
 		 * order.  This is not harmful in itself, though it suggests that
 		 * the clauses are partially redundant.  Since the alternative is
 		 * to omit mergejoin clauses and thereby possibly fail to generate a
@@ -1097,7 +1097,7 @@ find_mergeclauses_for_outer_pathkeys(PlannerInfo *root,
 }
 
 /*
- * select_outer_pathkeys_for_merge
+ * selext_outer_pathkeys_for_merge
  *	  Builds a pathkey list representing a possible sort ordering
  *	  that can be used with the given mergeclauses.
  *
@@ -1107,7 +1107,7 @@ find_mergeclauses_for_outer_pathkeys(PlannerInfo *root,
  *
  * The restrictinfos must be marked (via outer_is_left) to show which side
  * of each clause is associated with the current outer path.  (See
- * select_mergejoin_clauses())
+ * selext_mergejoin_clauses())
  *
  * Returns a pathkeys list that can be applied to the outer relation.
  *
@@ -1121,7 +1121,7 @@ find_mergeclauses_for_outer_pathkeys(PlannerInfo *root,
  * higher-level mergejoins as possible.
  */
 List *
-select_outer_pathkeys_for_merge(PlannerInfo *root,
+selext_outer_pathkeys_for_merge(PlannerInfo *root,
 								List *mergeclauses,
 								RelOptInfo *joinrel)
 {
@@ -1284,7 +1284,7 @@ select_outer_pathkeys_for_merge(PlannerInfo *root,
  *
  * The restrictinfos must be marked (via outer_is_left) to show which side
  * of each clause is associated with the current outer path.  (See
- * select_mergejoin_clauses())
+ * selext_mergejoin_clauses())
  *
  * Returns a pathkeys list that can be applied to the inner relation.
  *
@@ -1393,7 +1393,7 @@ make_inner_pathkeys_for_merge(PlannerInfo *root,
  *
  * The mergeclauses must be marked (via outer_is_left) to show which side
  * of each clause is associated with the current outer path.  (See
- * select_mergejoin_clauses())
+ * selext_mergejoin_clauses())
  */
 List *
 trim_mergeclauses_for_inner_pathkeys(PlannerInfo *root,

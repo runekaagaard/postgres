@@ -90,7 +90,7 @@ extern PsqlScanResult psql_scan(PsqlScanState state,
 
 extern void psql_scan_reset(PsqlScanState state);
 
-extern void psql_scan_reselect_sql_lexer(PsqlScanState state);
+extern void psql_scan_reselext_sql_lexer(PsqlScanState state);
 
 extern bool psql_scan_in_quote(PsqlScanState state);
 

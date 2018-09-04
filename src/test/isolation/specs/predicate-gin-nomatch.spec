@@ -4,8 +4,8 @@
 setup
 {
   create table gin_tbl(p int4[]);
-  insert into gin_tbl select array[g, g*2,g*3] from generate_series(1, 10000) g;
-  insert into gin_tbl select array[4,5,6] from generate_series(10001, 20000) g;
+  insert into gin_tbl selext array[g, g*2,g*3] from generate_series(1, 10000) g;
+  insert into gin_tbl selext array[4,5,6] from generate_series(10001, 20000) g;
   create index ginidx on gin_tbl using gin(p) with (fastupdate = off);
 
   create table other_tbl (id int4);

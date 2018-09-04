@@ -305,7 +305,7 @@ SpGistUpdateMetaPage(Relation index)
 	}
 }
 
-/* Macro to select proper element of lastUsedPages cache depending on flags */
+/* Macro to selext proper element of lastUsedPages cache depending on flags */
 /* Masking flags with SPGIST_CACHED_PAGES is just for paranoia's sake */
 #define GET_LUP(c, f)  (&(c)->lastUsedPages.cachedPage[((unsigned int) (f)) % SPGIST_CACHED_PAGES])
 

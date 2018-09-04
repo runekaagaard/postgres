@@ -142,19 +142,19 @@ int main()
 #line 30 "indicators.pgc"
 
 
-	/* use indicators to get information about selects */
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select val from indicator_test where id = 1", ECPGt_EOIT, 
+	/* use indicators to get information about selexts */
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext val from indicator_test where id = 1", ECPGt_EOIT, 
 	ECPGt_int,&(intvar),(long)1,(long)1,sizeof(int), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);}
 #line 33 "indicators.pgc"
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select val from indicator_test where id = 2", ECPGt_EOIT, 
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext val from indicator_test where id = 2", ECPGt_EOIT, 
 	ECPGt_int,&(intvar),(long)1,(long)1,sizeof(int), 
 	ECPGt_int,&(nullind),(long)1,(long)1,sizeof(int), ECPGt_EORT);}
 #line 34 "indicators.pgc"
 
 	printf("intvar: %d, nullind: %d\n", intvar, nullind);
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select val from indicator_test where id = 3", ECPGt_EOIT, 
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext val from indicator_test where id = 3", ECPGt_EOIT, 
 	ECPGt_int,&(intvar),(long)1,(long)1,sizeof(int), 
 	ECPGt_int,&(nullind),(long)1,(long)1,sizeof(int), ECPGt_EORT);}
 #line 36 "indicators.pgc"
@@ -168,7 +168,7 @@ int main()
 	ECPGt_int,&(nullind),(long)1,(long)1,sizeof(int), ECPGt_EOIT, ECPGt_EORT);}
 #line 41 "indicators.pgc"
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select val from indicator_test where id = 1", ECPGt_EOIT, 
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "selext val from indicator_test where id = 1", ECPGt_EOIT, 
 	ECPGt_int,&(intvar),(long)1,(long)1,sizeof(int), 
 	ECPGt_int,&(nullind),(long)1,(long)1,sizeof(int), ECPGt_EORT);}
 #line 42 "indicators.pgc"

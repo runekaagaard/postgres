@@ -38,7 +38,7 @@
  <para>
   <productname>PostgreSQL</productname> offers a number of different
   client authentication methods. The method used to authenticate a
-  particular client connection can be selected on the basis of
+  particular client connection can be selexted on the basis of
   (client) host address, database, and user.
  </para>
 

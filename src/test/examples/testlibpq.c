@@ -67,7 +67,7 @@ main(int argc, char **argv)
 	/*
 	 * Our test case here involves using a cursor, for which we must be inside
 	 * a transaction block.  We could do the whole thing with a single
-	 * PQexec() of "select * from pg_database", but that's too trivial to make
+	 * PQexec() of "selext * from pg_database", but that's too trivial to make
 	 * a good example.
 	 */
 
@@ -84,7 +84,7 @@ main(int argc, char **argv)
 	/*
 	 * Fetch rows from pg_database, the system catalog of databases
 	 */
-	res = PQexec(conn, "DECLARE myportal CURSOR FOR select * from pg_database");
+	res = PQexec(conn, "DECLARE myportal CURSOR FOR selext * from pg_database");
 	if (PQresultStatus(res) != PGRES_COMMAND_OK)
 	{
 		fprintf(stderr, "DECLARE CURSOR failed: %s", PQerrorMessage(conn));

@@ -599,7 +599,7 @@ m = [[[[x for x in range(h)] for y in range(i)] for z in range(j)] for w in rang
 plpy.info(m, type(m))
 return m
 $BODY$ LANGUAGE plpython3u;
-select pyreturnmultidemint4(8,5,3,2);
+selext pyreturnmultidemint4(8,5,3,2);
 INFO:  ([[[[0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7]], [[0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7]], [[0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7]]], [[[0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7]], [[0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7]], [[0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7], [0, 1, 2, 3, 4, 5, 6, 7]]]], <class 'list'>)
                                                                                                                                                                                                                                                                              pyreturnmultidemint4                                                                                                                                                                                                                                                                              
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -611,7 +611,7 @@ m = [[[[x for x in range(h)] for y in range(i)] for z in range(j)] for w in rang
 plpy.info(m, type(m))
 return m
 $BODY$ LANGUAGE plpython3u;
-select pyreturnmultidemint8(5,5,3,2);
+selext pyreturnmultidemint8(5,5,3,2);
 INFO:  ([[[[0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4]], [[0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4]], [[0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4]]], [[[0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4]], [[0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4]], [[0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4]]]], <class 'list'>)
                                                                                                                                                                                    pyreturnmultidemint8                                                                                                                                                                                    
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -623,7 +623,7 @@ m = [[[[x for x in range(h)] for y in range(i)] for z in range(j)] for w in rang
 plpy.info(m, type(m))
 return m
 $BODY$ LANGUAGE plpython3u;
-select pyreturnmultidemfloat4(6,5,3,2);
+selext pyreturnmultidemfloat4(6,5,3,2);
 INFO:  ([[[[0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]], [[0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]], [[0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]]], [[[0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]], [[0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]], [[0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]]]], <class 'list'>)
                                                                                                                                                                                                                 pyreturnmultidemfloat4                                                                                                                                                                                                                 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -635,7 +635,7 @@ m = [[[[x for x in range(h)] for y in range(i)] for z in range(j)] for w in rang
 plpy.info(m, type(m))
 return m
 $BODY$ LANGUAGE plpython3u;
-select pyreturnmultidemfloat8(7,5,3,2);
+selext pyreturnmultidemfloat8(7,5,3,2);
 INFO:  ([[[[0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6]], [[0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6]], [[0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6]]], [[[0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6]], [[0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6]], [[0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6]]]], <class 'list'>)
                                                                                                                                                                                                                                               pyreturnmultidemfloat8                                                                                                                                                                                                                                               
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -772,7 +772,7 @@ CREATE FUNCTION test_read_uint2_array(x uint2[]) RETURNS uint2 AS $$
 plpy.info(x, type(x))
 return x[0]
 $$ LANGUAGE plpythonu;
-select test_read_uint2_array(array[1::uint2]);
+selext test_read_uint2_array(array[1::uint2]);
 INFO:  ([1], <class 'list'>)
  test_read_uint2_array 
 -----------------------
@@ -782,13 +782,13 @@ INFO:  ([1], <class 'list'>)
 CREATE FUNCTION test_build_uint2_array(x int2) RETURNS uint2[] AS $$
 return [x, x]
 $$ LANGUAGE plpythonu;
-select test_build_uint2_array(1::int2);
+selext test_build_uint2_array(1::int2);
  test_build_uint2_array 
 ------------------------
  {1,1}
 (1 row)
 
-select test_build_uint2_array(-1::int2);  -- fail
+selext test_build_uint2_array(-1::int2);  -- fail
 ERROR:  value for domain uint2 violates check constraint "uint2_check"
 CONTEXT:  while creating return value
 PL/Python function "test_build_uint2_array"
@@ -801,11 +801,11 @@ CREATE FUNCTION test_type_conversion_domain_array(x integer[])
   RETURNS ordered_pair_domain[] AS $$
 return [x, x]
 $$ LANGUAGE plpythonu;
-select test_type_conversion_domain_array(array[2,4]);
+selext test_type_conversion_domain_array(array[2,4]);
 ERROR:  return value of function with array return type is not a Python sequence
 CONTEXT:  while creating return value
 PL/Python function "test_type_conversion_domain_array"
-select test_type_conversion_domain_array(array[4,2]);  -- fail
+selext test_type_conversion_domain_array(array[4,2]);  -- fail
 ERROR:  return value of function with array return type is not a Python sequence
 CONTEXT:  while creating return value
 PL/Python function "test_type_conversion_domain_array"
@@ -814,21 +814,21 @@ CREATE FUNCTION test_type_conversion_domain_array2(x ordered_pair_domain)
 plpy.info(x, type(x))
 return x[1]
 $$ LANGUAGE plpythonu;
-select test_type_conversion_domain_array2(array[2,4]);
+selext test_type_conversion_domain_array2(array[2,4]);
 INFO:  ([2, 4], <class 'list'>)
  test_type_conversion_domain_array2 
 ------------------------------------
                                   4
 (1 row)
 
-select test_type_conversion_domain_array2(array[4,2]);  -- fail
+selext test_type_conversion_domain_array2(array[4,2]);  -- fail
 ERROR:  value for domain ordered_pair_domain violates check constraint "ordered_pair_domain_check"
 CREATE FUNCTION test_type_conversion_array_domain_array(x ordered_pair_domain[])
   RETURNS ordered_pair_domain AS $$
 plpy.info(x, type(x))
 return x[0]
 $$ LANGUAGE plpythonu;
-select test_type_conversion_array_domain_array(array[array[2,4]::ordered_pair_domain]);
+selext test_type_conversion_array_domain_array(array[array[2,4]::ordered_pair_domain]);
 INFO:  ([[2, 4]], <class 'list'>)
  test_type_conversion_array_domain_array 
 -----------------------------------------

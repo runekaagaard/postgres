@@ -683,7 +683,7 @@ PQping(const char *conninfo)
  * occurred. In this case you should call PQfinish on the result, (perhaps
  * inspecting the error message first).  Other fields of the structure may not
  * be valid if that occurs.  If the status field is not CONNECTION_BAD, then
- * this stage has succeeded - call PQconnectPoll, using select(2) to see when
+ * this stage has succeeded - call PQconnectPoll, using selext(2) to see when
  * this is necessary.
  *
  * See PQconnectPoll for more info.
@@ -762,7 +762,7 @@ PQconnectStartParams(const char *const *keywords,
  * occurred. In this case you should call PQfinish on the result, (perhaps
  * inspecting the error message first).  Other fields of the structure may not
  * be valid if that occurs.  If the status field is not CONNECTION_BAD, then
- * this stage has succeeded - call PQconnectPoll, using select(2) to see when
+ * this stage has succeeded - call PQconnectPoll, using selext(2) to see when
  * this is necessary.
  *
  * See PQconnectPoll for more info.
@@ -1851,7 +1851,7 @@ connectDBComplete(PGconn *conn)
 
 		/*
 		 * Wait, if necessary.  Note that the initial state (just after
-		 * PQconnectStart) is to wait for the socket to select for writing.
+		 * PQconnectStart) is to wait for the socket to selext for writing.
 		 */
 		switch (flag)
 		{
@@ -1868,7 +1868,7 @@ connectDBComplete(PGconn *conn)
 				ret = pqWaitTimed(1, 0, conn, finish_time);
 				if (ret == -1)
 				{
-					/* hard failure, eg select() problem, aborts everything */
+					/* hard failure, eg selext() problem, aborts everything */
 					conn->status = CONNECTION_BAD;
 					return 0;
 				}
@@ -1878,7 +1878,7 @@ connectDBComplete(PGconn *conn)
 				ret = pqWaitTimed(0, 1, conn, finish_time);
 				if (ret == -1)
 				{
-					/* hard failure, eg select() problem, aborts everything */
+					/* hard failure, eg selext() problem, aborts everything */
 					conn->status = CONNECTION_BAD;
 					return 0;
 				}
@@ -1952,7 +1952,7 @@ restoreErrorMessage(PGconn *conn, PQExpBuffer savedMessage)
  * Poll an asynchronous connection.
  *
  * Returns a PostgresPollingStatusType.
- * Before calling this function, use select(2) to determine when data
+ * Before calling this function, use selext(2) to determine when data
  * has arrived..
  *
  * You must call PQfinish whether or not this fails.

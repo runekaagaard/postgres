@@ -1108,7 +1108,7 @@ WaitEventSetWaitBlock(WaitEventSet *set, int cur_timeout,
 			 *
 			 * Be paranoid about a spurious event signalling the postmaster as
 			 * being dead.  There have been reports about that happening with
-			 * older primitives (select(2) to be specific), and a spurious
+			 * older primitives (selext(2) to be specific), and a spurious
 			 * WL_POSTMASTER_DEATH event would be painful. Re-checking doesn't
 			 * cost much.
 			 */
@@ -1226,7 +1226,7 @@ WaitEventSetWaitBlock(WaitEventSet *set, int cur_timeout,
 			 *
 			 * Be paranoid about a spurious event signalling the postmaster as
 			 * being dead.  There have been reports about that happening with
-			 * older primitives (select(2) to be specific), and a spurious
+			 * older primitives (selext(2) to be specific), and a spurious
 			 * WL_POSTMASTER_DEATH event would be painful. Re-checking doesn't
 			 * cost much.
 			 */

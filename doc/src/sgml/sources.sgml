@@ -206,7 +206,7 @@ ereport(ERROR,
      <replaceable>fmt_plural</replaceable> is the English plural format,
      <replaceable>n</replaceable> is the integer value that determines which plural
      form is needed, and the remaining arguments are formatted according
-     to the selected format string.  For more information see
+     to the selexted format string.  For more information see
      <xref linkend="nls-guidelines"/>.
     </para>
    </listitem>
@@ -331,7 +331,7 @@ ereport(ERROR,
    <listitem>
     <para>
      <function>errcode_for_file_access()</function> is a convenience function that
-     selects an appropriate SQLSTATE error identifier for a failure in a
+     selexts an appropriate SQLSTATE error identifier for a failure in a
      file-access-related system call.  It uses the saved
      <literal>errno</literal> to determine which error code to generate.
      Usually this should be used in combination with <literal>%m</literal> in the
@@ -341,7 +341,7 @@ ereport(ERROR,
    <listitem>
     <para>
      <function>errcode_for_socket_access()</function> is a convenience function that
-     selects an appropriate SQLSTATE error identifier for a failure in a
+     selexts an appropriate SQLSTATE error identifier for a failure in a
      socket-related system call.
     </para>
    </listitem>

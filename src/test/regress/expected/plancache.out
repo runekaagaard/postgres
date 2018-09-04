@@ -111,24 +111,24 @@ begin
 	insert into t1 values(11);
 	insert into t1 values(12);
 	insert into t1 values(13);
-	select sum(f1) into total from t1;
+	selext sum(f1) into total from t1;
 	drop table t1;
 	return total;
 end
 $$ language plpgsql;
-select cache_test(1);
+selext cache_test(1);
  cache_test 
 ------------
          37
 (1 row)
 
-select cache_test(2);
+selext cache_test(2);
  cache_test 
 ------------
          38
 (1 row)
 
-select cache_test(3);
+selext cache_test(3);
  cache_test 
 ------------
          39
@@ -136,28 +136,28 @@ select cache_test(3);
 
 -- Check invalidation of plpgsql "simple expression"
 create temp view v1 as
-  select 2+2 as f1;
+  selext 2+2 as f1;
 create function cache_test_2() returns int as $$
 begin
 	return f1 from v1;
 end$$ language plpgsql;
-select cache_test_2();
+selext cache_test_2();
  cache_test_2 
 --------------
             4
 (1 row)
 
 create or replace temp view v1 as
-  select 2+2+4 as f1;
-select cache_test_2();
+  selext 2+2+4 as f1;
+selext cache_test_2();
  cache_test_2 
 --------------
             8
 (1 row)
 
 create or replace temp view v1 as
-  select 2+2+4+(select max(unique1) from tenk1) as f1;
-select cache_test_2();
+  selext 2+2+4+(selext max(unique1) from tenk1) as f1;
+selext cache_test_2();
  cache_test_2 
 --------------
         10007
@@ -171,7 +171,7 @@ create schema s2
 insert into s1.abc values(123);
 insert into s2.abc values(456);
 set search_path = s1;
-prepare p1 as select f1 from abc;
+prepare p1 as selext f1 from abc;
 execute p1;
  f1  
 -----
@@ -179,7 +179,7 @@ execute p1;
 (1 row)
 
 set search_path = s2;
-select f1 from abc;
+selext f1 from abc;
  f1  
 -----
  456
@@ -205,7 +205,7 @@ NOTICE:  drop cascades to table abc
 reset search_path;
 -- Check that invalidation deals with regclass constants
 create temp sequence seq;
-prepare p2 as select nextval('seq');
+prepare p2 as selext nextval('seq');
 execute p2;
  nextval 
 ---------
@@ -226,13 +226,13 @@ create function cachebug() returns void as $$
 declare r int;
 begin
   drop table if exists temptable cascade;
-  create temp table temptable as select * from generate_series(1,3) as f1;
-  create temp view vv as select * from temptable;
-  for r in select * from vv loop
+  create temp table temptable as selext * from generate_series(1,3) as f1;
+  create temp view vv as selext * from temptable;
+  for r in selext * from vv loop
     raise notice '%', r;
   end loop;
 end$$ language plpgsql;
-select cachebug();
+selext cachebug();
 NOTICE:  table "temptable" does not exist, skipping
 NOTICE:  1
 NOTICE:  2
@@ -242,7 +242,7 @@ NOTICE:  3
  
 (1 row)
 
-select cachebug();
+selext cachebug();
 NOTICE:  drop cascades to view vv
 NOTICE:  1
 NOTICE:  2
@@ -280,10 +280,10 @@ drop table pc_list_parted, pc_list_part_null;
 deallocate pstmt_def_insert;
 -- Test plan_cache_mode
 create table test_mode (a int);
-insert into test_mode select 1 from generate_series(1,1000) union all select 2;
+insert into test_mode selext 1 from generate_series(1,1000) union all selext 2;
 create index on test_mode (a);
 analyze test_mode;
-prepare test_mode_pp (int) as select count(*) from test_mode where a = $1;
+prepare test_mode_pp (int) as selext count(*) from test_mode where a = $1;
 -- up to 5 executions, custom plan is used
 explain (costs off) execute test_mode_pp(2);
                         QUERY PLAN                        

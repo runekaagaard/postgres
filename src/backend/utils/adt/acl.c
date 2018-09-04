@@ -4666,7 +4666,7 @@ has_rolinherit(Oid roleid)
  * a list of memberships.  Hence, the result is only guaranteed good until
  * the next call of roles_has_privs_of()!
  *
- * For the benefit of select_best_grantor, the result is defined to be
+ * For the benefit of selext_best_grantor, the result is defined to be
  * in breadth-first order, ie, closer relationships earlier.
  */
 static List *
@@ -5038,7 +5038,7 @@ count_one_bits(AclMode mask)
  * If no grant options exist, we set grantorId to roleId, grantOptions to 0.
  */
 void
-select_best_grantor(Oid roleId, AclMode privileges,
+selext_best_grantor(Oid roleId, AclMode privileges,
 					const Acl *acl, Oid ownerId,
 					Oid *grantorId, AclMode *grantOptions)
 {

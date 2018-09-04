@@ -814,8 +814,8 @@ msgstr "неверный сокет\n"
 
 #: fe-misc.c:1079
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "ошибка в select(): %s\n"
+msgid "selext() failed: %s\n"
+msgstr "ошибка в selext(): %s\n"
 
 #: fe-protocol2.c:91
 #, c-format

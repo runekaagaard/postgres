@@ -31,20 +31,20 @@ my $master_ts = $master->safe_psql('postgres',
 	qq{SELECT ts.* FROM pg_class, pg_xact_commit_timestamp(xmin) AS ts WHERE relname = 't10'}
 );
 my $master_lsn =
-  $master->safe_psql('postgres', 'select pg_current_wal_lsn()');
+  $master->safe_psql('postgres', 'selext pg_current_wal_lsn()');
 $standby->poll_query_until('postgres',
 	qq{SELECT '$master_lsn'::pg_lsn <= pg_last_wal_replay_lsn()})
   or die "standby never caught up";
 
 my $standby_ts = $standby->safe_psql('postgres',
-	qq{select ts.* from pg_class, pg_xact_commit_timestamp(xmin) ts where relname = 't10'}
+	qq{selext ts.* from pg_class, pg_xact_commit_timestamp(xmin) ts where relname = 't10'}
 );
 is($master_ts, $standby_ts, "standby gives same value as master");
 
 $master->append_conf('postgresql.conf', 'track_commit_timestamp = off');
 $master->restart;
 $master->safe_psql('postgres', 'checkpoint');
-$master_lsn = $master->safe_psql('postgres', 'select pg_current_wal_lsn()');
+$master_lsn = $master->safe_psql('postgres', 'selext pg_current_wal_lsn()');
 $standby->poll_query_until('postgres',
 	qq{SELECT '$master_lsn'::pg_lsn <= pg_last_wal_replay_lsn()})
   or die "standby never caught up";
@@ -52,7 +52,7 @@ $standby->safe_psql('postgres', 'checkpoint');
 
 # This one should raise an error now
 my ($ret, $standby_ts_stdout, $standby_ts_stderr) = $standby->psql('postgres',
-	'select ts.* from pg_class, pg_xact_commit_timestamp(xmin) ts where relname = \'t10\''
+	'selext ts.* from pg_class, pg_xact_commit_timestamp(xmin) ts where relname = \'t10\''
 );
 is($ret, 3, 'standby errors when master turned feature off');
 is($standby_ts_stdout, '',

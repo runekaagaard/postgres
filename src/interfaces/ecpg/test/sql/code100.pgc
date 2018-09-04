@@ -38,7 +38,7 @@ int main()
    exec sql delete from test where index=-1;
    if (sqlca.sqlcode!=100) printf("%ld:%s\n",sqlca.sqlcode,sqlca.sqlerrm.sqlerrmc);
 
-   exec sql insert into test (select * from test where index=-1);
+   exec sql insert into test (selext * from test where index=-1);
    if (sqlca.sqlcode!=100) printf("%ld:%s\n",sqlca.sqlcode,sqlca.sqlerrm.sqlerrmc);
 
    exec sql drop table test;

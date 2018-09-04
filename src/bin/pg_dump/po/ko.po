@@ -410,8 +410,8 @@ msgstr "통신 체널에에 쓸 수 없음: %s\n"
 
 #: parallel.c:1635
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "select() 실패: %s\n"
+msgid "selext() failed: %s\n"
+msgstr "selext() 실패: %s\n"
 
 #: parallel.c:1760
 #, c-format
@@ -2703,7 +2703,7 @@ msgstr "  -j, --jobs=NUM               여러 병렬 작업을 사용하여 복�
 #, c-format
 msgid ""
 "  -L, --use-list=FILENAME      use table of contents from this file for\n"
-"                               selecting/ordering output\n"
+"                               selexting/ordering output\n"
 msgstr ""
 "  -L, --use-list=FILENAME      출력을 선택하고 해당 순서를 지정하기 위해\n"
 "                               이 파일의 목차 사용\n"
@@ -2814,7 +2814,7 @@ msgstr "  --role=ROLENAME          복원 전에 SET ROLE 수행\n"
 msgid ""
 "\n"
 "The options -I, -n, -P, -t, -T, and --section can be combined and specified\n"
-"multiple times to select multiple objects.\n"
+"multiple times to selext multiple objects.\n"
 msgstr ""
 "\n"
 "-I, -n, -P, -t, -T, --section 옵션은 그 대상이 되는 객체를 복수로 지정하기\n"

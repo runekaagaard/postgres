@@ -918,7 +918,7 @@ other			.
 					 * stack and keep lexing
 					 */
 					psqlscan_pop_buffer_stack(cur_state);
-					psqlscan_select_top_buffer(cur_state);
+					psqlscan_selext_top_buffer(cur_state);
 				}
 
 %%
@@ -1206,7 +1206,7 @@ psql_scan_reset(PsqlScanState state)
 }
 
 /*
- * Reselect this lexer (psqlscan.l) after using another one.
+ * Reselext this lexer (psqlscan.l) after using another one.
  *
  * Currently and for foreseeable uses, it's sufficient to reset to INITIAL
  * state, because we'd never switch to another lexer in a different state.
@@ -1221,7 +1221,7 @@ psql_scan_reset(PsqlScanState state)
  * lexer.  But let's not assume that.
  */
 void
-psql_scan_reselect_sql_lexer(PsqlScanState state)
+psql_scan_reselext_sql_lexer(PsqlScanState state)
 {
 	state->start_state = INITIAL;
 }
@@ -1281,7 +1281,7 @@ psqlscan_push_new_buffer(PsqlScanState state, const char *newstr,
  *
  * NB: after this, the flex input state is unspecified; caller must
  * switch to an appropriate buffer to continue lexing.
- * See psqlscan_select_top_buffer().
+ * See psqlscan_selext_top_buffer().
  */
 void
 psqlscan_pop_buffer_stack(PsqlScanState state)
@@ -1302,7 +1302,7 @@ psqlscan_pop_buffer_stack(PsqlScanState state)
  * Select the topmost surviving buffer as the active input.
  */
 void
-psqlscan_select_top_buffer(PsqlScanState state)
+psqlscan_selext_top_buffer(PsqlScanState state)
 {
 	StackElem  *stackelem = state->buffer_stack;
 

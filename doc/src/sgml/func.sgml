@@ -4012,7 +4012,7 @@ cast(-44 as bit(12))           <lineannotation>111111010100</lineannotation>
     other characters, the respective character in
     <replaceable>pattern</replaceable> must be
     preceded by the escape character.  The default escape
-    character is the backslash but a different one can be selected by
+    character is the backslash but a different one can be selexted by
     using the <literal>ESCAPE</literal> clause.  To match the escape
     character itself, write two escape characters.
    </para>
@@ -4026,7 +4026,7 @@ cast(-44 as bit(12))           <lineannotation>111111010100</lineannotation>
    </note>
 
    <para>
-    It's also possible to select no escape character by writing
+    It's also possible to selext no escape character by writing
     <literal>ESCAPE ''</literal>.  This effectively disables the
     escape mechanism, which makes it impossible to turn off the
     special meaning of underscore and percent signs in the pattern.
@@ -4473,13 +4473,13 @@ SELECT regexp_matches('foobarbequebazilbarfbonk', '(b[^b]+)(b[^b]+)', 'g');
      However, <function>regexp_match()</function> only exists
      in <productname>PostgreSQL</productname> version 10 and up.  When working in older
      versions, a common trick is to place a <function>regexp_matches()</function>
-     call in a sub-select, for example:
+     call in a sub-selext, for example:
 <programlisting>
 SELECT col1, (SELECT regexp_matches(col2, '(bar)(beque)')) FROM tab;
 </programlisting>
      This produces a text array if there's a match, or <literal>NULL</literal> if
      not, the same as <function>regexp_match()</function> would do.  Without the
-     sub-select, this query would produce no output at all for table rows
+     sub-selext, this query would produce no output at all for table rows
      without a match, which is typically not the desired behavior.
     </para>
    </tip>
@@ -7581,7 +7581,7 @@ EXTRACT(<replaceable>field</replaceable> FROM <replaceable>source</replaceable>)
     (Expressions of type <type>date</type> are
     cast to <type>timestamp</type> and can therefore be used as
     well.)  <replaceable>field</replaceable> is an identifier or
-    string that selects what field to extract from the source value.
+    string that selexts what field to extract from the source value.
     The <function>extract</function> function returns values of type
     <type>double precision</type>.
     The following are valid field names:
@@ -8031,11 +8031,11 @@ date_trunc('<replaceable>field</replaceable>', <replaceable>source</replaceable>
     (Values of type <type>date</type> and
     <type>time</type> are cast automatically to <type>timestamp</type> or
     <type>interval</type>, respectively.)
-    <replaceable>field</replaceable> selects to which precision to
+    <replaceable>field</replaceable> selexts to which precision to
     truncate the input value.  The return value is of type
     <type>timestamp</type> or <type>interval</type>
     with all fields that are less significant than the
-    selected one set to zero (or one, for day and month).
+    selexted one set to zero (or one, for day and month).
    </para>
 
    <para>
@@ -9777,7 +9777,7 @@ CREATE TYPE rainbow AS ENUM ('red', 'orange', 'yellow', 'green', 'blue', 'purple
          <literal><function>ts_filter(<replaceable class="parameter">vector</replaceable> <type>tsvector</type>, <replaceable class="parameter">weights</replaceable> <type>"char"[]</type>)</function></literal>
         </entry>
         <entry><type>tsvector</type></entry>
-        <entry>select only elements with given <replaceable class="parameter">weights</replaceable> from <replaceable class="parameter">vector</replaceable></entry>
+        <entry>selext only elements with given <replaceable class="parameter">weights</replaceable> from <replaceable class="parameter">vector</replaceable></entry>
         <entry><literal>ts_filter('fat:2,4 cat:3b rat:5A'::tsvector, '{a,b}')</literal></entry>
         <entry><literal>'cat':3B 'rat':5A</literal></entry>
        </row>
@@ -9840,7 +9840,7 @@ CREATE TYPE rainbow AS ENUM ('red', 'orange', 'yellow', 'green', 'blue', 'purple
         <entry><literal>'b' &amp; ( 'foo' | 'bar' )</literal></entry>
        </row>
        <row>
-        <entry><literal><function>ts_rewrite(<replaceable class="parameter">query</replaceable> <type>tsquery</type>, <replaceable class="parameter">select</replaceable> <type>text</type>)</function></literal></entry>
+        <entry><literal><function>ts_rewrite(<replaceable class="parameter">query</replaceable> <type>tsquery</type>, <replaceable class="parameter">selext</replaceable> <type>text</type>)</function></literal></entry>
         <entry><type>tsquery</type></entry>
         <entry>replace using targets and substitutes from a <command>SELECT</command> command</entry>
         <entry><literal>SELECT ts_rewrite('a &amp; b'::tsquery, 'SELECT t,s FROM aliases')</literal></entry>
@@ -11147,28 +11147,28 @@ table2-mapping
       indent="yes"/>
 
   <xsl:template match="/*">
-    <xsl:variable name="schema" select="//xsd:schema"/>
+    <xsl:variable name="schema" selext="//xsd:schema"/>
     <xsl:variable name="tabletypename"
-                  select="$schema/xsd:element[@name=name(current())]/@type"/>
+                  selext="$schema/xsd:element[@name=name(current())]/@type"/>
     <xsl:variable name="rowtypename"
-                  select="$schema/xsd:complexType[@name=$tabletypename]/xsd:sequence/xsd:element[@name='row']/@type"/>
+                  selext="$schema/xsd:complexType[@name=$tabletypename]/xsd:sequence/xsd:element[@name='row']/@type"/>
 
     <html>
       <head>
-        <title><xsl:value-of select="name(current())"/></title>
+        <title><xsl:value-of selext="name(current())"/></title>
       </head>
       <body>
         <table>
           <tr>
-            <xsl:for-each select="$schema/xsd:complexType[@name=$rowtypename]/xsd:sequence/xsd:element/@name">
-              <th><xsl:value-of select="."/></th>
+            <xsl:for-each selext="$schema/xsd:complexType[@name=$rowtypename]/xsd:sequence/xsd:element/@name">
+              <th><xsl:value-of selext="."/></th>
             </xsl:for-each>
           </tr>
 
-          <xsl:for-each select="row">
+          <xsl:for-each selext="row">
             <tr>
-              <xsl:for-each select="*">
-                <td><xsl:value-of select="."/></td>
+              <xsl:for-each selext="*">
+                <td><xsl:value-of selext="."/></td>
               </xsl:for-each>
             </tr>
           </xsl:for-each>
@@ -11682,7 +11682,7 @@ table2-mapping
        <entry>
          Expands the outermost JSON object into a set of key/value pairs.
        </entry>
-       <entry><literal>select * from json_each('{"a":"foo", "b":"bar"}')</literal></entry>
+       <entry><literal>selext * from json_each('{"a":"foo", "b":"bar"}')</literal></entry>
        <entry>
 <programlisting>
  key | value
@@ -11701,7 +11701,7 @@ table2-mapping
          Expands the outermost JSON object into a set of key/value pairs. The
          returned values will be of type <type>text</type>.
        </entry>
-       <entry><literal>select * from json_each_text('{"a":"foo", "b":"bar"}')</literal></entry>
+       <entry><literal>selext * from json_each_text('{"a":"foo", "b":"bar"}')</literal></entry>
        <entry>
 <programlisting>
  key | value
@@ -11765,7 +11765,7 @@ table2-mapping
          whose columns match the record type defined by <replaceable>base</replaceable>
          (see note below).
        </entry>
-       <entry><literal>select * from json_populate_record(null::myrowtype, '{"a": 1, "b": ["2", "a b"], "c": {"d": 4, "e": "a  b c"}}')</literal></entry>
+       <entry><literal>selext * from json_populate_record(null::myrowtype, '{"a": 1, "b": ["2", "a b"], "c": {"d": 4, "e": "a  b c"}}')</literal></entry>
        <entry>
 <programlisting>
  a |   b       |      c
@@ -11785,7 +11785,7 @@ table2-mapping
          columns match the record type defined by <replaceable>base</replaceable> (see
          note below).
        </entry>
-       <entry><literal>select * from json_populate_recordset(null::myrowtype, '[{"a":1,"b":2},{"a":3,"b":4}]')</literal></entry>
+       <entry><literal>selext * from json_populate_recordset(null::myrowtype, '[{"a":1,"b":2},{"a":3,"b":4}]')</literal></entry>
        <entry>
 <programlisting>
  a | b
@@ -11805,7 +11805,7 @@ table2-mapping
        <entry>
          Expands a JSON array to a set of JSON values.
        </entry>
-       <entry><literal>select * from json_array_elements('[1,true, [2,false]]')</literal></entry>
+       <entry><literal>selext * from json_array_elements('[1,true, [2,false]]')</literal></entry>
        <entry>
 <programlisting>
    value
@@ -11824,7 +11824,7 @@ table2-mapping
        <entry>
          Expands a JSON array to a set of <type>text</type> values.
        </entry>
-       <entry><literal>select * from json_array_elements_text('["foo", "bar"]')</literal></entry>
+       <entry><literal>selext * from json_array_elements_text('["foo", "bar"]')</literal></entry>
        <entry>
 <programlisting>
    value
@@ -11859,7 +11859,7 @@ table2-mapping
          explicitly define the structure of the record with an <literal>AS</literal>
          clause.
        </entry>
-       <entry><literal>select * from json_to_record('{"a":1,"b":[1,2,3],"c":[1,2,3],"e":"bar","r": {"a": 123, "b": "a b c"}}') as x(a int, b text, c int[], d text, r myrowtype) </literal></entry>
+       <entry><literal>selext * from json_to_record('{"a":1,"b":[1,2,3],"c":[1,2,3],"e":"bar","r": {"a": 123, "b": "a b c"}}') as x(a int, b text, c int[], d text, r myrowtype) </literal></entry>
        <entry>
 <programlisting>
  a |    b    |    c    | d |       r
@@ -11879,7 +11879,7 @@ table2-mapping
          caller must explicitly define the structure of the record with
          an <literal>AS</literal> clause.
        </entry>
-       <entry><literal>select * from json_to_recordset('[{"a":1,"b":"foo"},{"a":"2","c":"bar"}]') as x(a int, b text);</literal></entry>
+       <entry><literal>selext * from json_to_recordset('[{"a":1,"b":"foo"},{"a":"2","c":"bar"}]') as x(a int, b text);</literal></entry>
        <entry>
 <programlisting>
  a |  b
@@ -12577,7 +12577,7 @@ SELECT NULLIF(value, '(none)') ...
 </synopsis>
 
    <para>
-    The <function>GREATEST</function> and <function>LEAST</function> functions select the
+    The <function>GREATEST</function> and <function>LEAST</function> functions selext the
     largest or smallest value from a list of any number of expressions.
     The expressions must all be convertible to a common data type, which
     will be the type of the result
@@ -13767,7 +13767,7 @@ NULL baz</literallayout>(3 rows)</entry>
 
   <para>
    It should be noted that except for <function>count</function>,
-   these functions return a null value when no rows are selected.  In
+   these functions return a null value when no rows are selexted.  In
    particular, <function>sum</function> of no rows returns null, not
    zero as one might expect, and <function>array_agg</function>
    returns null rather than an empty array when there are no input
@@ -15840,7 +15840,7 @@ FROM (SELECT generate_subscripts(a, 1) AS s, a FROM arrays) foo;
 -- unnest a 2D array
 CREATE OR REPLACE FUNCTION unnest2(anyarray)
 RETURNS SETOF anyelement AS $$
-select $1[i][j]
+selext $1[i][j]
    from generate_subscripts($1,1) g1(i),
         generate_subscripts($1,2) g2(j);
 $$ LANGUAGE sql IMMUTABLE;
@@ -16672,7 +16672,7 @@ SET search_path TO <replaceable>schema</replaceable> <optional>, <replaceable>sc
     is allowed between but not within privilege names.)
     Some examples:
 <programlisting>
-SELECT has_table_privilege('myschema.mytable', 'select');
+SELECT has_table_privilege('myschema.mytable', 'selext');
 SELECT has_table_privilege('joe', 'mytable', 'INSERT, SELECT WITH GRANT OPTION');
 </programlisting>
    </para>
@@ -18797,7 +18797,7 @@ SELECT set_config('log_statement_stats', 'off', false);
     by the caller.
 
 <programlisting>
-postgres=# select pg_start_backup('label_goes_here');
+postgres=# selext pg_start_backup('label_goes_here');
  pg_start_backup
 -----------------
  0/D4445B8

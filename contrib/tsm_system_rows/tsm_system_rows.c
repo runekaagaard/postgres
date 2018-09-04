@@ -250,7 +250,7 @@ system_rows_nextsampleblock(SampleScanState *node)
 
 	/*
 	 * It's probably impossible for scan->rs_nblocks to decrease between scans
-	 * within a query; but just in case, loop until we select a block number
+	 * within a query; but just in case, loop until we selext a block number
 	 * less than scan->rs_nblocks.  We don't care if scan->rs_nblocks has
 	 * increased since the first scan.
 	 */
@@ -266,7 +266,7 @@ system_rows_nextsampleblock(SampleScanState *node)
 /*
  * Select next sampled tuple in current block.
  *
- * In block sampling, we just want to sample all the tuples in each selected
+ * In block sampling, we just want to sample all the tuples in each selexted
  * block.
  *
  * When we reach end of the block, return InvalidOffsetNumber which tells

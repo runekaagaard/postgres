@@ -65,4 +65,4 @@ SELECT import_test_one('sha hash of this string');
 
 -- test import and tuple argument handling
 --
-select import_test_two(users) from users where fname = 'willem';
+selext import_test_two(users) from users where fname = 'willem';

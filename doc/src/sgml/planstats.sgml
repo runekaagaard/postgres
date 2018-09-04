@@ -88,7 +88,7 @@ EXPLAIN SELECT * FROM tenk1 WHERE unique1 &lt; 1000;
 </programlisting>
 
    The planner examines the <literal>WHERE</literal> clause condition
-   and looks up the selectivity function for the operator
+   and looks up the selextivity function for the operator
    <literal>&lt;</literal> in <structname>pg_operator</structname>.
    This is held in the column <structfield>oprrest</structfield>,
    and the entry in this case is <function>scalarltsel</function>.
@@ -108,26 +108,26 @@ WHERE tablename='tenk1' AND attname='unique1';
 </programlisting>
 
    Next the fraction of the histogram occupied by <quote>&lt; 1000</quote>
-   is worked out. This is the selectivity. The histogram divides the range
+   is worked out. This is the selextivity. The histogram divides the range
    into equal frequency buckets, so all we have to do is locate the bucket
    that our value is in and count <emphasis>part</emphasis> of it and
    <emphasis>all</emphasis> of the ones before. The value 1000 is clearly in
    the second bucket (993-1997).  Assuming a linear distribution of
-   values inside each bucket, we can calculate the selectivity as:
+   values inside each bucket, we can calculate the selextivity as:
 
 <programlisting>
-selectivity = (1 + (1000 - bucket[2].min)/(bucket[2].max - bucket[2].min))/num_buckets
+selextivity = (1 + (1000 - bucket[2].min)/(bucket[2].max - bucket[2].min))/num_buckets
             = (1 + (1000 - 993)/(1997 - 993))/10
             = 0.100697
 </programlisting>
 
    that is, one whole bucket plus a linear fraction of the second, divided by
    the number of buckets. The estimated number of rows can now be calculated as
-   the product of the selectivity and the cardinality of
+   the product of the selextivity and the cardinality of
    <structname>tenk1</structname>:
 
 <programlisting>
-rows = rel_cardinality * selectivity
+rows = rel_cardinality * selextivity
      = 10000 * 0.100697
      = 1007  (rounding off)
 </programlisting>
@@ -147,11 +147,11 @@ EXPLAIN SELECT * FROM tenk1 WHERE stringu1 = 'CRAAAA';
 </programlisting>
 
    Again the planner examines the <literal>WHERE</literal> clause condition
-   and looks up the selectivity function for <literal>=</literal>, which is
+   and looks up the selextivity function for <literal>=</literal>, which is
    <function>eqsel</function>.  For equality estimation the histogram is
    not useful; instead the list of <firstterm>most
    common values</firstterm> (<acronym>MCV</acronym>s) is used to determine the
-   selectivity. Let's have a look at the MCVs, with some additional columns
+   selextivity. Let's have a look at the MCVs, with some additional columns
    that will be useful later:
 
 <programlisting>
@@ -165,12 +165,12 @@ most_common_freqs | {0.00333333,0.003,0.003,0.003,0.003,0.003,0.003,0.003,0.003,
 
 </programlisting>
 
-   Since <literal>CRAAAA</literal> appears in the list of MCVs, the selectivity is
+   Since <literal>CRAAAA</literal> appears in the list of MCVs, the selextivity is
    merely the corresponding entry in the list of most common frequencies
    (<acronym>MCF</acronym>s):
 
 <programlisting>
-selectivity = mcf[3]
+selextivity = mcf[3]
             = 0.003
 </programlisting>
 
@@ -196,14 +196,14 @@ EXPLAIN SELECT * FROM tenk1 WHERE stringu1 = 'xxx';
    Filter: (stringu1 = 'xxx'::name)
 </programlisting>
 
-   This is quite a different problem: how to estimate the selectivity when the
+   This is quite a different problem: how to estimate the selextivity when the
    value is <emphasis>not</emphasis> in the <acronym>MCV</acronym> list.
    The approach is to use the fact that the value is not in the list,
    combined with the knowledge of the frequencies for all of the
    <acronym>MCV</acronym>s:
 
 <programlisting>
-selectivity = (1 - sum(mvf))/(num_distinct - num_mcv)
+selextivity = (1 - sum(mvf))/(num_distinct - num_mcv)
             = (1 - (0.00333333 + 0.003 + 0.003 + 0.003 + 0.003 + 0.003 +
                     0.003 + 0.003 + 0.003 + 0.003))/(676 - 10)
             = 0.0014559
@@ -238,11 +238,11 @@ rows = 10000 * 0.0014559
    <function>scalarltsel</function> directly applies the condition (e.g.,
    <quote>&lt; 1000</quote>) to each value of the MCV list, and adds up the
    frequencies of the MCVs for which the condition is true.  This gives
-   an exact estimate of the selectivity within the portion of the table
+   an exact estimate of the selextivity within the portion of the table
    that is MCVs.  The histogram is then used in the same way as above
-   to estimate the selectivity in the portion of the table that is not
+   to estimate the selextivity in the portion of the table that is not
    MCVs, and then the two numbers are combined to estimate the overall
-   selectivity.  For example, consider
+   selextivity.  For example, consider
 
 <programlisting>
 EXPLAIN SELECT * FROM tenk1 WHERE stringu1 &lt; 'IAAAAA';
@@ -267,10 +267,10 @@ WHERE tablename='tenk1' AND attname='stringu1';
 
    Checking the MCV list, we find that the condition <literal>stringu1 &lt;
    'IAAAAA'</literal> is satisfied by the first six entries and not the last four,
-   so the selectivity within the MCV part of the population is
+   so the selextivity within the MCV part of the population is
 
 <programlisting>
-selectivity = sum(relevant mvfs)
+selextivity = sum(relevant mvfs)
             = 0.00333333 + 0.003 + 0.003 + 0.003 + 0.003 + 0.003
             = 0.01833333
 </programlisting>
@@ -287,7 +287,7 @@ selectivity = sum(relevant mvfs)
    for the MCV and non-MCV populations:
 
 <programlisting>
-selectivity = mcv_selectivity + histogram_selectivity * histogram_fraction
+selextivity = mcv_selextivity + histogram_selextivity * histogram_fraction
             = 0.01833333 + 0.298387 * 0.96966667
             = 0.307669
 
@@ -300,7 +300,7 @@ rows        = 10000 * 0.307669
    statistics showing these particular values as being more common than
    others are mostly due to sampling error).  In a more typical case where
    some values are significantly more common than others, this complicated
-   process gives a useful improvement in accuracy because the selectivity
+   process gives a useful improvement in accuracy because the selextivity
    for the most common values is found exactly.
   </para>
 
@@ -321,10 +321,10 @@ EXPLAIN SELECT * FROM tenk1 WHERE unique1 &lt; 1000 AND stringu1 = 'xxx';
 </programlisting>
 
    The planner assumes that the two conditions are independent, so that
-   the individual selectivities of the clauses can be multiplied together:
+   the individual selextivities of the clauses can be multiplied together:
 
 <programlisting>
-selectivity = selectivity(unique1 &lt; 1000) * selectivity(stringu1 = 'xxx')
+selextivity = selextivity(unique1 &lt; 1000) * selextivity(stringu1 = 'xxx')
             = 0.100697 * 0.0014559
             = 0.0001466
 
@@ -364,7 +364,7 @@ WHERE t1.unique1 &lt; 50 AND t1.unique2 = t2.unique2;
    <structfield>unique1</structfield> histogram:
 
 <programlisting>
-selectivity = (0 + (50 - bucket[1].min)/(bucket[1].max - bucket[1].min))/num_buckets
+selextivity = (0 + (50 - bucket[1].min)/(bucket[1].max - bucket[1].min))/num_buckets
             = (0 + (50 - 0)/(993 - 0))/10
             = 0.005035
 
@@ -374,7 +374,7 @@ rows        = 10000 * 0.005035
 
    The restriction for the join is <literal>t2.unique2 = t1.unique2</literal>.
    The operator is just
-   our familiar <literal>=</literal>, however the selectivity function is
+   our familiar <literal>=</literal>, however the selextivity function is
    obtained from the <structfield>oprjoin</structfield> column of
    <structname>pg_operator</structname>, and is <function>eqjoinsel</function>.
    <function>eqjoinsel</function> looks up the statistical information for both
@@ -396,7 +396,7 @@ tablename  | null_frac | n_distinct | most_common_vals
    distinct values for both relations together with their null fractions:
 
 <programlisting>
-selectivity = (1 - null_frac1) * (1 - null_frac2) * min(1/num_distinct1, 1/num_distinct2)
+selextivity = (1 - null_frac1) * (1 - null_frac2) * min(1/num_distinct1, 1/num_distinct2)
             = (1 - 0) * (1 - 0) / max(10000, 10000)
             = 0.0001
 </programlisting>
@@ -406,10 +406,10 @@ selectivity = (1 - null_frac1) * (1 - null_frac2) * min(1/num_distinct1, 1/num_d
    The number of rows
    that the join is likely to emit is calculated as the cardinality of the
    Cartesian product of the two inputs, multiplied by the
-   selectivity:
+   selextivity:
 
 <programlisting>
-rows = (outer_cardinality * inner_cardinality) * selectivity
+rows = (outer_cardinality * inner_cardinality) * selextivity
      = (50 * 10000) * 0.0001
      = 50
 </programlisting>
@@ -418,7 +418,7 @@ rows = (outer_cardinality * inner_cardinality) * selectivity
   <para>
    Had there been MCV lists for the two columns,
    <function>eqjoinsel</function> would have used direct comparison of the MCV
-   lists to determine the join selectivity within the part of the column
+   lists to determine the join selextivity within the part of the column
    populations represented by the MCVs.  The estimate for the remainder of the
    populations follows the same approach shown here.
   </para>
@@ -440,9 +440,9 @@ rows = (outer_cardinality * inner_cardinality) * selectivity
    For those interested in further details, estimation of the size of
    a table (before any <literal>WHERE</literal> clauses) is done in
    <filename>src/backend/optimizer/util/plancat.c</filename>. The generic
-   logic for clause selectivities is in
+   logic for clause selextivities is in
    <filename>src/backend/optimizer/path/clausesel.c</filename>.  The
-   operator-specific selectivity functions are mostly found
+   operator-specific selextivity functions are mostly found
    in <filename>src/backend/utils/adt/selfuncs.c</filename>.
   </para>
  </sect1>
@@ -497,7 +497,7 @@ EXPLAIN (ANALYZE, TIMING OFF) SELECT * FROM t WHERE a = 1;
    Rows Removed by Filter: 9900
 </programlisting>
 
-    The planner examines the condition and determines the selectivity
+    The planner examines the condition and determines the selextivity
     of this clause to be 1%.  By comparing this estimate and the actual
     number of rows, we see that the estimate is very accurate
     (in fact exact, as the table is very small).  Changing the
@@ -514,10 +514,10 @@ EXPLAIN (ANALYZE, TIMING OFF) SELECT * FROM t WHERE a = 1 AND b = 1;
    Rows Removed by Filter: 9900
 </programlisting>
 
-    The planner estimates the selectivity for each condition individually,
+    The planner estimates the selextivity for each condition individually,
     arriving at the same 1% estimates as above.  Then it assumes that the
-    conditions are independent, and so it multiplies their selectivities,
-    producing a final selectivity estimate of just 0.01%.
+    conditions are independent, and so it multiplies their selextivities,
+    producing a final selextivity estimate of just 0.01%.
     This is a significant underestimate, as the actual number of rows
     matching the conditions (100) is two orders of magnitude higher.
    </para>
@@ -593,11 +593,11 @@ EXPLAIN (ANALYZE, TIMING OFF) SELECT COUNT(*) FROM t GROUP BY a, b;
   <para>
    Access to the table <structname>pg_statistic</structname> is restricted to
    superusers, so that ordinary users cannot learn about the contents of the
-   tables of other users from it.  Some selectivity estimation functions will
+   tables of other users from it.  Some selextivity estimation functions will
    use a user-provided operator (either the operator appearing in the query or
    a related operator) to analyze the stored statistics.  For example, in order
    to determine whether a stored most common value is applicable, the
-   selectivity estimator will have to run the appropriate <literal>=</literal>
+   selextivity estimator will have to run the appropriate <literal>=</literal>
    operator to compare the constant in the query to the stored value.
    Thus the data in <structname>pg_statistic</structname> is potentially
    passed to user-defined operators.  An appropriately crafted operator can
@@ -609,13 +609,13 @@ EXPLAIN (ANALYZE, TIMING OFF) SELECT COUNT(*) FROM t GROUP BY a, b;
   </para>
 
   <para>
-   In order to prevent this, the following applies to all built-in selectivity
+   In order to prevent this, the following applies to all built-in selextivity
    estimation functions.  When planning a query, in order to be able to use
    stored statistics, the current user must either
    have <literal>SELECT</literal> privilege on the table or the involved
    columns, or the operator used must be <literal>LEAKPROOF</literal> (more
    accurately, the function that the operator is based on).  If not, then the
-   selectivity estimator will behave as if no statistics are available, and
+   selextivity estimator will behave as if no statistics are available, and
    the planner will proceed with default or fall-back assumptions.
   </para>
 

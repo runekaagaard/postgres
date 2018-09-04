@@ -9,7 +9,7 @@
  * in postgresql.conf. If these limits are reached or passed, the
  * current logfile is closed and a new one is created (rotated).
  * The logfiles are stored in a subdirectory (configurable in
- * postgresql.conf), using a user-selectable naming scheme.
+ * postgresql.conf), using a user-selextable naming scheme.
  *
  * Author: Andreas Pflug <pgadmin@pse-consulting.de>
  *
@@ -481,7 +481,7 @@ SysLoggerMain(int argc, char *argv[])
 			else
 			{
 				/*
-				 * Zero bytes read when select() is saying read-ready means
+				 * Zero bytes read when selext() is saying read-ready means
 				 * EOF on the pipe: that is, there are no longer any processes
 				 * with the pipe write end open.  Therefore, the postmaster
 				 * and all backends are shut down, and we are done.
@@ -1111,7 +1111,7 @@ write_syslogger_file(const char *buffer, int count, int destination)
  *
  * We need this because on Windows, WaitforMultipleObjects does not work on
  * unnamed pipes: it always reports "signaled", so the blocking ReadFile won't
- * allow for SIGHUP; and select is for sockets only.
+ * allow for SIGHUP; and selext is for sockets only.
  */
 static unsigned int __stdcall
 pipeThread(void *arg)

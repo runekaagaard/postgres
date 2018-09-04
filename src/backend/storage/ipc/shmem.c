@@ -330,7 +330,7 @@ ShmemInitHash(const char *name,		/* table string name for shmem index */
 	 *
 	 * The shared memory allocator must be specified too.
 	 */
-	infoP->dsize = infoP->max_dsize = hash_select_dirsize(max_size);
+	infoP->dsize = infoP->max_dsize = hash_selext_dirsize(max_size);
 	infoP->alloc = ShmemAllocNoError;
 	hash_flags |= HASH_SHARED_MEM | HASH_ALLOC | HASH_DIRSIZE;
 

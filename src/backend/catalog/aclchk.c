@@ -1692,7 +1692,7 @@ ExecGrant_Attribute(InternalGrant *istmt, Oid relOid, const char *relname,
 	}
 
 	/*
-	 * In select_best_grantor we should consider existing table-level ACL bits
+	 * In selext_best_grantor we should consider existing table-level ACL bits
 	 * as well as the per-column ACL.  Build a new ACL that is their
 	 * concatenation.  (This is a bit cheap and dirty compared to merging them
 	 * properly with no duplications, but it's all we need here.)
@@ -1700,7 +1700,7 @@ ExecGrant_Attribute(InternalGrant *istmt, Oid relOid, const char *relname,
 	merged_acl = aclconcat(old_rel_acl, old_acl);
 
 	/* Determine ID to do the grant as, and available grant options */
-	select_best_grantor(GetUserId(), col_privileges,
+	selext_best_grantor(GetUserId(), col_privileges,
 						merged_acl, ownerId,
 						&grantorId, &avail_goptions);
 
@@ -1976,7 +1976,7 @@ ExecGrant_Relation(InternalGrant *istmt)
 			ObjectType	objtype;
 
 			/* Determine ID to do the grant as, and available grant options */
-			select_best_grantor(GetUserId(), this_privileges,
+			selext_best_grantor(GetUserId(), this_privileges,
 								old_acl, ownerId,
 								&grantorId, &avail_goptions);
 
@@ -2180,7 +2180,7 @@ ExecGrant_Database(InternalGrant *istmt)
 		}
 
 		/* Determine ID to do the grant as, and available grant options */
-		select_best_grantor(GetUserId(), istmt->privileges,
+		selext_best_grantor(GetUserId(), istmt->privileges,
 							old_acl, ownerId,
 							&grantorId, &avail_goptions);
 
@@ -2302,7 +2302,7 @@ ExecGrant_Fdw(InternalGrant *istmt)
 		}
 
 		/* Determine ID to do the grant as, and available grant options */
-		select_best_grantor(GetUserId(), istmt->privileges,
+		selext_best_grantor(GetUserId(), istmt->privileges,
 							old_acl, ownerId,
 							&grantorId, &avail_goptions);
 
@@ -2428,7 +2428,7 @@ ExecGrant_ForeignServer(InternalGrant *istmt)
 		}
 
 		/* Determine ID to do the grant as, and available grant options */
-		select_best_grantor(GetUserId(), istmt->privileges,
+		selext_best_grantor(GetUserId(), istmt->privileges,
 							old_acl, ownerId,
 							&grantorId, &avail_goptions);
 
@@ -2552,7 +2552,7 @@ ExecGrant_Function(InternalGrant *istmt)
 		}
 
 		/* Determine ID to do the grant as, and available grant options */
-		select_best_grantor(GetUserId(), istmt->privileges,
+		selext_best_grantor(GetUserId(), istmt->privileges,
 							old_acl, ownerId,
 							&grantorId, &avail_goptions);
 
@@ -2683,7 +2683,7 @@ ExecGrant_Language(InternalGrant *istmt)
 		}
 
 		/* Determine ID to do the grant as, and available grant options */
-		select_best_grantor(GetUserId(), istmt->privileges,
+		selext_best_grantor(GetUserId(), istmt->privileges,
 							old_acl, ownerId,
 							&grantorId, &avail_goptions);
 
@@ -2821,7 +2821,7 @@ ExecGrant_Largeobject(InternalGrant *istmt)
 		}
 
 		/* Determine ID to do the grant as, and available grant options */
-		select_best_grantor(GetUserId(), istmt->privileges,
+		selext_best_grantor(GetUserId(), istmt->privileges,
 							old_acl, ownerId,
 							&grantorId, &avail_goptions);
 
@@ -2947,7 +2947,7 @@ ExecGrant_Namespace(InternalGrant *istmt)
 		}
 
 		/* Determine ID to do the grant as, and available grant options */
-		select_best_grantor(GetUserId(), istmt->privileges,
+		selext_best_grantor(GetUserId(), istmt->privileges,
 							old_acl, ownerId,
 							&grantorId, &avail_goptions);
 
@@ -3071,7 +3071,7 @@ ExecGrant_Tablespace(InternalGrant *istmt)
 		}
 
 		/* Determine ID to do the grant as, and available grant options */
-		select_best_grantor(GetUserId(), istmt->privileges,
+		selext_best_grantor(GetUserId(), istmt->privileges,
 							old_acl, ownerId,
 							&grantorId, &avail_goptions);
 
@@ -3205,7 +3205,7 @@ ExecGrant_Type(InternalGrant *istmt)
 		}
 
 		/* Determine ID to do the grant as, and available grant options */
-		select_best_grantor(GetUserId(), istmt->privileges,
+		selext_best_grantor(GetUserId(), istmt->privileges,
 							old_acl, ownerId,
 							&grantorId, &avail_goptions);
 
@@ -3272,7 +3272,7 @@ string_to_privilege(const char *privname)
 {
 	if (strcmp(privname, "insert") == 0)
 		return ACL_INSERT;
-	if (strcmp(privname, "select") == 0)
+	if (strcmp(privname, "selext") == 0)
 		return ACL_SELECT;
 	if (strcmp(privname, "update") == 0)
 		return ACL_UPDATE;

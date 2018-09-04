@@ -586,28 +586,28 @@ blH2nKZC9d6fi4YzSYMepZpMOFR65M80MCMiDUGnZBB8sEADu2/iVtqDUeG8mAA=
 -----END PGP MESSAGE-----
 ');
 -- successful decrypt
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey))
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey))
 from keytbl, encdata where keytbl.id=1 and encdata.id=1;
  pgp_pub_decrypt 
 -----------------
  Secret msg
 (1 row)
 
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey))
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey))
 from keytbl, encdata where keytbl.id=2 and encdata.id=2;
  pgp_pub_decrypt 
 -----------------
  Secret msg
 (1 row)
 
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey))
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey))
 from keytbl, encdata where keytbl.id=3 and encdata.id=3;
  pgp_pub_decrypt 
 -----------------
  Secret msg
 (1 row)
 
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey))
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey))
 from keytbl, encdata where keytbl.id=6 and encdata.id=4;
  pgp_pub_decrypt 
 -----------------
@@ -615,19 +615,19 @@ from keytbl, encdata where keytbl.id=6 and encdata.id=4;
 (1 row)
 
 -- wrong key
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey))
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey))
 from keytbl, encdata where keytbl.id=2 and encdata.id=1;
 ERROR:  Wrong key
 -- sign-only key
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey))
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey))
 from keytbl, encdata where keytbl.id=4 and encdata.id=1;
 ERROR:  No encryption key found
 -- rsa: password-protected secret key, wrong password
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey), '123')
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey), '123')
 from keytbl, encdata where keytbl.id=7 and encdata.id=4;
 ERROR:  Wrong key or corrupt data
 -- rsa: password-protected secret key, right password
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey), 'parool')
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey), 'parool')
 from keytbl, encdata where keytbl.id=7 and encdata.id=4;
  pgp_pub_decrypt 
 -----------------
@@ -635,15 +635,15 @@ from keytbl, encdata where keytbl.id=7 and encdata.id=4;
 (1 row)
 
 -- password-protected secret key, no password
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey))
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey))
 from keytbl, encdata where keytbl.id=5 and encdata.id=1;
 ERROR:  Need password for secret key
 -- password-protected secret key, wrong password
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey), 'foo')
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey), 'foo')
 from keytbl, encdata where keytbl.id=5 and encdata.id=1;
 ERROR:  Wrong key or corrupt data
 -- password-protected secret key, right password
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey), 'parool')
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey), 'parool')
 from keytbl, encdata where keytbl.id=5 and encdata.id=1;
  pgp_pub_decrypt 
 -----------------
@@ -651,6 +651,6 @@ from keytbl, encdata where keytbl.id=5 and encdata.id=1;
 (1 row)
 
 -- test for a short read from prefix_init
-select pgp_pub_decrypt(dearmor(data), dearmor(seckey))
+selext pgp_pub_decrypt(dearmor(data), dearmor(seckey))
 from keytbl, encdata where keytbl.id=6 and encdata.id=5;
 ERROR:  Wrong key or corrupt data

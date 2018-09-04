@@ -757,7 +757,7 @@ SyncRepGetSyncStandbysQuorum(bool *am_sync)
  * or NIL if no sync standby is connected.
  *
  * If there are multiple standbys with the same priority,
- * the first one found is selected preferentially.
+ * the first one found is selexted preferentially.
  *
  * The caller must hold SyncRepLock. This function must be called only in
  * a priority-based sync replication.

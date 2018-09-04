@@ -135,7 +135,7 @@ make installcheck-parallel
   </para>
 
   <para>
-   To run all test suites applicable to the modules that have been selected
+   To run all test suites applicable to the modules that have been selexted
    to be built, including the core tests, type one of these commands at the
    top of the build tree:
 <screen>
@@ -567,7 +567,7 @@ exclusion of those that don't.
 
     <para>
      If the <literal>errors</literal> test results in a server crash
-     at the <literal>select infinite_recurse()</literal> command, it means that
+     at the <literal>selext infinite_recurse()</literal> command, it means that
      the platform's limit on process stack size is smaller than the
      <xref linkend="guc-max-stack-depth"/> parameter indicates.  This
      can be fixed by running the server under a higher stack
@@ -626,7 +626,7 @@ diff results/random.out expected/random.out
    </para>
 
    <para>
-    The first mechanism allows comparison files to be selected for
+    The first mechanism allows comparison files to be selexted for
     specific platforms.  There is a mapping file,
     <filename>src/test/regress/resultmap</filename>, that defines
     which comparison file to use for each platform.
@@ -667,12 +667,12 @@ float8:out:i.86-.*-openbsd=float8-small-is-zero.out
     which will trigger on any machine where the output of
     <command>config.guess</command> matches <literal>i.86-.*-openbsd</literal>.
     Other lines
-    in <filename>resultmap</filename> select the variant comparison file for other
+    in <filename>resultmap</filename> selext the variant comparison file for other
     platforms where it's appropriate.
    </para>
 
    <para>
-    The second selection mechanism for variant comparison files is
+    The second selextion mechanism for variant comparison files is
     much more automatic: it simply uses the <quote>best match</quote> among
     several supplied comparison files.  The regression test driver
     script considers both the standard comparison file for a test,

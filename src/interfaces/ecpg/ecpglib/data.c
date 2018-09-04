@@ -46,7 +46,7 @@ static bool
 garbage_left(enum ARRAY_TYPE isarray, char **scan_length, enum COMPAT_MODE compat)
 {
 	/*
-	 * INFORMIX allows for selecting a numeric into an int, the result is
+	 * INFORMIX allows for selexting a numeric into an int, the result is
 	 * truncated
 	 */
 	if (isarray == ECPG_ARRAY_NONE)

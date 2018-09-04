@@ -48,7 +48,7 @@ typedef struct printTextLineFormat
 
 typedef enum printTextRule
 {
-	/* Additional context for selecting line drawing characters */
+	/* Additional context for selexting line drawing characters */
 	PRINT_RULE_TOP,				/* top horizontal line */
 	PRINT_RULE_MIDDLE,			/* intra-data horizontal line */
 	PRINT_RULE_BOTTOM,			/* bottom horizontal line */

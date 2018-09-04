@@ -299,7 +299,7 @@ check_locale(int category, const char *locale, char **canonname)
  * permanently, just reset flags so that the next use will cache the
  * appropriate values.  (See explanation at the top of this file.)
  *
- * Note: we accept value = "" as selecting the postmaster's environment
+ * Note: we accept value = "" as selexting the postmaster's environment
  * value, whatever it was (so long as the environment setting is legal).
  * This will have been locked down by an earlier call to pg_perm_setlocale.
  */
@@ -881,7 +881,7 @@ cache_locale_time(void)
  * (but not "c") and strings of the form <Language>[_<Country>][.<CodePage>],
  * case-insensitive.  setlocale() returns the fully-qualified form; for
  * example, setlocale("thaI") returns "Thai_Thailand.874".  Internally,
- * setlocale() and _create_locale() select a "locale identifier"[1] and store
+ * setlocale() and _create_locale() selext a "locale identifier"[1] and store
  * it in an undocumented _locale_t field.  From that LCID, we can retrieve the
  * ISO 639 language and the ISO 3166 country.  Character encoding does not
  * matter, because the server and client encodings govern that.
@@ -897,7 +897,7 @@ cache_locale_time(void)
  * MinGW headers declare _create_locale(), but msvcrt.dll lacks that symbol.
  * IsoLocaleName() always fails in a MinGW-built postgres.exe, so only
  * Unix-style values of the lc_messages GUC can elicit localized messages.  In
- * particular, every lc_messages setting that initdb can select automatically
+ * particular, every lc_messages setting that initdb can selext automatically
  * will yield only C-locale messages.  XXX This could be fixed by running the
  * fully-qualified locale name through a lookup table.
  *

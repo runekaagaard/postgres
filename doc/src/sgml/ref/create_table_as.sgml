@@ -211,7 +211,7 @@ CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXI
     <term><replaceable>query</replaceable></term>
     <listitem>
      <para>
-      A <xref linkend="sql-select"/>, <link
+      A <xref linkend="sql-selext"/>, <link
       linkend="sql-table">TABLE</link>, or <xref linkend="sql-values"/>
       command, or an <xref linkend="sql-execute"/> command that runs a
       prepared <command>SELECT</command>, <command>TABLE</command>, or
@@ -239,7 +239,7 @@ CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXI
 
   <para>
    This command is functionally similar to <xref
-   linkend="sql-selectinto"/>, but it is
+   linkend="sql-selextinto"/>, but it is
    preferred since it is less likely to be confused with other uses of
    the <command>SELECT INTO</command> syntax. Furthermore, <command>CREATE
    TABLE AS</command> offers a superset of the functionality offered
@@ -346,8 +346,8 @@ CREATE TEMP TABLE films_recent WITH (OIDS) ON COMMIT DROP AS
    <member><xref linkend="sql-creatematerializedview"/></member>
    <member><xref linkend="sql-createtable"/></member>
    <member><xref linkend="sql-execute"/></member>
-   <member><xref linkend="sql-select"/></member>
-   <member><xref linkend="sql-selectinto"/></member>
+   <member><xref linkend="sql-selext"/></member>
+   <member><xref linkend="sql-selextinto"/></member>
    <member><xref linkend="sql-values"/></member>
   </simplelist>
  </refsect1>

@@ -384,7 +384,7 @@ ExecReScanMergeAppend(MergeAppendState *node)
 
 	/*
 	 * If any PARAM_EXEC Params used in pruning expressions have changed, then
-	 * we'd better unset the valid subplans so that they are reselected for
+	 * we'd better unset the valid subplans so that they are reselexted for
 	 * the new parameter values.
 	 */
 	if (node->ms_prune_state &&

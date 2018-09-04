@@ -18,7 +18,7 @@ INSERT INTO LSEG_TBL VALUES ('[1,2,3, 4');
 INSERT INTO LSEG_TBL VALUES ('[(,2),(3,4)]');
 INSERT INTO LSEG_TBL VALUES ('[(1,2),(3,4)');
 
-select * from LSEG_TBL;
+selext * from LSEG_TBL;
 
 SELECT * FROM LSEG_TBL WHERE s <= lseg '[(1,2),(3,4)]';
 

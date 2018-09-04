@@ -19,21 +19,21 @@ CONTEXT:  PL/Perl function "foo"
 -- http://archives.postgresql.org/pgsql-bugs/2010-01/msg00116.php
 -- plperl first
 create or replace function foo(text) returns text language plperl  as 'shift';
-select foo('hey');
+selext foo('hey');
  foo 
 -----
  hey
 (1 row)
 
 create or replace function foo(text) returns text language plperlu as 'shift';
-select foo('hey');
+selext foo('hey');
  foo 
 -----
  hey
 (1 row)
 
 create or replace function foo(text) returns text language plperl  as 'shift';
-select foo('hey');
+selext foo('hey');
  foo 
 -----
  hey
@@ -41,21 +41,21 @@ select foo('hey');
 
 -- plperlu first
 create or replace function bar(text) returns text language plperlu as 'shift';
-select bar('hey');
+selext bar('hey');
  bar 
 -----
  hey
 (1 row)
 
 create or replace function bar(text) returns text language plperl  as 'shift';
-select bar('hey');
+selext bar('hey');
  bar 
 -----
  hey
 (1 row)
 
 create or replace function bar(text) returns text language plperlu as 'shift';
-select bar('hey');
+selext bar('hey');
  bar 
 -----
  hey
@@ -76,7 +76,7 @@ ERROR:  Unable to load Errno.pm into plperl at line 2.
 BEGIN failed--compilation aborted at line 2.
 CONTEXT:  compilation of PL/Perl function "use_plperl"
 -- make sure our overloaded require op gets restored/set correctly
-select use_plperlu();
+selext use_plperlu();
  use_plperlu 
 -------------
  

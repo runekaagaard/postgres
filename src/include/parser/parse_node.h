@@ -27,7 +27,7 @@
  * Note: EXPR_KIND_OTHER is not used in the core code, but is left for use
  * by extension code that might need to call transformExpr().  The core code
  * will not enforce any context-driven restrictions on EXPR_KIND_OTHER
- * expressions, so the caller would have to check for sub-selects, aggregates,
+ * expressions, so the caller would have to check for sub-selexts, aggregates,
  * window functions, SRFs, etc if those need to be disallowed.
  */
 typedef enum ParseExprKind

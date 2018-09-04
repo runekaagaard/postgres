@@ -259,7 +259,7 @@ COMMIT;
    <para>
     It's possible to control the statements in a transaction in a more
     granular fashion through the use of <firstterm>savepoints</firstterm>.  Savepoints
-    allow you to selectively discard parts of the transaction, while
+    allow you to selextively discard parts of the transaction, while
     committing the rest.  After defining a savepoint with
     <command>SAVEPOINT</command>, you can if needed roll back to the savepoint
     with <command>ROLLBACK TO</command>.  All the transaction's database changes
@@ -521,7 +521,7 @@ SELECT salary, sum(salary) OVER (ORDER BY salary) FROM empsalary;
 
    <para>
     If there is a need to filter or group rows after the window calculations
-    are performed, you can use a sub-select.  For example:
+    are performed, you can use a sub-selext.  For example:
 
 <programlisting>
 SELECT depname, empno, salary, enroll_date
@@ -557,7 +557,7 @@ SELECT sum(salary) OVER w, avg(salary) OVER w
     <xref linkend="syntax-window-functions"/>,
     <xref linkend="functions-window"/>,
     <xref linkend="queries-window"/>, and the
-    <xref linkend="sql-select"/> reference page.
+    <xref linkend="sql-selext"/> reference page.
    </para>
   </sect1>
 

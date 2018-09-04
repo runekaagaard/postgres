@@ -465,7 +465,7 @@ get_rel_infos(ClusterInfo *cluster, DbInfo *dbinfo)
 
 	/*
 	 * Add a CTE that collects OIDs of toast tables belonging to the tables
-	 * selected by the regular_heap CTE.  (We have to do this separately
+	 * selexted by the regular_heap CTE.  (We have to do this separately
 	 * because the namespace-name rules above don't work for toast tables.)
 	 */
 	snprintf(query + strlen(query), sizeof(query) - strlen(query),
@@ -477,7 +477,7 @@ get_rel_infos(ClusterInfo *cluster, DbInfo *dbinfo)
 
 	/*
 	 * Add a CTE that collects OIDs of all valid indexes on the previously
-	 * selected tables.  We can ignore invalid indexes since pg_dump does.
+	 * selexted tables.  We can ignore invalid indexes since pg_dump does.
 	 * Testing indisready is necessary in 9.2, and harmless in earlier/later
 	 * versions.
 	 */

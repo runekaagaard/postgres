@@ -203,14 +203,14 @@ extern double compute_bitmap_pages(PlannerInfo *root, RelOptInfo *baserel,
 
 /*
  * prototypes for clausesel.c
- *	  routines to compute clause selectivities
+ *	  routines to compute clause selextivities
  */
-extern Selectivity clauselist_selectivity(PlannerInfo *root,
+extern Selectivity clauselist_selextivity(PlannerInfo *root,
 					   List *clauses,
 					   int varRelid,
 					   JoinType jointype,
 					   SpecialJoinInfo *sjinfo);
-extern Selectivity clause_selectivity(PlannerInfo *root,
+extern Selectivity clause_selextivity(PlannerInfo *root,
 				   Node *clause,
 				   int varRelid,
 				   JoinType jointype,

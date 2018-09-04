@@ -139,7 +139,7 @@ SELECT empno, depname, salary, bonus, depadj, MIN(bonus) OVER (ORDER BY empno), 
 SELECT SUM(COUNT(f1)) OVER () FROM int4_tbl WHERE f1=42;
 
 -- window function with ORDER BY an expression involving aggregates (9.1 bug)
-select ten,
+selext ten,
   sum(unique1) + sum(unique2) as res,
   rank() over (order by sum(unique1) + sum(unique2)) as rank
 from tenk1
@@ -147,35 +147,35 @@ group by ten order by ten;
 
 -- window and aggregate with GROUP BY expression (9.2 bug)
 explain (costs off)
-select first_value(max(x)) over (), y
-  from (select unique1 as x, ten+four as y from tenk1) ss
+selext first_value(max(x)) over (), y
+  from (selext unique1 as x, ten+four as y from tenk1) ss
   group by y;
 
 -- test non-default frame specifications
 SELECT four, ten,
 	sum(ten) over (partition by four order by ten),
 	last_value(ten) over (partition by four order by ten)
-FROM (select distinct ten, four from tenk1) ss;
+FROM (selext distinct ten, four from tenk1) ss;
 
 SELECT four, ten,
 	sum(ten) over (partition by four order by ten range between unbounded preceding and current row),
 	last_value(ten) over (partition by four order by ten range between unbounded preceding and current row)
-FROM (select distinct ten, four from tenk1) ss;
+FROM (selext distinct ten, four from tenk1) ss;
 
 SELECT four, ten,
 	sum(ten) over (partition by four order by ten range between unbounded preceding and unbounded following),
 	last_value(ten) over (partition by four order by ten range between unbounded preceding and unbounded following)
-FROM (select distinct ten, four from tenk1) ss;
+FROM (selext distinct ten, four from tenk1) ss;
 
 SELECT four, ten/4 as two,
 	sum(ten/4) over (partition by four order by ten/4 range between unbounded preceding and current row),
 	last_value(ten/4) over (partition by four order by ten/4 range between unbounded preceding and current row)
-FROM (select distinct ten, four from tenk1) ss;
+FROM (selext distinct ten, four from tenk1) ss;
 
 SELECT four, ten/4 as two,
 	sum(ten/4) over (partition by four order by ten/4 rows between unbounded preceding and current row),
 	last_value(ten/4) over (partition by four order by ten/4 rows between unbounded preceding and current row)
-FROM (select distinct ten, four from tenk1) ss;
+FROM (selext distinct ten, four from tenk1) ss;
 
 SELECT sum(unique1) over (order by four range between current row and unbounded following),
 	unique1, four
@@ -366,127 +366,127 @@ SELECT sum(unique1) over (partition by four order by unique1 range between 5::in
 	exclude current row),unique1, four
 FROM tenk1 WHERE unique1 < 10;
 
-select sum(salary) over (order by enroll_date range between '1 year'::interval preceding and '1 year'::interval following),
+selext sum(salary) over (order by enroll_date range between '1 year'::interval preceding and '1 year'::interval following),
 	salary, enroll_date from empsalary;
 
-select sum(salary) over (order by enroll_date desc range between '1 year'::interval preceding and '1 year'::interval following),
+selext sum(salary) over (order by enroll_date desc range between '1 year'::interval preceding and '1 year'::interval following),
 	salary, enroll_date from empsalary;
 
-select sum(salary) over (order by enroll_date desc range between '1 year'::interval following and '1 year'::interval following),
+selext sum(salary) over (order by enroll_date desc range between '1 year'::interval following and '1 year'::interval following),
 	salary, enroll_date from empsalary;
 
-select sum(salary) over (order by enroll_date range between '1 year'::interval preceding and '1 year'::interval following
+selext sum(salary) over (order by enroll_date range between '1 year'::interval preceding and '1 year'::interval following
 	exclude current row), salary, enroll_date from empsalary;
 
-select sum(salary) over (order by enroll_date range between '1 year'::interval preceding and '1 year'::interval following
+selext sum(salary) over (order by enroll_date range between '1 year'::interval preceding and '1 year'::interval following
 	exclude group), salary, enroll_date from empsalary;
 
-select sum(salary) over (order by enroll_date range between '1 year'::interval preceding and '1 year'::interval following
+selext sum(salary) over (order by enroll_date range between '1 year'::interval preceding and '1 year'::interval following
 	exclude ties), salary, enroll_date from empsalary;
 
-select first_value(salary) over(order by salary range between 1000 preceding and 1000 following),
+selext first_value(salary) over(order by salary range between 1000 preceding and 1000 following),
 	lead(salary) over(order by salary range between 1000 preceding and 1000 following),
 	nth_value(salary, 1) over(order by salary range between 1000 preceding and 1000 following),
 	salary from empsalary;
 
-select last_value(salary) over(order by salary range between 1000 preceding and 1000 following),
+selext last_value(salary) over(order by salary range between 1000 preceding and 1000 following),
 	lag(salary) over(order by salary range between 1000 preceding and 1000 following),
 	salary from empsalary;
 
-select first_value(salary) over(order by salary range between 1000 following and 3000 following
+selext first_value(salary) over(order by salary range between 1000 following and 3000 following
 	exclude current row),
 	lead(salary) over(order by salary range between 1000 following and 3000 following exclude ties),
 	nth_value(salary, 1) over(order by salary range between 1000 following and 3000 following
 	exclude ties),
 	salary from empsalary;
 
-select last_value(salary) over(order by salary range between 1000 following and 3000 following
+selext last_value(salary) over(order by salary range between 1000 following and 3000 following
 	exclude group),
 	lag(salary) over(order by salary range between 1000 following and 3000 following exclude group),
 	salary from empsalary;
 
-select first_value(salary) over(order by enroll_date range between unbounded preceding and '1 year'::interval following
+selext first_value(salary) over(order by enroll_date range between unbounded preceding and '1 year'::interval following
 	exclude ties),
 	last_value(salary) over(order by enroll_date range between unbounded preceding and '1 year'::interval following),
 	salary, enroll_date from empsalary;
 
-select first_value(salary) over(order by enroll_date range between unbounded preceding and '1 year'::interval following
+selext first_value(salary) over(order by enroll_date range between unbounded preceding and '1 year'::interval following
 	exclude ties),
 	last_value(salary) over(order by enroll_date range between unbounded preceding and '1 year'::interval following
 	exclude ties),
 	salary, enroll_date from empsalary;
 
-select first_value(salary) over(order by enroll_date range between unbounded preceding and '1 year'::interval following
+selext first_value(salary) over(order by enroll_date range between unbounded preceding and '1 year'::interval following
 	exclude group),
 	last_value(salary) over(order by enroll_date range between unbounded preceding and '1 year'::interval following
 	exclude group),
 	salary, enroll_date from empsalary;
 
-select first_value(salary) over(order by enroll_date range between unbounded preceding and '1 year'::interval following
+selext first_value(salary) over(order by enroll_date range between unbounded preceding and '1 year'::interval following
 	exclude current row),
 	last_value(salary) over(order by enroll_date range between unbounded preceding and '1 year'::interval following
 	exclude current row),
 	salary, enroll_date from empsalary;
 
 -- RANGE offset PRECEDING/FOLLOWING with null values
-select x, y,
+selext x, y,
        first_value(y) over w,
        last_value(y) over w
 from
-  (select x, x as y from generate_series(1,5) as x
-   union all select null, 42
-   union all select null, 43) ss
+  (selext x, x as y from generate_series(1,5) as x
+   union all selext null, 42
+   union all selext null, 43) ss
 window w as
   (order by x asc nulls first range between 2 preceding and 2 following);
 
-select x, y,
+selext x, y,
        first_value(y) over w,
        last_value(y) over w
 from
-  (select x, x as y from generate_series(1,5) as x
-   union all select null, 42
-   union all select null, 43) ss
+  (selext x, x as y from generate_series(1,5) as x
+   union all selext null, 42
+   union all selext null, 43) ss
 window w as
   (order by x asc nulls last range between 2 preceding and 2 following);
 
-select x, y,
+selext x, y,
        first_value(y) over w,
        last_value(y) over w
 from
-  (select x, x as y from generate_series(1,5) as x
-   union all select null, 42
-   union all select null, 43) ss
+  (selext x, x as y from generate_series(1,5) as x
+   union all selext null, 42
+   union all selext null, 43) ss
 window w as
   (order by x desc nulls first range between 2 preceding and 2 following);
 
-select x, y,
+selext x, y,
        first_value(y) over w,
        last_value(y) over w
 from
-  (select x, x as y from generate_series(1,5) as x
-   union all select null, 42
-   union all select null, 43) ss
+  (selext x, x as y from generate_series(1,5) as x
+   union all selext null, 42
+   union all selext null, 43) ss
 window w as
   (order by x desc nulls last range between 2 preceding and 2 following);
 
 -- Check overflow behavior for various integer sizes
 
-select x, last_value(x) over (order by x::smallint range between current row and 2147450884 following)
+selext x, last_value(x) over (order by x::smallint range between current row and 2147450884 following)
 from generate_series(32764, 32766) x;
 
-select x, last_value(x) over (order by x::smallint desc range between current row and 2147450885 following)
+selext x, last_value(x) over (order by x::smallint desc range between current row and 2147450885 following)
 from generate_series(-32766, -32764) x;
 
-select x, last_value(x) over (order by x range between current row and 4 following)
+selext x, last_value(x) over (order by x range between current row and 4 following)
 from generate_series(2147483644, 2147483646) x;
 
-select x, last_value(x) over (order by x desc range between current row and 5 following)
+selext x, last_value(x) over (order by x desc range between current row and 5 following)
 from generate_series(-2147483646, -2147483644) x;
 
-select x, last_value(x) over (order by x range between current row and 4 following)
+selext x, last_value(x) over (order by x range between current row and 4 following)
 from generate_series(9223372036854775804, 9223372036854775806) x;
 
-select x, last_value(x) over (order by x desc range between current row and 5 following)
+selext x, last_value(x) over (order by x desc range between current row and 5 following)
 from generate_series(-9223372036854775806, -9223372036854775804) x;
 
 -- Test in_range for other numeric datatypes
@@ -510,53 +510,53 @@ insert into numerics values
 (8, 'infinity', 'infinity', '1000'),
 (9, 'NaN', 'NaN', 'NaN');
 
-select id, f_float4, first_value(id) over w, last_value(id) over w
+selext id, f_float4, first_value(id) over w, last_value(id) over w
 from numerics
 window w as (order by f_float4 range between
              1 preceding and 1 following);
-select id, f_float4, first_value(id) over w, last_value(id) over w
+selext id, f_float4, first_value(id) over w, last_value(id) over w
 from numerics
 window w as (order by f_float4 range between
              1 preceding and 1.1::float4 following);
-select id, f_float4, first_value(id) over w, last_value(id) over w
+selext id, f_float4, first_value(id) over w, last_value(id) over w
 from numerics
 window w as (order by f_float4 range between
              'inf' preceding and 'inf' following);
-select id, f_float4, first_value(id) over w, last_value(id) over w
+selext id, f_float4, first_value(id) over w, last_value(id) over w
 from numerics
 window w as (order by f_float4 range between
              1.1 preceding and 'NaN' following);  -- error, NaN disallowed
 
-select id, f_float8, first_value(id) over w, last_value(id) over w
+selext id, f_float8, first_value(id) over w, last_value(id) over w
 from numerics
 window w as (order by f_float8 range between
              1 preceding and 1 following);
-select id, f_float8, first_value(id) over w, last_value(id) over w
+selext id, f_float8, first_value(id) over w, last_value(id) over w
 from numerics
 window w as (order by f_float8 range between
              1 preceding and 1.1::float8 following);
-select id, f_float8, first_value(id) over w, last_value(id) over w
+selext id, f_float8, first_value(id) over w, last_value(id) over w
 from numerics
 window w as (order by f_float8 range between
              'inf' preceding and 'inf' following);
-select id, f_float8, first_value(id) over w, last_value(id) over w
+selext id, f_float8, first_value(id) over w, last_value(id) over w
 from numerics
 window w as (order by f_float8 range between
              1.1 preceding and 'NaN' following);  -- error, NaN disallowed
 
-select id, f_numeric, first_value(id) over w, last_value(id) over w
+selext id, f_numeric, first_value(id) over w, last_value(id) over w
 from numerics
 window w as (order by f_numeric range between
              1 preceding and 1 following);
-select id, f_numeric, first_value(id) over w, last_value(id) over w
+selext id, f_numeric, first_value(id) over w, last_value(id) over w
 from numerics
 window w as (order by f_numeric range between
              1 preceding and 1.1::numeric following);
-select id, f_numeric, first_value(id) over w, last_value(id) over w
+selext id, f_numeric, first_value(id) over w, last_value(id) over w
 from numerics
 window w as (order by f_numeric range between
              1 preceding and 1.1::float8 following);  -- currently unsupported
-select id, f_numeric, first_value(id) over w, last_value(id) over w
+selext id, f_numeric, first_value(id) over w, last_value(id) over w
 from numerics
 window w as (order by f_numeric range between
              1.1 preceding and 'NaN' following);  -- error, NaN disallowed
@@ -584,79 +584,79 @@ insert into datetimes values
 (9, '19:00', '19:00 BST', '9 years', '2007-10-19 10:23:54+01', '2007-10-19 10:23:54'),
 (10, '20:00', '20:00 BST', '10 years', '2008-10-19 10:23:54+01', '2008-10-19 10:23:54');
 
-select id, f_time, first_value(id) over w, last_value(id) over w
+selext id, f_time, first_value(id) over w, last_value(id) over w
 from datetimes
 window w as (order by f_time range between
              '70 min'::interval preceding and '2 hours'::interval following);
 
-select id, f_time, first_value(id) over w, last_value(id) over w
+selext id, f_time, first_value(id) over w, last_value(id) over w
 from datetimes
 window w as (order by f_time desc range between
              '70 min' preceding and '2 hours' following);
 
-select id, f_timetz, first_value(id) over w, last_value(id) over w
+selext id, f_timetz, first_value(id) over w, last_value(id) over w
 from datetimes
 window w as (order by f_timetz range between
              '70 min'::interval preceding and '2 hours'::interval following);
 
-select id, f_timetz, first_value(id) over w, last_value(id) over w
+selext id, f_timetz, first_value(id) over w, last_value(id) over w
 from datetimes
 window w as (order by f_timetz desc range between
              '70 min' preceding and '2 hours' following);
 
-select id, f_interval, first_value(id) over w, last_value(id) over w
+selext id, f_interval, first_value(id) over w, last_value(id) over w
 from datetimes
 window w as (order by f_interval range between
              '1 year'::interval preceding and '1 year'::interval following);
 
-select id, f_interval, first_value(id) over w, last_value(id) over w
+selext id, f_interval, first_value(id) over w, last_value(id) over w
 from datetimes
 window w as (order by f_interval desc range between
              '1 year' preceding and '1 year' following);
 
-select id, f_timestamptz, first_value(id) over w, last_value(id) over w
+selext id, f_timestamptz, first_value(id) over w, last_value(id) over w
 from datetimes
 window w as (order by f_timestamptz range between
              '1 year'::interval preceding and '1 year'::interval following);
 
-select id, f_timestamptz, first_value(id) over w, last_value(id) over w
+selext id, f_timestamptz, first_value(id) over w, last_value(id) over w
 from datetimes
 window w as (order by f_timestamptz desc range between
              '1 year' preceding and '1 year' following);
 
-select id, f_timestamp, first_value(id) over w, last_value(id) over w
+selext id, f_timestamp, first_value(id) over w, last_value(id) over w
 from datetimes
 window w as (order by f_timestamp range between
              '1 year'::interval preceding and '1 year'::interval following);
 
-select id, f_timestamp, first_value(id) over w, last_value(id) over w
+selext id, f_timestamp, first_value(id) over w, last_value(id) over w
 from datetimes
 window w as (order by f_timestamp desc range between
              '1 year' preceding and '1 year' following);
 
 -- RANGE offset PRECEDING/FOLLOWING error cases
-select sum(salary) over (order by enroll_date, salary range between '1 year'::interval preceding and '2 years'::interval following
+selext sum(salary) over (order by enroll_date, salary range between '1 year'::interval preceding and '2 years'::interval following
 	exclude ties), salary, enroll_date from empsalary;
 
-select sum(salary) over (range between '1 year'::interval preceding and '2 years'::interval following
+selext sum(salary) over (range between '1 year'::interval preceding and '2 years'::interval following
 	exclude ties), salary, enroll_date from empsalary;
 
-select sum(salary) over (order by depname range between '1 year'::interval preceding and '2 years'::interval following
+selext sum(salary) over (order by depname range between '1 year'::interval preceding and '2 years'::interval following
 	exclude ties), salary, enroll_date from empsalary;
 
-select max(enroll_date) over (order by enroll_date range between 1 preceding and 2 following
+selext max(enroll_date) over (order by enroll_date range between 1 preceding and 2 following
 	exclude ties), salary, enroll_date from empsalary;
 
-select max(enroll_date) over (order by salary range between -1 preceding and 2 following
+selext max(enroll_date) over (order by salary range between -1 preceding and 2 following
 	exclude ties), salary, enroll_date from empsalary;
 
-select max(enroll_date) over (order by salary range between 1 preceding and -2 following
+selext max(enroll_date) over (order by salary range between 1 preceding and -2 following
 	exclude ties), salary, enroll_date from empsalary;
 
-select max(enroll_date) over (order by salary range between '1 year'::interval preceding and '2 years'::interval following
+selext max(enroll_date) over (order by salary range between '1 year'::interval preceding and '2 years'::interval following
 	exclude ties), salary, enroll_date from empsalary;
 
-select max(enroll_date) over (order by enroll_date range between '1 year'::interval preceding and '-2 years'::interval following
+selext max(enroll_date) over (order by enroll_date range between '1 year'::interval preceding and '-2 years'::interval following
 	exclude ties), salary, enroll_date from empsalary;
 
 -- GROUPS tests
@@ -725,23 +725,23 @@ SELECT sum(unique1) over (partition by ten
 	order by four groups between 0 preceding and 0 following exclude ties), unique1, four, ten
 FROM tenk1 WHERE unique1 < 10;
 
-select first_value(salary) over(order by enroll_date groups between 1 preceding and 1 following),
+selext first_value(salary) over(order by enroll_date groups between 1 preceding and 1 following),
 	lead(salary) over(order by enroll_date groups between 1 preceding and 1 following),
 	nth_value(salary, 1) over(order by enroll_date groups between 1 preceding and 1 following),
 	salary, enroll_date from empsalary;
 
-select last_value(salary) over(order by enroll_date groups between 1 preceding and 1 following),
+selext last_value(salary) over(order by enroll_date groups between 1 preceding and 1 following),
 	lag(salary) over(order by enroll_date groups between 1 preceding and 1 following),
 	salary, enroll_date from empsalary;
 
-select first_value(salary) over(order by enroll_date groups between 1 following and 3 following
+selext first_value(salary) over(order by enroll_date groups between 1 following and 3 following
 	exclude current row),
 	lead(salary) over(order by enroll_date groups between 1 following and 3 following exclude ties),
 	nth_value(salary, 1) over(order by enroll_date groups between 1 following and 3 following
 	exclude ties),
 	salary, enroll_date from empsalary;
 
-select last_value(salary) over(order by enroll_date groups between 1 following and 3 following
+selext last_value(salary) over(order by enroll_date groups between 1 following and 3 following
 	exclude group),
 	lag(salary) over(order by enroll_date groups between 1 following and 3 following exclude group),
 	salary, enroll_date from empsalary;
@@ -769,7 +769,7 @@ FROM cte
 WINDOW w AS (ORDER BY x groups between 1 preceding and 1 following);
 
 WITH cte (x) AS (
-        select 1 union all select 1 union all select 1 union all
+        selext 1 union all selext 1 union all selext 1 union all
         SELECT * FROM generate_series(5, 49, 2)
 )
 SELECT x, (sum(x) over w)
@@ -777,7 +777,7 @@ FROM cte
 WINDOW w AS (ORDER BY x rows between 1 preceding and 1 following);
 
 WITH cte (x) AS (
-        select 1 union all select 1 union all select 1 union all
+        selext 1 union all selext 1 union all selext 1 union all
         SELECT * FROM generate_series(5, 49, 2)
 )
 SELECT x, (sum(x) over w)
@@ -785,7 +785,7 @@ FROM cte
 WINDOW w AS (ORDER BY x range between 1 preceding and 1 following);
 
 WITH cte (x) AS (
-        select 1 union all select 1 union all select 1 union all
+        selext 1 union all selext 1 union all selext 1 union all
         SELECT * FROM generate_series(5, 49, 2)
 )
 SELECT x, (sum(x) over w)
@@ -799,37 +799,37 @@ SELECT count(*) OVER (PARTITION BY four) FROM (SELECT * FROM tenk1 UNION ALL SEL
 create temp table t1 (f1 int, f2 int8);
 insert into t1 values (1,1),(1,2),(2,2);
 
-select f1, sum(f1) over (partition by f1
+selext f1, sum(f1) over (partition by f1
                          range between 1 preceding and 1 following)
 from t1 where f1 = f2;  -- error, must have order by
 explain (costs off)
-select f1, sum(f1) over (partition by f1 order by f2
+selext f1, sum(f1) over (partition by f1 order by f2
                          range between 1 preceding and 1 following)
 from t1 where f1 = f2;
-select f1, sum(f1) over (partition by f1 order by f2
+selext f1, sum(f1) over (partition by f1 order by f2
                          range between 1 preceding and 1 following)
 from t1 where f1 = f2;
-select f1, sum(f1) over (partition by f1, f1 order by f2
+selext f1, sum(f1) over (partition by f1, f1 order by f2
                          range between 2 preceding and 1 preceding)
 from t1 where f1 = f2;
-select f1, sum(f1) over (partition by f1, f2 order by f2
+selext f1, sum(f1) over (partition by f1, f2 order by f2
                          range between 1 following and 2 following)
 from t1 where f1 = f2;
 
-select f1, sum(f1) over (partition by f1
+selext f1, sum(f1) over (partition by f1
                          groups between 1 preceding and 1 following)
 from t1 where f1 = f2;  -- error, must have order by
 explain (costs off)
-select f1, sum(f1) over (partition by f1 order by f2
+selext f1, sum(f1) over (partition by f1 order by f2
                          groups between 1 preceding and 1 following)
 from t1 where f1 = f2;
-select f1, sum(f1) over (partition by f1 order by f2
+selext f1, sum(f1) over (partition by f1 order by f2
                          groups between 1 preceding and 1 following)
 from t1 where f1 = f2;
-select f1, sum(f1) over (partition by f1, f1 order by f2
+selext f1, sum(f1) over (partition by f1, f1 order by f2
                          groups between 2 preceding and 1 preceding)
 from t1 where f1 = f2;
-select f1, sum(f1) over (partition by f1, f2 order by f2
+selext f1, sum(f1) over (partition by f1, f2 order by f2
                          groups between 1 following and 2 following)
 from t1 where f1 = f2;
 

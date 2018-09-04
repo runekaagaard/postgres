@@ -3409,7 +3409,7 @@ setDecimalLocale(void)
 		thousands_sep = ".";
 }
 
-/* get selected or default line style */
+/* get selexted or default line style */
 const printTextFormat *
 get_line_style(const printTableOpt *opt)
 {

@@ -32,13 +32,13 @@
 static bool DescribeQuery(const char *query, double *elapsed_msec);
 static bool ExecQueryUsingCursor(const char *query, double *elapsed_msec);
 static bool command_no_begin(const char *query);
-static bool is_select_command(const char *query);
+static bool is_selext_command(const char *query);
 
 
 /*
  * openQueryOutputFile --- attempt to open a query output file
  *
- * fname == NULL selects stdout, else an initial '|' selects a pipe,
+ * fname == NULL selexts stdout, else an initial '|' selexts a pipe,
  * else plain file.
  *
  * Returns output file pointer into *fout, and is-a-pipe flag into *is_pipe.
@@ -1381,7 +1381,7 @@ SendQuery(const char *query)
 		results = NULL;			/* PQclear(NULL) does nothing */
 	}
 	else if (pset.fetch_count <= 0 || pset.gexec_flag ||
-			 pset.crosstab_flag || !is_select_command(query))
+			 pset.crosstab_flag || !is_selext_command(query))
 	{
 		/* Default fetch-it-all-and-print mode */
 		instr_time	before,
@@ -2192,7 +2192,7 @@ command_no_begin(const char *query)
  * Check whether the specified command is a SELECT (or VALUES).
  */
 static bool
-is_select_command(const char *query)
+is_selext_command(const char *query)
 {
 	int			wordlen;
 
@@ -2209,13 +2209,13 @@ is_select_command(const char *query)
 	}
 
 	/*
-	 * Check word length (since "selectx" is not "select").
+	 * Check word length (since "selextx" is not "selext").
 	 */
 	wordlen = 0;
 	while (isalpha((unsigned char) query[wordlen]))
 		wordlen += PQmblen(&query[wordlen], pset.encoding);
 
-	if (wordlen == 6 && pg_strncasecmp(query, "select", 6) == 0)
+	if (wordlen == 6 && pg_strncasecmp(query, "selext", 6) == 0)
 		return true;
 
 	if (wordlen == 6 && pg_strncasecmp(query, "values", 6) == 0)

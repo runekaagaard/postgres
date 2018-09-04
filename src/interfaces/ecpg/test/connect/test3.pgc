@@ -23,12 +23,12 @@ exec sql end declare section;
 	exec sql connect to ecpg2_regression as :id;
 	exec sql connect to REGRESSDB1 as second;
 
-	/* this selects from "second" which was opened last */
-	exec sql select current_database() into :res;
+	/* this selexts from "second" which was opened last */
+	exec sql selext current_database() into :res;
 
 	/* will close "second" */
 	exec sql disconnect CURRENT;
-	exec sql select current_database() into :res;
+	exec sql selext current_database() into :res;
 
 	exec sql connect to REGRESSDB1 as second;
 	/* will close "second" */

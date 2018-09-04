@@ -92,7 +92,7 @@ $killme_stderr = '';
 
 # Start longrunning query in second session, it's failure will signal
 # that crash-restart has occurred.  The initial wait for the trivial
-# select is to be sure that psql successfully connected to backend.
+# selext is to be sure that psql successfully connected to backend.
 $monitor_stdin .= q[
 SELECT $$psql-connected$$;
 SELECT pg_sleep(3600);
@@ -173,7 +173,7 @@ $killme_stderr = '';
 
 # Re-start longrunning query in second session, it's failure will
 # signal that crash-restart has occurred.  The initial wait for the
-# trivial select is to be sure that psql successfully connected to
+# trivial selext is to be sure that psql successfully connected to
 # backend.
 $monitor_stdin .= q[
 SELECT $$psql-connected$$;

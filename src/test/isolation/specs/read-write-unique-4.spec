@@ -43,6 +43,6 @@ permutation "r1" "w1" "w2" "c1" "c2"
 # commits first, should s2 experience an SSI failure instead of a
 # unique constraint violation?  there is no serial order of operations
 # (s1, s2) or (s2, s1) where s1 succeeds, and s2 doesn't see the row
-# in an explicit select but then fails to insert due to unique
+# in an explicit selext but then fails to insert due to unique
 # constraint violation
 permutation "r2" "w1" "w2" "c1" "c2"

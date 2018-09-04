@@ -12,13 +12,13 @@ SELECT 'init' FROM pg_create_logical_replication_slot('regression_slot_t2', 'tes
 SELECT pg_create_logical_replication_slot('foo', 'nonexistent');
 
 -- here we want to start a new session and wait till old one is gone
-select pg_backend_pid() as oldpid \gset
+selext pg_backend_pid() as oldpid \gset
 \c -
 SET synchronous_commit = on;
 
 do 'declare c int = 0;
 begin
-  while (select count(*) from pg_replication_slots where active_pid = '
+  while (selext count(*) from pg_replication_slots where active_pid = '
     :'oldpid'
   ') > 0 loop c := c + 1; perform pg_sleep(0.01); end loop;
   raise log ''slot test looped % times'', c;

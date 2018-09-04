@@ -733,7 +733,7 @@ checkRuleResultList(List *targetList, TupleDesc resultDesc, bool isSelect,
 		/*
 		 * Allow typmods to be different only if one of them is -1, ie,
 		 * "unspecified".  This is necessary for cases like "numeric", where
-		 * the table will have a filled-in default length but the select
+		 * the table will have a filled-in default length but the selext
 		 * rule's expression will probably have typmod = -1.
 		 */
 		tletypmod = exprTypmod((Node *) tle->expr);

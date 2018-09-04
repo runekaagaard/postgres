@@ -713,7 +713,7 @@ similar_escape(PG_FUNCTION_ARGS)
 	 * parens in case the string contains "|", else the "^" and "$" will
 	 * be bound into the first and last alternatives which is not what we
 	 * want, and the parens must be non capturing because we don't want them
-	 * to count when selecting output for SUBSTRING.
+	 * to count when selexting output for SUBSTRING.
 	 *----------
 	 */
 

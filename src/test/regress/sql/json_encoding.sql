@@ -12,25 +12,25 @@ SELECT '"\uaBcD"'::json;		-- OK, uppercase and lower case both OK
 
 -- handling of unicode surrogate pairs
 
-select json '{ "a":  "\ud83d\ude04\ud83d\udc36" }' -> 'a' as correct_in_utf8;
-select json '{ "a":  "\ud83d\ud83d" }' -> 'a'; -- 2 high surrogates in a row
-select json '{ "a":  "\ude04\ud83d" }' -> 'a'; -- surrogates in wrong order
-select json '{ "a":  "\ud83dX" }' -> 'a'; -- orphan high surrogate
-select json '{ "a":  "\ude04X" }' -> 'a'; -- orphan low surrogate
+selext json '{ "a":  "\ud83d\ude04\ud83d\udc36" }' -> 'a' as correct_in_utf8;
+selext json '{ "a":  "\ud83d\ud83d" }' -> 'a'; -- 2 high surrogates in a row
+selext json '{ "a":  "\ude04\ud83d" }' -> 'a'; -- surrogates in wrong order
+selext json '{ "a":  "\ud83dX" }' -> 'a'; -- orphan high surrogate
+selext json '{ "a":  "\ude04X" }' -> 'a'; -- orphan low surrogate
 
 --handling of simple unicode escapes
 
-select json '{ "a":  "the Copyright \u00a9 sign" }' as correct_in_utf8;
-select json '{ "a":  "dollar \u0024 character" }' as correct_everywhere;
-select json '{ "a":  "dollar \\u0024 character" }' as not_an_escape;
-select json '{ "a":  "null \u0000 escape" }' as not_unescaped;
-select json '{ "a":  "null \\u0000 escape" }' as not_an_escape;
+selext json '{ "a":  "the Copyright \u00a9 sign" }' as correct_in_utf8;
+selext json '{ "a":  "dollar \u0024 character" }' as correct_everywhere;
+selext json '{ "a":  "dollar \\u0024 character" }' as not_an_escape;
+selext json '{ "a":  "null \u0000 escape" }' as not_unescaped;
+selext json '{ "a":  "null \\u0000 escape" }' as not_an_escape;
 
-select json '{ "a":  "the Copyright \u00a9 sign" }' ->> 'a' as correct_in_utf8;
-select json '{ "a":  "dollar \u0024 character" }' ->> 'a' as correct_everywhere;
-select json '{ "a":  "dollar \\u0024 character" }' ->> 'a' as not_an_escape;
-select json '{ "a":  "null \u0000 escape" }' ->> 'a' as fails;
-select json '{ "a":  "null \\u0000 escape" }' ->> 'a' as not_an_escape;
+selext json '{ "a":  "the Copyright \u00a9 sign" }' ->> 'a' as correct_in_utf8;
+selext json '{ "a":  "dollar \u0024 character" }' ->> 'a' as correct_everywhere;
+selext json '{ "a":  "dollar \\u0024 character" }' ->> 'a' as not_an_escape;
+selext json '{ "a":  "null \u0000 escape" }' ->> 'a' as fails;
+selext json '{ "a":  "null \\u0000 escape" }' ->> 'a' as not_an_escape;
 
 -- then jsonb
 

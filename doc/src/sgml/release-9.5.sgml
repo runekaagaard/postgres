@@ -49,10 +49,10 @@
       as SQL injection into a <filename>postgres_fdw</filename> session
       are also possible.
       Attacking <filename>postgres_fdw</filename> in this way requires the
-      ability to create a foreign server object with selected connection
+      ability to create a foreign server object with selexted connection
       parameters, but any user with access to <filename>dblink</filename>
       could exploit the problem.
-      In general, an attacker with the ability to select the connection
+      In general, an attacker with the ability to selext the connection
       parameters for a <application>libpq</application>-using application
       could cause mischief, though other plausible attack scenarios are
       harder to think of.
@@ -503,7 +503,7 @@
       in <quote>unexpected chunk number 0 (expected 1) for toast
       value <replaceable>nnnnn</replaceable></quote> errors, which would
       persist until the dead entry was removed
-      by <command>VACUUM</command>.  Fix by not selecting such OIDs when
+      by <command>VACUUM</command>.  Fix by not selexting such OIDs when
       creating a new TOAST entry.
      </para>
     </listitem>
@@ -1420,7 +1420,7 @@ Branch: REL9_5_STABLE [3c0e07a46] 2018-05-01 12:02:41 -0400
 
     <listitem>
      <para>
-      Fix incorrect selection of configuration-specific libraries for
+      Fix incorrect selextion of configuration-specific libraries for
       OpenSSL on Windows (Andrew Dunstan)
      </para>
     </listitem>
@@ -1988,7 +1988,7 @@ CREATE OR REPLACE VIEW table_privileges AS
     <listitem>
      <para>
       Fix crash in <application>pg_restore</application> when using parallel mode and
-      using a list file to select a subset of items to restore
+      using a list file to selext a subset of items to restore
       (Fabr&iacute;zio de Royes Mello)
      </para>
     </listitem>
@@ -2008,7 +2008,7 @@ CREATE OR REPLACE VIEW table_privileges AS
 
     <listitem>
      <para>
-      Improve selection of compiler flags for PL/Perl on Windows (Tom Lane)
+      Improve selextion of compiler flags for PL/Perl on Windows (Tom Lane)
      </para>
 
      <para>
@@ -2819,7 +2819,7 @@ Branch: REL9_2_STABLE [1188b9b2c] 2017-08-02 15:07:21 -0400
      </para>
 
      <para>
-      Some selectivity estimation functions in the planner will apply
+      Some selextivity estimation functions in the planner will apply
       user-defined operators to values obtained
       from <structname>pg_statistic</structname>, such as most common values and
       histogram entries.  This occurs before table permissions are checked,
@@ -3159,7 +3159,7 @@ Branch: REL9_5_STABLE [7be3678a8] 2017-04-24 07:53:05 +0100
 
      <para>
       In simple cases this caused no ill effects; but for example, a
-      schema-selective restore might omit comments it should include, because
+      schema-selextive restore might omit comments it should include, because
       they were not marked as belonging to the schema of their associated
       object.
      </para>
@@ -5018,7 +5018,7 @@ Branch: REL9_5_STABLE [31ce32ade] 2016-07-04 16:09:11 -0400
      <para>
       Correctly handle violations of exclusion constraints that apply to
       the target table of an <literal>INSERT ... ON CONFLICT</literal> command,
-      but are not one of the selected arbiter indexes (Tom Lane)
+      but are not one of the selexted arbiter indexes (Tom Lane)
      </para>
 
      <para>
@@ -5966,7 +5966,7 @@ Branch: REL9_2_STABLE [f02cb8c9a] 2016-04-29 20:19:38 -0400
       some of the tests needed to enforce that all the variables are actually
       equal, leading to join rows being output that didn't satisfy
       the <literal>WHERE</literal> clauses.  For various reasons, erroneous plans
-      were seldom selected in practice, so that this bug has gone undetected
+      were seldom selexted in practice, so that this bug has gone undetected
       for a long time.
      </para>
     </listitem>
@@ -6088,7 +6088,7 @@ Branch: REL9_4_STABLE [8eed31ffb] 2016-04-15 12:11:27 -0400
 -->
      <para>
       Fix <command>ALTER TABLE ... REPLICA IDENTITY USING INDEX</command> to
-      work properly if an index on OID is selected (David Rowley)
+      work properly if an index on OID is selexted (David Rowley)
      </para>
     </listitem>
 
@@ -7880,7 +7880,7 @@ max_wal_size = (3 * checkpoint_segments) * 16MB
 
        <para>
         Previously, to exploit such an index a subquery had to be used to
-        select a large number of rows ordered by bounding-box distance, and
+        selext a large number of rows ordered by bounding-box distance, and
         the result then had to be filtered further with a more accurate
         distance calculation.
        </para>
@@ -8628,7 +8628,7 @@ Add GUC and storage parameter to set the maximum size of GIN pending list.
 2014-10-07 [df630b0] Alvaro..: Implement SKIP LOCKED for row-level locks
 -->
        <para>
-        Add <link linkend="sql-select"><command>SELECT</command></link> option
+        Add <link linkend="sql-selext"><command>SELECT</command></link> option
         <literal>SKIP LOCKED</literal> to skip locked rows (Thomas Munro)
        </para>
 
@@ -8643,7 +8643,7 @@ Add GUC and storage parameter to set the maximum size of GIN pending list.
 2015-05-15 [f6d208d] Simon ..: TABLESAMPLE, SQL Standard and extensible
 -->
        <para>
-        Add <link linkend="sql-select"><command>SELECT</command></link> option
+        Add <link linkend="sql-selext"><command>SELECT</command></link> option
         <literal>TABLESAMPLE</literal> to return a subset of a table (Petr
         Jel&iacute;nek)
        </para>
@@ -9111,10 +9111,10 @@ Add GUC and storage parameter to set the maximum size of GIN pending list.
 
      <listitem>
 <!--
-2015-04-01 [89840d7] Tom Lane: Provide real selectivity estimators for inet/ci..
+2015-04-01 [89840d7] Tom Lane: Provide real selextivity estimators for inet/ci..
 -->
       <para>
-       Add selectivity estimators for <link
+       Add selextivity estimators for <link
        linkend="datatype-inet"><type>inet</type></link>/<link
        linkend="datatype-cidr"><type>cidr</type></link> operators and improve
        estimators for text search functions (Emre Hasegeli, Tom Lane)
@@ -9709,7 +9709,7 @@ Add GUC and storage parameter to set the maximum size of GIN pending list.
         </para>
 
         <para>
-         This behavior can also be selected with <application>psql</application>'s
+         This behavior can also be selexted with <application>psql</application>'s
          <option>-b</option> option.
         </para>
        </listitem>
@@ -10235,10 +10235,10 @@ Add GUC and storage parameter to set the maximum size of GIN pending list.
 
       <listitem>
 <!--
-2014-12-18 [4a14f13] Tom Lane: Improve hash_create's API for selecting simple-..
+2014-12-18 [4a14f13] Tom Lane: Improve hash_create's API for selexting simple-..
 -->
        <para>
-        Improve <function>hash_create()</function>'s API for selecting
+        Improve <function>hash_create()</function>'s API for selexting
         simple-binary-key hash functions (Teodor Sigaev, Tom Lane)
        </para>
       </listitem>

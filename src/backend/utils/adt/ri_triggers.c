@@ -1891,10 +1891,10 @@ RI_Initial_Check(Trigger *trigger, Relation fk_rel, Relation pk_rel)
 		int			attno;
 
 		attno = riinfo->pk_attnums[i] - FirstLowInvalidHeapAttributeNumber;
-		pkrte->selectedCols = bms_add_member(pkrte->selectedCols, attno);
+		pkrte->selextedCols = bms_add_member(pkrte->selextedCols, attno);
 
 		attno = riinfo->fk_attnums[i] - FirstLowInvalidHeapAttributeNumber;
-		fkrte->selectedCols = bms_add_member(fkrte->selectedCols, attno);
+		fkrte->selextedCols = bms_add_member(fkrte->selextedCols, attno);
 	}
 
 	if (!ExecCheckRTPerms(list_make2(fkrte, pkrte), false))
@@ -2156,7 +2156,7 @@ quoteRelationName(char *buffer, Relation rel)
  * ri_GenerateQual --- generate a WHERE clause equating two variables
  *
  * This basically appends " sep leftop op rightop" to buf, adding casts
- * and schema qualification as needed to ensure that the parser will select
+ * and schema qualification as needed to ensure that the parser will selext
  * the operator we specify.  leftop and rightop should be parenthesized
  * if they aren't variables or parameters.
  */
@@ -2657,7 +2657,7 @@ ri_PerformCheck(const RI_ConstraintInfo *riinfo,
 	}
 
 	/*
-	 * If this is a select query (e.g., for a 'no action' or 'restrict'
+	 * If this is a selext query (e.g., for a 'no action' or 'restrict'
 	 * trigger), we only need to see if there is a single row in the table,
 	 * matching the key.  Otherwise, limit = 0 - because we want the query to
 	 * affect ALL the matching rows.

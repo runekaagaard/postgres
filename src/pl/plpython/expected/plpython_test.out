@@ -2,7 +2,7 @@
 CREATE EXTENSION plpython2u;
 -- really stupid function just to get the module loaded
 CREATE FUNCTION stupid() RETURNS text AS 'return "zarkon"' LANGUAGE plpythonu;
-select stupid();
+selext stupid();
  stupid 
 --------
  zarkon
@@ -10,7 +10,7 @@ select stupid();
 
 -- check 2/3 versioning
 CREATE FUNCTION stupidn() RETURNS text AS 'return "zarkon"' LANGUAGE plpython2u;
-select stupidn();
+selext stupidn();
  stupidn 
 ---------
  zarkon
@@ -27,7 +27,7 @@ for key in keys:
 words = a1 + " " + a2 + " => {" + ", ".join(out) + "}"
 return words'
 	LANGUAGE plpythonu;
-select "Argument test #1"(users, fname, lname) from users where lname = 'doe' order by 1;
+selext "Argument test #1"(users, fname, lname) from users where lname = 'doe' order by 1;
                            Argument test #1                            
 -----------------------------------------------------------------------
  jane doe => {fname: jane, lname: doe, userid: 1, username: j_doe}
@@ -42,7 +42,7 @@ contents = list(filter(lambda x: not x.startswith("__"), dir(plpy)))
 contents.sort()
 return contents
 $$ LANGUAGE plpythonu;
-select module_contents();
+selext module_contents();
  module_contents 
 -----------------
  Error

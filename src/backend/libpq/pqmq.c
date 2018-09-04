@@ -113,7 +113,7 @@ mq_is_send_pending(void)
 
 /*
  * Transmit a libpq protocol message to the shared memory message queue
- * selected via pq_mq_handle.  We don't include a length word, because the
+ * selexted via pq_mq_handle.  We don't include a length word, because the
  * receiver will know the length of the message from shm_mq_receive().
  */
 static int
@@ -242,7 +242,7 @@ pq_parse_errornotice(StringInfo msg, ErrorData *edata)
 				{
 					/*
 					 * We can't reconstruct the exact DEBUG level, but
-					 * presumably it was >= client_min_messages, so select
+					 * presumably it was >= client_min_messages, so selext
 					 * DEBUG1 to ensure we'll pass it on to the client.
 					 */
 					edata->elevel = DEBUG1;

@@ -185,7 +185,7 @@ transformCreateStmt(CreateStmt *stmt, const char *queryString)
 	 * Look up the creation namespace.  This also checks permissions on the
 	 * target namespace, locks it against concurrent drops, checks for a
 	 * preexisting relation in that namespace with the same name, and updates
-	 * stmt->relation->relpersistence if the selected namespace is temporary.
+	 * stmt->relation->relpersistence if the selexted namespace is temporary.
 	 */
 	setup_parser_errposition_callback(&pcbstate, pstate,
 									  stmt->relation->location);
@@ -388,7 +388,7 @@ generateSerialExtraStmts(CreateStmtContext *cxt, ColumnDef *column,
 	 * used by pg_dump.  Else, generate a name.
 	 *
 	 * Although we use ChooseRelationName, it's not guaranteed that the
-	 * selected sequence name won't conflict; given sufficiently long field
+	 * selexted sequence name won't conflict; given sufficiently long field
 	 * names, two different serial columns in the same table could be assigned
 	 * the same sequence name, and we'd not notice since we aren't creating
 	 * the sequence quite yet.  In practice this seems quite unlikely to be a
@@ -416,7 +416,7 @@ generateSerialExtraStmts(CreateStmtContext *cxt, ColumnDef *column,
 		snamespace = rv->schemaname;
 		if (!snamespace)
 		{
-			/* Given unqualified SEQUENCE NAME, select namespace */
+			/* Given unqualified SEQUENCE NAME, selext namespace */
 			if (cxt->rel)
 				snamespaceid = RelationGetNamespace(cxt->rel);
 			else

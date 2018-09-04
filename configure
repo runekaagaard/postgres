@@ -2635,8 +2635,8 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
-# Let the site file select an alternate cache file if it wants to.
-# Prefer an explicitly selected file to automatically selected ones.
+# Let the site file selext an alternate cache file if it wants to.
+# Prefer an explicitly selexted file to automatically selexted ones.
 ac_site_file1=NONE
 ac_site_file2=NONE
 if test -n "$CONFIG_SITE"; then
@@ -5168,7 +5168,7 @@ fi
   done;
 
   # And then get the libraries that need to be linked in for the
-  # selected components.  They're large libraries, we only want to
+  # selexted components.  They're large libraries, we only want to
   # link them into the LLVM using shared library.
   for pgac_option in `$LLVM_CONFIG --libs --system-libs $pgac_components`; do
     case $pgac_option in
@@ -5260,7 +5260,7 @@ unset CXXFLAGS
 #
 . "$srcdir/src/template/$template" || exit
 
-# C[XX]FLAGS are selected so:
+# C[XX]FLAGS are selexted so:
 # If the user specifies something in the environment, that is used.
 # else:  If the template file set something, that is used.
 # else:  If coverage was enabled, don't set anything.
@@ -5276,7 +5276,7 @@ elif test "$enable_coverage" = yes; then
 elif test "$GCC" = yes; then
   CFLAGS="-O2"
 else
-  # if the user selected debug mode, don't use -O
+  # if the user selexted debug mode, don't use -O
   if test "$enable_debug" != yes; then
     CFLAGS="-O"
   fi
@@ -5291,7 +5291,7 @@ elif test "$enable_coverage" = yes; then
 elif test "$GCC" = yes; then
   CXXFLAGS="-O2"
 else
-  # if the user selected debug mode, don't use -O
+  # if the user selexted debug mode, don't use -O
   if test "$enable_debug" != yes; then
     CXXFLAGS="-O"
   fi
@@ -8371,7 +8371,7 @@ do
     for ac_exec_ext in '' $ac_executable_extensions; do
       ac_path_GREP="$as_dir/$ac_prog$ac_exec_ext"
       as_fn_executable_p "$ac_path_GREP" || continue
-# Check for GNU ac_path_GREP and select it if it is found.
+# Check for GNU ac_path_GREP and selext it if it is found.
   # Check for GNU $ac_path_GREP
 case `"$ac_path_GREP" --version 2>&1` in
 *GNU*)
@@ -8437,7 +8437,7 @@ do
     for ac_exec_ext in '' $ac_executable_extensions; do
       ac_path_EGREP="$as_dir/$ac_prog$ac_exec_ext"
       as_fn_executable_p "$ac_path_EGREP" || continue
-# Check for GNU ac_path_EGREP and select it if it is found.
+# Check for GNU ac_path_EGREP and selext it if it is found.
   # Check for GNU $ac_path_EGREP
 case `"$ac_path_EGREP" --version 2>&1` in
 *GNU*)
@@ -12671,7 +12671,7 @@ $as_echo "#define HAVE_STDBOOL_H 1" >>confdefs.h
 fi
 
 
-for ac_header in atomic.h crypt.h fp_class.h getopt.h ieeefp.h ifaddrs.h langinfo.h mbarrier.h poll.h sys/epoll.h sys/ipc.h sys/prctl.h sys/procctl.h sys/pstat.h sys/resource.h sys/select.h sys/sem.h sys/shm.h sys/sockio.h sys/tas.h sys/un.h termios.h ucred.h utime.h wchar.h wctype.h
+for ac_header in atomic.h crypt.h fp_class.h getopt.h ieeefp.h ifaddrs.h langinfo.h mbarrier.h poll.h sys/epoll.h sys/ipc.h sys/prctl.h sys/procctl.h sys/pstat.h sys/resource.h sys/selext.h sys/sem.h sys/shm.h sys/sockio.h sys/tas.h sys/un.h termios.h ucred.h utime.h wchar.h wctype.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
@@ -15310,7 +15310,7 @@ if test "$PORTNAME" = "win32"; then
   # Win32 gets snprintf.c built unconditionally.
   #
   # To properly translate all NLS languages strings, we must support the
-  # *printf() %$ format, which allows *printf() arguments to be selected
+  # *printf() %$ format, which allows *printf() arguments to be selexted
   # by position in the translated string.
   #
   # libintl versions < 0.13 use the native *printf() functions, and Win32
@@ -16335,7 +16335,7 @@ _ACEOF
 
 
 # Select the printf length modifier that goes with that, too.
-# (This used to be bound up with replacement-snprintf selection, but now
+# (This used to be bound up with replacement-snprintf selextion, but now
 # we assume that the native *printf functions use standard length modifiers.)
 if test x"$pg_int64_type" = x"long long int" ; then
   INT64_MODIFIER='"ll"'
@@ -16603,7 +16603,7 @@ _ACEOF
 
 
 
-# Decide whether float4 is passed by value: user-selectable, enabled by default
+# Decide whether float4 is passed by value: user-selextable, enabled by default
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to build with float4 passed by value" >&5
 $as_echo_n "checking whether to build with float4 passed by value... " >&6; }
 
@@ -16645,8 +16645,8 @@ _ACEOF
 
 # Decide whether float8 is passed by value.
 # Note: this setting also controls int8 and related types such as timestamp.
-# If sizeof(Datum) >= 8, this is user-selectable, enabled by default.
-# If not, trying to select it is an error.
+# If sizeof(Datum) >= 8, this is user-selextable, enabled by default.
+# If not, trying to selext it is an error.
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to build with float8 passed by value" >&5
 $as_echo_n "checking whether to build with float8 passed by value... " >&6; }
 if test $ac_cv_sizeof_void_p -ge 8 ; then
@@ -17578,13 +17578,13 @@ fi
 # use the special CRC instructions for calculating CRC-32C. If we're not
 # targeting such a processor, but we can nevertheless produce code that uses
 # the SSE intrinsics, perhaps with some extra CFLAGS, compile both
-# implementations and select which one to use at runtime, depending on whether
+# implementations and selext which one to use at runtime, depending on whether
 # SSE 4.2 is supported by the processor we're running on.
 #
 # Similarly, if we are targeting an ARM processor that has the CRC
 # instructions that are part of the ARMv8 CRC Extension, use them. And if
 # we're not targeting such a processor, but can nevertheless produce code that
-# uses the CRC instructions, compile both, and select at runtime.
+# uses the CRC instructions, compile both, and selext at runtime.
 #
 # You can override this logic by setting the appropriate USE_*_CRC32 flag to 1
 # in the template or configure command line.
@@ -17615,7 +17615,7 @@ if test x"$USE_SLICING_BY_8_CRC32C" = x"" && test x"$USE_SSE42_CRC32C" = x"" && 
   fi
 fi
 
-# Set PG_CRC32C_OBJS appropriately depending on the selected implementation.
+# Set PG_CRC32C_OBJS appropriately depending on the selexted implementation.
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking which CRC-32C implementation to use" >&5
 $as_echo_n "checking which CRC-32C implementation to use... " >&6; }
 if test x"$USE_SSE42_CRC32C" = x"1"; then
@@ -17834,7 +17834,7 @@ fi
 # You can override this logic by setting the appropriate USE_*RANDOM flag to 1
 # in the template or configure command line.
 
-# If not selected manually, try to select a source automatically.
+# If not selexted manually, try to selext a source automatically.
 if test "$enable_strong_random" = "yes" && test x"$USE_OPENSSL_RANDOM" = x"" && test x"$USE_WIN32_RANDOM" = x"" && test x"$USE_DEV_URANDOM" = x"" ; then
   if test x"$with_openssl" = x"yes" ; then
     USE_OPENSSL_RANDOM=1

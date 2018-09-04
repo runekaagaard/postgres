@@ -229,7 +229,7 @@ WHERE mid = did AND mid = 12;
     preprocessed <type>tsvector</type> format.  Searching and ranking
     are performed entirely on the <type>tsvector</type> representation
     of a document &mdash; the original text need only be retrieved
-    when the document has been selected for display to a user.
+    when the document has been selexted for display to a user.
     We therefore often speak of the <type>tsvector</type> as being the
     document, but of course it is only a compact representation of
     the full document.
@@ -419,7 +419,7 @@ SELECT phraseto_tsquery('the cats ate the rats');
    </para>
 
    <para>
-    During installation an appropriate configuration is selected and
+    During installation an appropriate configuration is selexted and
     <xref linkend="guc-default-text-search-config"/> is set accordingly
     in <filename>postgresql.conf</filename>.  If you are using the same text search
     configuration for the entire cluster you can use the value in
@@ -468,7 +468,7 @@ SELECT phraseto_tsquery('the cats ate the rats');
 
    <listitem>
     <para>
-     <firstterm>Text search configurations</firstterm> select a parser and a set
+     <firstterm>Text search configurations</firstterm> selext a parser and a set
      of dictionaries to use to normalize the tokens produced by the parser.
     </para>
    </listitem>
@@ -535,7 +535,7 @@ WHERE to_tsvector(body) @@ to_tsquery('friend');
 
    <para>
     A more complex example is to
-    select the ten most recent documents that contain <literal>create</literal> and
+    selext the ten most recent documents that contain <literal>create</literal> and
     <literal>table</literal> in the <structname>title</structname> or <structname>body</structname>:
 
 <programlisting>
@@ -748,7 +748,7 @@ SELECT to_tsvector('english', 'a fat  cat sat on a mat - it ate a fat rats');
     because there are in fact no dictionaries assigned for its token type
     (<literal>Space symbols</literal>), meaning space tokens will never be
     indexed. The choices of parser, dictionaries and which types of tokens to
-    index are determined by the selected text search configuration (<xref
+    index are determined by the selexted text search configuration (<xref
     linkend="textsearch-configuration"/>).  It is possible to have
     many different configurations in the same database, and predefined
     configurations are available for various languages. In our example
@@ -1209,7 +1209,7 @@ SELECT websearch_to_tsquery('english', '""" )( dummy \\ query &lt;-&gt;');
    </para>
 
    <para>
-    Here is an example that selects only the ten highest-ranked matches:
+    Here is an example that selexts only the ten highest-ranked matches:
 
 <screen>
 SELECT title, ts_rank_cd(textsearch, query) AS rank
@@ -1330,9 +1330,9 @@ ts_headline(<optional> <replaceable class="parameter">config</replaceable> <type
      <listitem>
       <para>
        <literal>MaxFragments</literal>: maximum number of text excerpts
-       or fragments to display.  The default value of zero selects a
+       or fragments to display.  The default value of zero selexts a
        non-fragment-oriented headline generation method.  A value greater than
-       zero selects fragment-based headline generation.  This method
+       zero selexts fragment-based headline generation.  This method
        finds text fragments with as many query words as possible and
        stretches those fragments around the query words.  As a result
        query words are close to the middle of each fragment and have words on
@@ -1767,16 +1767,16 @@ SELECT ts_rewrite('a &amp; b'::tsquery, 'a'::tsquery, 'c'::tsquery);
      <varlistentry>
 
       <term>
-       <literal>ts_rewrite (<replaceable class="parameter">query</replaceable> <type>tsquery</type>, <replaceable class="parameter">select</replaceable> <type>text</type>) returns <type>tsquery</type></literal>
+       <literal>ts_rewrite (<replaceable class="parameter">query</replaceable> <type>tsquery</type>, <replaceable class="parameter">selext</replaceable> <type>text</type>) returns <type>tsquery</type></literal>
       </term>
 
       <listitem>
        <para>
         This form of <function>ts_rewrite</function> accepts a starting
-        <replaceable>query</replaceable> and a SQL <replaceable>select</replaceable> command, which
-        is given as a text string.  The <replaceable>select</replaceable> must yield two
+        <replaceable>query</replaceable> and a SQL <replaceable>selext</replaceable> command, which
+        is given as a text string.  The <replaceable>selext</replaceable> must yield two
         columns of <type>tsquery</type> type.  For each row of the
-        <replaceable>select</replaceable> result, occurrences of the first column value
+        <replaceable>selext</replaceable> result, occurrences of the first column value
         (the target) are replaced by the second column value (the substitute)
         within the current <replaceable>query</replaceable> value.  For example:
 
@@ -1833,7 +1833,7 @@ SELECT ts_rewrite(to_tsquery('supernovae &amp; crab'), 'SELECT * FROM aliases');
      Rewriting can be slow when there are many rewriting rules, since it
      checks every rule for a possible match. To filter out obvious non-candidate
      rules we can use the containment operators for the <type>tsquery</type>
-     type. In the example below, we select only those rules which might match
+     type. In the example below, we selext only those rules which might match
      the original query:
 
 <screen>
@@ -1915,7 +1915,7 @@ SELECT title, body FROM messages WHERE tsv @@ to_tsquery('title &amp; body');
     in <varname>search_path</varname>.  For
     <function>tsvector_update_trigger_column</function>, the second trigger argument
     is the name of another table column, which must be of type
-    <type>regconfig</type>.  This allows a per-row selection of configuration
+    <type>regconfig</type>.  This allows a per-row selextion of configuration
     to be made.  The remaining argument(s) are the names of textual columns
     (of type <type>text</type>, <type>varchar</type>, or <type>char</type>).  These
     will be included in the document in the order given.  NULL values will
@@ -2480,7 +2480,7 @@ SELECT ts_lexize('public.simple_dict','The');
    <para>
     We can also choose to return <literal>NULL</literal>, instead of the lower-cased
     word, if it is not found in the stop words file.  This behavior is
-    selected by setting the dictionary's <literal>Accept</literal> parameter to
+    selexted by setting the dictionary's <literal>Accept</literal> parameter to
     <literal>false</literal>.  Continuing the example:
 
 <screen>
@@ -2673,7 +2673,7 @@ more sample word(s) : more indexed word(s)
    <para>
     A thesaurus dictionary uses a <firstterm>subdictionary</firstterm> (which
     is specified in the dictionary's configuration) to normalize the input
-    text before checking for phrase matches. It is only possible to select one
+    text before checking for phrase matches. It is only possible to selext one
     subdictionary.  An error is reported if the subdictionary fails to
     recognize a word. In that case, you should remove the use of the word or
     teach the subdictionary about it.  You can place an asterisk
@@ -3302,7 +3302,7 @@ ts_debug(<optional> <replaceable class="parameter">config</replaceable> <type>re
      <listitem>
       <para>
        <replaceable>dictionaries</replaceable> <type>regdictionary[]</type> &mdash; the
-       dictionaries selected by the configuration for this token type
+       dictionaries selexted by the configuration for this token type
       </para>
      </listitem>
      <listitem>

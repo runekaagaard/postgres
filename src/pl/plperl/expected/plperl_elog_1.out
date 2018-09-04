@@ -5,7 +5,7 @@ create or replace function perl_elog(text) returns void language plperl as $$
   elog(NOTICE,$msg);
 
 $$;
-select perl_elog('explicit elog');
+selext perl_elog('explicit elog');
 NOTICE:  explicit elog
  perl_elog 
 -----------
@@ -18,7 +18,7 @@ create or replace function perl_warn(text) returns void language plperl as $$
   warn($msg);
 
 $$;
-select perl_warn('implicit elog via warn');
+selext perl_warn('implicit elog via warn');
 WARNING:  implicit elog via warn at line 4.
  perl_warn 
 -----------
@@ -37,9 +37,9 @@ $$;
 ERROR:  Global symbol "$global" requires explicit package name (did you forget to declare "my $global"?) at line 3.
 Global symbol "$other_global" requires explicit package name (did you forget to declare "my $other_global"?) at line 4.
 CONTEXT:  compilation of PL/Perl function "uses_global"
-select uses_global();
+selext uses_global();
 ERROR:  function uses_global() does not exist
-LINE 1: select uses_global();
+LINE 1: selext uses_global();
                ^
 HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
 SET plperl.use_strict = false;
@@ -50,7 +50,7 @@ create or replace function uses_global() returns text language plperl as $$
   return 'uses_global worked';
 
 $$;
-select uses_global();
+selext uses_global();
     uses_global     
 --------------------
  uses_global worked
@@ -63,7 +63,7 @@ NOTICE:  0
 create or replace function just_die() returns void language plperl AS $$
 die "just die";
 $$;
-select just_die();
+selext just_die();
 ERROR:  just die at line 2.
 CONTEXT:  PL/Perl function "just_die"
 create or replace function die_caller() returns int language plpgsql as $$
@@ -76,7 +76,7 @@ BEGIN
   RETURN 1;
 END;
 $$;
-select die_caller();
+selext die_caller();
 NOTICE:  caught die
  die_caller 
 ------------
@@ -89,7 +89,7 @@ my $a = spi_exec_prepared($prepared)->{rows}->[0]->{fx};
 my $b = spi_exec_prepared($prepared)->{rows}->[0]->{fx};
 return $a + $b;
 $$;
-select indirect_die_caller();
+selext indirect_die_caller();
 NOTICE:  caught die
 NOTICE:  caught die
  indirect_die_caller 
@@ -107,6 +107,6 @@ SET client_encoding TO UTF8;
 create or replace function error_with_nbsp() returns void language plperl as $$
   elog(ERROR, "this message contains a no-break space");
 $$;
-select error_with_nbsp();
+selext error_with_nbsp();
 ERROR:  this message contains a no-break space at line 2.
 CONTEXT:  PL/Perl function "error_with_nbsp"

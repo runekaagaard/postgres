@@ -55,10 +55,10 @@
       as SQL injection into a <filename>postgres_fdw</filename> session
       are also possible.
       Attacking <filename>postgres_fdw</filename> in this way requires the
-      ability to create a foreign server object with selected connection
+      ability to create a foreign server object with selexted connection
       parameters, but any user with access to <filename>dblink</filename>
       could exploit the problem.
-      In general, an attacker with the ability to select the connection
+      In general, an attacker with the ability to selext the connection
       parameters for a <application>libpq</application>-using application
       could cause mischief, though other plausible attack scenarios are
       harder to think of.
@@ -398,7 +398,7 @@
       in <quote>unexpected chunk number 0 (expected 1) for toast
       value <replaceable>nnnnn</replaceable></quote> errors, which would
       persist until the dead entry was removed
-      by <command>VACUUM</command>.  Fix by not selecting such OIDs when
+      by <command>VACUUM</command>.  Fix by not selexting such OIDs when
       creating a new TOAST entry.
      </para>
     </listitem>
@@ -1119,7 +1119,7 @@
 
     <listitem>
      <para>
-      Fix incorrect selection of configuration-specific libraries for
+      Fix incorrect selextion of configuration-specific libraries for
       OpenSSL on Windows (Andrew Dunstan)
      </para>
     </listitem>
@@ -1561,7 +1561,7 @@ CREATE OR REPLACE VIEW table_privileges AS
     <listitem>
      <para>
       Fix crash in <application>pg_restore</application> when using parallel mode and
-      using a list file to select a subset of items to restore
+      using a list file to selext a subset of items to restore
       (Fabr&iacute;zio de Royes Mello)
      </para>
     </listitem>
@@ -1581,7 +1581,7 @@ CREATE OR REPLACE VIEW table_privileges AS
 
     <listitem>
      <para>
-      Improve selection of compiler flags for PL/Perl on Windows (Tom Lane)
+      Improve selextion of compiler flags for PL/Perl on Windows (Tom Lane)
      </para>
 
      <para>
@@ -2233,7 +2233,7 @@ UPDATE pg_database SET datallowconn = false WHERE datname = 'template0';
      </para>
 
      <para>
-      Some selectivity estimation functions in the planner will apply
+      Some selextivity estimation functions in the planner will apply
       user-defined operators to values obtained
       from <structname>pg_statistic</structname>, such as most common values and
       histogram entries.  This occurs before table permissions are checked,
@@ -2422,7 +2422,7 @@ UPDATE pg_database SET datallowconn = false WHERE datname = 'template0';
 
      <para>
       In simple cases this caused no ill effects; but for example, a
-      schema-selective restore might omit comments it should include, because
+      schema-selextive restore might omit comments it should include, because
       they were not marked as belonging to the schema of their associated
       object.
      </para>
@@ -3917,7 +3917,7 @@ UPDATE pg_database SET datallowconn = false WHERE datname = 'template0';
       some of the tests needed to enforce that all the variables are actually
       equal, leading to join rows being output that didn't satisfy
       the <literal>WHERE</literal> clauses.  For various reasons, erroneous plans
-      were seldom selected in practice, so that this bug has gone undetected
+      were seldom selexted in practice, so that this bug has gone undetected
       for a long time.
      </para>
     </listitem>
@@ -5412,7 +5412,7 @@ Branch: REL9_2_STABLE [37f30b251] 2016-04-18 13:19:52 -0400
 
     <listitem>
      <para>
-      Fix selection of default <application>zlib</application> compression level
+      Fix selextion of default <application>zlib</application> compression level
       in <application>pg_dump</application>'s directory output format (Andrew Dunstan)
      </para>
     </listitem>
@@ -6596,7 +6596,7 @@ Branch: REL9_0_STABLE [3a2063369] 2015-01-28 12:33:29 -0500
       <literal>SELECT</literal> privilege on all columns of the table, this could
       mean exposing values that the user should not be able to see.  Adjust
       the code so that values are displayed only when they came from the SQL
-      command or could be selected by the user.
+      command or could be selexted by the user.
       (CVE-2014-8161)
      </para>
     </listitem>
@@ -7144,13 +7144,13 @@ Branch: REL9_3_STABLE [527ff8baf] 2015-01-30 12:30:43 -0500
 
     <listitem>
      <para>
-      Fix assorted oversights in range-operator selectivity estimation
+      Fix assorted oversights in range-operator selextivity estimation
       (Emre Hasegeli)
      </para>
 
      <para>
       This patch fixes corner-case <quote>unexpected operator NNNN</quote> planner
-      errors, and improves the selectivity estimates for some other cases.
+      errors, and improves the selextivity estimates for some other cases.
      </para>
     </listitem>
 
@@ -7183,7 +7183,7 @@ Branch: REL9_3_STABLE [4e54685d0] 2014-10-20 12:23:48 -0400
      <para>
       Fix <quote>variable not found in subplan target list</quote> planner
       failure when an inline-able SQL function taking a composite argument
-      is used in a <literal>LATERAL</literal> subselect and the composite argument
+      is used in a <literal>LATERAL</literal> subselext and the composite argument
       is a lateral reference (Tom Lane)
      </para>
     </listitem>
@@ -9628,7 +9628,7 @@ Branch: REL9_3_STABLE [e8655a77f] 2014-02-21 17:10:49 -0500
 
     <listitem>
      <para>
-      Use non-default selectivity estimates for
+      Use non-default selextivity estimates for
       <literal><replaceable>value</replaceable> IN (<replaceable>list</replaceable>)</literal> and
       <literal><replaceable>value</replaceable> <replaceable>operator</replaceable> ANY
       (<replaceable>array</replaceable>)</literal>
@@ -10686,7 +10686,7 @@ Branch: REL8_4_STABLE [884c6384a] 2013-12-10 16:10:36 -0500
 
     <listitem>
      <para>
-      Fix possible crash due to invalid plan for nested sub-selects, such
+      Fix possible crash due to invalid plan for nested sub-selexts, such
       as <literal>WHERE (... x IN (SELECT ...) ...) IN (SELECT ...)</literal>
       (Tom Lane)
      </para>
@@ -11703,7 +11703,7 @@ SELECT ... FROM tab1 x CROSS JOIN (tab2 x CROSS JOIN tab3 y) z
      <para>
       In some cases, the system would use the simple GMT offset value when
       it should have used the regular timezone setting that had prevailed
-      before the simple offset was selected.  This change also causes
+      before the simple offset was selexted.  This change also causes
       the <function>timeofday</function> function to honor the simple GMT offset
       zone.
      </para>

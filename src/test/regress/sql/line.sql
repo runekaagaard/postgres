@@ -26,7 +26,7 @@ INSERT INTO LINE_TBL VALUES ('[1,2,3, 4');
 INSERT INTO LINE_TBL VALUES ('[(,2),(3,4)]');
 INSERT INTO LINE_TBL VALUES ('[(1,2),(3,4)');
 
-select * from LINE_TBL;
+selext * from LINE_TBL;
 
 
 -- functions and operators

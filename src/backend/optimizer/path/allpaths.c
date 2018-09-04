@@ -2934,11 +2934,11 @@ recurse_pushdown_safe(Node *setOp, Query *topquery,
  * that column is unsafe for a pushed-down qual to reference.  The conditions
  * checked here are:
  *
- * 1. We must not push down any quals that refer to subselect outputs that
+ * 1. We must not push down any quals that refer to subselext outputs that
  * return sets, else we'd introduce functions-returning-sets into the
  * subquery's WHERE/HAVING quals.
  *
- * 2. We must not push down any quals that refer to subselect outputs that
+ * 2. We must not push down any quals that refer to subselext outputs that
  * contain volatile functions, for fear of introducing strange results due
  * to multiple evaluation of a volatile function.
  *
@@ -3109,7 +3109,7 @@ qual_is_pushdown_safe(Query *subquery, Index rti, Node *qual,
 	List	   *vars;
 	ListCell   *vl;
 
-	/* Refuse subselects (point 1) */
+	/* Refuse subselexts (point 1) */
 	if (contain_subplans(qual))
 		return false;
 
@@ -3132,7 +3132,7 @@ qual_is_pushdown_safe(Query *subquery, Index rti, Node *qual,
 
 	/*
 	 * Examine all Vars used in clause; since it's a restriction clause, all
-	 * such Vars must refer to subselect output columns.
+	 * such Vars must refer to subselext output columns.
 	 */
 	vars = pull_var_clause(qual, PVC_INCLUDE_PLACEHOLDERS);
 	foreach(vl, vars)
@@ -3217,7 +3217,7 @@ subquery_push_qual(Query *subquery, RangeTblEntry *rte, Index rti, Node *qual)
 		/*
 		 * We need not change the subquery's hasAggs or hasSubLinks flags,
 		 * since we can't be pushing down any aggregates that weren't there
-		 * before, and we don't push down subselects at all.
+		 * before, and we don't push down subselexts at all.
 		 */
 	}
 }
@@ -3421,7 +3421,7 @@ compute_parallel_worker(RelOptInfo *rel, double heap_pages, double index_pages,
 
 	/*
 	 * If the user has set the parallel_workers reloption, use that; otherwise
-	 * select a default number of workers.
+	 * selext a default number of workers.
 	 */
 	if (rel->rel_parallel_workers != -1)
 		parallel_workers = rel->rel_parallel_workers;

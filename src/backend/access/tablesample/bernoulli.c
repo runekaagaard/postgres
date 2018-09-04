@@ -3,14 +3,14 @@
  * bernoulli.c
  *	  support routines for BERNOULLI tablesample method
  *
- * To ensure repeatability of samples, it is necessary that selection of a
+ * To ensure repeatability of samples, it is necessary that selextion of a
  * given tuple be history-independent; otherwise syncscanning would break
  * repeatability, to say nothing of logically-irrelevant maintenance such
  * as physical extension or shortening of the relation.
  *
  * To achieve that, we proceed by hashing each candidate TID together with
- * the active seed, and then selecting it if the hash is less than the
- * cutoff value computed from the selection probability by BeginSampleScan.
+ * the active seed, and then selexting it if the hash is less than the
+ * cutoff value computed from the selextion probability by BeginSampleScan.
  *
  *
  * Portions Copyright (c) 1996-2018, PostgreSQL Global Development Group
@@ -37,7 +37,7 @@
 /* Private state */
 typedef struct
 {
-	uint64		cutoff;			/* select tuples with hash less than this */
+	uint64		cutoff;			/* selext tuples with hash less than this */
 	uint32		seed;			/* random seed */
 	OffsetNumber lt;			/* last tuple returned from current block */
 } BernoulliSamplerData;

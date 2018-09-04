@@ -205,18 +205,18 @@ id             value
 
 1              tableAValue2   
 
-starting permutation: wrjt selectjoinforupdate c2 c1
+starting permutation: wrjt selextjoinforupdate c2 c1
 step wrjt: UPDATE jointest SET data = 42 WHERE id = 7;
-step selectjoinforupdate: 
+step selextjoinforupdate: 
 	set enable_nestloop to 0;
 	set enable_hashjoin to 0;
 	set enable_seqscan to 0;
 	explain (costs off)
-	select * from jointest a join jointest b on a.id=b.id for update;
-	select * from jointest a join jointest b on a.id=b.id for update;
+	selext * from jointest a join jointest b on a.id=b.id for update;
+	selext * from jointest a join jointest b on a.id=b.id for update;
  <waiting ...>
 step c2: COMMIT;
-step selectjoinforupdate: <... completed>
+step selextjoinforupdate: <... completed>
 QUERY PLAN     
 
 LockRows       

@@ -184,7 +184,7 @@ scan_directory_ci(const char *dirname, const char *fname, int fnamelen,
 
 /*
  * We keep loaded timezones in a hashtable so we don't have to
- * load and parse the TZ definition file every time one is selected.
+ * load and parse the TZ definition file every time one is selexted.
  * Because we want timezone names to be found case-insensitively,
  * the hash key is the uppercased name of the zone.
  */

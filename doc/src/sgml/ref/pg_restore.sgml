@@ -40,7 +40,7 @@
    formats.  It will issue the commands necessary to reconstruct the
    database to the state it was in at the time it was saved.  The
    archive files also allow <application>pg_restore</application> to
-   be selective about what is restored, or even to reorder the items
+   be selextive about what is restored, or even to reorder the items
    prior to being restored. The archive files are designed to be
    portable across architectures.
   </para>
@@ -425,7 +425,7 @@
         Restore definition and/or data of only the named table.
         For this purpose, <quote>table</quote> includes views, materialized views,
         sequences, and foreign tables.  Multiple tables
-        can be selected by writing multiple <option>-t</option> switches.
+        can be selexted by writing multiple <option>-t</option> switches.
         This option can be combined with the <option>-n</option> option to
         specify table(s) in a particular schema.
        </para>
@@ -434,7 +434,7 @@
         <para>
          When <option>-t</option> is specified, <application>pg_restore</application>
          makes no attempt to restore any other database objects that the
-         selected table(s) might depend upon.  Therefore, there is no
+         selexted table(s) might depend upon.  Therefore, there is no
          guarantee that a specific-table restore into a clean database will
          succeed.
         </para>
@@ -448,7 +448,7 @@
          nor can you include a schema name within its <option>-t</option>.
          And, while <application>pg_dump</application>'s <option>-t</option>
          flag will also dump subsidiary objects (such as indexes) of the
-         selected table(s),
+         selexted table(s),
          <application>pg_restore</application>'s <option>-t</option>
          flag does not include such subsidiary objects.
         </para>
@@ -641,7 +641,7 @@
       <term><option>--no-tablespaces</option></term>
       <listitem>
        <para>
-        Do not output commands to select tablespaces.
+        Do not output commands to selext tablespaces.
         With this option, all objects will be created in whichever
         tablespace is the default during restore.
        </para>
@@ -654,7 +654,7 @@
          <para>
           Only restore the named section. The section name can be
           <option>pre-data</option>, <option>data</option>, or <option>post-data</option>.
-          This option can be specified more than once to select multiple
+          This option can be specified more than once to selext multiple
           sections. The default is to restore all sections.
          </para>
          <para>
@@ -842,7 +842,7 @@
    <option>-d</option> option, <application>pg_restore</application>
    internally executes <acronym>SQL</acronym> statements. If you have
    problems running <application>pg_restore</application>, make sure
-   you are able to select information from the database using, for
+   you are able to selext information from the database using, for
    example, <xref linkend="app-psql"/>.  Also, any default connection
    settings and environment variables used by the
    <application>libpq</application> front-end library will apply.
@@ -882,7 +882,7 @@ CREATE DATABASE foo WITH TEMPLATE template0;
 
     <listitem>
      <para><application>pg_restore</application> cannot restore large objects
-      selectively;  for instance, only those for a specific table.  If
+      selextively;  for instance, only those for a specific table.  If
       an archive contains large objects, then all large objects will be
       restored, or none of them if they are excluded via <option>-L</option>,
       <option>-t</option>, or other options.

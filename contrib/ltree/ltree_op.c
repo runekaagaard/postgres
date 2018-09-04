@@ -603,16 +603,16 @@ ltreeparentsel(PG_FUNCTION_ARGS)
 		/*
 		 * Is the constant "<@" to any of the column's most common values?
 		 */
-		mcvsel = mcv_selectivity(&vardata, &contproc, constval, varonleft,
+		mcvsel = mcv_selextivity(&vardata, &contproc, constval, varonleft,
 								 &mcvsum);
 
 		/*
 		 * If the histogram is large enough, see what fraction of it the
 		 * constant is "<@" to, and assume that's representative of the
-		 * non-MCV population.  Otherwise use the default selectivity for the
+		 * non-MCV population.  Otherwise use the default selextivity for the
 		 * non-MCV population.
 		 */
-		selec = histogram_selectivity(&vardata, &contproc,
+		selec = histogram_selextivity(&vardata, &contproc,
 									  constval, varonleft,
 									  10, 1, &hist_size);
 		if (selec < 0)
@@ -624,7 +624,7 @@ ltreeparentsel(PG_FUNCTION_ARGS)
 		{
 			/*
 			 * For histogram sizes from 10 to 100, we combine the histogram
-			 * and default selectivities, putting increasingly more trust in
+			 * and default selextivities, putting increasingly more trust in
 			 * the histogram for larger sizes.
 			 */
 			double		hist_weight = hist_size / 100.0;

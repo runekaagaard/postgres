@@ -214,7 +214,7 @@ EXPLAIN SELECT * FROM tenk1 WHERE unique1 &lt; 7000;
    </para>
 
    <para>
-    The actual number of rows this query would select is 7000, but the <literal>rows</literal>
+    The actual number of rows this query would selext is 7000, but the <literal>rows</literal>
     estimate is only approximate.  If you try to duplicate this experiment,
     you will probably get a slightly different estimate; moreover, it can
     change after each <command>ANALYZE</command> command, because the
@@ -444,7 +444,7 @@ WHERE t1.unique1 &lt; 10 AND t2.unique2 &lt; 10 AND t1.hundred &lt; t2.hundred;
    </para>
 
    <para>
-    If we change the query's selectivity a bit, we might get a very different
+    If we change the query's selextivity a bit, we might get a very different
     join plan:
 
 <screen>
@@ -980,7 +980,7 @@ WHERE relname LIKE 'tenk1%';
    Most queries retrieve only a fraction of the rows in a table, due
    to <literal>WHERE</literal> clauses that restrict the rows to be
    examined.  The planner thus needs to make an estimate of the
-   <firstterm>selectivity</firstterm> of <literal>WHERE</literal> clauses, that is,
+   <firstterm>selextivity</firstterm> of <literal>WHERE</literal> clauses, that is,
    the fraction of rows that match each condition in the
    <literal>WHERE</literal> clause.  The information used for this task is
    stored in the
@@ -1187,8 +1187,8 @@ SELECT stxname, stxkeys, stxdependencies
     </para>
 
     <para>
-     When computing the selectivity for a query involving functionally
-     dependent columns, the planner adjusts the per-condition selectivity
+     When computing the selextivity for a query involving functionally
+     dependent columns, the planner adjusts the per-condition selextivity
      estimates using the dependency coefficients so as not to produce
      an underestimate.
     </para>
@@ -1213,7 +1213,7 @@ SELECT stxname, stxkeys, stxdependencies
 SELECT * FROM zipcodes WHERE city = 'San Francisco' AND zip = '94105';
 </programlisting>
       the planner will disregard the <structfield>city</structfield> clause as not
-      changing the selectivity, which is correct.  However, it will make
+      changing the selextivity, which is correct.  However, it will make
       the same assumption about
 <programlisting>
 SELECT * FROM zipcodes WHERE city = 'San Francisco' AND zip = '90210';
@@ -1226,7 +1226,7 @@ SELECT * FROM zipcodes WHERE city = 'San Francisco' AND zip = '90210';
      <para>
       In many practical situations, this assumption is usually satisfied;
       for example, there might be a GUI in the application that only allows
-      selecting compatible city and ZIP code values to use in a query.
+      selexting compatible city and ZIP code values to use in a query.
       But if that's not the case, functional dependencies may not be a viable
       option.
      </para>
@@ -1241,7 +1241,7 @@ SELECT * FROM zipcodes WHERE city = 'San Francisco' AND zip = '90210';
      column.  Estimates of the number of distinct values when combining more
      than one column (for example, for <literal>GROUP BY a, b</literal>) are
      frequently wrong when the planner only has single-column statistical
-     data, causing it to select bad plans.
+     data, causing it to selext bad plans.
     </para>
 
     <para>

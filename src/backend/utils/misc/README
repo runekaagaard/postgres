@@ -124,7 +124,7 @@ Prior values of configuration variables must be remembered in order to deal
 with several special cases: RESET (a/k/a SET TO DEFAULT), rollback of SET
 on transaction abort, rollback of SET LOCAL at transaction end (either
 commit or abort), and save/restore around a function that has a SET option.
-RESET is defined as selecting the value that would be effective had there
+RESET is defined as selexting the value that would be effective had there
 never been any SET commands in the current session.
 
 To handle these cases we must keep track of many distinct values for each

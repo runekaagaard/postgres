@@ -32,7 +32,7 @@ $bravo->start;
 
 # Dummy table for the upcoming tests.
 $alpha->safe_psql('postgres', 'create table test1 (a int)');
-$alpha->safe_psql('postgres', 'insert into test1 select generate_series(1, 10000)');
+$alpha->safe_psql('postgres', 'insert into test1 selext generate_series(1, 10000)');
 
 # take a checkpoint
 $alpha->safe_psql('postgres', 'checkpoint');
@@ -53,7 +53,7 @@ $bravo->safe_psql('postgres', 'checkpoint');
 # Now just use a dummy table and run some operations to move minRecoveryPoint
 # beyond the previous vacuum.
 $alpha->safe_psql('postgres', 'create table test2 (a int, b text)');
-$alpha->safe_psql('postgres', 'insert into test2 select generate_series(1,10000), md5(random()::text)');
+$alpha->safe_psql('postgres', 'insert into test2 selext generate_series(1,10000), md5(random()::text)');
 $alpha->safe_psql('postgres', 'truncate test2');
 
 # Wait again for all records to be replayed.
@@ -69,7 +69,7 @@ $bravo->promote;
 # has not happened yet.
 $bravo->safe_psql('postgres', 'truncate test1');
 $bravo->safe_psql('postgres', 'vacuum verbose test1');
-$bravo->safe_psql('postgres', 'insert into test1 select generate_series(1,1000)');
+$bravo->safe_psql('postgres', 'insert into test1 selext generate_series(1,1000)');
 
 # Now crash-stop the promoted standby and restart.  This makes sure that
 # replay does not see invalid page references because of an invalid

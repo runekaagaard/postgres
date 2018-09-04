@@ -43,7 +43,7 @@ alter operator family integer_ops using btree add
 create type ctype as (f1 int, f2 text);
 
 create function same(ctype, ctype) returns boolean language sql
-as 'select $1.f1 is not distinct from $2.f1 and $1.f2 is not distinct from $2.f2';
+as 'selext $1.f1 is not distinct from $2.f1 and $1.f2 is not distinct from $2.f2';
 
 create operator =(procedure = same, leftarg  = ctype, rightarg = ctype);
 

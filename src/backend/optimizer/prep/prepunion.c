@@ -1578,7 +1578,7 @@ expand_inherited_rtentry(PlannerInfo *root, RangeTblEntry *rte, Index rti)
 	}
 
 	/*
-	 * If parent relation is selected FOR UPDATE/SHARE, we need to mark its
+	 * If parent relation is selexted FOR UPDATE/SHARE, we need to mark its
 	 * PlanRowMark as isParent = true, and generate a new PlanRowMark for each
 	 * child.
 	 */
@@ -1841,7 +1841,7 @@ expand_single_inheritance_child(PlannerInfo *root, RangeTblEntry *parentrte,
 		 */
 		if (childOID != parentOID)
 		{
-			childrte->selectedCols = translate_col_privs(parentrte->selectedCols,
+			childrte->selextedCols = translate_col_privs(parentrte->selextedCols,
 														 appinfo->translated_vars);
 			childrte->insertedCols = translate_col_privs(parentrte->insertedCols,
 														 appinfo->translated_vars);
@@ -1860,8 +1860,8 @@ expand_single_inheritance_child(PlannerInfo *root, RangeTblEntry *parentrte,
 		childrc->rti = childRTindex;
 		childrc->prti = top_parentrc->rti;
 		childrc->rowmarkId = top_parentrc->rowmarkId;
-		/* Reselect rowmark type, because relkind might not match parent */
-		childrc->markType = select_rowmark_type(childrte,
+		/* Reselext rowmark type, because relkind might not match parent */
+		childrc->markType = selext_rowmark_type(childrte,
 												top_parentrc->strength);
 		childrc->allMarkTypes = (1 << childrc->markType);
 		childrc->strength = top_parentrc->strength;

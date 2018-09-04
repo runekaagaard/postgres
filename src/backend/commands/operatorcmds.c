@@ -482,7 +482,7 @@ AlterOperator(AlterOperatorStmt *stmt)
 		if (OidIsValid(joinOid))
 			ereport(ERROR,
 					(errcode(ERRCODE_INVALID_FUNCTION_DEFINITION),
-					 errmsg("only binary operators can have join selectivity")));
+					 errmsg("only binary operators can have join selextivity")));
 	}
 
 	if (oprForm->oprresult != BOOLOID)
@@ -490,11 +490,11 @@ AlterOperator(AlterOperatorStmt *stmt)
 		if (OidIsValid(restrictionOid))
 			ereport(ERROR,
 					(errcode(ERRCODE_INVALID_FUNCTION_DEFINITION),
-					 errmsg("only boolean operators can have restriction selectivity")));
+					 errmsg("only boolean operators can have restriction selextivity")));
 		if (OidIsValid(joinOid))
 			ereport(ERROR,
 					(errcode(ERRCODE_INVALID_FUNCTION_DEFINITION),
-					 errmsg("only boolean operators can have join selectivity")));
+					 errmsg("only boolean operators can have join selextivity")));
 	}
 
 	/* Update the tuple */

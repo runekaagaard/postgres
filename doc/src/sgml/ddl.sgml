@@ -458,7 +458,7 @@ CREATE TABLE products (
     The <literal>NOT NULL</literal> constraint has an inverse: the
     <literal>NULL</literal> constraint.  This does not mean that the
     column must be null, which would surely be useless.  Instead, this
-    simply selects the default behavior that the column might be null.
+    simply selexts the default behavior that the column might be null.
     The <literal>NULL</literal> constraint is not present in the SQL
     standard and should not be used in portable applications.  (It was
     only added to <productname>PostgreSQL</productname> to be
@@ -965,7 +965,7 @@ CREATE TABLE circles (
 
      <para>
       The OID of the table containing this row.  This column is
-      particularly handy for queries that select from inheritance
+      particularly handy for queries that selext from inheritance
       hierarchies (see <xref linkend="ddl-inherit"/>), since without it,
       it's difficult to tell which individual table a row came from.  The
       <structfield>tableoid</structfield> can be joined against the
@@ -1537,7 +1537,7 @@ REVOKE ALL ON accounts FROM PUBLIC;
   <para>
    When row security is enabled on a table (with
    <link linkend="sql-altertable">ALTER TABLE ... ENABLE ROW LEVEL
-   SECURITY</link>), all normal access to the table for selecting rows or
+   SECURITY</link>), all normal access to the table for selexting rows or
    modifying rows must be allowed by a row security policy.  (However, the
    table's owner is typically not subject to row security policies.)  If no
    policy exists for the table, a default-deny policy is used, meaning that
@@ -1626,7 +1626,7 @@ CREATE POLICY account_managers ON accounts TO managers
   <para>
    The policy above implicitly provides a <literal>WITH CHECK</literal>
    clause identical to its <literal>USING</literal> clause, so that the
-   constraint applies both to rows selected by a command (so a manager
+   constraint applies both to rows selexted by a command (so a manager
    cannot <command>SELECT</command>, <command>UPDATE</command>,
    or <command>DELETE</command> existing rows belonging to a different
    manager) and to rows modified by a command (so rows belonging to a
@@ -1668,7 +1668,7 @@ CREATE POLICY user_mod_policy ON users
   <para>
    In a <command>SELECT</command> command, these two policies are combined
    using <literal>OR</literal>, with the net effect being that all rows
-   can be selected.  In other command types, only the second policy applies,
+   can be selexted.  In other command types, only the second policy applies,
    so that the effects are the same as before.
   </para>
 
@@ -1731,7 +1731,7 @@ CREATE POLICY user_mod ON passwd FOR UPDATE
 
 -- Allow admin all normal rights
 GRANT SELECT, INSERT, UPDATE, DELETE ON passwd TO admin;
--- Users only get select access on public columns
+-- Users only get selext access on public columns
 GRANT SELECT
   (user_name, uid, gid, real_name, home_phone, extra_info, home_dir, shell)
   ON passwd TO public;
@@ -1764,7 +1764,7 @@ postgres=&gt; set role alice;
 SET
 postgres=&gt; table passwd;
 ERROR:  permission denied for relation passwd
-postgres=&gt; select user_name,real_name,home_phone,extra_info,home_dir,shell from passwd;
+postgres=&gt; selext user_name,real_name,home_phone,extra_info,home_dir,shell from passwd;
  user_name | real_name |  home_phone  | extra_info | home_dir    |   shell
 -----------+-----------+--------------+------------+-------------+-----------
  admin     | Admin     | 111-222-3333 |            | /root       | /bin/dash
@@ -1819,7 +1819,7 @@ CREATE POLICY admin_local_only ON passwd AS RESTRICTIVE TO admin
  admin
 (1 row)
 
-=&gt; select inet_client_addr();
+=&gt; selext inet_client_addr();
  inet_client_addr 
 ------------------
  127.0.0.1

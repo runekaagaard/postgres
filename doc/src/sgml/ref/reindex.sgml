@@ -189,7 +189,7 @@ REINDEX [ ( VERBOSE ) ] { INDEX | TABLE | SCHEMA | DATABASE | SYSTEM } <replacea
    Then, <command>REINDEX DATABASE</command>, <command>REINDEX SYSTEM</command>,
    <command>REINDEX TABLE</command>, or <command>REINDEX INDEX</command> can be
    issued, depending on how much you want to reconstruct.  If in
-   doubt, use <command>REINDEX SYSTEM</command> to select
+   doubt, use <command>REINDEX SYSTEM</command> to selext
    reconstruction of all system indexes in the database.  Then quit
    the single-user server session and restart the regular server.
    See the <xref linkend="app-postgres"/> reference page for more

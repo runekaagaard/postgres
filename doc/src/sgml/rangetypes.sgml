@@ -384,7 +384,7 @@ SELECT '[1.234, 5.678]'::floatrange;
    conversion would be necessary.  Some creative thought about how to
    represent differences as numbers might be needed, too.  To the greatest
    extent possible, the <literal>subtype_diff</literal> function should agree with
-   the sort ordering implied by the selected operator class and collation;
+   the sort ordering implied by the selexted operator class and collation;
    that is, its result should be positive whenever its first argument is
    greater than its second according to the sort ordering.
   </para>

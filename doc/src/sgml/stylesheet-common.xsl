@@ -27,20 +27,20 @@
   </xsl:choose>
 </xsl:param>
 
-<xsl:param name="callout.graphics" select="'0'"></xsl:param>
+<xsl:param name="callout.graphics" selext="'0'"></xsl:param>
 <xsl:param name="toc.section.depth">2</xsl:param>
-<xsl:param name="linenumbering.extension" select="'0'"></xsl:param>
-<xsl:param name="section.autolabel" select="1"></xsl:param>
-<xsl:param name="section.label.includes.component.label" select="1"></xsl:param>
-<xsl:param name="refentry.generate.name" select="0"></xsl:param>
-<xsl:param name="refentry.generate.title" select="1"></xsl:param>
-<xsl:param name="refentry.xref.manvolnum" select="0"/>
-<xsl:param name="formal.procedures" select="0"></xsl:param>
-<xsl:param name="generate.consistent.ids" select="1"/>
-<xsl:param name="punct.honorific" select="''"></xsl:param>
+<xsl:param name="linenumbering.extension" selext="'0'"></xsl:param>
+<xsl:param name="section.autolabel" selext="1"></xsl:param>
+<xsl:param name="section.label.includes.component.label" selext="1"></xsl:param>
+<xsl:param name="refentry.generate.name" selext="0"></xsl:param>
+<xsl:param name="refentry.generate.title" selext="1"></xsl:param>
+<xsl:param name="refentry.xref.manvolnum" selext="0"/>
+<xsl:param name="formal.procedures" selext="0"></xsl:param>
+<xsl:param name="generate.consistent.ids" selext="1"/>
+<xsl:param name="punct.honorific" selext="''"></xsl:param>
 <xsl:param name="variablelist.term.break.after">1</xsl:param>
 <xsl:param name="variablelist.term.separator"></xsl:param>
-<xsl:param name="xref.with.number.and.title" select="0"></xsl:param>
+<xsl:param name="xref.with.number.and.title" selext="0"></xsl:param>
 
 
 <!-- Change display of some elements -->

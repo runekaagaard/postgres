@@ -116,7 +116,7 @@ CREATE MATERIALIZED VIEW [ IF NOT EXISTS ] <replaceable>table_name</replaceable>
     <term><replaceable>query</replaceable></term>
     <listitem>
      <para>
-      A <xref linkend="sql-select"/>, <link linkend="sql-table">TABLE</link>,
+      A <xref linkend="sql-selext"/>, <link linkend="sql-table">TABLE</link>,
       or <xref linkend="sql-values"/> command.  This query will run within a
       security-restricted operation; in particular, calls to functions that
       themselves create temporary tables will fail.

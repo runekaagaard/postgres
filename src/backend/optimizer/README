@@ -18,7 +18,7 @@ Paths and Join Pairs
 --------------------
 
 During the planning/optimizing process, we build "Path" trees representing
-the different ways of doing a query.  We select the cheapest Path that
+the different ways of doing a query.  We selext the cheapest Path that
 generates the desired relation and turn it into a Plan to pass to the
 executor.  (There is pretty nearly a one-to-one correspondence between the
 Path and Plan trees, but Path nodes omit info that won't be needed during
@@ -26,7 +26,7 @@ planning, and include info needed for planning that won't be needed by the
 executor.)
 
 The optimizer builds a RelOptInfo structure for each base relation used in
-the query.  Base rels are either primitive tables, or subquery subselects
+the query.  Base rels are either primitive tables, or subquery subselexts
 that are planned via a separate recursive invocation of the planner.  A
 RelOptInfo is also built for each join relation that is considered during
 planning.  A join rel is simply a combination of base rels.  There is only
@@ -36,7 +36,7 @@ by joining A and B first and then adding C, or joining B and C first and
 then adding A, etc.  These different means of building the joinrel are
 represented as Paths.  For each RelOptInfo we build a list of Paths that
 represent plausible ways to implement the scan or join of that relation.
-Once we've considered all the plausible Paths for a rel, we select the one
+Once we've considered all the plausible Paths for a rel, we selext the one
 that is cheapest according to the planner's cost estimates.  The final plan
 is derived from the cheapest Path for the RelOptInfo that includes all the
 base rels of the query.
@@ -98,7 +98,7 @@ bottom up.  Note that the join list structure constrains the possible join
 orders, but it doesn't constrain the join implementation method at each
 join (nestloop, merge, hash), nor does it say which rel is considered outer
 or inner at each join.  We consider all these possibilities in building
-Paths. We generate a Path for each feasible join method, and select the
+Paths. We generate a Path for each feasible join method, and selext the
 cheapest Path.
 
 For each planning problem, therefore, we will have a list of relations
@@ -322,7 +322,7 @@ set up for recursive handling of subqueries
 ----make_one_rel()
      set_base_rel_pathlists()
       find seqscan and all index paths for each base relation
-      find selectivity of columns used in joins
+      find selextivity of columns used in joins
      make_rel_from_joinlist()
       hand off join subproblems to a plugin, GEQO, or standard_join_search()
 -----standard_join_search()
@@ -439,7 +439,7 @@ course); furthermore, we need test only one such comparison, not all of
 them.  Therefore, equivalence clauses are removed from the standard qual
 distribution process.  Instead, when preparing a restriction or join clause
 list, we examine each EquivalenceClass to see if it can contribute a
-clause, and if so we select an appropriate pair of values to compare.  For
+clause, and if so we selext an appropriate pair of values to compare.  For
 example, if we are trying to join A's relation to C's, we can generate the
 clause A = C, even though this appeared nowhere explicitly in the original
 query.  This may allow us to explore join paths that otherwise would have
@@ -927,7 +927,7 @@ unless they are leakproof or have security_level zero.
 * EC-derived quals are assigned the minimum (not maximum) security_level
 found among the EC's source clauses.
 * If the maximum security_level found among the EC's source clauses is
-above zero, then the equality operators selected for derived quals must
+above zero, then the equality operators selexted for derived quals must
 be leakproof.  When no such operator can be found, the EC is treated as
 "broken" and we fall back to emitting its source clauses without any
 additional derived quals.
@@ -944,12 +944,12 @@ no plan degradation when no barrier quals are present.
 Once we have security levels assigned to all clauses, enforcement
 of barrier-qual ordering restrictions boils down to two rules:
 
-* Table scan plan nodes must not select quals for early execution
+* Table scan plan nodes must not selext quals for early execution
 (for example, use them as index qualifiers in an indexscan) unless
 they are leakproof or have security_level no higher than any other
 qual that is due to be executed at the same plan node.  (Use the
 utility function restriction_is_securely_promotable() to check
-whether it's okay to select a qual for early execution.)
+whether it's okay to selext a qual for early execution.)
 
 * Normal execution of a list of quals must execute them in an order
 that satisfies the same security rule, ie higher security_levels must

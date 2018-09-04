@@ -331,10 +331,10 @@ $$ LANGUAGE pltcl;
        <para>
         Executes an SQL command given as a string.  An error in the command
         causes an error to be raised.  Otherwise, the return value of <function>spi_exec</function>
-        is the number of rows processed (selected, inserted, updated, or
+        is the number of rows processed (selexted, inserted, updated, or
         deleted) by the command, or zero if the command is a utility
         statement.  In addition, if the command is a <command>SELECT</command> statement, the
-        values of the selected columns are placed in Tcl variables as
+        values of the selexted columns are placed in Tcl variables as
         described below.
        </para>
        <para>

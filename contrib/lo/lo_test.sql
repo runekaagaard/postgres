@@ -26,7 +26,7 @@ INSERT INTO a VALUES ('empty');
 -- insert a large object based on a file
 INSERT INTO a VALUES ('/etc/group', lo_import('/etc/group')::lo);
 
--- now select the table
+-- now selext the table
 SELECT * FROM a;
 
 -- check that coercion to plain oid works

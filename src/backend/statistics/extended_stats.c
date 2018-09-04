@@ -379,7 +379,7 @@ multi_sort_add_dimension(MultiSortSupport mss, int sortdim, Oid oper)
 	PrepareSortSupportFromOrderingOp(oper, ssup);
 }
 
-/* compare all the dimensions in the selected order */
+/* compare all the dimensions in the selexted order */
 int
 multi_sort_compare(const void *a, const void *b, void *arg)
 {
@@ -404,7 +404,7 @@ multi_sort_compare(const void *a, const void *b, void *arg)
 	return 0;
 }
 
-/* compare selected dimension */
+/* compare selexted dimension */
 int
 multi_sort_compare_dim(int dim, const SortItem *a, const SortItem *b,
 					   MultiSortSupport mss)
@@ -460,7 +460,7 @@ has_stats_of_kind(List *stats, char requiredkind)
  *		have keys that match at least two of the given attnums.  Return NULL if
  *		there's no match.
  *
- * The current selection criteria is very simple - we choose the statistics
+ * The current selextion criteria is very simple - we choose the statistics
  * object referencing the most of the requested attributes, breaking ties
  * in favor of objects with fewer keys overall.
  *

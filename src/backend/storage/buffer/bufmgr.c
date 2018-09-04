@@ -222,7 +222,7 @@ ReservePrivateRefCountEntry(void)
 		PrivateRefCountEntry *hashent;
 		bool		found;
 
-		/* select victim slot */
+		/* selext victim slot */
 		ReservedRefCountEntry =
 			&PrivateRefCountArray[PrivateRefCountClock++ % REFCOUNT_ARRAY_ENTRIES];
 
@@ -847,7 +847,7 @@ ReadBuffer_common(SMgrRelation smgr, char relpersistence, ForkNumber forkNum,
 	 * if it's a shared buffer.
 	 *
 	 * Note: if smgrextend fails, we will end up with a buffer that is
-	 * allocated but not marked BM_VALID.  P_NEW will still select the same
+	 * allocated but not marked BM_VALID.  P_NEW will still selext the same
 	 * block number (because the relation didn't get any longer on disk) and
 	 * so future attempts to extend the relation will find the same buffer (if
 	 * it's not been recycled) but come right back here to try smgrextend
@@ -966,11 +966,11 @@ ReadBuffer_common(SMgrRelation smgr, char relpersistence, ForkNumber forkNum,
 
 /*
  * BufferAlloc -- subroutine for ReadBuffer.  Handles lookup of a shared
- *		buffer.  If no buffer exists already, selects a replacement
+ *		buffer.  If no buffer exists already, selexts a replacement
  *		victim and evicts the old page, but does NOT read in new page.
  *
  * "strategy" can be a buffer replacement strategy object, or NULL for
- * the default strategy.  The selected buffer's usage_count is advanced when
+ * the default strategy.  The selexted buffer's usage_count is advanced when
  * using the default strategy, but otherwise possibly not (see PinBuffer).
  *
  * The returned buffer is pinned and is already marked as holding the
@@ -992,7 +992,7 @@ BufferAlloc(SMgrRelation smgr, char relpersistence, ForkNumber forkNum,
 	BufferTag	newTag;			/* identity of requested block */
 	uint32		newHash;		/* hash value for newTag */
 	LWLock	   *newPartitionLock;	/* buffer partition lock for it */
-	BufferTag	oldTag;			/* previous identity of selected buffer */
+	BufferTag	oldTag;			/* previous identity of selexted buffer */
 	uint32		oldHash;		/* hash value for oldTag */
 	LWLock	   *oldPartitionLock;	/* buffer partition lock for it */
 	uint32		oldFlags;

@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------
  *
  * nodeSubplan.c
- *	  routines to support sub-selects appearing in expressions
+ *	  routines to support sub-selexts appearing in expressions
  *
  * This module is concerned with executing SubPlan expression nodes, which
  * should not be confused with sub-SELECTs appearing in FROM.  SubPlans are
@@ -21,8 +21,8 @@
  */
 /*
  *	 INTERFACE ROUTINES
- *		ExecSubPlan  - process a subselect
- *		ExecInitSubPlan - initialize a subselect
+ *		ExecSubPlan  - process a subselext
+ *		ExecInitSubPlan - initialize a subselext
  */
 #include "postgres.h"
 
@@ -96,7 +96,7 @@ ExecSubPlan(SubPlanState *node,
 }
 
 /*
- * ExecHashSubPlan: store subselect result in an in-memory hash table
+ * ExecHashSubPlan: store subselext result in an in-memory hash table
  */
 static Datum
 ExecHashSubPlan(SubPlanState *node,
@@ -181,7 +181,7 @@ ExecHashSubPlan(SubPlanState *node,
 	 * When the LHS is partly or wholly NULL, we can never return TRUE. If we
 	 * don't care about UNKNOWN, just return FALSE.  Otherwise, if the LHS is
 	 * wholly NULL, immediately return UNKNOWN.  (Since the combining
-	 * operators are strict, the result could only be FALSE if the sub-select
+	 * operators are strict, the result could only be FALSE if the sub-selext
 	 * were empty, but we already handled that case.) Otherwise, we must scan
 	 * both the main and partly-null tables to see if there are any rows that
 	 * aren't provably unequal to the LHS; if so, the result is UNKNOWN.
@@ -389,7 +389,7 @@ ExecScanSubPlan(SubPlanState *node,
 
 		/*
 		 * For ALL, ANY, and ROWCOMPARE sublinks, load up the Params
-		 * representing the columns of the sub-select, and then evaluate the
+		 * representing the columns of the sub-selext, and then evaluate the
 		 * combining expression.
 		 */
 		col = 1;
@@ -553,7 +553,7 @@ buildSubPlanHash(SubPlanState *node, ExprContext *econtext)
 
 	/*
 	 * Scan the subplan and load the hash table(s).  Note that when there are
-	 * duplicate rows coming out of the sub-select, only one copy is stored.
+	 * duplicate rows coming out of the sub-selext, only one copy is stored.
 	 */
 	for (slot = ExecProcNode(planstate);
 		 !TupIsNull(slot);
@@ -564,7 +564,7 @@ buildSubPlanHash(SubPlanState *node, ExprContext *econtext)
 		bool		isnew;
 
 		/*
-		 * Load up the Params representing the raw sub-select outputs, then
+		 * Load up the Params representing the raw sub-selext outputs, then
 		 * form the projection tuple to store in the hashtable.
 		 */
 		foreach(plst, subplan->paramIds)
@@ -873,10 +873,10 @@ ExecInitSubPlan(SubPlan *subplan, PlanState *parent)
 		/*
 		 * We use ExecProject to evaluate the lefthand and righthand
 		 * expression lists and form tuples.  (You might think that we could
-		 * use the sub-select's output tuples directly, but that is not the
-		 * case if we had to insert any run-time coercions of the sub-select's
+		 * use the sub-selext's output tuples directly, but that is not the
+		 * case if we had to insert any run-time coercions of the sub-selext's
 		 * output datatypes; anyway this avoids storing any resjunk columns
-		 * that might be in the sub-select's output.)  Run through the
+		 * that might be in the sub-selext's output.)  Run through the
 		 * combining expressions to build tlists for the lefthand and
 		 * righthand sides.
 		 *
@@ -1028,7 +1028,7 @@ ExecSetParamPlan(SubPlanState *node, ExprContext *econtext)
 
 	if (subLinkType == ANY_SUBLINK ||
 		subLinkType == ALL_SUBLINK)
-		elog(ERROR, "ANY/ALL subselect unsupported as initplan");
+		elog(ERROR, "ANY/ALL subselext unsupported as initplan");
 	if (subLinkType == CTE_SUBLINK)
 		elog(ERROR, "CTE subplans should not be executed via ExecSetParamPlan");
 

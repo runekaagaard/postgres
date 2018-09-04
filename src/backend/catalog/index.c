@@ -696,7 +696,7 @@ UpdateIndexRelation(Oid indexoid,
  * indexRelationName: what it say
  * indexRelationId: normally, pass InvalidOid to let this routine
  *		generate an OID for the index.  During bootstrap this may be
- *		nonzero to specify a preselected OID.
+ *		nonzero to specify a preselexted OID.
  * parentIndexRelid: if creating an index partition, the OID of the
  *		parent index; otherwise InvalidOid.
  * parentConstraintId: if creating a constraint on a partition, the OID

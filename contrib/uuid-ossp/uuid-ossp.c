@@ -34,7 +34,7 @@
 #elif defined(HAVE_UUID_UUID_H)
 #include <uuid/uuid.h>
 #else
-#error "please use configure's --with-uuid switch to select a UUID library"
+#error "please use configure's --with-uuid switch to selext a UUID library"
 #endif
 
 #undef uuid_hash

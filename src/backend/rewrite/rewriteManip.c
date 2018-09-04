@@ -100,7 +100,7 @@ contain_aggs_of_level_walker(Node *node,
 	}
 	if (IsA(node, Query))
 	{
-		/* Recurse into subselects */
+		/* Recurse into subselexts */
 		bool		result;
 
 		context->sublevels_up++;
@@ -174,7 +174,7 @@ locate_agg_of_level_walker(Node *node,
 	}
 	if (IsA(node, Query))
 	{
-		/* Recurse into subselects */
+		/* Recurse into subselexts */
 		bool		result;
 
 		context->sublevels_up++;
@@ -213,7 +213,7 @@ contain_windowfuncs_walker(Node *node, void *context)
 		return false;
 	if (IsA(node, WindowFunc))
 		return true;			/* abort the tree traversal and return true */
-	/* Mustn't recurse into subselects */
+	/* Mustn't recurse into subselexts */
 	return expression_tree_walker(node, contain_windowfuncs_walker,
 								  (void *) context);
 }
@@ -264,7 +264,7 @@ locate_windowfunc_walker(Node *node, locate_windowfunc_context *context)
 		}
 		/* else fall through to examine argument */
 	}
-	/* Mustn't recurse into subselects */
+	/* Mustn't recurse into subselexts */
 	return expression_tree_walker(node, locate_windowfunc_walker,
 								  (void *) context);
 }
@@ -407,7 +407,7 @@ OffsetVarNodes_walker(Node *node, OffsetVarNodes_context *context)
 
 	if (IsA(node, Query))
 	{
-		/* Recurse into subselects */
+		/* Recurse into subselexts */
 		bool		result;
 
 		context->sublevels_up++;
@@ -590,7 +590,7 @@ ChangeVarNodes_walker(Node *node, ChangeVarNodes_context *context)
 
 	if (IsA(node, Query))
 	{
-		/* Recurse into subselects */
+		/* Recurse into subselexts */
 		bool		result;
 
 		context->sublevels_up++;
@@ -754,7 +754,7 @@ IncrementVarSublevelsUp_walker(Node *node,
 	}
 	if (IsA(node, Query))
 	{
-		/* Recurse into subselects */
+		/* Recurse into subselexts */
 		bool		result;
 
 		context->min_sublevels_up++;
@@ -872,7 +872,7 @@ rangeTableEntry_used_walker(Node *node,
 
 	if (IsA(node, Query))
 	{
-		/* Recurse into subselects */
+		/* Recurse into subselexts */
 		bool		result;
 
 		context->sublevels_up++;
@@ -920,8 +920,8 @@ rangeTableEntry_used(Node *node, int rt_index, int sublevels_up)
 Query *
 getInsertSelectQuery(Query *parsetree, Query ***subquery_ptr)
 {
-	Query	   *selectquery;
-	RangeTblEntry *selectrte;
+	Query	   *selextquery;
+	RangeTblEntry *selextrte;
 	RangeTblRef *rtr;
 
 	if (subquery_ptr)
@@ -949,20 +949,20 @@ getInsertSelectQuery(Query *parsetree, Query ***subquery_ptr)
 		elog(ERROR, "expected to find SELECT subquery");
 	rtr = (RangeTblRef *) linitial(parsetree->jointree->fromlist);
 	Assert(IsA(rtr, RangeTblRef));
-	selectrte = rt_fetch(rtr->rtindex, parsetree->rtable);
-	selectquery = selectrte->subquery;
-	if (!(selectquery && IsA(selectquery, Query) &&
-		  selectquery->commandType == CMD_SELECT))
+	selextrte = rt_fetch(rtr->rtindex, parsetree->rtable);
+	selextquery = selextrte->subquery;
+	if (!(selextquery && IsA(selextquery, Query) &&
+		  selextquery->commandType == CMD_SELECT))
 		elog(ERROR, "expected to find SELECT subquery");
-	if (list_length(selectquery->rtable) >= 2 &&
-		strcmp(rt_fetch(PRS2_OLD_VARNO, selectquery->rtable)->eref->aliasname,
+	if (list_length(selextquery->rtable) >= 2 &&
+		strcmp(rt_fetch(PRS2_OLD_VARNO, selextquery->rtable)->eref->aliasname,
 			   "old") == 0 &&
-		strcmp(rt_fetch(PRS2_NEW_VARNO, selectquery->rtable)->eref->aliasname,
+		strcmp(rt_fetch(PRS2_NEW_VARNO, selextquery->rtable)->eref->aliasname,
 			   "new") == 0)
 	{
 		if (subquery_ptr)
-			*subquery_ptr = &(selectrte->subquery);
-		return selectquery;
+			*subquery_ptr = &(selextrte->subquery);
+		return selextquery;
 	}
 	elog(ERROR, "could not find rule placeholders");
 	return NULL;				/* not reached */
@@ -1493,7 +1493,7 @@ ReplaceVarsFromTargetList_callback(Var *var,
 		 * an ON UPDATE rule's NEW variable and the referenced tlist item in
 		 * the original UPDATE command is part of a multiple assignment. There
 		 * seems no practical way to handle such cases without multiple
-		 * evaluation of the multiple assignment's sub-select, which would
+		 * evaluation of the multiple assignment's sub-selext, which would
 		 * create semantic oddities that users of rules would probably prefer
 		 * not to cope with.  So treat it as an unimplemented feature.
 		 */

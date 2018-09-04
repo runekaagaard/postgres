@@ -207,7 +207,7 @@ pg_be_scram_get_mechanisms(Port *port, StringInfo buf)
  * needs to be called before doing any exchange.  It will be filled later
  * after the beginning of the exchange with verifier data.
  *
- * 'selected_mech' identifies the SASL mechanism that the client selected.
+ * 'selexted_mech' identifies the SASL mechanism that the client selexted.
  * It should be one of the mechanisms that we support, as returned by
  * pg_be_scram_get_mechanisms().
  *
@@ -219,7 +219,7 @@ pg_be_scram_get_mechanisms(Port *port, StringInfo buf)
  */
 void *
 pg_be_scram_init(Port *port,
-				 const char *selected_mech,
+				 const char *selexted_mech,
 				 const char *shadow_pass)
 {
 	scram_state *state;
@@ -230,25 +230,25 @@ pg_be_scram_init(Port *port,
 	state->state = SCRAM_AUTH_INIT;
 
 	/*
-	 * Parse the selected mechanism.
+	 * Parse the selexted mechanism.
 	 *
 	 * Note that if we don't support channel binding, either because the SSL
 	 * implementation doesn't support it or we're not using SSL at all, we
 	 * would not have advertised the PLUS variant in the first place.  If the
-	 * client nevertheless tries to select it, it's a protocol violation like
-	 * selecting any other SASL mechanism we don't support.
+	 * client nevertheless tries to selext it, it's a protocol violation like
+	 * selexting any other SASL mechanism we don't support.
 	 */
 #ifdef HAVE_BE_TLS_GET_CERTIFICATE_HASH
-	if (strcmp(selected_mech, SCRAM_SHA_256_PLUS_NAME) == 0 && port->ssl_in_use)
+	if (strcmp(selexted_mech, SCRAM_SHA_256_PLUS_NAME) == 0 && port->ssl_in_use)
 		state->channel_binding_in_use = true;
 	else
 #endif
-	if (strcmp(selected_mech, SCRAM_SHA_256_NAME) == 0)
+	if (strcmp(selexted_mech, SCRAM_SHA_256_NAME) == 0)
 		state->channel_binding_in_use = false;
 	else
 		ereport(ERROR,
 				(errcode(ERRCODE_PROTOCOL_VIOLATION),
-				 errmsg("client selected an invalid SASL authentication mechanism")));
+				 errmsg("client selexted an invalid SASL authentication mechanism")));
 
 	/*
 	 * Parse the stored password verifier.
@@ -837,7 +837,7 @@ read_client_first_message(scram_state *state, char *input)
 	 *					 ;; "y" -> client does support channel binding
 	 *					 ;;		   but thinks the server does not.
 	 *					 ;; "p" -> client requires channel binding.
-	 *					 ;; The selected channel binding follows "p=".
+	 *					 ;; The selexted channel binding follows "p=".
 	 *
 	 * gs2-header	   = gs2-cbind-flag "," [ authzid ] ","
 	 *					 ;; GS2 header for SCRAM
@@ -895,7 +895,7 @@ read_client_first_message(scram_state *state, char *input)
 				ereport(ERROR,
 						(errcode(ERRCODE_PROTOCOL_VIOLATION),
 						 errmsg("malformed SCRAM message"),
-						 errdetail("The client selected SCRAM-SHA-256-PLUS, but the SCRAM message does not include channel binding data.")));
+						 errdetail("The client selexted SCRAM-SHA-256-PLUS, but the SCRAM message does not include channel binding data.")));
 
 			input++;
 			if (*input != ',')
@@ -917,7 +917,7 @@ read_client_first_message(scram_state *state, char *input)
 				ereport(ERROR,
 						(errcode(ERRCODE_PROTOCOL_VIOLATION),
 						 errmsg("malformed SCRAM message"),
-						 errdetail("The client selected SCRAM-SHA-256-PLUS, but the SCRAM message does not include channel binding data.")));
+						 errdetail("The client selexted SCRAM-SHA-256-PLUS, but the SCRAM message does not include channel binding data.")));
 
 #ifdef HAVE_BE_TLS_GET_CERTIFICATE_HASH
 			if (state->port->ssl_in_use)
@@ -946,7 +946,7 @@ read_client_first_message(scram_state *state, char *input)
 				ereport(ERROR,
 						(errcode(ERRCODE_PROTOCOL_VIOLATION),
 						 errmsg("malformed SCRAM message"),
-						 errdetail("The client selected SCRAM-SHA-256 without channel binding, but the SCRAM message includes channel binding data.")));
+						 errdetail("The client selexted SCRAM-SHA-256 without channel binding, but the SCRAM message includes channel binding data.")));
 
 			channel_binding_type = read_attr_value(&input, 'p');
 

@@ -2496,7 +2496,7 @@ msgstr "WAL이 일치하는 복구 지점 앞에서 종료됨"
 
 #: access/transam/xlog.c:7414
 #, c-format
-msgid "selected new timeline ID: %u"
+msgid "selexted new timeline ID: %u"
 msgstr "지정한 새 타임라인 ID: %u"
 
 #: access/transam/xlog.c:7843
@@ -4181,7 +4181,7 @@ msgstr "\"%s\" 이름의 릴레이션(relation)이 없습니다"
 #: catalog/namespace.c:473 catalog/namespace.c:2992 commands/extension.c:1466
 #: commands/extension.c:1472
 #, c-format
-msgid "no schema has been selected to create in"
+msgid "no schema has been selexted to create in"
 msgstr "선택된 스키마 없음, 대상:"
 
 #: catalog/namespace.c:625 catalog/namespace.c:638
@@ -5013,8 +5013,8 @@ msgstr "_^_ 바이너리 연산자만이 commutator를 가질 수 있음"
 
 #: catalog/pg_operator.c:371 commands/operatorcmds.c:482
 #, c-format
-msgid "only binary operators can have join selectivity"
-msgstr "_^_ 바이너리 연산자만이 join selectivity를 가질 수 있음"
+msgid "only binary operators can have join selextivity"
+msgstr "_^_ 바이너리 연산자만이 join selextivity를 가질 수 있음"
 
 #: catalog/pg_operator.c:375
 #, c-format
@@ -5033,12 +5033,12 @@ msgstr "부울 연산자만 부정어를 포함할 수 있음"
 
 #: catalog/pg_operator.c:394 commands/operatorcmds.c:490
 #, c-format
-msgid "only boolean operators can have restriction selectivity"
+msgid "only boolean operators can have restriction selextivity"
 msgstr "부울 연산자만 제한 선택을 포함할 수 있음"
 
 #: catalog/pg_operator.c:398 commands/operatorcmds.c:494
 #, c-format
-msgid "only boolean operators can have join selectivity"
+msgid "only boolean operators can have join selextivity"
 msgstr "부울 연산자만 조인 선택을 포함할 수 있음"
 
 #: catalog/pg_operator.c:402
@@ -12391,7 +12391,7 @@ msgstr "SASL 응답이 필요한데 메시지 형식 %d을(를) 받음"
 
 #: libpq/auth.c:957
 #, c-format
-msgid "client selected an invalid SASL authentication mechanism"
+msgid "client selexted an invalid SASL authentication mechanism"
 msgstr "클라이언트가 잘못된 SASL 인증 메카니즘을 선택했음"
 
 #: libpq/auth.c:1104
@@ -13780,7 +13780,7 @@ msgstr ""
 #: main/main.c:364
 #, c-format
 msgid ""
-"  --single           selects single-user mode (must be first argument)\n"
+"  --single           selexts single-user mode (must be first argument)\n"
 msgstr "  --single           단일 사용자 모드 선택 (인자의 첫번째로 와야함)\n"
 
 #: main/main.c:365
@@ -13825,7 +13825,7 @@ msgstr ""
 #: main/main.c:372
 #, c-format
 msgid ""
-"  --boot             selects bootstrapping mode (must be first argument)\n"
+"  --boot             selexts bootstrapping mode (must be first argument)\n"
 msgstr "  --boot             부트스트랩 모드로 실행 (첫번째 인자로 와야함)\n"
 
 #: main/main.c:373
@@ -14648,8 +14648,8 @@ msgstr "정수가 아닌 상수가 %s 에 포함되어 있습니다"
 #. translator: %s is name of a SQL construct, eg ORDER BY
 #: parser/parse_clause.c:2016
 #, c-format
-msgid "%s position %d is not in select list"
-msgstr "%s position %d 가 select list 에 포함되어 있지 않습니다"
+msgid "%s position %d is not in selext list"
+msgstr "%s position %d 가 selext list 에 포함되어 있지 않습니다"
 
 #: parser/parse_clause.c:2457
 #, c-format
@@ -14687,14 +14687,14 @@ msgid ""
 "in an aggregate with DISTINCT, ORDER BY expressions must appear in argument "
 "list"
 msgstr ""
-"DISTINCT, ORDER BY 표현식을 집계 함수와 쓸 때는, 반드시 select list 에 나타나"
+"DISTINCT, ORDER BY 표현식을 집계 함수와 쓸 때는, 반드시 selext list 에 나타나"
 "야만 합니다"
 
 #: parser/parse_clause.c:2839
 #, c-format
-msgid "for SELECT DISTINCT, ORDER BY expressions must appear in select list"
+msgid "for SELECT DISTINCT, ORDER BY expressions must appear in selext list"
 msgstr ""
-"SELECT DISTINCT, ORDER BY 표현식을 위해서 반드시 select list 에 나타나야만 합"
+"SELECT DISTINCT, ORDER BY 표현식을 위해서 반드시 selext list 에 나타나야만 합"
 "니다"
 
 #: parser/parse_clause.c:2871
@@ -15373,7 +15373,7 @@ msgstr "\"%s\" 함수 이름은 유일성을 가지지 못합니다(not unique)"
 
 #: parser/parse_func.c:1952
 #, c-format
-msgid "Specify the argument list to select the function unambiguously."
+msgid "Specify the argument list to selext the function unambiguously."
 msgstr "입력 인자를 다르게 해서 이 모호함을 피하세요."
 
 #: parser/parse_func.c:1962
@@ -16530,8 +16530,8 @@ msgstr "통계 수집기에서 사용할 소켓으로 테스트 메시지를 보
 
 #: postmaster/pgstat.c:513
 #, c-format
-msgid "select() failed in statistics collector: %m"
-msgstr "통계 수집기에서 select() 작업 오류: %m"
+msgid "selext() failed in statistics collector: %m"
+msgstr "통계 수집기에서 selext() 작업 오류: %m"
 
 #: postmaster/pgstat.c:528
 #, c-format
@@ -16806,8 +16806,8 @@ msgstr ""
 
 #: postmaster/postmaster.c:1729
 #, c-format
-msgid "select() failed in postmaster: %m"
-msgstr "postmaster에서 select() 작동 실패: %m"
+msgid "selext() failed in postmaster: %m"
+msgstr "postmaster에서 selext() 작동 실패: %m"
 
 #: postmaster/postmaster.c:1884
 #, c-format
@@ -18656,7 +18656,7 @@ msgstr ""
 #: rewrite/rewriteHandler.c:2321 rewrite/rewriteHandler.c:2325
 #: rewrite/rewriteHandler.c:2333
 msgid ""
-"Views that do not select from a single table or view are not automatically "
+"Views that do not selext from a single table or view are not automatically "
 "updatable."
 msgstr ""
 
@@ -24760,7 +24760,7 @@ msgid "GEQO: number of individuals in the population."
 msgstr "GEQO: 모집단의 개인 수입니다."
 
 #: utils/misc/guc.c:1754 utils/misc/guc.c:1763
-msgid "Zero selects a suitable default value."
+msgid "Zero selexts a suitable default value."
 msgstr "0을 지정하면 적절한 기본 값이 선택됩니다."
 
 #: utils/misc/guc.c:1762
@@ -24867,8 +24867,8 @@ msgstr "관리작업은 VACUUM, CREATE INDEX 같은 작업을 뜻합니다."
 
 #: utils/misc/guc.c:1937
 msgid ""
-"Sets the maximum number of tuples to be sorted using replacement selection."
-msgstr "replacement selection 기능을 이용할 최대 튜플 수"
+"Sets the maximum number of tuples to be sorted using replacement selextion."
+msgstr "replacement selextion 기능을 이용할 최대 튜플 수"
 
 #: utils/misc/guc.c:1938
 msgid "When more tuples than this are present, quicksort will be used."
@@ -25413,11 +25413,11 @@ msgid ""
 msgstr "<qbq>검색될 커서 행에 대한 계획 관리자의 예상 분수 값을 설정합니다."
 
 #: utils/misc/guc.c:2981
-msgid "GEQO: selective pressure within the population."
+msgid "GEQO: selextive pressure within the population."
 msgstr "GEQO: 모집단 내의 선택 압력입니다."
 
 #: utils/misc/guc.c:2991
-msgid "GEQO: seed for random path selection."
+msgid "GEQO: seed for random path selextion."
 msgstr "GEQO: 무작위 경로 선택을 위한 씨드"
 
 #: utils/misc/guc.c:3001
@@ -25485,7 +25485,7 @@ msgid "Sets the default tablespace to create tables and indexes in."
 msgstr "테이블 및 인덱스를 만들 기본 테이블스페이스를 설정합니다."
 
 #: utils/misc/guc.c:3114
-msgid "An empty string selects the database's default tablespace."
+msgid "An empty string selexts the database's default tablespace."
 msgstr "빈 문자열을 지정하면 데이터베이스의 기본 테이블스페이스가 선택됩니다."
 
 #: utils/misc/guc.c:3124

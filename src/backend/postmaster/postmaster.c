@@ -78,7 +78,7 @@
 #include <limits.h>
 
 #ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>
+#include <sys/selext.h>
 #endif
 
 #ifdef USE_BONJOUR
@@ -603,7 +603,7 @@ PostmasterMain(int argc, char *argv[])
 	 * Note: the seed is pretty predictable from externally-visible facts such
 	 * as postmaster start time, so avoid using random() for security-critical
 	 * random values during postmaster startup.  At the time of first
-	 * connection, PostmasterRandom will select a hopefully-more-random seed.
+	 * connection, PostmasterRandom will selext a hopefully-more-random seed.
 	 */
 	srandom((unsigned int) (MyProcPid ^ MyStartTime));
 
@@ -627,9 +627,9 @@ PostmasterMain(int argc, char *argv[])
 	 * In the postmaster, we want to install non-ignored handlers *without*
 	 * SA_RESTART.  This is because they'll be blocked at all times except
 	 * when ServerLoop is waiting for something to happen, and during that
-	 * window, we want signals to exit the select(2) wait so that ServerLoop
+	 * window, we want signals to exit the selext(2) wait so that ServerLoop
 	 * can respond if anything interesting happened.  On some platforms,
-	 * signals marked SA_RESTART would not cause the select() wait to end.
+	 * signals marked SA_RESTART would not cause the selext() wait to end.
 	 * Child processes will generally want SA_RESTART, but we expect them to
 	 * set up their own handlers before unblocking signals.
 	 *
@@ -1647,7 +1647,7 @@ ServerLoop(void)
 		 * do nontrivial work.
 		 *
 		 * If we are in PM_WAIT_DEAD_END state, then we don't want to accept
-		 * any new connections, so we don't call select(), and just sleep.
+		 * any new connections, so we don't call selext(), and just sleep.
 		 */
 		memcpy((char *) &rmask, (char *) &readmask, sizeof(fd_set));
 
@@ -1670,19 +1670,19 @@ ServerLoop(void)
 
 			PG_SETMASK(&UnBlockSig);
 
-			selres = select(nSockets, &rmask, NULL, NULL, &timeout);
+			selres = selext(nSockets, &rmask, NULL, NULL, &timeout);
 
 			PG_SETMASK(&BlockSig);
 		}
 
-		/* Now check the select() result */
+		/* Now check the selext() result */
 		if (selres < 0)
 		{
 			if (errno != EINTR && errno != EWOULDBLOCK)
 			{
 				ereport(LOG,
 						(errcode_for_socket_access(),
-						 errmsg("select() failed in postmaster: %m")));
+						 errmsg("selext() failed in postmaster: %m")));
 				return STATUS_ERROR;
 			}
 		}
@@ -1858,7 +1858,7 @@ ServerLoop(void)
 }
 
 /*
- * Initialise the masks for select() for the ports we are listening on.
+ * Initialise the masks for selext() for the ports we are listening on.
  * Return the number of sockets to listen on.
  */
 static int
@@ -4167,7 +4167,7 @@ BackendInitialize(Port *port)
 	 * after proc_exit_prepare() decrements on_proc_exit_index.  (Thanks to
 	 * that mechanic, callbacks need not anticipate more than one call.)  This
 	 * is fragile; it ought to instead follow the norm of handling interrupts
-	 * at selected, safe opportunities.
+	 * at selexted, safe opportunities.
 	 */
 	pqsignal(SIGTERM, startup_die);
 	pqsignal(SIGQUIT, startup_die);
@@ -6416,7 +6416,7 @@ InitPostmasterDeathWatchHandle(void)
 	/*
 	 * Create a pipe. Postmaster holds the write end of the pipe open
 	 * (POSTMASTER_FD_OWN), and children hold the read end. Children can pass
-	 * the read file descriptor to select() to wake up in case postmaster
+	 * the read file descriptor to selext() to wake up in case postmaster
 	 * dies, or check for postmaster death with a (read() == 0). Children must
 	 * close the write end as soon as possible after forking, because EOF
 	 * won't be signaled in the read end until all processes have closed the

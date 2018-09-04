@@ -501,7 +501,7 @@ SPI_execute_plan_with_paramlist(SPIPlanPtr plan, ParamListInfo params,
  * This is currently not documented in spi.sgml because it is only intended
  * for use by RI triggers.
  *
- * Passing snapshot == InvalidSnapshot will select the normal behavior of
+ * Passing snapshot == InvalidSnapshot will selext the normal behavior of
  * fetching a new snapshot for each query.
  */
 int
@@ -2268,7 +2268,7 @@ _SPI_execute_plan(SPIPlanPtr plan, ParamListInfo paramLI,
 					 * For historical reasons, if CREATE TABLE AS was spelled
 					 * as SELECT INTO, return a special return code.
 					 */
-					if (ctastmt->is_select_into)
+					if (ctastmt->is_selext_into)
 						res = SPI_OK_SELINTO;
 				}
 				else if (IsA(stmt->utilityStmt, CopyStmt))

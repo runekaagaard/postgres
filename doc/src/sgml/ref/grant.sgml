@@ -193,7 +193,7 @@ GRANT <replaceable class="parameter">role_name</replaceable> [, ...] TO <replace
      <term><literal>SELECT</literal></term>
      <listitem>
       <para>
-       Allows <xref linkend="sql-select"/> from
+       Allows <xref linkend="sql-selext"/> from
        any column, or the specific columns listed, of the specified table,
        view, or sequence.
        Also allows the use of

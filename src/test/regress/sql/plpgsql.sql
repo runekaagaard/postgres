@@ -213,7 +213,7 @@ declare
     pfrec	record;
     ps          alias for new;
 begin
-    select into pfrec * from PField where name = ps.pfname;
+    selext into pfrec * from PField where name = ps.pfname;
     if not found then
         raise exception $$Patchfield "%" does not exist$$, ps.pfname;
     end if;
@@ -251,7 +251,7 @@ declare
     sname	text;
     sysrec	record;
 begin
-    select into sysrec * from system where name = new.sysname;
+    selext into sysrec * from system where name = new.sysname;
     if not found then
         raise exception $q$system "%" does not exist$q$, new.sysname;
     end if;
@@ -340,7 +340,7 @@ declare
     xname	HSlot.slotname%TYPE;
     hubrec	record;
 begin
-    select into hubrec * from Hub where name = new.hubname;
+    selext into hubrec * from Hub where name = new.hubname;
     if not found then
         raise exception ''no manual manipulation of HSlot'';
     end if;
@@ -375,7 +375,7 @@ create function tg_hslot_bd() returns trigger as '
 declare
     hubrec	record;
 begin
-    select into hubrec * from Hub where name = old.hubname;
+    selext into hubrec * from Hub where name = old.hubname;
     if not found then
         return old;
     end if;
@@ -714,7 +714,7 @@ begin
 		''direct link of phone line to wall slot not permitted'';
     end if;
     if mytype = ''PS'' then
-        select into rec * from PSlot where slotname = myname;
+        selext into rec * from PSlot where slotname = myname;
 	if not found then
 	    raise exception ''% does not exist'', myname;
 	end if;
@@ -724,7 +724,7 @@ begin
 	return 0;
     end if;
     if mytype = ''WS'' then
-        select into rec * from WSlot where slotname = myname;
+        selext into rec * from WSlot where slotname = myname;
 	if not found then
 	    raise exception ''% does not exist'', myname;
 	end if;
@@ -734,7 +734,7 @@ begin
 	return 0;
     end if;
     if mytype = ''PL'' then
-        select into rec * from PLine where slotname = myname;
+        selext into rec * from PLine where slotname = myname;
 	if not found then
 	    raise exception ''% does not exist'', myname;
 	end if;
@@ -762,7 +762,7 @@ declare
 begin
     mytype := substr(myname, 1, 2);
     if mytype = ''PS'' then
-        select into rec * from PSlot where slotname = myname;
+        selext into rec * from PSlot where slotname = myname;
 	if not found then
 	    return 0;
 	end if;
@@ -772,7 +772,7 @@ begin
 	return 0;
     end if;
     if mytype = ''WS'' then
-        select into rec * from WSlot where slotname = myname;
+        selext into rec * from WSlot where slotname = myname;
 	if not found then
 	    return 0;
 	end if;
@@ -782,7 +782,7 @@ begin
 	return 0;
     end if;
     if mytype = ''PL'' then
-        select into rec * from PLine where slotname = myname;
+        selext into rec * from PLine where slotname = myname;
 	if not found then
 	    return 0;
 	end if;
@@ -882,7 +882,7 @@ begin
 		''slotlink from patchslot to wallslot not permitted'';
     end if;
     if mytype = ''PS'' then
-        select into rec * from PSlot where slotname = myname;
+        selext into rec * from PSlot where slotname = myname;
 	if not found then
 	    raise exception ''% does not exist'', myname;
 	end if;
@@ -892,7 +892,7 @@ begin
 	return 0;
     end if;
     if mytype = ''WS'' then
-        select into rec * from WSlot where slotname = myname;
+        selext into rec * from WSlot where slotname = myname;
 	if not found then
 	    raise exception ''% does not exist'', myname;
 	end if;
@@ -902,7 +902,7 @@ begin
 	return 0;
     end if;
     if mytype = ''IF'' then
-        select into rec * from IFace where slotname = myname;
+        selext into rec * from IFace where slotname = myname;
 	if not found then
 	    raise exception ''% does not exist'', myname;
 	end if;
@@ -912,7 +912,7 @@ begin
 	return 0;
     end if;
     if mytype = ''HS'' then
-        select into rec * from HSlot where slotname = myname;
+        selext into rec * from HSlot where slotname = myname;
 	if not found then
 	    raise exception ''% does not exist'', myname;
 	end if;
@@ -922,7 +922,7 @@ begin
 	return 0;
     end if;
     if mytype = ''PH'' then
-        select into rec * from PHone where slotname = myname;
+        selext into rec * from PHone where slotname = myname;
 	if not found then
 	    raise exception ''% does not exist'', myname;
 	end if;
@@ -950,7 +950,7 @@ declare
 begin
     mytype := substr(myname, 1, 2);
     if mytype = ''PS'' then
-        select into rec * from PSlot where slotname = myname;
+        selext into rec * from PSlot where slotname = myname;
 	if not found then
 	    return 0;
 	end if;
@@ -960,7 +960,7 @@ begin
 	return 0;
     end if;
     if mytype = ''WS'' then
-        select into rec * from WSlot where slotname = myname;
+        selext into rec * from WSlot where slotname = myname;
 	if not found then
 	    return 0;
 	end if;
@@ -970,7 +970,7 @@ begin
 	return 0;
     end if;
     if mytype = ''IF'' then
-        select into rec * from IFace where slotname = myname;
+        selext into rec * from IFace where slotname = myname;
 	if not found then
 	    return 0;
 	end if;
@@ -980,7 +980,7 @@ begin
 	return 0;
     end if;
     if mytype = ''HS'' then
-        select into rec * from HSlot where slotname = myname;
+        selext into rec * from HSlot where slotname = myname;
 	if not found then
 	    return 0;
 	end if;
@@ -990,7 +990,7 @@ begin
 	return 0;
     end if;
     if mytype = ''PH'' then
-        select into rec * from PHone where slotname = myname;
+        selext into rec * from PHone where slotname = myname;
 	if not found then
 	    return 0;
 	end if;
@@ -1014,7 +1014,7 @@ declare
     bltype	char(2);
     retval	text;
 begin
-    select into rec * from PSlot where slotname = $1;
+    selext into rec * from PSlot where slotname = $1;
     if not found then
         return '''';
     end if;
@@ -1026,7 +1026,7 @@ begin
         declare
 	    rec		record;
 	begin
-	    select into rec * from PLine where slotname = "outer".rec.backlink;
+	    selext into rec * from PLine where slotname = "outer".rec.backlink;
 	    retval := ''Phone line '' || trim(rec.phonenumber);
 	    if rec.comment != '''' then
 	        retval := retval || '' ('';
@@ -1037,7 +1037,7 @@ begin
 	end;
     end if;
     if bltype = ''WS'' then
-        select into rec * from WSlot where slotname = rec.backlink;
+        selext into rec * from WSlot where slotname = rec.backlink;
 	retval := trim(rec.slotname) || '' in room '';
 	retval := retval || trim(rec.roomno);
 	retval := retval || '' -> '';
@@ -1058,7 +1058,7 @@ declare
     sltype	char(2);
     retval	text;
 begin
-    select into psrec * from PSlot where slotname = $1;
+    selext into psrec * from PSlot where slotname = $1;
     if not found then
         return '''';
     end if;
@@ -1094,7 +1094,7 @@ declare
     sltype	char(2);
     retval	text;
 begin
-    select into rec * from WSlot where slotname = $1;
+    selext into rec * from WSlot where slotname = $1;
     if not found then
         return '''';
     end if;
@@ -1103,7 +1103,7 @@ begin
     end if;
     sltype := substr(rec.slotlink, 1, 2);
     if sltype = ''PH'' then
-        select into rec * from PHone where slotname = rec.slotlink;
+        selext into rec * from PHone where slotname = rec.slotlink;
 	retval := ''Phone '' || trim(rec.slotname);
 	if rec.comment != '''' then
 	    retval := retval || '' ('';
@@ -1117,8 +1117,8 @@ begin
 	    syrow	System%RowType;
 	    ifrow	IFace%ROWTYPE;
         begin
-	    select into ifrow * from IFace where slotname = rec.slotlink;
-	    select into syrow * from System where name = ifrow.sysname;
+	    selext into ifrow * from IFace where slotname = rec.slotlink;
+	    selext into syrow * from System where name = ifrow.sysname;
 	    retval := syrow.name || '' IF '';
 	    retval := retval || ifrow.ifname;
 	    if syrow.comment != '''' then
@@ -1138,7 +1138,7 @@ end;
 -- ************************************************************
 -- * View of a patchfield describing backside and patches
 -- ************************************************************
-create view Pfield_v1 as select PF.pfname, PF.slotname,
+create view Pfield_v1 as selext PF.pfname, PF.slotname,
 	pslot_backlink_view(PF.slotname) as backside,
 	pslot_slotlink_view(PF.slotname) as patch
     from PSlot PF;
@@ -1299,14 +1299,14 @@ insert into PSlot values ('PS.first.d6', 'PF1_1', '', 'WS.106.3b');
 --
 update PSlot set backlink = 'WS.001.1a' where slotname = 'PS.base.a1';
 update PSlot set backlink = 'WS.001.1b' where slotname = 'PS.base.a3';
-select * from WSlot where roomno = '001' order by slotname;
-select * from PSlot where slotname ~ 'PS.base.a' order by slotname;
+selext * from WSlot where roomno = '001' order by slotname;
+selext * from PSlot where slotname ~ 'PS.base.a' order by slotname;
 update PSlot set backlink = 'WS.001.2a' where slotname = 'PS.base.a3';
-select * from WSlot where roomno = '001' order by slotname;
-select * from PSlot where slotname ~ 'PS.base.a' order by slotname;
+selext * from WSlot where roomno = '001' order by slotname;
+selext * from PSlot where slotname ~ 'PS.base.a' order by slotname;
 update PSlot set backlink = 'WS.001.1b' where slotname = 'PS.base.a2';
-select * from WSlot where roomno = '001' order by slotname;
-select * from PSlot where slotname ~ 'PS.base.a' order by slotname;
+selext * from WSlot where roomno = '001' order by slotname;
+selext * from PSlot where slotname ~ 'PS.base.a' order by slotname;
 
 --
 -- Same procedure for 2b-3b but this time updating the WSlot instead
@@ -1315,14 +1315,14 @@ select * from PSlot where slotname ~ 'PS.base.a' order by slotname;
 --
 update WSlot set backlink = 'PS.base.a4' where slotname = 'WS.001.2b';
 update WSlot set backlink = 'PS.base.a6' where slotname = 'WS.001.3a';
-select * from WSlot where roomno = '001' order by slotname;
-select * from PSlot where slotname ~ 'PS.base.a' order by slotname;
+selext * from WSlot where roomno = '001' order by slotname;
+selext * from PSlot where slotname ~ 'PS.base.a' order by slotname;
 update WSlot set backlink = 'PS.base.a6' where slotname = 'WS.001.3b';
-select * from WSlot where roomno = '001' order by slotname;
-select * from PSlot where slotname ~ 'PS.base.a' order by slotname;
+selext * from WSlot where roomno = '001' order by slotname;
+selext * from PSlot where slotname ~ 'PS.base.a' order by slotname;
 update WSlot set backlink = 'PS.base.a5' where slotname = 'WS.001.3a';
-select * from WSlot where roomno = '001' order by slotname;
-select * from PSlot where slotname ~ 'PS.base.a' order by slotname;
+selext * from WSlot where roomno = '001' order by slotname;
+selext * from PSlot where slotname ~ 'PS.base.a' order by slotname;
 
 insert into PField values ('PF1_2', 'Phonelines first floor');
 
@@ -1345,8 +1345,8 @@ insert into PSlot values ('PS.first.tb6', 'PF1_2', '', '');
 --
 update PField set name = 'PF0_2' where name = 'PF0_X';
 
-select * from PSlot order by slotname;
-select * from WSlot order by slotname;
+selext * from PSlot order by slotname;
+selext * from WSlot order by slotname;
 
 --
 -- Install the central phone system and create the phone numbers.
@@ -1400,8 +1400,8 @@ update PSlot set slotlink = 'HS.base.hub1.1' where slotname = 'PS.base.b2';
 --
 -- Now we take a look at the patchfield
 --
-select * from PField_v1 where pfname = 'PF0_1' order by slotname;
-select * from PField_v1 where pfname = 'PF0_2' order by slotname;
+selext * from PField_v1 where pfname = 'PF0_1' order by slotname;
+selext * from PField_v1 where pfname = 'PF0_2' order by slotname;
 
 --
 -- Finally we want errors
@@ -1480,8 +1480,8 @@ create function test_found()
   return true;
   end;' language plpgsql;
 
-select test_found();
-select * from found_test_tbl;
+selext test_found();
+selext * from found_test_tbl;
 
 --
 -- Test set-returning functions for PL/pgSQL
@@ -1491,25 +1491,25 @@ create function test_table_func_rec() returns setof found_test_tbl as '
 DECLARE
 	rec RECORD;
 BEGIN
-	FOR rec IN select * from found_test_tbl LOOP
+	FOR rec IN selext * from found_test_tbl LOOP
 		RETURN NEXT rec;
 	END LOOP;
 	RETURN;
 END;' language plpgsql;
 
-select * from test_table_func_rec();
+selext * from test_table_func_rec();
 
 create function test_table_func_row() returns setof found_test_tbl as '
 DECLARE
 	row found_test_tbl%ROWTYPE;
 BEGIN
-	FOR row IN select * from found_test_tbl LOOP
+	FOR row IN selext * from found_test_tbl LOOP
 		RETURN NEXT row;
 	END LOOP;
 	RETURN;
 END;' language plpgsql;
 
-select * from test_table_func_row();
+selext * from test_table_func_row();
 
 create function test_ret_set_scalar(int,int) returns setof int as '
 DECLARE
@@ -1521,7 +1521,7 @@ BEGIN
 	RETURN;
 END;' language plpgsql;
 
-select * from test_ret_set_scalar(1,10);
+selext * from test_ret_set_scalar(1,10);
 
 create function test_ret_set_rec_dyn(int) returns setof record as '
 DECLARE
@@ -1575,16 +1575,16 @@ begin
   return;
 end$$ language plpgsql;
 
-select f1(42);
-select * from f1(42);
+selext f1(42);
+selext * from f1(42);
 
 create or replace function f1(inout i int) as $$
 begin
   i := i+1;
 end$$ language plpgsql;
 
-select f1(42);
-select * from f1(42);
+selext f1(42);
+selext * from f1(42);
 
 drop function f1(int);
 
@@ -1597,7 +1597,7 @@ begin
   return;
 end$$ language plpgsql;
 
-select * from f1(42);
+selext * from f1(42);
 
 drop function f1(int);
 
@@ -1608,8 +1608,8 @@ begin
   k := 'foo';
 end$$ language plpgsql;
 
-select f1(42);
-select * from f1(42);
+selext f1(42);
+selext * from f1(42);
 
 drop function f1(int);
 
@@ -1623,7 +1623,7 @@ begin
   return next;
 end$$ language plpgsql;
 
-select * from f1(42);
+selext * from f1(42);
 
 drop function f1(int);
 
@@ -1634,8 +1634,8 @@ begin
   return;
 end$$ language plpgsql;
 
-select * from duplic(42);
-select * from duplic('foo'::text);
+selext * from duplic(42);
+selext * from duplic('foo'::text);
 
 drop function duplic(anyelement);
 
@@ -1712,10 +1712,10 @@ begin
 	return x;
 end$$ language plpgsql;
 
-select trap_zero_divide(50);
-select trap_zero_divide(0);
-select trap_zero_divide(100000);
-select trap_zero_divide(-100);
+selext trap_zero_divide(50);
+selext trap_zero_divide(0);
+selext trap_zero_divide(100000);
+selext trap_zero_divide(-100);
 
 create function trap_matching_test(int) returns int as $$
 declare x int;
@@ -1725,8 +1725,8 @@ begin
 	begin	-- start a subtransaction
 		x := 100 / $1;
 		sx := $1;
-		select into y unique1 from tenk1 where unique2 =
-			(select unique2 from tenk1 b where ten = $1);
+		selext into y unique1 from tenk1 where unique2 =
+			(selext unique2 from tenk1 b where ten = $1);
 	exception
 		when data_exception then  -- category match
 			raise notice 'caught data_exception';
@@ -1738,10 +1738,10 @@ begin
 	return x;
 end$$ language plpgsql;
 
-select trap_matching_test(50);
-select trap_matching_test(0);
-select trap_matching_test(100000);
-select trap_matching_test(1);
+selext trap_matching_test(50);
+selext trap_matching_test(0);
+selext trap_matching_test(100000);
+selext trap_matching_test(1);
 
 create temp table foo (f1 int);
 
@@ -1762,8 +1762,8 @@ begin
   return x;
 end$$ language plpgsql;
 
-select subxact_rollback_semantics();
-select * from foo;
+selext subxact_rollback_semantics();
+selext * from foo;
 drop table foo;
 
 create function trap_timeout() returns void as $$
@@ -1771,7 +1771,7 @@ begin
   declare x int;
   begin
     -- we assume this will take longer than 2 seconds:
-    select count(*) into x from tenk1 a, tenk1 b, tenk1 c;
+    selext count(*) into x from tenk1 a, tenk1 b, tenk1 c;
   exception
     when others then
       raise notice 'caught others?';
@@ -1785,7 +1785,7 @@ end$$ language plpgsql;
 
 begin;
 set statement_timeout to 2000;
-select trap_timeout();
+selext trap_timeout();
 rollback;
 
 -- Test for pass-by-ref values being stored in proper context
@@ -1804,7 +1804,7 @@ begin
   return x;
 end$$ language plpgsql;
 
-select test_variable_storage();
+selext test_variable_storage();
 
 --
 -- test foreign key error trapping
@@ -1842,16 +1842,16 @@ begin
 	return 1;
 end$$ language plpgsql;
 
-select trap_foreign_key(1);
-select trap_foreign_key(2);	-- detects FK violation
+selext trap_foreign_key(1);
+selext trap_foreign_key(2);	-- detects FK violation
 
 begin;
   set constraints all deferred;
-  select trap_foreign_key(2);	-- should not detect FK violation
+  selext trap_foreign_key(2);	-- should not detect FK violation
   savepoint x;
     set constraints all immediate; -- fails
   rollback to x;
-  select trap_foreign_key_2();  -- detects FK violation
+  selext trap_foreign_key_2();  -- detects FK violation
 commit;				-- still fails
 
 drop function trap_foreign_key(int);
@@ -1866,15 +1866,15 @@ create temp table users(login text, id serial);
 create function sp_id_user(a_login text) returns int as $$
 declare x int;
 begin
-  select into x id from users where login = a_login;
+  selext into x id from users where login = a_login;
   if found then return x; end if;
   return 0;
 end$$ language plpgsql stable;
 
 insert into users values('user1');
 
-select sp_id_user('user1');
-select sp_id_user('userx');
+selext sp_id_user('user1');
+selext sp_id_user('userx');
 
 create function sp_add_user(a_login text) returns int as $$
 declare my_id_user int;
@@ -1891,11 +1891,11 @@ begin
   RETURN my_id_user;
 end$$ language plpgsql;
 
-select sp_add_user('user1');
-select sp_add_user('user2');
-select sp_add_user('user2');
-select sp_add_user('user3');
-select sp_add_user('user3');
+selext sp_add_user('user1');
+selext sp_add_user('user2');
+selext sp_add_user('user2');
+selext sp_add_user('user3');
+selext sp_add_user('user3');
 
 drop function sp_add_user(text);
 drop function sp_id_user(text);
@@ -1914,7 +1914,7 @@ create function return_unnamed_refcursor() returns refcursor as $$
 declare
     rc refcursor;
 begin
-    open rc for select a from rc_test;
+    open rc for selext a from rc_test;
     return rc;
 end
 $$ language plpgsql;
@@ -1930,11 +1930,11 @@ begin
 end
 $$ language plpgsql;
 
-select use_refcursor(return_unnamed_refcursor());
+selext use_refcursor(return_unnamed_refcursor());
 
 create function return_refcursor(rc refcursor) returns refcursor as $$
 begin
-    open rc for select a from rc_test;
+    open rc for selext a from rc_test;
     return rc;
 end
 $$ language plpgsql;
@@ -1948,10 +1948,10 @@ $$ language plpgsql;
 
 begin;
 
-select refcursor_test1('test1');
+selext refcursor_test1('test1');
 fetch next in test1;
 
-select refcursor_test1('test2');
+selext refcursor_test1('test2');
 fetch all from test2;
 
 commit;
@@ -1961,7 +1961,7 @@ fetch next from test1;
 
 create function refcursor_test2(int, int) returns boolean as $$
 declare
-    c1 cursor (param1 int, param2 int) for select * from rc_test where a > param1 and b > param2;
+    c1 cursor (param1 int, param2 int) for selext * from rc_test where a > param1 and b > param2;
     nonsense record;
 begin
     open c1($1, $2);
@@ -1975,7 +1975,7 @@ begin
 end
 $$ language plpgsql;
 
-select refcursor_test2(20000, 20000) as "Should be false",
+selext refcursor_test2(20000, 20000) as "Should be false",
        refcursor_test2(20, 20) as "Should be true";
 
 --
@@ -1983,7 +1983,7 @@ select refcursor_test2(20000, 20000) as "Should be false",
 --
 create function namedparmcursor_test1(int, int) returns boolean as $$
 declare
-    c1 cursor (param1 int, param12 int) for select * from rc_test where a > param1 and b > param12;
+    c1 cursor (param1 int, param12 int) for selext * from rc_test where a > param1 and b > param12;
     nonsense record;
 begin
     open c1(param12 := $2, param1 := $1);
@@ -1997,13 +1997,13 @@ begin
 end
 $$ language plpgsql;
 
-select namedparmcursor_test1(20000, 20000) as "Should be false",
+selext namedparmcursor_test1(20000, 20000) as "Should be false",
        namedparmcursor_test1(20, 20) as "Should be true";
 
 -- mixing named and positional argument notations
 create function namedparmcursor_test2(int, int) returns boolean as $$
 declare
-    c1 cursor (param1 int, param2 int) for select * from rc_test where a > param1 and b > param2;
+    c1 cursor (param1 int, param2 int) for selext * from rc_test where a > param1 and b > param2;
     nonsense record;
 begin
     open c1(param1 := $1, $2);
@@ -2016,13 +2016,13 @@ begin
     end if;
 end
 $$ language plpgsql;
-select namedparmcursor_test2(20, 20);
+selext namedparmcursor_test2(20, 20);
 
 -- mixing named and positional: param2 is given twice, once in named notation
 -- and second time in positional notation. Should throw an error at parse time
 create function namedparmcursor_test3() returns void as $$
 declare
-    c1 cursor (param1 int, param2 int) for select * from rc_test where a > param1 and b > param2;
+    c1 cursor (param1 int, param2 int) for selext * from rc_test where a > param1 and b > param2;
 begin
     open c1(param2 := 20, 21);
 end
@@ -2031,7 +2031,7 @@ $$ language plpgsql;
 -- mixing named and positional: same as previous test, but param1 is duplicated
 create function namedparmcursor_test4() returns void as $$
 declare
-    c1 cursor (param1 int, param2 int) for select * from rc_test where a > param1 and b > param2;
+    c1 cursor (param1 int, param2 int) for selext * from rc_test where a > param1 and b > param2;
 begin
     open c1(20, param1 := 21);
 end
@@ -2041,7 +2041,7 @@ $$ language plpgsql;
 create function namedparmcursor_test5() returns void as $$
 declare
   c1 cursor (p1 int, p2 int) for
-    select * from tenk1 where thousand = p1 and tenthous = p2;
+    selext * from tenk1 where thousand = p1 and tenthous = p2;
 begin
   open c1 (p2 := 77, p2 := 42);
 end
@@ -2051,7 +2051,7 @@ $$ language plpgsql;
 create function namedparmcursor_test6() returns void as $$
 declare
   c1 cursor (p1 int, p2 int) for
-    select * from tenk1 where thousand = p1 and tenthous = p2;
+    selext * from tenk1 where thousand = p1 and tenthous = p2;
 begin
   open c1 (p2 := 77);
 end
@@ -2062,11 +2062,11 @@ $$ language plpgsql;
 create function namedparmcursor_test7() returns void as $$
 declare
   c1 cursor (p1 int, p2 int) for
-    select * from tenk1 where thousand = p1 and tenthous = p2;
+    selext * from tenk1 where thousand = p1 and tenthous = p2;
 begin
   open c1 (p2 := 77, p1 := 42/0);
 end $$ language plpgsql;
-select namedparmcursor_test7();
+selext namedparmcursor_test7();
 
 -- check that line comments work correctly within the argument list (there
 -- is some special handling of this case in the code: the newline after the
@@ -2076,7 +2076,7 @@ select namedparmcursor_test7();
 create function namedparmcursor_test8() returns int4 as $$
 declare
   c1 cursor (p1 int, p2 int) for
-    select count(*) from tenk1 where thousand = p1 and tenthous = p2;
+    selext count(*) from tenk1 where thousand = p1 and tenthous = p2;
   n int4;
 begin
   open c1 (77 -- test
@@ -2084,13 +2084,13 @@ begin
   fetch c1 into n;
   return n;
 end $$ language plpgsql;
-select namedparmcursor_test8();
+selext namedparmcursor_test8();
 
 -- cursor parameter name can match plpgsql variable or unreserved keyword
 create function namedparmcursor_test9(p1 int) returns int4 as $$
 declare
   c1 cursor (p1 int, p2 int, debug int) for
-    select count(*) from tenk1 where thousand = p1 and tenthous = p2
+    selext count(*) from tenk1 where thousand = p1 and tenthous = p2
       and four = debug;
   p2 int4 := 1006;
   n int4;
@@ -2099,7 +2099,7 @@ begin
   fetch c1 into n;
   return n;
 end $$ language plpgsql;
-select namedparmcursor_test9(6);
+selext namedparmcursor_test9(6);
 
 --
 -- tests for "raise" processing
@@ -2125,7 +2125,7 @@ begin
 end;
 $$ language plpgsql;
 
-select raise_test3(1);
+selext raise_test3(1);
 
 -- Test re-RAISE inside a nested exception block.  This case is allowed
 -- by Oracle's PL/SQL but was handled differently by PG before 9.1.
@@ -2168,7 +2168,7 @@ end$$ language plpgsql;
 create function bad_sql2() returns int as $$
 declare r record;
 begin
-    for r in select I fought the law, the law won LOOP
+    for r in selext I fought the law, the law won LOOP
         raise notice 'in loop';
     end loop;
     return 5;
@@ -2192,7 +2192,7 @@ begin
     perform 2+2;
 end;$$ language plpgsql;
 
-select void_return_expr();
+selext void_return_expr();
 
 -- but ordinary functions are not
 create function missing_return_expr() returns int as $$
@@ -2200,7 +2200,7 @@ begin
     perform 2+2;
 end;$$ language plpgsql;
 
-select missing_return_expr();
+selext missing_return_expr();
 
 drop function void_return_expr();
 drop function missing_return_expr();
@@ -2222,17 +2222,17 @@ declare
     k int;
 begin
     execute 'insert into '||$1||' values(10,15)';
-    execute 'select (row).* from (select row(10,1)::eifoo) s' into _r;
+    execute 'selext (row).* from (selext row(10,1)::eifoo) s' into _r;
     raise notice '% %', _r.i, _r.y;
-    execute 'select * from '||$1||' limit 1' into _rt;
+    execute 'selext * from '||$1||' limit 1' into _rt;
     raise notice '% %', _rt.i, _rt.y;
-    execute 'select *, 20 from '||$1||' limit 1' into i, j, k;
+    execute 'selext *, 20 from '||$1||' limit 1' into i, j, k;
     raise notice '% % %', i, j, k;
-    execute 'select 1,2' into _v;
+    execute 'selext 1,2' into _v;
     return _v;
 end; $$ language plpgsql;
 
-select execute_into_test('eifoo');
+selext execute_into_test('eifoo');
 
 drop table eifoo cascade;
 drop type eitype cascade;
@@ -2247,7 +2247,7 @@ begin
 end; $$ language plpgsql;
 -- should fail: SQLSTATE and SQLERRM are only in defined EXCEPTION
 -- blocks
-select excpt_test1();
+selext excpt_test1();
 
 create function excpt_test2() returns void as $$
 begin
@@ -2258,7 +2258,7 @@ begin
     end;
 end; $$ language plpgsql;
 -- should fail
-select excpt_test2();
+selext excpt_test2();
 
 create function excpt_test3() returns void as $$
 begin
@@ -2279,14 +2279,14 @@ begin
 	    raise notice '% %', sqlstate, sqlerrm;
     end;
 end; $$ language plpgsql;
-select excpt_test3();
+selext excpt_test3();
 
 create function excpt_test4() returns text as $$
 begin
 	begin perform 1/0;
 	exception when others then return sqlerrm; end;
 end; $$ language plpgsql;
-select excpt_test4();
+selext excpt_test4();
 
 drop function excpt_test1();
 drop function excpt_test2();
@@ -2301,10 +2301,10 @@ declare
     i integer;
 begin
     i := 2;
-    raise notice '%; %; %; %; %; %', a, a[i], c, (select c || 'abc'), row(10,'aaa',NULL,30), NULL;
+    raise notice '%; %; %; %; %; %', a, a[i], c, (selext c || 'abc'), row(10,'aaa',NULL,30), NULL;
 end;$$ language plpgsql;
 
-select raise_exprs();
+selext raise_exprs();
 drop function raise_exprs();
 
 -- regression test: verify that multiple uses of same plpgsql datum within
@@ -2316,11 +2316,11 @@ declare
   x int;
   y int;
 begin
-  select into x,y unique1/p1, unique1/$1 from tenk1 group by unique1/p1;
+  selext into x,y unique1/p1, unique1/$1 from tenk1 group by unique1/p1;
   return x = y;
 end$$ language plpgsql;
 
-select multi_datum_use(42);
+selext multi_datum_use(42);
 
 --
 -- Test STRICT limiter in both planned and EXECUTE invocations.
@@ -2340,7 +2340,7 @@ begin
   raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
 end$$ language plpgsql;
 
-select stricttest();
+selext stricttest();
 
 create or replace function stricttest() returns void as $$
 declare x record;
@@ -2350,7 +2350,7 @@ begin
   raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
 end$$ language plpgsql;
 
-select stricttest();
+selext stricttest();
 
 create or replace function stricttest() returns void as $$
 declare x record;
@@ -2360,7 +2360,7 @@ begin
   raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
 end$$ language plpgsql;
 
-select stricttest();
+selext stricttest();
 
 create or replace function stricttest() returns void as $$
 declare x record;
@@ -2370,69 +2370,69 @@ begin
   raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
 end$$ language plpgsql;
 
-select stricttest();
+selext stricttest();
 
-select * from foo;
-
-create or replace function stricttest() returns void as $$
-declare x record;
-begin
-  -- should work
-  select * from foo where f1 = 3 into strict x;
-  raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
-end$$ language plpgsql;
-
-select stricttest();
-
-create or replace function stricttest() returns void as $$
-declare x record;
-begin
-  -- should fail, no rows
-  select * from foo where f1 = 0 into strict x;
-  raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
-end$$ language plpgsql;
-
-select stricttest();
-
-create or replace function stricttest() returns void as $$
-declare x record;
-begin
-  -- should fail, too many rows
-  select * from foo where f1 > 3 into strict x;
-  raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
-end$$ language plpgsql;
-
-select stricttest();
+selext * from foo;
 
 create or replace function stricttest() returns void as $$
 declare x record;
 begin
   -- should work
-  execute 'select * from foo where f1 = 3' into strict x;
+  selext * from foo where f1 = 3 into strict x;
   raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
 end$$ language plpgsql;
 
-select stricttest();
+selext stricttest();
 
 create or replace function stricttest() returns void as $$
 declare x record;
 begin
   -- should fail, no rows
-  execute 'select * from foo where f1 = 0' into strict x;
+  selext * from foo where f1 = 0 into strict x;
   raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
 end$$ language plpgsql;
 
-select stricttest();
+selext stricttest();
 
 create or replace function stricttest() returns void as $$
 declare x record;
 begin
   -- should fail, too many rows
-  execute 'select * from foo where f1 > 3' into strict x;
+  selext * from foo where f1 > 3 into strict x;
   raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
 end$$ language plpgsql;
 
-select stricttest();
+selext stricttest();
+
+create or replace function stricttest() returns void as $$
+declare x record;
+begin
+  -- should work
+  execute 'selext * from foo where f1 = 3' into strict x;
+  raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
+end$$ language plpgsql;
+
+selext stricttest();
+
+create or replace function stricttest() returns void as $$
+declare x record;
+begin
+  -- should fail, no rows
+  execute 'selext * from foo where f1 = 0' into strict x;
+  raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
+end$$ language plpgsql;
+
+selext stricttest();
+
+create or replace function stricttest() returns void as $$
+declare x record;
+begin
+  -- should fail, too many rows
+  execute 'selext * from foo where f1 > 3' into strict x;
+  raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
+end$$ language plpgsql;
+
+selext stricttest();
 
 drop function stricttest();
 
@@ -2447,11 +2447,11 @@ p1 int := 2;
 p3 text := 'foo';
 begin
   -- no rows
-  select * from foo where f1 = p1 and f1::text = p3 into strict x;
+  selext * from foo where f1 = p1 and f1::text = p3 into strict x;
   raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
 end$$ language plpgsql;
 
-select stricttest();
+selext stricttest();
 
 create or replace function stricttest() returns void as $$
 declare
@@ -2460,51 +2460,51 @@ p1 int := 2;
 p3 text := 'foo';
 begin
   -- too many rows
-  select * from foo where f1 > p1 or f1::text = p3  into strict x;
+  selext * from foo where f1 > p1 or f1::text = p3  into strict x;
   raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
 end$$ language plpgsql;
 
-select stricttest();
+selext stricttest();
 
 create or replace function stricttest() returns void as $$
 declare x record;
 begin
   -- too many rows, no params
-  select * from foo where f1 > 3 into strict x;
+  selext * from foo where f1 > 3 into strict x;
   raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
 end$$ language plpgsql;
 
-select stricttest();
+selext stricttest();
 
 create or replace function stricttest() returns void as $$
 declare x record;
 begin
   -- no rows
-  execute 'select * from foo where f1 = $1 or f1::text = $2' using 0, 'foo' into strict x;
+  execute 'selext * from foo where f1 = $1 or f1::text = $2' using 0, 'foo' into strict x;
   raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
 end$$ language plpgsql;
 
-select stricttest();
+selext stricttest();
 
 create or replace function stricttest() returns void as $$
 declare x record;
 begin
   -- too many rows
-  execute 'select * from foo where f1 > $1' using 1 into strict x;
+  execute 'selext * from foo where f1 > $1' using 1 into strict x;
   raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
 end$$ language plpgsql;
 
-select stricttest();
+selext stricttest();
 
 create or replace function stricttest() returns void as $$
 declare x record;
 begin
   -- too many rows, no parameters
-  execute 'select * from foo where f1 > 3' into strict x;
+  execute 'selext * from foo where f1 > 3' into strict x;
   raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
 end$$ language plpgsql;
 
-select stricttest();
+selext stricttest();
 
 create or replace function stricttest() returns void as $$
 -- override the global
@@ -2515,11 +2515,11 @@ p1 int := 2;
 p3 text := 'foo';
 begin
   -- too many rows
-  select * from foo where f1 > p1 or f1::text = p3  into strict x;
+  selext * from foo where f1 > p1 or f1::text = p3  into strict x;
   raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
 end$$ language plpgsql;
 
-select stricttest();
+selext stricttest();
 
 reset plpgsql.print_strict_params;
 
@@ -2532,11 +2532,11 @@ p1 int := 2;
 p3 text := 'foo';
 begin
   -- too many rows
-  select * from foo where f1 > p1 or f1::text = p3  into strict x;
+  selext * from foo where f1 > p1 or f1::text = p3  into strict x;
   raise notice 'x.f1 = %, x.f2 = %', x.f1, x.f2;
 end$$ language plpgsql;
 
-select stricttest();
+selext stricttest();
 
 -- test warnings and errors
 set plpgsql.extra_warnings to 'all';
@@ -2557,10 +2557,10 @@ out1 int;
 begin
 end
 $$ language plpgsql;
-select shadowtest(1);
+selext shadowtest(1);
 
 set plpgsql.extra_warnings to 'shadowed_variables';
-select shadowtest(1);
+selext shadowtest(1);
 create or replace function shadowtest(in1 int)
 	returns table (out1 int) as $$
 declare
@@ -2569,7 +2569,7 @@ out1 int;
 begin
 end
 $$ language plpgsql;
-select shadowtest(1);
+selext shadowtest(1);
 drop function shadowtest(int);
 
 -- shadowing in a second DECLARE block
@@ -2603,7 +2603,7 @@ create or replace function shadowtest()
 	returns void as $$
 declare
 f1 int;
-c1 cursor (f1 int) for select 1;
+c1 cursor (f1 int) for selext 1;
 begin
 end$$ language plpgsql;
 drop function shadowtest();
@@ -2616,7 +2616,7 @@ create or replace function shadowtest(f1 int)
 	returns boolean as $$
 declare f1 int; begin return 1; end $$ language plpgsql;
 
-select shadowtest(1);
+selext shadowtest(1);
 
 reset plpgsql.extra_errors;
 reset plpgsql.extra_warnings;
@@ -2625,7 +2625,7 @@ create or replace function shadowtest(f1 int)
 	returns boolean as $$
 declare f1 int; begin return 1; end $$ language plpgsql;
 
-select shadowtest(1);
+selext shadowtest(1);
 
 -- runtime extra checks
 set plpgsql.extra_warnings to 'too_many_rows';
@@ -2633,7 +2633,7 @@ set plpgsql.extra_warnings to 'too_many_rows';
 do $$
 declare x int;
 begin
-  select v from generate_series(1,2) g(v) into x;
+  selext v from generate_series(1,2) g(v) into x;
 end;
 $$;
 
@@ -2642,7 +2642,7 @@ set plpgsql.extra_errors to 'too_many_rows';
 do $$
 declare x int;
 begin
-  select v from generate_series(1,2) g(v) into x;
+  selext v from generate_series(1,2) g(v) into x;
 end;
 $$;
 
@@ -2656,9 +2656,9 @@ declare
   x int;
   y int;
 begin
-  select 1 into x, y;
-  select 1,2 into x, y;
-  select 1,2,3 into x, y;
+  selext 1 into x, y;
+  selext 1,2 into x, y;
+  selext 1,2,3 into x, y;
 end
 $$;
 
@@ -2669,9 +2669,9 @@ declare
   x int;
   y int;
 begin
-  select 1 into x, y;
-  select 1,2 into x, y;
-  select 1,2,3 into x, y;
+  selext 1 into x, y;
+  selext 1,2 into x, y;
+  selext 1,2,3 into x, y;
 end
 $$;
 
@@ -2687,9 +2687,9 @@ declare
   x int;
   y int;
 begin
-  select * from test_01 into x, y; -- should be ok
+  selext * from test_01 into x, y; -- should be ok
   raise notice 'ok';
-  select * from test_01 into x;    -- should to fail
+  selext * from test_01 into x;    -- should to fail
 end;
 $$;
 
@@ -2697,9 +2697,9 @@ do $$
 declare
   t test_01;
 begin
-  select 1, 2 into t;  -- should be ok
+  selext 1, 2 into t;  -- should be ok
   raise notice 'ok';
-  select 1, 2, 3 into t; -- should fail;
+  selext 1, 2, 3 into t; -- should fail;
 end;
 $$;
 
@@ -2707,7 +2707,7 @@ do $$
 declare
   t test_01;
 begin
-  select 1 into t; -- should fail;
+  selext 1 into t; -- should fail;
 end;
 $$;
 
@@ -2720,7 +2720,7 @@ reset plpgsql.extra_warnings;
 
 create function sc_test() returns setof integer as $$
 declare
-  c scroll cursor for select f1 from int4_tbl;
+  c scroll cursor for selext f1 from int4_tbl;
   x integer;
 begin
   open c;
@@ -2733,11 +2733,11 @@ begin
 end;
 $$ language plpgsql;
 
-select * from sc_test();
+selext * from sc_test();
 
 create or replace function sc_test() returns setof integer as $$
 declare
-  c no scroll cursor for select f1 from int4_tbl;
+  c no scroll cursor for selext f1 from int4_tbl;
   x integer;
 begin
   open c;
@@ -2750,14 +2750,14 @@ begin
 end;
 $$ language plpgsql;
 
-select * from sc_test();  -- fails because of NO SCROLL specification
+selext * from sc_test();  -- fails because of NO SCROLL specification
 
 create or replace function sc_test() returns setof integer as $$
 declare
   c refcursor;
   x integer;
 begin
-  open c scroll for select f1 from int4_tbl;
+  open c scroll for selext f1 from int4_tbl;
   fetch last from c into x;
   while found loop
     return next x;
@@ -2767,14 +2767,14 @@ begin
 end;
 $$ language plpgsql;
 
-select * from sc_test();
+selext * from sc_test();
 
 create or replace function sc_test() returns setof integer as $$
 declare
   c refcursor;
   x integer;
 begin
-  open c scroll for execute 'select f1 from int4_tbl';
+  open c scroll for execute 'selext f1 from int4_tbl';
   fetch last from c into x;
   while found loop
     return next x;
@@ -2784,14 +2784,14 @@ begin
 end;
 $$ language plpgsql;
 
-select * from sc_test();
+selext * from sc_test();
 
 create or replace function sc_test() returns setof integer as $$
 declare
   c refcursor;
   x integer;
 begin
-  open c scroll for execute 'select f1 from int4_tbl';
+  open c scroll for execute 'selext f1 from int4_tbl';
   fetch last from c into x;
   while found loop
     return next x;
@@ -2802,11 +2802,11 @@ begin
 end;
 $$ language plpgsql;
 
-select * from sc_test();
+selext * from sc_test();
 
 create or replace function sc_test() returns setof integer as $$
 declare
-  c cursor for select * from generate_series(1, 10);
+  c cursor for selext * from generate_series(1, 10);
   x integer;
 begin
   open c;
@@ -2824,11 +2824,11 @@ begin
 end;
 $$ language plpgsql;
 
-select * from sc_test();
+selext * from sc_test();
 
 create or replace function sc_test() returns setof integer as $$
 declare
-  c cursor for select * from generate_series(1, 10);
+  c cursor for selext * from generate_series(1, 10);
   x integer;
 begin
   open c;
@@ -2841,7 +2841,7 @@ begin
 end;
 $$ language plpgsql;
 
-select * from sc_test();
+selext * from sc_test();
 
 drop function sc_test();
 
@@ -2864,7 +2864,7 @@ begin
 end;
 $$ language plpgsql;
 
-select pl_qual_names(42);
+selext pl_qual_names(42);
 
 drop function pl_qual_names(int);
 
@@ -2874,37 +2874,37 @@ begin
     $1 := -1;
     $2 := -2;
     return next;
-    return query select x + 1, x * 10 from generate_series(0, 10) s (x);
+    return query selext x + 1, x * 10 from generate_series(0, 10) s (x);
     return next;
 end;
 $$ language plpgsql;
 
-select * from ret_query1();
+selext * from ret_query1();
 
 create type record_type as (x text, y int, z boolean);
 
 create or replace function ret_query2(lim int) returns setof record_type as $$
 begin
-    return query select md5(s.x::text), s.x, s.x > 0
+    return query selext md5(s.x::text), s.x, s.x > 0
                  from generate_series(-8, lim) s (x) where s.x % 2 = 0;
 end;
 $$ language plpgsql;
 
-select * from ret_query2(8);
+selext * from ret_query2(8);
 
 -- test EXECUTE USING
 create function exc_using(int, text) returns int as $$
 declare i int;
 begin
-  for i in execute 'select * from generate_series(1,$1)' using $1+1 loop
+  for i in execute 'selext * from generate_series(1,$1)' using $1+1 loop
     raise notice '%', i;
   end loop;
-  execute 'select $2 + $2*3 + length($1)' into i using $2,$1;
+  execute 'selext $2 + $2*3 + length($1)' into i using $2,$1;
   return i;
 end
 $$ language plpgsql;
 
-select exc_using(5, 'foobar');
+selext exc_using(5, 'foobar');
 
 drop function exc_using(int, text);
 
@@ -2913,7 +2913,7 @@ declare
   c refcursor;
   i int;
 begin
-  open c for execute 'select * from generate_series(1,$1)' using $1+1;
+  open c for execute 'selext * from generate_series(1,$1)' using $1+1;
   loop
     fetch c into i;
     exit when not found;
@@ -2924,7 +2924,7 @@ begin
 end;
 $$ language plpgsql;
 
-select exc_using(5);
+selext exc_using(5);
 
 drop function exc_using(int);
 
@@ -2933,9 +2933,9 @@ drop function exc_using(int);
 create or replace function forc01() returns void as $$
 declare
   c cursor(r1 integer, r2 integer)
-       for select * from generate_series(r1,r2) i;
+       for selext * from generate_series(r1,r2) i;
   c2 cursor
-       for select * from generate_series(41,43) i;
+       for selext * from generate_series(41,43) i;
 begin
   for r in c(5,7) loop
     raise notice '% from %', r.i, c;
@@ -2966,16 +2966,16 @@ begin
 end;
 $$ language plpgsql;
 
-select forc01();
+selext forc01();
 
 -- try updating the cursor's current row
 
 create temp table forc_test as
-  select n as i, n as j from generate_series(1,10) n;
+  selext n as i, n as j from generate_series(1,10) n;
 
 create or replace function forc01() returns void as $$
 declare
-  c cursor for select * from forc_test;
+  c cursor for selext * from forc_test;
 begin
   for r in c loop
     raise notice '%, %', r.i, r.j;
@@ -2984,9 +2984,9 @@ begin
 end;
 $$ language plpgsql;
 
-select forc01();
+selext forc01();
 
-select * from forc_test;
+selext * from forc_test;
 
 -- same, with a cursor whose portal name doesn't match variable name
 create or replace function forc01() returns void as $$
@@ -2994,7 +2994,7 @@ declare
   c refcursor := 'fooled_ya';
   r record;
 begin
-  open c for select * from forc_test;
+  open c for selext * from forc_test;
   loop
     fetch c into r;
     exit when not found;
@@ -3004,9 +3004,9 @@ begin
 end;
 $$ language plpgsql;
 
-select forc01();
+selext forc01();
 
-select * from forc_test;
+selext * from forc_test;
 
 drop function forc01();
 
@@ -3027,12 +3027,12 @@ $$ language plpgsql;
 create or replace function return_dquery()
 returns setof int as $$
 begin
-  return query execute 'select * from (values(10),(20)) f';
-  return query execute 'select * from (values($1),($2)) f' using 40,50;
+  return query execute 'selext * from (values(10),(20)) f';
+  return query execute 'selext * from (values($1),($2)) f' using 40,50;
 end;
 $$ language plpgsql;
 
-select * from return_dquery();
+selext * from return_dquery();
 
 drop function return_dquery();
 
@@ -3044,24 +3044,24 @@ insert into tabwithcols values(10,20,30,40),(50,60,70,80);
 create or replace function returnqueryf()
 returns setof tabwithcols as $$
 begin
-  return query select * from tabwithcols;
-  return query execute 'select * from tabwithcols';
+  return query selext * from tabwithcols;
+  return query execute 'selext * from tabwithcols';
 end;
 $$ language plpgsql;
 
-select * from returnqueryf();
+selext * from returnqueryf();
 
 alter table tabwithcols drop column b;
 
-select * from returnqueryf();
+selext * from returnqueryf();
 
 alter table tabwithcols drop column d;
 
-select * from returnqueryf();
+selext * from returnqueryf();
 
 alter table tabwithcols add column d int;
 
-select * from returnqueryf();
+selext * from returnqueryf();
 
 drop function returnqueryf();
 drop table tabwithcols;
@@ -3082,7 +3082,7 @@ begin
 end;
 $$ language plpgsql;
 
-select compos();
+selext compos();
 
 -- test: use of variable of record type in return statement
 create or replace function compos() returns compostype as $$
@@ -3094,7 +3094,7 @@ begin
 end;
 $$ language plpgsql;
 
-select compos();
+selext compos();
 
 -- test: use of row expr in return statement
 create or replace function compos() returns compostype as $$
@@ -3103,7 +3103,7 @@ begin
 end;
 $$ language plpgsql;
 
-select compos();
+selext compos();
 
 -- this does not work currently (no implicit casting)
 create or replace function compos() returns compostype as $$
@@ -3112,7 +3112,7 @@ begin
 end;
 $$ language plpgsql;
 
-select compos();
+selext compos();
 
 -- ... but this does
 create or replace function compos() returns compostype as $$
@@ -3121,7 +3121,7 @@ begin
 end;
 $$ language plpgsql;
 
-select compos();
+selext compos();
 
 drop function compos();
 
@@ -3135,7 +3135,7 @@ begin
 end;
 $$ language plpgsql;
 
-select composrec();
+selext composrec();
 
 -- test: return row expr in return statement.
 create or replace function composrec() returns record as $$
@@ -3144,7 +3144,7 @@ begin
 end;
 $$ language plpgsql;
 
-select composrec();
+selext composrec();
 
 drop function composrec();
 
@@ -3160,7 +3160,7 @@ begin
 end;
 $$ language plpgsql;
 
-select * from compos();
+selext * from compos();
 
 drop function compos();
 
@@ -3171,7 +3171,7 @@ begin
 end;
 $$ language plpgsql;
 
-select compos();
+selext compos();
 
 -- RETURN variable is a different code path ...
 create or replace function compos() returns compostype as $$
@@ -3181,7 +3181,7 @@ begin
 end;
 $$ language plpgsql;
 
-select * from compos();
+selext * from compos();
 
 drop function compos();
 
@@ -3195,7 +3195,7 @@ begin
 end;
 $$ language plpgsql;
 
-select compos();
+selext compos();
 
 -- test: invalid use of composite expression in scalar-returning function
 create or replace function compos() returns int as $$
@@ -3204,7 +3204,7 @@ begin
 end;
 $$ language plpgsql;
 
-select compos();
+selext compos();
 
 drop function compos();
 drop type compostype;
@@ -3222,7 +3222,7 @@ begin
 end;
 $$ language plpgsql;
 
-select raise_test();
+selext raise_test();
 
 -- Since we can't actually see the thrown SQLSTATE in default psql output,
 -- test it like this; this also tests re-RAISE
@@ -3238,7 +3238,7 @@ begin
 end;
 $$ language plpgsql;
 
-select raise_test();
+selext raise_test();
 
 create or replace function raise_test() returns void as $$
 begin
@@ -3251,7 +3251,7 @@ begin
 end;
 $$ language plpgsql;
 
-select raise_test();
+selext raise_test();
 
 -- SQLSTATE specification in WHEN
 create or replace function raise_test() returns void as $$
@@ -3265,7 +3265,7 @@ begin
 end;
 $$ language plpgsql;
 
-select raise_test();
+selext raise_test();
 
 create or replace function raise_test() returns void as $$
 begin
@@ -3277,7 +3277,7 @@ begin
 end;
 $$ language plpgsql;
 
-select raise_test();
+selext raise_test();
 
 create or replace function raise_test() returns void as $$
 begin
@@ -3285,7 +3285,7 @@ begin
 end;
 $$ language plpgsql;
 
-select raise_test();
+selext raise_test();
 
 create or replace function raise_test() returns void as $$
 begin
@@ -3293,7 +3293,7 @@ begin
 end;
 $$ language plpgsql;
 
-select raise_test();
+selext raise_test();
 
 create or replace function raise_test() returns void as $$
 begin
@@ -3301,7 +3301,7 @@ begin
 end;
 $$ language plpgsql;
 
-select raise_test();
+selext raise_test();
 
 create or replace function raise_test() returns void as $$
 begin
@@ -3309,7 +3309,7 @@ begin
 end;
 $$ language plpgsql;
 
-select raise_test();
+selext raise_test();
 
 -- conflict on message
 create or replace function raise_test() returns void as $$
@@ -3318,7 +3318,7 @@ begin
 end;
 $$ language plpgsql;
 
-select raise_test();
+selext raise_test();
 
 -- conflict on errcode
 create or replace function raise_test() returns void as $$
@@ -3327,7 +3327,7 @@ begin
 end;
 $$ language plpgsql;
 
-select raise_test();
+selext raise_test();
 
 -- nothing to re-RAISE
 create or replace function raise_test() returns void as $$
@@ -3336,7 +3336,7 @@ begin
 end;
 $$ language plpgsql;
 
-select raise_test();
+selext raise_test();
 
 -- test access to exception data
 create function zero_divide() returns int as $$
@@ -3370,7 +3370,7 @@ exception when others then
 end;
 $$ language plpgsql;
 
-select stacked_diagnostics_test();
+selext stacked_diagnostics_test();
 
 create or replace function stacked_diagnostics_test() returns void as $$
 declare _detail text;
@@ -3387,7 +3387,7 @@ exception when others then
 end;
 $$ language plpgsql;
 
-select stacked_diagnostics_test();
+selext stacked_diagnostics_test();
 
 -- fail, cannot use stacked diagnostics statement outside handler
 create or replace function stacked_diagnostics_test() returns void as $$
@@ -3403,7 +3403,7 @@ begin
 end;
 $$ language plpgsql;
 
-select stacked_diagnostics_test();
+selext stacked_diagnostics_test();
 
 drop function zero_divide();
 drop function stacked_diagnostics_test();
@@ -3420,7 +3420,7 @@ exception
 end;
 $$ language plpgsql;
 
-select raise_test();
+selext raise_test();
 
 drop function raise_test();
 
@@ -3452,7 +3452,7 @@ exception when others then
 end;
 $$ language plpgsql;
 
-select stacked_diagnostics_test();
+selext stacked_diagnostics_test();
 
 drop function stacked_diagnostics_test();
 
@@ -3466,9 +3466,9 @@ begin
   end loop; end;
 $$ language plpgsql;
 
-select vari(1,2,3,4,5);
-select vari(3,4,5);
-select vari(variadic array[5,6,7]);
+selext vari(1,2,3,4,5);
+selext vari(3,4,5);
+selext vari(variadic array[5,6,7]);
 
 drop function vari(int[]);
 
@@ -3484,10 +3484,10 @@ begin
 end;
 $$ language plpgsql immutable strict;
 
-select pleast(10,1,2,3,-16);
-select pleast(10.2,2.2,-1.1);
-select pleast(10.2,10, -20);
-select pleast(10,20, -1.0);
+selext pleast(10,1,2,3,-16);
+selext pleast(10.2,2.2,-1.1);
+selext pleast(10.2,10, -20);
+selext pleast(10,20, -1.0);
 
 -- in case of conflict, non-variadic version is preferred
 create or replace function pleast(numeric)
@@ -3498,7 +3498,7 @@ begin
 end;
 $$ language plpgsql immutable strict;
 
-select pleast(10);
+selext pleast(10);
 
 drop function pleast(numeric[]);
 drop function pleast(numeric);
@@ -3507,11 +3507,11 @@ drop function pleast(numeric);
 
 create function tftest(int) returns table(a int, b int) as $$
 begin
-  return query select $1, $1+i from generate_series(1,5) g(i);
+  return query selext $1, $1+i from generate_series(1,5) g(i);
 end;
 $$ language plpgsql immutable strict;
 
-select * from tftest(10);
+selext * from tftest(10);
 
 create or replace function tftest(a1 int) returns table(a int, b int) as $$
 begin
@@ -3522,7 +3522,7 @@ begin
 end;
 $$ language plpgsql immutable strict;
 
-select * from tftest(10);
+selext * from tftest(10);
 
 drop function tftest(int);
 
@@ -3534,20 +3534,20 @@ begin
   return query values(10),(20);
   get diagnostics rc = row_count;
   raise notice '% %', found, rc;
-  return query select * from (values(10),(20)) f(a) where false;
+  return query selext * from (values(10),(20)) f(a) where false;
   get diagnostics rc = row_count;
   raise notice '% %', found, rc;
   return query execute 'values(10),(20)';
   -- just for fun, let's use array elements as targets
   get diagnostics rca[1] = row_count;
   raise notice '% %', found, rca[1];
-  return query execute 'select * from (values(10),(20)) f(a) where false';
+  return query execute 'selext * from (values(10),(20)) f(a) where false';
   get diagnostics rca[2] = row_count;
   raise notice '% %', found, rca[2];
 end;
 $$ language plpgsql;
 
-select * from rttest();
+selext * from rttest();
 
 drop function rttest();
 
@@ -3644,9 +3644,9 @@ $$ language plpgsql;
 
 -- "limit" is to prevent this from being inlined
 create function sql_recurse(float8) returns float8 as
-$$ select recurse($1) limit 1; $$ language sql;
+$$ selext recurse($1) limit 1; $$ language sql;
 
-select recurse(10);
+selext recurse(10);
 
 create function error1(text) returns text language sql as
 $$ SELECT relname::text FROM pg_class c WHERE c.oid = $1::regclass $$;
@@ -3659,9 +3659,9 @@ end$$;
 BEGIN;
 create table public.stuffs (stuff text);
 SAVEPOINT a;
-select error2('nonexistent.stuffs');
+selext error2('nonexistent.stuffs');
 ROLLBACK TO a;
-select error2('public.stuffs');
+selext error2('public.stuffs');
 rollback;
 
 drop function error2(p_name_table text);
@@ -3670,7 +3670,7 @@ drop function error1(text);
 -- Test for proper handling of cast-expression caching
 
 create function sql_to_date(integer) returns date as $$
-select $1::text::date
+selext $1::text::date
 $$ language sql immutable strict;
 
 create cast (integer as date) with function sql_to_date(integer) as assignment;
@@ -3680,18 +3680,18 @@ begin
   return $1;
 end$$ language plpgsql;
 
-select cast_invoker(20150717);
-select cast_invoker(20150718);  -- second call crashed in pre-release 9.5
+selext cast_invoker(20150717);
+selext cast_invoker(20150718);  -- second call crashed in pre-release 9.5
 
 begin;
-select cast_invoker(20150717);
-select cast_invoker(20150718);
+selext cast_invoker(20150717);
+selext cast_invoker(20150718);
 savepoint s1;
-select cast_invoker(20150718);
-select cast_invoker(-1); -- fails
+selext cast_invoker(20150718);
+selext cast_invoker(-1); -- fails
 rollback to savepoint s1;
-select cast_invoker(20150719);
-select cast_invoker(20150720);
+selext cast_invoker(20150719);
+selext cast_invoker(20150720);
 commit;
 
 drop function cast_invoker(integer);
@@ -3714,8 +3714,8 @@ begin
 end
 $$;
 
-select fail();
-select fail();
+selext fail();
+selext fail();
 
 drop function fail();
 
@@ -3730,7 +3730,7 @@ begin
 end
 $$ language plpgsql;
 
-select strtest();
+selext strtest();
 
 create or replace function strtest() returns text as $$
 begin
@@ -3739,7 +3739,7 @@ begin
 end
 $$ language plpgsql;
 
-select strtest();
+selext strtest();
 
 set standard_conforming_strings = on;
 
@@ -3750,7 +3750,7 @@ begin
 end
 $$ language plpgsql;
 
-select strtest();
+selext strtest();
 
 create or replace function strtest() returns text as $$
 begin
@@ -3759,7 +3759,7 @@ begin
 end
 $$ language plpgsql;
 
-select strtest();
+selext strtest();
 
 drop function strtest();
 
@@ -3820,7 +3820,7 @@ begin
 end;
 $$ language plpgsql;
 
-select scope_test();
+selext scope_test();
 
 drop function scope_test();
 
@@ -3832,39 +3832,39 @@ create function conflict_test() returns setof int8_tbl as $$
 declare r record;
   q1 bigint := 42;
 begin
-  for r in select q1,q2 from int8_tbl loop
+  for r in selext q1,q2 from int8_tbl loop
     return next r;
   end loop;
 end;
 $$ language plpgsql;
 
-select * from conflict_test();
+selext * from conflict_test();
 
 create or replace function conflict_test() returns setof int8_tbl as $$
 #variable_conflict use_variable
 declare r record;
   q1 bigint := 42;
 begin
-  for r in select q1,q2 from int8_tbl loop
+  for r in selext q1,q2 from int8_tbl loop
     return next r;
   end loop;
 end;
 $$ language plpgsql;
 
-select * from conflict_test();
+selext * from conflict_test();
 
 create or replace function conflict_test() returns setof int8_tbl as $$
 #variable_conflict use_column
 declare r record;
   q1 bigint := 42;
 begin
-  for r in select q1,q2 from int8_tbl loop
+  for r in selext q1,q2 from int8_tbl loop
     return next r;
   end loop;
 end;
 $$ language plpgsql;
 
-select * from conflict_test();
+selext * from conflict_test();
 
 drop function conflict_test();
 
@@ -3879,7 +3879,7 @@ begin
 end
 $$ language plpgsql;
 
-select unreserved_test();
+selext unreserved_test();
 
 create or replace function unreserved_test() returns int as $$
 declare
@@ -3890,7 +3890,7 @@ begin
 end
 $$ language plpgsql;
 
-select unreserved_test();
+selext unreserved_test();
 
 drop function unreserved_test();
 
@@ -3909,8 +3909,8 @@ begin
   end;
 $$ language plpgsql;
 
-select foreach_test(ARRAY[1,2,3,4]);
-select foreach_test(ARRAY[[1,2],[3,4]]);
+selext foreach_test(ARRAY[1,2,3,4]);
+selext foreach_test(ARRAY[[1,2],[3,4]]);
 
 create or replace function foreach_test(anyarray)
 returns void as $$
@@ -3924,8 +3924,8 @@ begin
 $$ language plpgsql;
 
 -- should fail
-select foreach_test(ARRAY[1,2,3,4]);
-select foreach_test(ARRAY[[1,2],[3,4]]);
+selext foreach_test(ARRAY[1,2,3,4]);
+selext foreach_test(ARRAY[[1,2],[3,4]]);
 
 create or replace function foreach_test(anyarray)
 returns void as $$
@@ -3938,8 +3938,8 @@ begin
   end;
 $$ language plpgsql;
 
-select foreach_test(ARRAY[1,2,3,4]);
-select foreach_test(ARRAY[[1,2],[3,4]]);
+selext foreach_test(ARRAY[1,2,3,4]);
+selext foreach_test(ARRAY[[1,2],[3,4]]);
 
 -- higher level of slicing
 create or replace function foreach_test(anyarray)
@@ -3954,10 +3954,10 @@ begin
 $$ language plpgsql;
 
 -- should fail
-select foreach_test(ARRAY[1,2,3,4]);
+selext foreach_test(ARRAY[1,2,3,4]);
 -- ok
-select foreach_test(ARRAY[[1,2],[3,4]]);
-select foreach_test(ARRAY[[[1,2]],[[3,4]]]);
+selext foreach_test(ARRAY[[1,2],[3,4]]);
+selext foreach_test(ARRAY[[[1,2]],[[3,4]]]);
 
 create type xy_tuple AS (x int, y int);
 
@@ -3973,8 +3973,8 @@ begin
   end;
 $$ language plpgsql;
 
-select foreach_test(ARRAY[(10,20),(40,69),(35,78)]::xy_tuple[]);
-select foreach_test(ARRAY[[(10,20),(40,69)],[(35,78),(88,76)]]::xy_tuple[]);
+selext foreach_test(ARRAY[(10,20),(40,69),(35,78)]::xy_tuple[]);
+selext foreach_test(ARRAY[[(10,20),(40,69)],[(35,78),(88,76)]]::xy_tuple[]);
 
 create or replace function foreach_test(anyarray)
 returns void as $$
@@ -3987,8 +3987,8 @@ begin
   end;
 $$ language plpgsql;
 
-select foreach_test(ARRAY[(10,20),(40,69),(35,78)]::xy_tuple[]);
-select foreach_test(ARRAY[[(10,20),(40,69)],[(35,78),(88,76)]]::xy_tuple[]);
+selext foreach_test(ARRAY[(10,20),(40,69),(35,78)]::xy_tuple[]);
+selext foreach_test(ARRAY[[(10,20),(40,69)],[(35,78),(88,76)]]::xy_tuple[]);
 
 -- slicing over array of composite types
 create or replace function foreach_test(anyarray)
@@ -4002,8 +4002,8 @@ begin
   end;
 $$ language plpgsql;
 
-select foreach_test(ARRAY[(10,20),(40,69),(35,78)]::xy_tuple[]);
-select foreach_test(ARRAY[[(10,20),(40,69)],[(35,78),(88,76)]]::xy_tuple[]);
+selext foreach_test(ARRAY[(10,20),(40,69),(35,78)]::xy_tuple[]);
+selext foreach_test(ARRAY[[(10,20),(40,69)],[(35,78),(88,76)]]::xy_tuple[]);
 
 drop function foreach_test(anyarray);
 drop type xy_tuple;
@@ -4023,14 +4023,14 @@ begin
   return r.ar;
 end$$;
 
-select arrayassign1();
-select arrayassign1(); -- try again to exercise internal caching
+selext arrayassign1();
+selext arrayassign1(); -- try again to exercise internal caching
 
 create domain orderedarray as int[2]
   constraint sorted check (value[1] < value[2]);
 
-select '{1,2}'::orderedarray;
-select '{2,1}'::orderedarray;  -- fail
+selext '{1,2}'::orderedarray;
+selext '{2,1}'::orderedarray;  -- fail
 
 create function testoa(x1 int, x2 int, x3 int) returns orderedarray
 language plpgsql as $$
@@ -4041,10 +4041,10 @@ begin
   return res;
 end$$;
 
-select testoa(1,2,3);
-select testoa(1,2,3); -- try again to exercise internal caching
-select testoa(2,1,3); -- fail at initial assign
-select testoa(1,2,1); -- fail at update
+selext testoa(1,2,3);
+selext testoa(1,2,3); -- try again to exercise internal caching
+selext testoa(2,1,3); -- fail at initial assign
+selext testoa(1,2,1); -- fail at update
 
 drop function arrayassign1();
 drop function testoa(x1 int, x2 int, x3 int);
@@ -4065,28 +4065,28 @@ language plpgsql as $$
   begin return $1[1]; end;
 $$ stable;
 
-select consumes_rw_array(returns_rw_array(42));
+selext consumes_rw_array(returns_rw_array(42));
 
 -- bug #14174
 explain (verbose, costs off)
-select i, a from
-  (select returns_rw_array(1) as a offset 0) ss,
+selext i, a from
+  (selext returns_rw_array(1) as a offset 0) ss,
   lateral consumes_rw_array(a) i;
 
-select i, a from
-  (select returns_rw_array(1) as a offset 0) ss,
+selext i, a from
+  (selext returns_rw_array(1) as a offset 0) ss,
   lateral consumes_rw_array(a) i;
 
 explain (verbose, costs off)
-select consumes_rw_array(a), a from returns_rw_array(1) a;
+selext consumes_rw_array(a), a from returns_rw_array(1) a;
 
-select consumes_rw_array(a), a from returns_rw_array(1) a;
+selext consumes_rw_array(a), a from returns_rw_array(1) a;
 
 explain (verbose, costs off)
-select consumes_rw_array(a), a from
+selext consumes_rw_array(a), a from
   (values (returns_rw_array(1)), (returns_rw_array(2))) v(a);
 
-select consumes_rw_array(a), a from
+selext consumes_rw_array(a), a from
   (values (returns_rw_array(1)), (returns_rw_array(2))) v(a);
 
 do $$
@@ -4139,9 +4139,9 @@ begin
 end;
 $$ language plpgsql;
 
-select outer_outer_func(10);
+selext outer_outer_func(10);
 -- repeated call should to work
-select outer_outer_func(20);
+selext outer_outer_func(20);
 
 drop function outer_outer_func(int);
 drop function outer_func(int);
@@ -4194,9 +4194,9 @@ begin
 end;
 $$ language plpgsql;
 
-select outer_outer_func(10);
+selext outer_outer_func(10);
 -- repeated call should to work
-select outer_outer_func(20);
+selext outer_outer_func(20);
 
 drop function outer_outer_func(int);
 drop function outer_func(int);

@@ -1502,7 +1502,7 @@ update_frameheadpos(WindowAggState *winstate)
 			 * necessary.  Note that if we reach end of partition, we will
 			 * leave frameheadpos = end+1 and framehead_slot empty.
 			 */
-			tuplestore_select_read_pointer(winstate->buffer,
+			tuplestore_selext_read_pointer(winstate->buffer,
 										   winstate->framehead_ptr);
 			if (winstate->frameheadpos == 0 &&
 				TupIsNull(winstate->framehead_slot))
@@ -1583,7 +1583,7 @@ update_frameheadpos(WindowAggState *winstate)
 				less = true;
 			}
 
-			tuplestore_select_read_pointer(winstate->buffer,
+			tuplestore_selext_read_pointer(winstate->buffer,
 										   winstate->framehead_ptr);
 			if (winstate->frameheadpos == 0 &&
 				TupIsNull(winstate->framehead_slot))
@@ -1659,7 +1659,7 @@ update_frameheadpos(WindowAggState *winstate)
 			else
 				minheadgroup = winstate->currentgroup + offset;
 
-			tuplestore_select_read_pointer(winstate->buffer,
+			tuplestore_selext_read_pointer(winstate->buffer,
 										   winstate->framehead_ptr);
 			if (winstate->frameheadpos == 0 &&
 				TupIsNull(winstate->framehead_slot))
@@ -1755,7 +1755,7 @@ update_frametailpos(WindowAggState *winstate)
 			 * reach end of partition, we will leave frametailpos = end+1 and
 			 * frametail_slot empty.
 			 */
-			tuplestore_select_read_pointer(winstate->buffer,
+			tuplestore_selext_read_pointer(winstate->buffer,
 										   winstate->frametail_ptr);
 			if (winstate->frametailpos == 0 &&
 				TupIsNull(winstate->frametail_slot))
@@ -1837,7 +1837,7 @@ update_frametailpos(WindowAggState *winstate)
 				less = false;
 			}
 
-			tuplestore_select_read_pointer(winstate->buffer,
+			tuplestore_selext_read_pointer(winstate->buffer,
 										   winstate->frametail_ptr);
 			if (winstate->frametailpos == 0 &&
 				TupIsNull(winstate->frametail_slot))
@@ -1913,7 +1913,7 @@ update_frametailpos(WindowAggState *winstate)
 			else
 				maxtailgroup = winstate->currentgroup + offset;
 
-			tuplestore_select_read_pointer(winstate->buffer,
+			tuplestore_selext_read_pointer(winstate->buffer,
 										   winstate->frametail_ptr);
 			if (winstate->frametailpos == 0 &&
 				TupIsNull(winstate->frametail_slot))
@@ -1987,7 +1987,7 @@ update_grouptailpos(WindowAggState *winstate)
 	 * group tail row.
 	 */
 	Assert(winstate->grouptailpos <= winstate->currentpos);
-	tuplestore_select_read_pointer(winstate->buffer,
+	tuplestore_selext_read_pointer(winstate->buffer,
 								   winstate->grouptail_ptr);
 	for (;;)
 	{
@@ -2158,7 +2158,7 @@ ExecWindowAgg(PlanState *pstate)
 	 *
 	 * Current row must be in the tuplestore, since we spooled it above.
 	 */
-	tuplestore_select_read_pointer(winstate->buffer, winstate->current_ptr);
+	tuplestore_selext_read_pointer(winstate->buffer, winstate->current_ptr);
 	if ((winstate->frameOptions & (FRAMEOPTION_GROUPS |
 								   FRAMEOPTION_EXCLUDE_GROUP |
 								   FRAMEOPTION_EXCLUDE_TIES)) &&
@@ -2728,7 +2728,7 @@ initialize_peragg(WindowAggState *winstate, WindowFunc *wfunc,
 	}
 
 	/*
-	 * If the selected finalfn isn't read-only, we can't run this aggregate as
+	 * If the selexted finalfn isn't read-only, we can't run this aggregate as
 	 * a window function.  This is a user-facing error, so we take a bit more
 	 * care with the error message than elsewhere in this function.
 	 */
@@ -2933,7 +2933,7 @@ window_gettupleslot(WindowObject winobj, int64 pos, TupleTableSlot *slot)
 
 	oldcontext = MemoryContextSwitchTo(winstate->ss.ps.ps_ExprContext->ecxt_per_query_memory);
 
-	tuplestore_select_read_pointer(winstate->buffer, winobj->readptr);
+	tuplestore_selext_read_pointer(winstate->buffer, winobj->readptr);
 
 	/*
 	 * Advance or rewind until we are within one tuple of the one we want.
@@ -3067,7 +3067,7 @@ WinSetMarkPosition(WindowObject winobj, int64 markpos)
 
 	if (markpos < winobj->markpos)
 		elog(ERROR, "cannot move WindowObject's mark position backward");
-	tuplestore_select_read_pointer(winstate->buffer, winobj->markptr);
+	tuplestore_selext_read_pointer(winstate->buffer, winobj->markptr);
 	if (markpos > winobj->markpos)
 	{
 		tuplestore_skiptuples(winstate->buffer,
@@ -3075,7 +3075,7 @@ WinSetMarkPosition(WindowObject winobj, int64 markpos)
 							  true);
 		winobj->markpos = markpos;
 	}
-	tuplestore_select_read_pointer(winstate->buffer, winobj->readptr);
+	tuplestore_selext_read_pointer(winstate->buffer, winobj->readptr);
 	if (markpos > winobj->seekpos)
 	{
 		tuplestore_skiptuples(winstate->buffer,

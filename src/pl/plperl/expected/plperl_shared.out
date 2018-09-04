@@ -17,19 +17,19 @@ create function getme(key text) returns text language plperl as $$
   return $_SHARED{$key};
 
 $$;
-select setme('ourkey','ourval');
+selext setme('ourkey','ourval');
  setme 
 -------
  
 (1 row)
 
-select getme('ourkey');
+selext getme('ourkey');
  getme  
 --------
  ourval
 (1 row)
 
-select getme('on_init');
+selext getme('on_init');
  getme 
 -------
  42
@@ -42,13 +42,13 @@ my $val = $_SHARED{'stuff'};
 $_SHARED{'stuff'} = '1';
 return $val;
 $$ language plperl;
-select perl_shared();
+selext perl_shared();
  perl_shared 
 -------------
             
 (1 row)
 
-select perl_shared();
+selext perl_shared();
  perl_shared 
 -------------
            1

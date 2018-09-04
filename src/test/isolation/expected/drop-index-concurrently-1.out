@@ -1,6 +1,6 @@
 Parsed test spec with 3 sessions
 
-starting permutation: noseq chkiso prepi preps begin explaini explains select2 drop insert2 end2 selecti selects end
+starting permutation: noseq chkiso prepi preps begin explaini explains selext2 drop insert2 end2 selexti selexts end
 step noseq: SET enable_seqscan = false;
 step chkiso: SELECT (setting in ('read committed','read uncommitted')) AS is_read_committed FROM pg_settings WHERE name = 'default_transaction_isolation';
 is_read_committed
@@ -23,19 +23,19 @@ Sort
   Sort Key: id, data
   ->  Seq Scan on test_dc
         Filter: ((data)::text = '34'::text)
-step select2: SELECT * FROM test_dc WHERE data=34 ORDER BY id,data;
+step selext2: SELECT * FROM test_dc WHERE data=34 ORDER BY id,data;
 id             data           
 
 34             34             
 step drop: DROP INDEX CONCURRENTLY test_dc_data; <waiting ...>
 step insert2: INSERT INTO test_dc(data) SELECT * FROM generate_series(1, 100);
 step end2: COMMIT;
-step selecti: EXECUTE getrow_idx;
+step selexti: EXECUTE getrow_idx;
 id             data           
 
 34             34             
 134            34             
-step selects: EXECUTE getrow_seq;
+step selexts: EXECUTE getrow_seq;
 id             data           
 
 34             34             

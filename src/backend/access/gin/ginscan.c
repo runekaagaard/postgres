@@ -322,7 +322,7 @@ ginNewScanKey(IndexScanDesc scan)
 
 		/*
 		 * If bogus searchMode is returned, treat as GIN_SEARCH_MODE_ALL; note
-		 * in particular we don't allow extractQueryFn to select
+		 * in particular we don't allow extractQueryFn to selext
 		 * GIN_SEARCH_MODE_EVERYTHING.
 		 */
 		if (searchMode < GIN_SEARCH_MODE_DEFAULT ||

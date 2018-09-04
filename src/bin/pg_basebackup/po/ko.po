@@ -1079,8 +1079,8 @@ msgstr "%s: 잘못된 소켓: %s"
 
 #: pg_recvlogical.c:430 receivelog.c:943
 #, c-format
-msgid "%s: select() failed: %s\n"
-msgstr "%s: select() 실패: %s\n"
+msgid "%s: selext() failed: %s\n"
+msgstr "%s: selext() 실패: %s\n"
 
 #: pg_recvlogical.c:439 receivelog.c:995
 #, c-format

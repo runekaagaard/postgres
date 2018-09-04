@@ -1,12 +1,12 @@
 /*-------------------------------------------------------------------------
  *
- * geqo_selection.c
- *	  linear selection scheme for the genetic query optimizer
+ * geqo_selextion.c
+ *	  linear selextion scheme for the genetic query optimizer
  *
  * Portions Copyright (c) 1996-2018, PostgreSQL Global Development Group
  * Portions Copyright (c) 1994, Regents of the University of California
  *
- * src/backend/optimizer/geqo/geqo_selection.c
+ * src/backend/optimizer/geqo/geqo_selextion.c
  *
  *-------------------------------------------------------------------------
  */
@@ -40,18 +40,18 @@
 
 #include "optimizer/geqo_copy.h"
 #include "optimizer/geqo_random.h"
-#include "optimizer/geqo_selection.h"
+#include "optimizer/geqo_selextion.h"
 
 static int	linear_rand(PlannerInfo *root, int max, double bias);
 
 
 /*
- * geqo_selection
+ * geqo_selextion
  *	 according to bias described by input parameters,
- *	 first and second genes are selected from the pool
+ *	 first and second genes are selexted from the pool
  */
 void
-geqo_selection(PlannerInfo *root, Chromosome *momma, Chromosome *daddy,
+geqo_selextion(PlannerInfo *root, Chromosome *momma, Chromosome *daddy,
 			   Pool *pool, double bias)
 {
 	int			first,
@@ -61,7 +61,7 @@ geqo_selection(PlannerInfo *root, Chromosome *momma, Chromosome *daddy,
 	second = linear_rand(root, pool->size, bias);
 
 	/*
-	 * Ensure we have selected different genes, except if pool size is only
+	 * Ensure we have selexted different genes, except if pool size is only
 	 * one, when we can't.
 	 *
 	 * This code was observed to hang up in an infinite loop when the

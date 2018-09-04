@@ -257,7 +257,7 @@ fallbackSplit(GistEntryVector *entryvec, GIST_SPLITVEC *v)
 
 /*
  * Represents information about an entry that can be placed to either group
- * without affecting overlap over selected axis ("common entry").
+ * without affecting overlap over selexted axis ("common entry").
  */
 typedef struct
 {
@@ -269,16 +269,16 @@ typedef struct
 
 /*
  * Context for g_box_consider_split. Contains information about currently
- * selected split and some general information.
+ * selexted split and some general information.
  */
 typedef struct
 {
 	int			entriesCount;	/* total number of entries being split */
 	BOX			boundingBox;	/* minimum bounding box across all entries */
 
-	/* Information about currently selected split follows */
+	/* Information about currently selexted split follows */
 
-	bool		first;			/* true if no split was selected yet */
+	bool		first;			/* true if no split was selexted yet */
 
 	float8		leftUpper;		/* upper bound of left interval */
 	float8		rightLower;		/* lower bound of right interval */
@@ -287,7 +287,7 @@ typedef struct
 	float4		overlap;
 	int			dim;			/* axis of this split */
 	float8		range;			/* width of general MBR projection to the
-								 * selected axis */
+								 * selexted axis */
 } ConsiderSplitContext;
 
 /*
@@ -336,7 +336,7 @@ non_negative(float val)
 }
 
 /*
- * Consider replacement of currently selected split with the better one.
+ * Consider replacement of currently selexted split with the better one.
  */
 static inline void
 g_box_consider_split(ConsiderSplitContext *context, int dimNum,
@@ -374,11 +374,11 @@ g_box_consider_split(ConsiderSplitContext *context, int dimNum,
 
 	if (ratio > LIMIT_RATIO)
 	{
-		bool		selectthis = false;
+		bool		selextthis = false;
 
 		/*
 		 * The ratio is acceptable, so compare current split with previously
-		 * selected one. Between splits of one dimension we search for minimal
+		 * selexted one. Between splits of one dimension we search for minimal
 		 * overlap (allowing negative values) and minimal ration (between same
 		 * overlaps. We switch dimension if find less overlap (non-negative)
 		 * or less range with same overlap.
@@ -392,9 +392,9 @@ g_box_consider_split(ConsiderSplitContext *context, int dimNum,
 
 		overlap = float8_div(float8_mi(leftUpper, rightLower), range);
 
-		/* If there is no previous selection, select this */
+		/* If there is no previous selextion, selext this */
 		if (context->first)
-			selectthis = true;
+			selextthis = true;
 		else if (context->dim == dimNum)
 		{
 			/*
@@ -403,7 +403,7 @@ g_box_consider_split(ConsiderSplitContext *context, int dimNum,
 			 */
 			if (overlap < context->overlap ||
 				(overlap == context->overlap && ratio > context->ratio))
-				selectthis = true;
+				selextthis = true;
 		}
 		else
 		{
@@ -427,12 +427,12 @@ g_box_consider_split(ConsiderSplitContext *context, int dimNum,
 			if (non_negative(overlap) < non_negative(context->overlap) ||
 				(range > context->range &&
 				 non_negative(overlap) <= non_negative(context->overlap)))
-				selectthis = true;
+				selextthis = true;
 		}
 
-		if (selectthis)
+		if (selextthis)
 		{
-			/* save information about selected split */
+			/* save information about selexted split */
 			context->first = false;
 			context->ratio = ratio;
 			context->range = range;
@@ -473,7 +473,7 @@ common_entry_cmp(const void *i1, const void *i2)
  * 1) Entries which should be placed to the left group
  * 2) Entries which should be placed to the right group
  * 3) "Common entries" which can be placed to any of groups without affecting
- *	  of overlap along selected axis.
+ *	  of overlap along selexted axis.
  *
  * The common entries are distributed by minimizing penalty.
  *
@@ -524,7 +524,7 @@ gist_box_picksplit(PG_FUNCTION_ARGS)
 	/*
 	 * Iterate over axes for optimal split searching.
 	 */
-	context.first = true;		/* nothing selected yet */
+	context.first = true;		/* nothing selexted yet */
 	for (dim = 0; dim < 2; dim++)
 	{
 		float8		leftUpper,
@@ -532,7 +532,7 @@ gist_box_picksplit(PG_FUNCTION_ARGS)
 		int			i1,
 					i2;
 
-		/* Project each entry as an interval on the selected axis. */
+		/* Project each entry as an interval on the selexted axis. */
 		for (i = FirstOffsetNumber; i <= maxoff; i = OffsetNumberNext(i))
 		{
 			box = DatumGetBoxP(entryvec->vector[i].key);
@@ -675,7 +675,7 @@ gist_box_picksplit(PG_FUNCTION_ARGS)
 	}
 
 	/*
-	 * Ok, we have now selected the split across one axis.
+	 * Ok, we have now selexted the split across one axis.
 	 *
 	 * While considering the splits, we already determined that there will be
 	 * enough entries in both groups to reach the desired ratio, but we did
@@ -694,7 +694,7 @@ gist_box_picksplit(PG_FUNCTION_ARGS)
 
 	/*
 	 * Allocate an array for "common entries" - entries which can be placed to
-	 * either group without affecting overlap along selected axis.
+	 * either group without affecting overlap along selexted axis.
 	 */
 	commonEntriesCount = 0;
 	commonEntries = (CommonEntry *) palloc(nentries * sizeof(CommonEntry));
@@ -728,7 +728,7 @@ gist_box_picksplit(PG_FUNCTION_ARGS)
 					upper;
 
 		/*
-		 * Get upper and lower bounds along selected axis.
+		 * Get upper and lower bounds along selexted axis.
 		 */
 		box = DatumGetBoxP(entryvec->vector[i].key);
 		if (context.dim == 0)
@@ -815,7 +815,7 @@ gist_box_picksplit(PG_FUNCTION_ARGS)
 				PLACE_RIGHT(box, commonEntries[i].index);
 			else
 			{
-				/* Otherwise select the group by minimal penalty */
+				/* Otherwise selext the group by minimal penalty */
 				if (box_penalty(leftBox, box) < box_penalty(rightBox, box))
 					PLACE_LEFT(box, commonEntries[i].index);
 				else

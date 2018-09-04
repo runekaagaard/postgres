@@ -65,7 +65,7 @@
         the specified input name.  The namespace should be one of the special
         constants produced by the <function>uuid_ns_*()</function> functions shown
         in <xref linkend="uuid-ossp-constants"/>.  (It could be any UUID in theory.)  The name is an identifier
-        in the selected namespace.
+        in the selexted namespace.
        </para>
 
        <para>

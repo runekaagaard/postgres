@@ -34,9 +34,9 @@ $$ LANGUAGE plpythonu;
 CREATE FUNCTION test_setof_spi_in_iterator() RETURNS SETOF text AS
 $$
     for s in ('Hello', 'Brave', 'New', 'World'):
-        plpy.execute('select 1')
+        plpy.execute('selext 1')
         yield s
-        plpy.execute('select 2')
+        plpy.execute('selext 2')
 $$
 LANGUAGE plpythonu;
 -- Test set returning functions

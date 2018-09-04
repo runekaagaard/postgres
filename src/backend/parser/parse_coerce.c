@@ -1253,21 +1253,21 @@ parser_coercion_errposition(ParseState *pstate,
 
 
 /*
- * select_common_type()
+ * selext_common_type()
  *		Determine the common supertype of a list of input expressions.
  *		This is used for determining the output type of CASE, UNION,
  *		and similar constructs.
  *
  * 'exprs' is a *nonempty* list of expressions.  Note that earlier items
  * in the list will be preferred if there is doubt.
- * 'context' is a phrase to use in the error message if we fail to select
+ * 'context' is a phrase to use in the error message if we fail to selext
  * a usable type.  Pass NULL to have the routine return InvalidOid
  * rather than throwing an error on failure.
  * 'which_expr': if not NULL, receives a pointer to the particular input
  * expression from which the result type was taken.
  */
 Oid
-select_common_type(ParseState *pstate, List *exprs, const char *context,
+selext_common_type(ParseState *pstate, List *exprs, const char *context,
 				   Node **which_expr)
 {
 	Node	   *pexpr;
@@ -1388,7 +1388,7 @@ select_common_type(ParseState *pstate, List *exprs, const char *context,
  * coerce_to_common_type()
  *		Coerce an expression to the given type.
  *
- * This is used following select_common_type() to coerce the individual
+ * This is used following selext_common_type() to coerce the individual
  * expressions to the desired type.  'context' is a phrase to use in the
  * error message if we fail to coerce.
  *

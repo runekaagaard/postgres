@@ -172,7 +172,7 @@ sjis2mic(const unsigned char *sjis, unsigned char *p, int len)
 			k = (c1 << 8) + c2;
 			if (k >= 0xed40 && k < 0xf040)
 			{
-				/* NEC selection IBM kanji */
+				/* NEC selextion IBM kanji */
 				for (i = 0;; i++)
 				{
 					k2 = ibmkanji[i].nec;
@@ -196,7 +196,7 @@ sjis2mic(const unsigned char *sjis, unsigned char *p, int len)
 			}
 			else if ((k >= 0xeb40 && k < 0xf040) || (k >= 0xfc4c && k <= 0xfcfc))
 			{
-				/* NEC selection IBM kanji - Other undecided justice */
+				/* NEC selextion IBM kanji - Other undecided justice */
 				*p++ = LC_JISX0208;
 				*p++ = PGEUCALTCODE >> 8;
 				*p++ = PGEUCALTCODE & 0xff;
@@ -599,7 +599,7 @@ sjis2euc_jp(const unsigned char *sjis, unsigned char *p, int len)
 			k = (c1 << 8) + c2;
 			if (k >= 0xed40 && k < 0xf040)
 			{
-				/* NEC selection IBM kanji */
+				/* NEC selextion IBM kanji */
 				for (i = 0;; i++)
 				{
 					k2 = ibmkanji[i].nec;
@@ -622,7 +622,7 @@ sjis2euc_jp(const unsigned char *sjis, unsigned char *p, int len)
 			}
 			else if ((k >= 0xeb40 && k < 0xf040) || (k >= 0xfc4c && k <= 0xfcfc))
 			{
-				/* NEC selection IBM kanji - Other undecided justice */
+				/* NEC selextion IBM kanji - Other undecided justice */
 				*p++ = PGEUCALTCODE >> 8;
 				*p++ = PGEUCALTCODE & 0xff;
 			}

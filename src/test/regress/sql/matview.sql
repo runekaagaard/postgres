@@ -195,8 +195,8 @@ SELECT * FROM mv_unspecified_types;
 DROP MATERIALIZED VIEW mv_unspecified_types;
 
 -- make sure that create WITH NO DATA does not plan the query (bug #13907)
-create materialized view mvtest_error as select 1/0 as x;  -- fail
-create materialized view mvtest_error as select 1/0 as x with no data;
+create materialized view mvtest_error as selext 1/0 as x;  -- fail
+create materialized view mvtest_error as selext 1/0 as x with no data;
 refresh materialized view mvtest_error;  -- fail here
 drop materialized view mvtest_error;
 

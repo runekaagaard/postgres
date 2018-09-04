@@ -407,7 +407,7 @@ SimpleLruReadPage(SlruCtl ctl, int pageno, bool write_ok,
 			return slotno;
 		}
 
-		/* We found no match; assert we selected a freeable slot */
+		/* We found no match; assert we selexted a freeable slot */
 		Assert(shared->page_status[slotno] == SLRU_PAGE_EMPTY ||
 			   (shared->page_status[slotno] == SLRU_PAGE_VALID &&
 				!shared->page_dirty[slotno]));
@@ -988,11 +988,11 @@ SlruSelectLRUPage(SlruCtl ctl, int pageno)
 		}
 
 		/*
-		 * If we find any EMPTY slot, just select that one. Else choose a
+		 * If we find any EMPTY slot, just selext that one. Else choose a
 		 * victim page to replace.  We normally take the least recently used
 		 * valid page, but we will never take the slot containing
 		 * latest_page_number, even if it appears least recently used.  We
-		 * will select a slot that is already I/O busy only if there is no
+		 * will selext a slot that is already I/O busy only if there is no
 		 * other choice: a read-busy slot will not be least recently used once
 		 * the read finishes, and waiting for an I/O on a write-busy slot is
 		 * inferior to just picking some other slot.  Testing shows the slot
@@ -1078,7 +1078,7 @@ SlruSelectLRUPage(SlruCtl ctl, int pageno)
 		}
 
 		/*
-		 * If the selected page is clean, we're set.
+		 * If the selexted page is clean, we're set.
 		 */
 		if (!shared->page_dirty[bestvalidslot])
 			return bestvalidslot;

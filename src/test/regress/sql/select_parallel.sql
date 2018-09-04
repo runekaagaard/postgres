@@ -17,15 +17,15 @@ set max_parallel_workers_per_gather=4;
 
 -- Parallel Append with partial-subplans
 explain (costs off)
-  select round(avg(aa)), sum(aa) from a_star;
-select round(avg(aa)), sum(aa) from a_star a1;
+  selext round(avg(aa)), sum(aa) from a_star;
+selext round(avg(aa)), sum(aa) from a_star a1;
 
 -- Parallel Append with both partial and non-partial subplans
 alter table c_star set (parallel_workers = 0);
 alter table d_star set (parallel_workers = 0);
 explain (costs off)
-  select round(avg(aa)), sum(aa) from a_star;
-select round(avg(aa)), sum(aa) from a_star a2;
+  selext round(avg(aa)), sum(aa) from a_star;
+selext round(avg(aa)), sum(aa) from a_star a2;
 
 -- Parallel Append with only non-partial subplans
 alter table a_star set (parallel_workers = 0);
@@ -33,8 +33,8 @@ alter table b_star set (parallel_workers = 0);
 alter table e_star set (parallel_workers = 0);
 alter table f_star set (parallel_workers = 0);
 explain (costs off)
-  select round(avg(aa)), sum(aa) from a_star;
-select round(avg(aa)), sum(aa) from a_star a3;
+  selext round(avg(aa)), sum(aa) from a_star;
+selext round(avg(aa)), sum(aa) from a_star a3;
 
 -- Disable Parallel Append
 alter table a_star reset (parallel_workers);
@@ -45,37 +45,37 @@ alter table e_star reset (parallel_workers);
 alter table f_star reset (parallel_workers);
 set enable_parallel_append to off;
 explain (costs off)
-  select round(avg(aa)), sum(aa) from a_star;
-select round(avg(aa)), sum(aa) from a_star a4;
+  selext round(avg(aa)), sum(aa) from a_star;
+selext round(avg(aa)), sum(aa) from a_star a4;
 reset enable_parallel_append;
 
 -- Parallel Append that runs serially
 create function sp_test_func() returns setof text as
-$$ select 'foo'::varchar union all select 'bar'::varchar $$
+$$ selext 'foo'::varchar union all selext 'bar'::varchar $$
 language sql stable;
-select sp_test_func() order by 1;
+selext sp_test_func() order by 1;
 
 -- Parallel Append is not to be used when the subpath depends on the outer param
 create table part_pa_test(a int, b int) partition by range(a);
 create table part_pa_test_p1 partition of part_pa_test for values from (minvalue) to (0);
 create table part_pa_test_p2 partition of part_pa_test for values from (0) to (maxvalue);
 explain (costs off)
-	select (select max((select pa1.b from part_pa_test pa1 where pa1.a = pa2.a)))
+	selext (selext max((selext pa1.b from part_pa_test pa1 where pa1.a = pa2.a)))
 	from part_pa_test pa2;
 drop table part_pa_test;
 
 -- test with leader participation disabled
 set parallel_leader_participation = off;
 explain (costs off)
-  select count(*) from tenk1 where stringu1 = 'GRAAAA';
-select count(*) from tenk1 where stringu1 = 'GRAAAA';
+  selext count(*) from tenk1 where stringu1 = 'GRAAAA';
+selext count(*) from tenk1 where stringu1 = 'GRAAAA';
 
 -- test with leader participation disabled, but no workers available (so
 -- the leader will have to run the plan despite the setting)
 set max_parallel_workers = 0;
 explain (costs off)
-  select count(*) from tenk1 where stringu1 = 'GRAAAA';
-select count(*) from tenk1 where stringu1 = 'GRAAAA';
+  selext count(*) from tenk1 where stringu1 = 'GRAAAA';
+selext count(*) from tenk1 where stringu1 = 'GRAAAA';
 
 reset max_parallel_workers;
 reset parallel_leader_participation;
@@ -83,25 +83,25 @@ reset parallel_leader_participation;
 -- test that parallel_restricted function doesn't run in worker
 alter table tenk1 set (parallel_workers = 4);
 explain (verbose, costs off)
-select sp_parallel_restricted(unique1) from tenk1
+selext sp_parallel_restricted(unique1) from tenk1
   where stringu1 = 'GRAAAA' order by 1;
 
 -- test parallel plan when group by expression is in target list.
 explain (costs off)
-	select length(stringu1) from tenk1 group by length(stringu1);
-select length(stringu1) from tenk1 group by length(stringu1);
+	selext length(stringu1) from tenk1 group by length(stringu1);
+selext length(stringu1) from tenk1 group by length(stringu1);
 
 explain (costs off)
-	select stringu1, count(*) from tenk1 group by stringu1 order by stringu1;
+	selext stringu1, count(*) from tenk1 group by stringu1 order by stringu1;
 
--- test that parallel plan for aggregates is not selected when
+-- test that parallel plan for aggregates is not selexted when
 -- target list contains parallel restricted clause.
 explain (costs off)
-	select  sum(sp_parallel_restricted(unique1)) from tenk1
+	selext  sum(sp_parallel_restricted(unique1)) from tenk1
 	group by(sp_parallel_restricted(unique1));
 
 -- test prepared statement
-prepare tenk1_count(integer) As select  count((unique1)) from tenk1 where hundred > $1;
+prepare tenk1_count(integer) As selext  count((unique1)) from tenk1 where hundred > $1;
 explain (costs off) execute tenk1_count(1);
 execute tenk1_count(1);
 deallocate tenk1_count;
@@ -109,14 +109,14 @@ deallocate tenk1_count;
 -- test parallel plans for queries containing un-correlated subplans.
 alter table tenk2 set (parallel_workers = 0);
 explain (costs off)
-	select count(*) from tenk1 where (two, four) not in
-	(select hundred, thousand from tenk2 where thousand > 100);
-select count(*) from tenk1 where (two, four) not in
-	(select hundred, thousand from tenk2 where thousand > 100);
+	selext count(*) from tenk1 where (two, four) not in
+	(selext hundred, thousand from tenk2 where thousand > 100);
+selext count(*) from tenk1 where (two, four) not in
+	(selext hundred, thousand from tenk2 where thousand > 100);
 -- this is not parallel-safe due to use of random() within SubLink's testexpr:
 explain (costs off)
-	select * from tenk1 where (unique1 + random())::integer not in
-	(select ten from tenk2);
+	selext * from tenk1 where (unique1 + random())::integer not in
+	(selext ten from tenk2);
 alter table tenk2 reset (parallel_workers);
 
 -- test parallel plan for a query containing initplan.
@@ -126,9 +126,9 @@ set enable_bitmapscan = off;
 alter table tenk2 set (parallel_workers = 2);
 
 explain (costs off)
-	select count(*) from tenk1
+	selext count(*) from tenk1
         where tenk1.unique1 = (Select max(tenk2.unique1) from tenk2);
-select count(*) from tenk1
+selext count(*) from tenk1
     where tenk1.unique1 = (Select max(tenk2.unique1) from tenk2);
 
 reset enable_indexscan;
@@ -141,31 +141,31 @@ set enable_seqscan to off;
 set enable_bitmapscan to off;
 
 explain (costs off)
-	select  count((unique1)) from tenk1 where hundred > 1;
-select  count((unique1)) from tenk1 where hundred > 1;
+	selext  count((unique1)) from tenk1 where hundred > 1;
+selext  count((unique1)) from tenk1 where hundred > 1;
 
 -- test parallel index-only scans.
 explain (costs off)
-	select  count(*) from tenk1 where thousand > 95;
-select  count(*) from tenk1 where thousand > 95;
+	selext  count(*) from tenk1 where thousand > 95;
+selext  count(*) from tenk1 where thousand > 95;
 
 -- test rescan cases too
 set enable_material = false;
 
 explain (costs off)
-select * from
-  (select count(unique1) from tenk1 where hundred > 10) ss
+selext * from
+  (selext count(unique1) from tenk1 where hundred > 10) ss
   right join (values (1),(2),(3)) v(x) on true;
-select * from
-  (select count(unique1) from tenk1 where hundred > 10) ss
+selext * from
+  (selext count(unique1) from tenk1 where hundred > 10) ss
   right join (values (1),(2),(3)) v(x) on true;
 
 explain (costs off)
-select * from
-  (select count(*) from tenk1 where thousand > 99) ss
+selext * from
+  (selext count(*) from tenk1 where thousand > 99) ss
   right join (values (1),(2),(3)) v(x) on true;
-select * from
-  (select count(*) from tenk1 where thousand > 99) ss
+selext * from
+  (selext count(*) from tenk1 where thousand > 99) ss
   right join (values (1),(2),(3)) v(x) on true;
 
 reset enable_material;
@@ -186,19 +186,19 @@ EXCEPTION WHEN invalid_parameter_value THEN
 END $$;
 set work_mem='64kB';  --set small work mem to force lossy pages
 explain (costs off)
-	select count(*) from tenk1, tenk2 where tenk1.hundred > 1 and tenk2.thousand=0;
-select count(*) from tenk1, tenk2 where tenk1.hundred > 1 and tenk2.thousand=0;
+	selext count(*) from tenk1, tenk2 where tenk1.hundred > 1 and tenk2.thousand=0;
+selext count(*) from tenk1, tenk2 where tenk1.hundred > 1 and tenk2.thousand=0;
 
 create table bmscantest (a int, t text);
-insert into bmscantest select r, 'fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo' FROM generate_series(1,100000) r;
+insert into bmscantest selext r, 'fooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo' FROM generate_series(1,100000) r;
 create index i_bmtest ON bmscantest(a);
-select count(*) from bmscantest where a>1;
+selext count(*) from bmscantest where a>1;
 
 -- test accumulation of stats for parallel nodes
 reset enable_seqscan;
 alter table tenk2 set (parallel_workers = 0);
 explain (analyze, timing off, summary off, costs off)
-   select count(*) from tenk1, tenk2 where tenk1.hundred > 1
+   selext count(*) from tenk1, tenk2 where tenk1.hundred > 1
         and tenk2.thousand=0;
 alter table tenk2 reset (parallel_workers);
 
@@ -210,8 +210,8 @@ declare ln text;
 begin
     for ln in
         explain (analyze, timing off, summary off, costs off)
-          select * from
-          (select ten from tenk1 where ten < 100 order by ten) ss
+          selext * from
+          (selext ten from tenk1 where ten < 100 order by ten) ss
           right join (values (1),(2),(3)) v(x) on true
     loop
         ln := regexp_replace(ln, 'Memory: \S*',  'Memory: xxx');
@@ -219,7 +219,7 @@ begin
     end loop;
 end;
 $$;
-select * from explain_parallel_sort_stats();
+selext * from explain_parallel_sort_stats();
 
 reset enable_indexscan;
 reset enable_hashjoin;
@@ -234,8 +234,8 @@ set enable_hashjoin to off;
 set enable_nestloop to off;
 
 explain (costs off)
-	select  count(*) from tenk1, tenk2 where tenk1.unique1 = tenk2.unique1;
-select  count(*) from tenk1, tenk2 where tenk1.unique1 = tenk2.unique1;
+	selext  count(*) from tenk1, tenk2 where tenk1.unique1 = tenk2.unique1;
+selext  count(*) from tenk1, tenk2 where tenk1.unique1 = tenk2.unique1;
 
 reset enable_hashjoin;
 reset enable_nestloop;
@@ -244,9 +244,9 @@ reset enable_nestloop;
 set enable_hashagg = false;
 
 explain (costs off)
-   select count(*) from tenk1 group by twenty;
+   selext count(*) from tenk1 group by twenty;
 
-select count(*) from tenk1 group by twenty;
+selext count(*) from tenk1 group by twenty;
 
 --test expressions in targetlist are pushed down for gather merge
 create function sp_simple_func(var1 integer) returns integer
@@ -257,24 +257,24 @@ end;
 $$ language plpgsql PARALLEL SAFE;
 
 explain (costs off, verbose)
-    select ten, sp_simple_func(ten) from tenk1 where ten < 100 order by ten;
+    selext ten, sp_simple_func(ten) from tenk1 where ten < 100 order by ten;
 
 drop function sp_simple_func(integer);
 
 -- test handling of SRFs in targetlist (bug in 10.0)
 
 explain (costs off)
-   select count(*), generate_series(1,2) from tenk1 group by twenty;
+   selext count(*), generate_series(1,2) from tenk1 group by twenty;
 
-select count(*), generate_series(1,2) from tenk1 group by twenty;
+selext count(*), generate_series(1,2) from tenk1 group by twenty;
 
 -- test gather merge with parallel leader participation disabled
 set parallel_leader_participation = off;
 
 explain (costs off)
-   select count(*) from tenk1 group by twenty;
+   selext count(*) from tenk1 group by twenty;
 
-select count(*) from tenk1 group by twenty;
+selext count(*) from tenk1 group by twenty;
 
 reset parallel_leader_participation;
 
@@ -282,13 +282,13 @@ reset parallel_leader_participation;
 set enable_material = false;
 
 explain (costs off)
-select * from
-  (select string4, count(unique2)
+selext * from
+  (selext string4, count(unique2)
    from tenk1 group by string4 order by string4) ss
   right join (values (1),(2),(3)) v(x) on true;
 
-select * from
-  (select string4, count(unique2)
+selext * from
+  (selext string4, count(unique2)
    from tenk1 group by string4 order by string4) ss
   right join (values (1),(2),(3)) v(x) on true;
 
@@ -298,29 +298,29 @@ reset enable_hashagg;
 
 -- check parallelized int8 aggregate (bug #14897)
 explain (costs off)
-select avg(unique1::int8) from tenk1;
+selext avg(unique1::int8) from tenk1;
 
-select avg(unique1::int8) from tenk1;
+selext avg(unique1::int8) from tenk1;
 
 -- gather merge test with a LIMIT
 explain (costs off)
-  select fivethous from tenk1 order by fivethous limit 4;
+  selext fivethous from tenk1 order by fivethous limit 4;
 
-select fivethous from tenk1 order by fivethous limit 4;
+selext fivethous from tenk1 order by fivethous limit 4;
 
 -- gather merge test with 0 worker
 set max_parallel_workers = 0;
 explain (costs off)
-   select string4 from tenk1 order by string4 limit 5;
-select string4 from tenk1 order by string4 limit 5;
+   selext string4 from tenk1 order by string4 limit 5;
+selext string4 from tenk1 order by string4 limit 5;
 
 -- gather merge test with 0 workers, with parallel leader
 -- participation disabled (the leader will have to run the plan
 -- despite the setting)
 set parallel_leader_participation = off;
 explain (costs off)
-   select string4 from tenk1 order by string4 limit 5;
-select string4 from tenk1 order by string4 limit 5;
+   selext string4 from tenk1 order by string4 limit 5;
+selext string4 from tenk1 order by string4 limit 5;
 
 reset parallel_leader_participation;
 reset max_parallel_workers;
@@ -328,7 +328,7 @@ reset max_parallel_workers;
 SAVEPOINT settings;
 SET LOCAL force_parallel_mode = 1;
 explain (costs off)
-  select stringu1::int2 from tenk1 where unique1 = 1;
+  selext stringu1::int2 from tenk1 where unique1 = 1;
 ROLLBACK TO SAVEPOINT settings;
 
 -- exercise record typmod remapping between backends
@@ -358,14 +358,14 @@ set role regress_parallel_worker;
 reset session authorization;
 drop role regress_parallel_worker;
 set force_parallel_mode = 1;
-select count(*) from tenk1;
+selext count(*) from tenk1;
 reset force_parallel_mode;
 reset role;
 
 -- Window function calculation can't be pushed to workers.
 explain (costs off, verbose)
-  select count(*) from tenk1 a where (unique1, two) in
-    (select unique1, row_number() over() from tenk1 b);
+  selext count(*) from tenk1 a where (unique1, two) in
+    (selext unique1, row_number() over() from tenk1 b);
 
 
 -- to increase the parallel query test coverage
@@ -377,7 +377,7 @@ ROLLBACK TO SAVEPOINT settings;
 -- provoke error in worker
 SAVEPOINT settings;
 SET LOCAL force_parallel_mode = 1;
-select stringu1::int2 from tenk1 where unique1 = 1;
+selext stringu1::int2 from tenk1 where unique1 = 1;
 ROLLBACK TO SAVEPOINT settings;
 
 -- test interaction with set-returning functions

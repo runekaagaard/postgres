@@ -1202,25 +1202,25 @@ SELECT DATE_TRUNC('DECADE', DATE '0002-12-31 BC'); -- 0011-01-01 BC
 --
 -- test infinity
 --
-select 'infinity'::date, '-infinity'::date;
+selext 'infinity'::date, '-infinity'::date;
    date   |   date    
 ----------+-----------
  infinity | -infinity
 (1 row)
 
-select 'infinity'::date > 'today'::date as t;
+selext 'infinity'::date > 'today'::date as t;
  t 
 ---
  t
 (1 row)
 
-select '-infinity'::date < 'today'::date as t;
+selext '-infinity'::date < 'today'::date as t;
  t 
 ---
  t
 (1 row)
 
-select isfinite('infinity'::date), isfinite('-infinity'::date), isfinite('today'::date);
+selext isfinite('infinity'::date), isfinite('-infinity'::date), isfinite('today'::date);
  isfinite | isfinite | isfinite 
 ----------+----------+----------
  f        | f        | t
@@ -1448,32 +1448,32 @@ SELECT EXTRACT(UNDEFINED FROM DATE 'infinity');     -- ERROR:  timestamp units "
 ERROR:  timestamp units "undefined" not supported
 CONTEXT:  SQL function "date_part" statement 1
 -- test constructors
-select make_date(2013, 7, 15);
+selext make_date(2013, 7, 15);
  make_date  
 ------------
  07-15-2013
 (1 row)
 
-select make_date(-44, 3, 15);
+selext make_date(-44, 3, 15);
    make_date   
 ---------------
  03-15-0044 BC
 (1 row)
 
-select make_time(8, 20, 0.0);
+selext make_time(8, 20, 0.0);
  make_time 
 -----------
  08:20:00
 (1 row)
 
 -- should fail
-select make_date(2013, 2, 30);
+selext make_date(2013, 2, 30);
 ERROR:  date field value out of range: 2013-02-30
-select make_date(2013, 13, 1);
+selext make_date(2013, 13, 1);
 ERROR:  date field value out of range: 2013-13-01
-select make_date(2013, 11, -1);
+selext make_date(2013, 11, -1);
 ERROR:  date field value out of range: 2013-11--1
-select make_time(10, 55, 100.1);
+selext make_time(10, 55, 100.1);
 ERROR:  time field value out of range: 10:55:100.1
-select make_time(24, 0, 2.1);
+selext make_time(24, 0, 2.1);
 ERROR:  time field value out of range: 24:00:2.1

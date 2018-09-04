@@ -424,8 +424,8 @@ msgstr "nie można zapisać do kanału komunikacyjnego: %s\n"
 
 #: parallel.c:1635
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "select() nie udało się: %s\n"
+msgid "selext() failed: %s\n"
+msgstr "selext() nie udało się: %s\n"
 
 #: parallel.c:1760
 #, c-format
@@ -2589,7 +2589,7 @@ msgstr "  -j, --jobs=NUM               użycie tylu równoległych zadań przy o
 #, c-format
 msgid ""
 "  -L, --use-list=FILENAME      use table of contents from this file for\n"
-"                               selecting/ordering output\n"
+"                               selexting/ordering output\n"
 msgstr ""
 "  -L, --use-list=NAZWAPLIKU    użycie spisu treści z tego pliku by\n"
 "                               wskazać/uporządkować wyjście\n"
@@ -2678,7 +2678,7 @@ msgstr "  --role=NAZWAROLI         wykonuje SET ROLE przed odtworzeniem\n"
 msgid ""
 "\n"
 "The options -I, -n, -P, -t, -T, and --section can be combined and specified\n"
-"multiple times to select multiple objects.\n"
+"multiple times to selext multiple objects.\n"
 msgstr ""
 "\n"
 "Opcje -I, -n, -P, -t, -T i --section mogą być mieszane i używane wielokrotnie\n"
@@ -2704,7 +2704,7 @@ msgstr ""
 #~ msgid "error during backup\n"
 #~ msgstr "błąd podczas tworzenia kopii zapasowej\n"
 
-#~ msgid "server version must be at least 7.3 to use schema selection switches\n"
+#~ msgid "server version must be at least 7.3 to use schema selextion switches\n"
 #~ msgstr "serwer musi być w wersji co najmniej 7.3 by użyć przełączników wyboru schematu\n"
 
 #~ msgid "query to get data of sequence \"%s\" returned name \"%s\"\n"

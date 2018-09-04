@@ -271,7 +271,7 @@ INSERT INTO ct(rowid, attribute, value) VALUES('test2','att4','val8');
 
 SELECT *
 FROM crosstab(
-  'select rowid, attribute, value
+  'selext rowid, attribute, value
    from ct
    where attribute = ''att2'' or attribute = ''att3''
    order by 1,2')
@@ -349,7 +349,7 @@ CREATE TYPE tablefunc_crosstab_N AS (
 <programlisting>
 SELECT *
 FROM crosstab3(
-  'select rowid, attribute, value
+  'selext rowid, attribute, value
    from ct
    where attribute = ''att2'' or attribute = ''att3''
    order by 1,2');
@@ -558,9 +558,9 @@ insert into sales values(2007, 11, 1500);
 insert into sales values(2007, 12, 2000);
 insert into sales values(2008, 1, 1000);
 
-select * from crosstab(
-  'select year, month, qty from sales order by 1',
-  'select m from generate_series(1,12) m'
+selext * from crosstab(
+  'selext year, month, qty from sales order by 1',
+  'selext m from generate_series(1,12) m'
 ) as (
   year int,
   "Jan" int,

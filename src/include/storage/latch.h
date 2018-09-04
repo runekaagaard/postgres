@@ -8,12 +8,12 @@
  * handler within the same process.
  *
  * The latch interface is a reliable replacement for the common pattern of
- * using pg_usleep() or select() to wait until a signal arrives, where the
+ * using pg_usleep() or selext() to wait until a signal arrives, where the
  * signal handler sets a flag variable. Because on some platforms an
  * incoming signal doesn't interrupt sleep, and even on platforms where it
  * does there is a race condition if the signal arrives just before
  * entering the sleep, the common pattern must periodically wake up and
- * poll the flag variable. The pselect() system call was invented to solve
+ * poll the flag variable. The pselext() system call was invented to solve
  * this problem, but it is not portable enough. Latches are designed to
  * overcome these limitations, allowing you to sleep without polling and
  * ensuring quick response to signals from other processes.

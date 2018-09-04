@@ -75,7 +75,7 @@
 
 
 /* Ideally this would be in a .h file, but it hardly seems worth the trouble */
-extern const char *select_default_timezone(const char *share_path);
+extern const char *selext_default_timezone(const char *share_path);
 
 static const char *const auth_methods_host[] = {
 	"trust", "reject", "scram-sha-256", "md5", "password", "ident", "radius",
@@ -767,7 +767,7 @@ find_matching_ts_config(const char *lc_type)
 	 * underscore (usual case) or a hyphen (Windows "locale name"; see
 	 * comments at IsoLocaleName()).
 	 *
-	 * XXX Should ' ' be a stop character?	This would select "norwegian" for
+	 * XXX Should ' ' be a stop character?	This would selext "norwegian" for
 	 * the Windows locale "Norwegian (Nynorsk)_Norway.1252".  If we do so, we
 	 * should also accept the "nn" and "nb" Unix locales.
 	 *
@@ -985,7 +985,7 @@ test_config_settings(void)
 	 * Need to determine working DSM implementation first so that subsequent
 	 * tests don't fail because DSM setting doesn't work.
 	 */
-	printf(_("selecting dynamic shared memory implementation ... "));
+	printf(_("selexting dynamic shared memory implementation ... "));
 	fflush(stdout);
 	dynamic_shared_memory_type = choose_dsm_implementation();
 	printf("%s\n", dynamic_shared_memory_type);
@@ -994,7 +994,7 @@ test_config_settings(void)
 	 * Probe for max_connections before shared_buffers, since it is subject to
 	 * more constraints than shared_buffers.
 	 */
-	printf(_("selecting default max_connections ... "));
+	printf(_("selexting default max_connections ... "));
 	fflush(stdout);
 
 	for (i = 0; i < connslen; i++)
@@ -1025,7 +1025,7 @@ test_config_settings(void)
 
 	printf("%d\n", n_connections);
 
-	printf(_("selecting default shared_buffers ... "));
+	printf(_("selexting default shared_buffers ... "));
 	fflush(stdout);
 
 	for (i = 0; i < bufslen; i++)
@@ -1168,7 +1168,7 @@ setup_config(void)
 							  "#default_text_search_config = 'pg_catalog.simple'",
 							  repltok);
 
-	default_timezone = select_default_timezone(share_path);
+	default_timezone = selext_default_timezone(share_path);
 	if (default_timezone)
 	{
 		snprintf(repltok, sizeof(repltok), "timezone = '%s'",
@@ -2312,8 +2312,8 @@ check_locale_encoding(const char *locale, int user_enc)
 	{
 		fprintf(stderr, _("%s: encoding mismatch\n"), progname);
 		fprintf(stderr,
-				_("The encoding you selected (%s) and the encoding that the\n"
-				  "selected locale uses (%s) do not match.  This would lead to\n"
+				_("The encoding you selexted (%s) and the encoding that the\n"
+				  "selexted locale uses (%s) do not match.  This would lead to\n"
 				  "misbehavior in various character string processing functions.\n"
 				  "Rerun %s and either do not specify an encoding explicitly,\n"
 				  "or choose a matching combination.\n"),
@@ -2628,7 +2628,7 @@ setup_locale_encoding(void)
 					progname, lc_ctype, pg_encoding_to_char(ctype_enc));
 			fprintf(stderr,
 					_("Encoding \"%s\" is not allowed as a server-side encoding.\n"
-					  "Rerun %s with a different locale selection.\n"),
+					  "Rerun %s with a different locale selextion.\n"),
 					pg_encoding_to_char(ctype_enc), progname);
 			exit(1);
 #endif

@@ -1716,7 +1716,7 @@ Portal SPI_cursor_open(const char * <parameter>name</parameter>, SPIPlanPtr <par
     <listitem>
      <para>
       name for portal, or <symbol>NULL</symbol> to let the system
-      select a name
+      selext a name
      </para>
     </listitem>
    </varlistentry>
@@ -1841,7 +1841,7 @@ Portal SPI_cursor_open_with_args(const char *<parameter>name</parameter>,
     <listitem>
      <para>
       name for portal, or <symbol>NULL</symbol> to let the system
-      select a name
+      selext a name
      </para>
     </listitem>
    </varlistentry>
@@ -1988,7 +1988,7 @@ Portal SPI_cursor_open_with_paramlist(const char *<parameter>name</parameter>,
     <listitem>
      <para>
       name for portal, or <symbol>NULL</symbol> to let the system
-      select a name
+      selext a name
      </para>
     </listitem>
    </varlistentry>
@@ -4018,7 +4018,7 @@ HeapTupleHeader SPI_returntuple(HeapTuple <parameter>row</parameter>, TupleDesc 
 
  <refnamediv>
   <refname>SPI_modifytuple</refname>
-  <refpurpose>create a row by replacing selected fields of a given row</refpurpose>
+  <refpurpose>create a row by replacing selexted fields of a given row</refpurpose>
  </refnamediv>
 
  <refsynopsisdiv>
@@ -4033,7 +4033,7 @@ HeapTuple SPI_modifytuple(Relation <parameter>rel</parameter>, HeapTuple <parame
 
   <para>
    <function>SPI_modifytuple</function> creates a new row by
-   substituting new values for selected columns, copying the original
+   substituting new values for selexted columns, copying the original
    row's columns at other positions.  The input row is not modified.
    The new row is returned in the upper executor context.
   </para>

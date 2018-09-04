@@ -810,7 +810,7 @@ CREATE OPERATOR &lt; (
 );
 </programlisting>
    It is important to specify the correct commutator and negator operators,
-   as well as suitable restriction and join selectivity
+   as well as suitable restriction and join selextivity
    functions, otherwise the optimizer will be unable to make effective
    use of the index.
   </para>
@@ -1187,7 +1187,7 @@ ALTER OPERATOR FAMILY integer_ops USING btree ADD
 SELECT * FROM mytable ORDER BY somecol USING ~&lt;~;
 </programlisting>
    Alternatively, specifying the class's greater-than operator
-   in <literal>USING</literal> selects a descending-order sort.
+   in <literal>USING</literal> selexts a descending-order sort.
   </para>
 
   <para>

@@ -2,7 +2,7 @@
  *
  * createplan.c
  *	  Routines to create the desired plan for processing a query.
- *	  Planning is complete, we just need to convert the selected
+ *	  Planning is complete, we just need to convert the selexted
  *	  Path into a Plan.
  *
  * Portions Copyright (c) 1996-2018, PostgreSQL Global Development Group
@@ -36,7 +36,7 @@
 #include "optimizer/planner.h"
 #include "optimizer/predtest.h"
 #include "optimizer/restrictinfo.h"
-#include "optimizer/subselect.h"
+#include "optimizer/subselext.h"
 #include "optimizer/tlist.h"
 #include "optimizer/var.h"
 #include "parser/parse_clause.h"
@@ -2901,7 +2901,7 @@ create_bitmap_subplan(PlannerInfo *root, Path *bitmapqual,
 		plan->startup_cost = apath->path.startup_cost;
 		plan->total_cost = apath->path.total_cost;
 		plan->plan_rows =
-			clamp_row_est(apath->bitmapselectivity * apath->path.parent->tuples);
+			clamp_row_est(apath->bitmapselextivity * apath->path.parent->tuples);
 		plan->plan_width = 0;	/* meaningless */
 		plan->parallel_aware = false;
 		plan->parallel_safe = apath->path.parallel_safe;
@@ -2965,7 +2965,7 @@ create_bitmap_subplan(PlannerInfo *root, Path *bitmapqual,
 			plan->startup_cost = opath->path.startup_cost;
 			plan->total_cost = opath->path.total_cost;
 			plan->plan_rows =
-				clamp_row_est(opath->bitmapselectivity * opath->path.parent->tuples);
+				clamp_row_est(opath->bitmapselextivity * opath->path.parent->tuples);
 			plan->plan_width = 0;	/* meaningless */
 			plan->parallel_aware = false;
 			plan->parallel_safe = opath->path.parallel_safe;
@@ -3010,7 +3010,7 @@ create_bitmap_subplan(PlannerInfo *root, Path *bitmapqual,
 		plan->startup_cost = 0.0;
 		plan->total_cost = ipath->indextotalcost;
 		plan->plan_rows =
-			clamp_row_est(ipath->indexselectivity * ipath->path.parent->tuples);
+			clamp_row_est(ipath->indexselextivity * ipath->path.parent->tuples);
 		plan->plan_width = 0;	/* meaningless */
 		plan->parallel_aware = false;
 		plan->parallel_safe = ipath->path.parallel_safe;
@@ -3522,7 +3522,7 @@ create_foreignscan_plan(PlannerInfo *root, ForeignPath *best_path,
 	 * Let the FDW perform its processing on the restriction clauses and
 	 * generate the plan node.  Note that the FDW might remove restriction
 	 * clauses that it intends to execute remotely, or even add more (if it
-	 * has selected some join clauses for remote use but also wants them
+	 * has selexted some join clauses for remote use but also wants them
 	 * rechecked locally).
 	 */
 	scan_plan = rel->fdwroutine->GetForeignPlan(root, rel, rel_oid,
@@ -4811,7 +4811,7 @@ get_switched_clauses(List *clauses, Relids outerrelids)
  * execution cost, cheapest first.
  *
  * Ideally the order should be driven by a combination of execution cost and
- * selectivity, but it's not immediately clear how to account for both,
+ * selextivity, but it's not immediately clear how to account for both,
  * and given the uncertainty of the estimates the reliability of the decisions
  * would be doubtful anyway.  So we just order by security level then
  * estimated per-tuple cost, being careful not to change the order when
@@ -4828,7 +4828,7 @@ get_switched_clauses(List *clauses, Relids outerrelids)
  * Note: some callers pass lists that contain entries that will later be
  * removed; this is the easiest way to let this routine see RestrictInfos
  * instead of bare clauses.  This is another reason why trying to consider
- * selectivity in the ordering would likely do the wrong thing.
+ * selextivity in the ordering would likely do the wrong thing.
  */
 static List *
 order_qual_clauses(PlannerInfo *root, List *clauses)

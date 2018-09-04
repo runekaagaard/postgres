@@ -68,8 +68,8 @@ static Node *transformJoinOnClause(ParseState *pstate, JoinExpr *j,
 static RangeTblEntry *getRTEForSpecialRelationTypes(ParseState *pstate,
 							  RangeVar *rv);
 static RangeTblEntry *transformTableEntry(ParseState *pstate, RangeVar *r);
-static RangeTblEntry *transformRangeSubselect(ParseState *pstate,
-						RangeSubselect *r);
+static RangeTblEntry *transformRangeSubselext(ParseState *pstate,
+						RangeSubselext *r);
 static RangeTblEntry *transformRangeFunction(ParseState *pstate,
 					   RangeFunction *r);
 static RangeTblEntry *transformRangeTableFunc(ParseState *pstate,
@@ -121,7 +121,7 @@ transformFromClause(ParseState *pstate, List *frmList)
 	ListCell   *fl;
 
 	/*
-	 * The grammar will have produced a list of RangeVars, RangeSubselects,
+	 * The grammar will have produced a list of RangeVars, RangeSubselexts,
 	 * RangeFunctions, and/or JoinExprs. Transform each one (possibly adding
 	 * entries to the rtable), check for duplicate refnames, and then add it
 	 * to the joinlist and namespace.
@@ -438,18 +438,18 @@ transformTableEntry(ParseState *pstate, RangeVar *r)
 }
 
 /*
- * transformRangeSubselect --- transform a sub-SELECT appearing in FROM
+ * transformRangeSubselext --- transform a sub-SELECT appearing in FROM
  */
 static RangeTblEntry *
-transformRangeSubselect(ParseState *pstate, RangeSubselect *r)
+transformRangeSubselext(ParseState *pstate, RangeSubselext *r)
 {
 	Query	   *query;
 	RangeTblEntry *rte;
 
 	/*
-	 * We require user to supply an alias for a subselect, per SQL92. To relax
+	 * We require user to supply an alias for a subselext, per SQL92. To relax
 	 * this, we'd have to be prepared to gin up a unique alias for an
-	 * unlabeled subselect.  (This is just elog, not ereport, because the
+	 * unlabeled subselext.  (This is just elog, not ereport, because the
 	 * grammar should have enforced it already.  It'd probably be better to
 	 * report the error here, but we don't have a good error location here.)
 	 */
@@ -457,7 +457,7 @@ transformRangeSubselect(ParseState *pstate, RangeSubselect *r)
 		elog(ERROR, "subquery in FROM must have an alias");
 
 	/*
-	 * Set p_expr_kind to show this parse level is recursing to a subselect.
+	 * Set p_expr_kind to show this parse level is recursing to a subselext.
 	 * We can't be nested within any expression, so don't need save-restore
 	 * logic here.
 	 */
@@ -465,7 +465,7 @@ transformRangeSubselect(ParseState *pstate, RangeSubselect *r)
 	pstate->p_expr_kind = EXPR_KIND_FROM_SUBSELECT;
 
 	/*
-	 * If the subselect is LATERAL, make lateral_only names of this level
+	 * If the subselext is LATERAL, make lateral_only names of this level
 	 * visible to it.  (LATERAL can't nest within a single pstate level, so we
 	 * don't need save/restore logic here.)
 	 */
@@ -1130,14 +1130,14 @@ transformFromClauseItem(ParseState *pstate, Node *n,
 		rtr->rtindex = rtindex;
 		return (Node *) rtr;
 	}
-	else if (IsA(n, RangeSubselect))
+	else if (IsA(n, RangeSubselext))
 	{
 		/* sub-SELECT is like a plain relation */
 		RangeTblRef *rtr;
 		RangeTblEntry *rte;
 		int			rtindex;
 
-		rte = transformRangeSubselect(pstate, (RangeSubselect *) n);
+		rte = transformRangeSubselext(pstate, (RangeSubselext *) n);
 		/* assume new rte is at end */
 		rtindex = list_length(pstate->p_rtable);
 		Assert(rte == rt_fetch(rtindex, pstate->p_rtable));
@@ -1558,7 +1558,7 @@ buildMergedJoinVar(ParseState *pstate, JoinType jointype,
 	outcoltypmod = l_colvar->vartypmod;
 	if (outcoltype != r_colvar->vartype)
 	{
-		outcoltype = select_common_type(pstate,
+		outcoltype = selext_common_type(pstate,
 										list_make2(l_colvar, r_colvar),
 										"JOIN/USING",
 										NULL);
@@ -1796,7 +1796,7 @@ checkExprIsVarFree(ParseState *pstate, Node *n, const char *constructName)
  * checkTargetlistEntrySQL92 -
  *	  Validate a targetlist entry found by findTargetlistEntrySQL92
  *
- * When we select a pre-existing tlist entry as a result of syntax such
+ * When we selext a pre-existing tlist entry as a result of syntax such
  * as "GROUP BY 1", we have to make sure it is acceptable for use in the
  * indicated clause type; transformExpr() will have treated it as a regular
  * targetlist item.
@@ -2000,7 +2000,7 @@ findTargetlistEntrySQL92(ParseState *pstate, Node *node, List **tlist,
 		ereport(ERROR,
 				(errcode(ERRCODE_INVALID_COLUMN_REFERENCE),
 		/* translator: %s is name of a SQL construct, eg ORDER BY */
-				 errmsg("%s position %d is not in select list",
+				 errmsg("%s position %d is not in selext list",
 						ParseExprKindName(exprKind), target_pos),
 				 parser_errposition(pstate, location)));
 	}
@@ -2050,7 +2050,7 @@ findTargetlistEntrySQL99(ParseState *pstate, Node *node, List **tlist,
 		 * Ignore any implicit cast on the existing tlist expression.
 		 *
 		 * This essentially allows the ORDER/GROUP/etc item to adopt the same
-		 * datatype previously selected for a textually-equivalent tlist item.
+		 * datatype previously selexted for a textually-equivalent tlist item.
 		 * There can't be any implicit cast at top level in an ordinary SELECT
 		 * tlist at this stage, but the case does arise with ORDER BY in an
 		 * aggregate function.
@@ -2872,7 +2872,7 @@ transformDistinctClause(ParseState *pstate,
 					(errcode(ERRCODE_INVALID_COLUMN_REFERENCE),
 					 is_agg ?
 					 errmsg("in an aggregate with DISTINCT, ORDER BY expressions must appear in argument list") :
-					 errmsg("for SELECT DISTINCT, ORDER BY expressions must appear in select list"),
+					 errmsg("for SELECT DISTINCT, ORDER BY expressions must appear in selext list"),
 					 parser_errposition(pstate,
 										exprLocation((Node *) tle->expr))));
 		result = lappend(result, copyObject(scl));
@@ -3237,7 +3237,7 @@ transformOnConflictArbiter(ParseState *pstate,
 			/* Make sure the rel as a whole is marked for SELECT access */
 			rte->requiredPerms |= ACL_SELECT;
 			/* Mark the constrained columns as requiring SELECT access */
-			rte->selectedCols = bms_add_members(rte->selectedCols, conattnos);
+			rte->selextedCols = bms_add_members(rte->selextedCols, conattnos);
 		}
 	}
 
@@ -3588,8 +3588,8 @@ transformFrameOffset(ParseState *pstate, int frameOptions,
 		Oid			preferredType;
 		int			nfuncs = 0;
 		int			nmatches = 0;
-		Oid			selectedType = InvalidOid;
-		Oid			selectedFunc = InvalidOid;
+		Oid			selextedType = InvalidOid;
+		Oid			selextedFunc = InvalidOid;
 		CatCList   *proclist;
 		int			i;
 
@@ -3626,10 +3626,10 @@ transformFrameOffset(ParseState *pstate, int frameOptions,
 			nmatches++;
 
 			/* Remember preferred match, or any match if didn't find that */
-			if (selectedType != preferredType)
+			if (selextedType != preferredType)
 			{
-				selectedType = procform->amprocrighttype;
-				selectedFunc = procform->amproc;
+				selextedType = procform->amprocrighttype;
+				selextedFunc = procform->amproc;
 			}
 		}
 		ReleaseCatCacheList(proclist);
@@ -3653,7 +3653,7 @@ transformFrameOffset(ParseState *pstate, int frameOptions,
 							format_type_be(nodeType)),
 					 errhint("Cast the offset value to an appropriate type."),
 					 parser_errposition(pstate, exprLocation(node))));
-		if (nmatches != 1 && selectedType != preferredType)
+		if (nmatches != 1 && selextedType != preferredType)
 			ereport(ERROR,
 					(errcode(ERRCODE_FEATURE_NOT_SUPPORTED),
 					 errmsg("RANGE with offset PRECEDING/FOLLOWING has multiple interpretations for column type %s and offset type %s",
@@ -3665,8 +3665,8 @@ transformFrameOffset(ParseState *pstate, int frameOptions,
 		/* OK, coerce the offset to the right type */
 		constructName = "RANGE";
 		node = coerce_to_specific_type(pstate, node,
-									   selectedType, constructName);
-		*inRangeFunc = selectedFunc;
+									   selextedType, constructName);
+		*inRangeFunc = selextedFunc;
 	}
 	else if (frameOptions & FRAMEOPTION_GROUPS)
 	{

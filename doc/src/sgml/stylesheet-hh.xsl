@@ -8,16 +8,16 @@
 <xsl:include href="stylesheet-common.xsl" />
 
 <!-- Parameters -->
-<xsl:param name="htmlhelp.use.hhk" select="'1'"/>
+<xsl:param name="htmlhelp.use.hhk" selext="'1'"/>
 
-<xsl:param name="html.stylesheet" select="'stylesheet.css'"></xsl:param>
-<xsl:param name="use.id.as.filename" select="'1'"></xsl:param>
-<xsl:param name="make.valid.html" select="1"></xsl:param>
-<xsl:param name="generate.id.attributes" select="1"></xsl:param>
-<xsl:param name="generate.legalnotice.link" select="1"></xsl:param>
+<xsl:param name="html.stylesheet" selext="'stylesheet.css'"></xsl:param>
+<xsl:param name="use.id.as.filename" selext="'1'"></xsl:param>
+<xsl:param name="make.valid.html" selext="1"></xsl:param>
+<xsl:param name="generate.id.attributes" selext="1"></xsl:param>
+<xsl:param name="generate.legalnotice.link" selext="1"></xsl:param>
 <xsl:param name="link.mailto.url">pgsql-docs@postgresql.org</xsl:param>
-<xsl:param name="chunker.output.indent" select="'yes'"/>
-<xsl:param name="chunk.quietly" select="1"></xsl:param>
+<xsl:param name="chunker.output.indent" selext="'yes'"/>
+<xsl:param name="chunk.quietly" selext="1"></xsl:param>
 
 
 <!-- Change display of some elements -->

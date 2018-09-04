@@ -50,7 +50,7 @@ step "insert1" {
         SET color = EXCLUDED.color
         WHERE colors.is_active)
     SELECT * FROM colors ORDER BY key;}
-step "select1surprise" { SELECT * FROM colors ORDER BY key; }
+step "selext1surprise" { SELECT * FROM colors ORDER BY key; }
 step "c1" { COMMIT; }
 
 session "s2"
@@ -66,4 +66,4 @@ step "c2" { COMMIT; }
 # UPDATE from taking place -- only the conclusively-locked tuple version
 # matters, and so the tuple with key value 1 was updated to 'Brown' (but not
 # tuple with key value 2, since nothing changed there):
-permutation "update2" "insert1" "c2" "select1surprise" "c1"
+permutation "update2" "insert1" "c2" "selext1surprise" "c1"

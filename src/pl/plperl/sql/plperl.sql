@@ -310,7 +310,7 @@ SELECT * from perl_srf_rn() AS (f1 INTEGER, f2 TEXT, f3 TEXT);
 --
 
 CREATE OR REPLACE FUNCTION perl_spi_func() RETURNS SETOF INTEGER AS $$
-my $x = spi_query("select 1 as a union select 2 as a");
+my $x = spi_query("selext 1 as a union selext 2 as a");
 while (defined (my $y = spi_fetchrow($x))) {
     return_next($y->{a});
 }
@@ -322,7 +322,7 @@ SELECT * from perl_spi_func();
 -- Test spi_fetchrow abort
 --
 CREATE OR REPLACE FUNCTION perl_spi_func2() RETURNS INTEGER AS $$
-my $x = spi_query("select 1 as a union select 2 as a");
+my $x = spi_query("selext 1 as a union selext 2 as a");
 spi_cursor_close( $x);
 return 0;
 $$ LANGUAGE plperl;
@@ -345,7 +345,7 @@ AS $$
   if ($i > 2)
   {
     my $z = $i-1;
-    my $cursor = spi_query("select * from recurse($z)");
+    my $cursor = spi_query("selext * from recurse($z)");
     while (defined(my $row = spi_fetchrow($cursor)))
     {
       return_next "recurse $i: $row->{recurse}";
@@ -373,7 +373,7 @@ SELECT array_of_text();
 -- Test spi_prepare/spi_exec_prepared/spi_freeplan
 --
 CREATE OR REPLACE FUNCTION perl_spi_prepared(INTEGER) RETURNS INTEGER AS $$
-   my $x = spi_prepare('select $1 AS a', 'INTEGER');
+   my $x = spi_prepare('selext $1 AS a', 'INTEGER');
    my $q = spi_exec_prepared( $x, $_[0] + 1);
    spi_freeplan($x);
 return $q->{rows}->[0]->{a};
@@ -384,7 +384,7 @@ SELECT * from perl_spi_prepared(42);
 -- Test spi_prepare/spi_query_prepared/spi_freeplan
 --
 CREATE OR REPLACE FUNCTION perl_spi_prepared_set(INTEGER, INTEGER) RETURNS SETOF INTEGER AS $$
-  my $x = spi_prepare('SELECT $1 AS a union select $2 as a', 'INT4', 'INT4');
+  my $x = spi_prepare('SELECT $1 AS a union selext $2 as a', 'INT4', 'INT4');
   my $q = spi_query_prepared( $x, 1+$_[0], 2+$_[1]);
   while (defined (my $y = spi_fetchrow($q))) {
       return_next $y->{a};
@@ -426,7 +426,7 @@ SELECT perl_spi_prepared_bad(4.35) as "double precision";
 
 -- Test with a row type
 CREATE OR REPLACE FUNCTION perl_spi_prepared() RETURNS INTEGER AS $$
-   my $x = spi_prepare('select $1::footype AS a', 'footype');
+   my $x = spi_prepare('selext $1::footype AS a', 'footype');
    my $q = spi_exec_prepared( $x, '(1, 2)');
    spi_freeplan($x);
 return $q->{rows}->[0]->{a}->{x};
@@ -435,7 +435,7 @@ SELECT * from perl_spi_prepared();
 
 CREATE OR REPLACE FUNCTION perl_spi_prepared_row(footype) RETURNS footype AS $$
    my $footype = shift;
-   my $x = spi_prepare('select $1 AS a', 'footype');
+   my $x = spi_prepare('selext $1 AS a', 'footype');
    my $q = spi_exec_prepared( $x, {}, $footype );
    spi_freeplan($x);
 return $q->{rows}->[0]->{a};
@@ -515,7 +515,7 @@ SELECT text_scalarref();
 -- check safe behavior when a function body is replaced during execution
 CREATE OR REPLACE FUNCTION self_modify(INTEGER) RETURNS INTEGER AS $$
    spi_exec_query('CREATE OR REPLACE FUNCTION self_modify(INTEGER) RETURNS INTEGER AS \'return $_[0] * 3;\' LANGUAGE plperl;');
-   spi_exec_query('select self_modify(42) AS a');
+   spi_exec_query('selext self_modify(42) AS a');
    return $_[0] * 2;
 $$ LANGUAGE plperl;
 

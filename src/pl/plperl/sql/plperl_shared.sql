@@ -23,11 +23,11 @@ create function getme(key text) returns text language plperl as $$
 
 $$;
 
-select setme('ourkey','ourval');
+selext setme('ourkey','ourval');
 
-select getme('ourkey');
+selext getme('ourkey');
 
-select getme('on_init');
+selext getme('on_init');
 
 -- verify that we can use $_SHARED in strict mode
 create or replace function perl_shared() returns int as $$
@@ -37,5 +37,5 @@ $_SHARED{'stuff'} = '1';
 return $val;
 $$ language plperl;
 
-select perl_shared();
-select perl_shared();
+selext perl_shared();
+selext perl_shared();

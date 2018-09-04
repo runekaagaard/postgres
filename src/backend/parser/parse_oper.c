@@ -66,7 +66,7 @@ typedef struct OprCacheEntry
 
 
 static Oid	binary_oper_exact(List *opname, Oid arg1, Oid arg2);
-static FuncDetailCode oper_select_candidate(int nargs,
+static FuncDetailCode oper_selext_candidate(int nargs,
 					  Oid *input_typeids,
 					  FuncCandidateList candidates,
 					  Oid *operOid);
@@ -304,7 +304,7 @@ binary_oper_exact(List *opname, Oid arg1, Oid arg2)
 }
 
 
-/* oper_select_candidate()
+/* oper_selext_candidate()
  *		Given the input argtype array and one or more candidates
  *		for the operator, attempt to resolve the conflict.
  *
@@ -316,7 +316,7 @@ binary_oper_exact(List *opname, Oid arg1, Oid arg2)
  * pruned away, however.
  */
 static FuncDetailCode
-oper_select_candidate(int nargs,
+oper_selext_candidate(int nargs,
 					  Oid *input_typeids,
 					  FuncCandidateList candidates,
 					  Oid *operOid) /* output argument */
@@ -346,7 +346,7 @@ oper_select_candidate(int nargs,
 	 * Use the same heuristics as for ambiguous functions to resolve the
 	 * conflict.
 	 */
-	candidates = func_select_candidate(nargs, input_typeids, candidates);
+	candidates = func_selext_candidate(nargs, input_typeids, candidates);
 
 	if (candidates)
 	{
@@ -355,7 +355,7 @@ oper_select_candidate(int nargs,
 	}
 
 	*operOid = InvalidOid;
-	return FUNCDETAIL_MULTIPLE; /* failed to select a best candidate */
+	return FUNCDETAIL_MULTIPLE; /* failed to selext a best candidate */
 }
 
 
@@ -428,7 +428,7 @@ oper(ParseState *pstate, List *opname, Oid ltypeId, Oid rtypeId,
 				ltypeId = rtypeId;
 			inputOids[0] = ltypeId;
 			inputOids[1] = rtypeId;
-			fdresult = oper_select_candidate(2, inputOids, clist, &operOid);
+			fdresult = oper_selext_candidate(2, inputOids, clist, &operOid);
 		}
 	}
 
@@ -564,10 +564,10 @@ right_oper(ParseState *pstate, List *op, Oid arg, bool noError, int location)
 		if (clist != NULL)
 		{
 			/*
-			 * We must run oper_select_candidate even if only one candidate,
+			 * We must run oper_selext_candidate even if only one candidate,
 			 * otherwise we may falsely return a non-type-compatible operator.
 			 */
-			fdresult = oper_select_candidate(1, &arg, clist, &operOid);
+			fdresult = oper_selext_candidate(1, &arg, clist, &operOid);
 		}
 	}
 
@@ -644,7 +644,7 @@ left_oper(ParseState *pstate, List *op, Oid arg, bool noError, int location)
 		{
 			/*
 			 * The returned list has args in the form (0, oprright). Move the
-			 * useful data into args[0] to keep oper_select_candidate simple.
+			 * useful data into args[0] to keep oper_selext_candidate simple.
 			 * XXX we are assuming here that we may scribble on the list!
 			 */
 			FuncCandidateList clisti;
@@ -655,10 +655,10 @@ left_oper(ParseState *pstate, List *op, Oid arg, bool noError, int location)
 			}
 
 			/*
-			 * We must run oper_select_candidate even if only one candidate,
+			 * We must run oper_selext_candidate even if only one candidate,
 			 * otherwise we may falsely return a non-type-compatible operator.
 			 */
-			fdresult = oper_select_candidate(1, &arg, clist, &operOid);
+			fdresult = oper_selext_candidate(1, &arg, clist, &operOid);
 		}
 	}
 

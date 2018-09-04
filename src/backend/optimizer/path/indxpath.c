@@ -448,7 +448,7 @@ consider_index_join_clauses(PlannerInfo *root, RelOptInfo *rel,
 	/*
 	 * The strategy here is to identify every potentially useful set of outer
 	 * rels that can provide indexable join clauses.  For each such set,
-	 * select all the join clauses available from those outer rels, add on all
+	 * selext all the join clauses available from those outer rels, add on all
 	 * the indexable restriction clauses, and generate plain and/or bitmap
 	 * index paths for that set of clauses.  This is based on the assumption
 	 * that it's always better to apply a clause as an indexqual than as a
@@ -461,7 +461,7 @@ consider_index_join_clauses(PlannerInfo *root, RelOptInfo *rel,
 	 * considered to a multiple of the number of clauses considered.  (We'll
 	 * always consider using each individual join clause, though.)
 	 *
-	 * For simplicity in selecting relevant clauses, we represent each set of
+	 * For simplicity in selexting relevant clauses, we represent each set of
 	 * outer rels as a maximum set of clause_relids --- that is, the indexed
 	 * relation itself is also included in the relids set.  considered_relids
 	 * lists all relids sets we've already tried.
@@ -757,7 +757,7 @@ get_index_paths(PlannerInfo *root, RelOptInfo *rel,
 	/*
 	 * If we skipped any lower-order ScalarArrayOpExprs on an index with an AM
 	 * that supports them, then try again including those clauses.  This will
-	 * produce paths with more selectivity but no ordering.
+	 * produce paths with more selextivity but no ordering.
 	 */
 	if (skip_lower_saop)
 	{
@@ -779,7 +779,7 @@ get_index_paths(PlannerInfo *root, RelOptInfo *rel,
 	 *
 	 * Also, pick out the ones that are usable as bitmap scans.  For that, we
 	 * must discard indexes that don't support bitmap scans, and we also are
-	 * only interested in paths that have some selectivity; we should discard
+	 * only interested in paths that have some selextivity; we should discard
 	 * anything that was generated solely for ordering purposes.
 	 */
 	foreach(lc, indexpaths)
@@ -791,7 +791,7 @@ get_index_paths(PlannerInfo *root, RelOptInfo *rel,
 
 		if (index->amhasgetbitmap &&
 			(ipath->path.pathkeys == NIL ||
-			 ipath->indexselectivity < 1.0))
+			 ipath->indexselextivity < 1.0))
 			*bitindexpaths = lappend(*bitindexpaths, ipath);
 	}
 
@@ -913,7 +913,7 @@ build_index_paths(PlannerInfo *root, RelOptInfo *rel,
 	 * aware of that refinement.)
 	 *
 	 * We also build a Relids set showing which outer rels are required by the
-	 * selected clauses.  Any lateral_relids are included in that, but not
+	 * selexted clauses.  Any lateral_relids are included in that, but not
 	 * otherwise accounted for.
 	 */
 	index_clauses = NIL;
@@ -1360,7 +1360,7 @@ generate_bitmap_or_paths(PlannerInfo *root, RelOptInfo *rel,
  *		Given a nonempty list of bitmap paths, AND them into one path.
  *
  * This is a nontrivial decision since we can legally use any subset of the
- * given path set.  We want to choose a good tradeoff between selectivity
+ * given path set.  We want to choose a good tradeoff between selextivity
  * and cost of computing the bitmap.
  *
  * The result is either a single one of the inputs, or a BitmapAndPath
@@ -1411,7 +1411,7 @@ choose_bitmap_and(PlannerInfo *root, RelOptInfo *rel, List *paths)
 	 * same WHERE clause.  This is a bit of a kluge: it's needed because
 	 * costsize.c and clausesel.c aren't very smart about redundant clauses.
 	 * They will usually double-count the redundant clauses, producing a
-	 * too-small selectivity that makes a redundant AND step look like it
+	 * too-small selextivity that makes a redundant AND step look like it
 	 * reduces the total cost.  Perhaps someday that code will be smarter and
 	 * we can remove this limitation.  (But note that this also defends
 	 * against flat-out duplicate input paths, which can happen because
@@ -1427,7 +1427,7 @@ choose_bitmap_and(PlannerInfo *root, RelOptInfo *rel, List *paths)
 	 * used with a plain index, followed by a clauseless scan of a partial
 	 * index "WHERE x >= 40 AND x < 50".  The partial index has been accepted
 	 * only because "x = 42" was present, and so allowing it would partially
-	 * double-count selectivity.  (We could use predicate_implied_by on
+	 * double-count selextivity.  (We could use predicate_implied_by on
 	 * regular qual clauses too, to have a more intelligent, but much more
 	 * expensive, check for redundancy --- but in most cases simple equality
 	 * seems to suffice.)
@@ -1580,7 +1580,7 @@ path_usage_comparator(const void *a, const void *b)
 	cost_bitmap_tree_node(pb->path, &bcost, &bselec);
 
 	/*
-	 * If costs are the same, sort by selectivity.
+	 * If costs are the same, sort by selextivity.
 	 */
 	if (acost < bcost)
 		return -1;
@@ -2217,8 +2217,8 @@ match_clauses_to_index(IndexOptInfo *index,
  * clause twice (pointer equality should be a good enough check for this).
  *
  * Note: it's possible that a badly-defined index could have multiple matching
- * columns.  We always select the first match if so; this avoids scenarios
- * wherein we get an inflated idea of the index's selectivity by using the
+ * columns.  We always selext the first match if so; this avoids scenarios
+ * wherein we get an inflated idea of the index's selextivity by using the
  * same clause multiple times with different index columns.
  */
 static void
@@ -3844,7 +3844,7 @@ expand_indexqual_rowcompare(RestrictInfo *rinfo,
  *
  * *indexcolnos receives an integer list of the index column numbers (zero
  * based) used in the resulting expression.  The reason we need to return
- * that is that if the index is selected for use, createplan.c will need to
+ * that is that if the index is selexted for use, createplan.c will need to
  * call this again to extract that list.  (This is a bit grotty, but row
  * comparison indexquals aren't used enough to justify finding someplace to
  * keep the information in the Path representation.)  Since createplan.c

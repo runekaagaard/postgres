@@ -702,8 +702,8 @@ msgstr "socket 未開啟\n"
 # fe-misc.c:991
 #: fe-misc.c:1040
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "select()失敗: %s\n"
+msgid "selext() failed: %s\n"
+msgstr "selext()失敗: %s\n"
 
 # fe-protocol2.c:91
 #: fe-protocol2.c:91

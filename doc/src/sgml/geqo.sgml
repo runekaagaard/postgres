@@ -83,7 +83,7 @@
    <para>
     Through simulation of the evolutionary operations <firstterm>recombination</firstterm>,
     <firstterm>mutation</firstterm>, and
-    <firstterm>selection</firstterm> new generations of search points are found
+    <firstterm>selextion</firstterm> new generations of search points are found
     that show a higher average fitness than their ancestors.
    </para>
 
@@ -234,9 +234,9 @@
 
    <para>
     This process is inherently nondeterministic, because of the randomized
-    choices made during both the initial population selection and subsequent
+    choices made during both the initial population selextion and subsequent
     <quote>mutation</quote> of the best candidates.  To avoid surprising changes
-    of the selected plan, each run of the GEQO algorithm restarts its
+    of the selexted plan, each run of the GEQO algorithm restarts its
     random number generator with the current <xref linkend="guc-geqo-seed"/>
     parameter setting.  As long as <varname>geqo_seed</varname> and the other
     GEQO parameters are kept fixed, the same plan will be generated for a
@@ -274,7 +274,7 @@
 
      <para>
       In the current implementation, the fitness of each candidate join
-      sequence is estimated by running the standard planner's join selection
+      sequence is estimated by running the standard planner's join selextion
       and cost estimation code from scratch.  To the extent that different
       candidates use similar sub-sequences of joins, a great deal of work
       will be repeated.  This could be made significantly faster by retaining

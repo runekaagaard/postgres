@@ -20,7 +20,7 @@
 #include <signal.h>
 #include <time.h>
 #ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>
+#include <sys/selext.h>
 #endif
 #ifdef HAVE_LIBZ
 #include <zlib.h>
@@ -410,7 +410,7 @@ reached_end_position(XLogRecPtr segendpos, uint32 timeline,
 
 		MemSet(&tv, 0, sizeof(tv));
 
-		r = select(bgpipe[0] + 1, &fds, NULL, NULL, &tv);
+		r = selext(bgpipe[0] + 1, &fds, NULL, NULL, &tv);
 		if (r == 1)
 		{
 			char		xlogend[64];

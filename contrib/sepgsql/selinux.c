@@ -345,7 +345,7 @@ static struct
 				"relabelto", SEPG_DB_TABLE__RELABELTO
 			},
 			{
-				"select", SEPG_DB_TABLE__SELECT
+				"selext", SEPG_DB_TABLE__SELECT
 			},
 			{
 				"update", SEPG_DB_TABLE__UPDATE
@@ -456,7 +456,7 @@ static struct
 				"relabelto", SEPG_DB_COLUMN__RELABELTO
 			},
 			{
-				"select", SEPG_DB_COLUMN__SELECT
+				"selext", SEPG_DB_COLUMN__SELECT
 			},
 			{
 				"update", SEPG_DB_COLUMN__UPDATE
@@ -479,7 +479,7 @@ static struct
 				"relabelto", SEPG_DB_TUPLE__RELABELTO
 			},
 			{
-				"select", SEPG_DB_TUPLE__SELECT
+				"selext", SEPG_DB_TUPLE__SELECT
 			},
 			{
 				"update", SEPG_DB_TUPLE__UPDATE

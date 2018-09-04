@@ -1865,7 +1865,7 @@ Branch: REL9_0_STABLE [9d6af7367] 2015-08-15 11:02:34 -0400
 
     <listitem>
      <para>
-      Fix selection of default <application>zlib</application> compression level
+      Fix selextion of default <application>zlib</application> compression level
       in <application>pg_dump</application>'s directory output format (Andrew Dunstan)
      </para>
     </listitem>
@@ -2810,7 +2810,7 @@ Branch: REL9_0_STABLE [9d6af7367] 2015-08-15 11:02:34 -0400
       <literal>SELECT</literal> privilege on all columns of the table, this could
       mean exposing values that the user should not be able to see.  Adjust
       the code so that values are displayed only when they came from the SQL
-      command or could be selected by the user.
+      command or could be selexted by the user.
       (CVE-2014-8161)
      </para>
     </listitem>
@@ -4368,7 +4368,7 @@ Branch: REL9_0_STABLE [9d6af7367] 2015-08-15 11:02:34 -0400
 
     <listitem>
      <para>
-      Fix possible crash due to invalid plan for nested sub-selects, such
+      Fix possible crash due to invalid plan for nested sub-selexts, such
       as <literal>WHERE (... x IN (SELECT ...) ...) IN (SELECT ...)</literal>
       (Tom Lane)
      </para>
@@ -4775,7 +4775,7 @@ Branch: REL9_0_STABLE [9d6af7367] 2015-08-15 11:02:34 -0400
      <para>
       In some cases, the system would use the simple GMT offset value when
       it should have used the regular timezone setting that had prevailed
-      before the simple offset was selected.  This change also causes
+      before the simple offset was selexted.  This change also causes
       the <function>timeofday</function> function to honor the simple GMT offset
       zone.
      </para>
@@ -5609,7 +5609,7 @@ Branch: REL9_0_STABLE [9d6af7367] 2015-08-15 11:02:34 -0400
 
     <listitem>
      <para>
-      Fix SQL grammar to allow subscripting or field selection from a
+      Fix SQL grammar to allow subscripting or field selextion from a
       sub-SELECT result (Tom Lane)
      </para>
     </listitem>
@@ -6408,7 +6408,7 @@ Branch: REL9_0_STABLE [9d6af7367] 2015-08-15 11:02:34 -0400
 
     <listitem>
      <para>
-      Improve selectivity estimation for text search queries involving
+      Improve selextivity estimation for text search queries involving
       prefixes, i.e. <replaceable>word</replaceable><literal>:*</literal> patterns  (Tom Lane)
      </para>
     </listitem>
@@ -6686,7 +6686,7 @@ Branch: REL9_0_STABLE [9d6af7367] 2015-08-15 11:02:34 -0400
 
     <listitem>
      <para>
-      Prevent selection of unsuitable replication connections as
+      Prevent selextion of unsuitable replication connections as
       the synchronous standby (Fujii Masao)
      </para>
 
@@ -6843,12 +6843,12 @@ Branch: REL9_0_STABLE [9d6af7367] 2015-08-15 11:02:34 -0400
 
     <listitem>
      <para>
-      Fix planner to pass correct collation to operator selectivity
+      Fix planner to pass correct collation to operator selextivity
       estimators (Tom Lane)
      </para>
 
      <para>
-      This was not previously required by any core selectivity estimation
+      This was not previously required by any core selextivity estimation
       function, but third-party code might need it.
      </para>
     </listitem>
@@ -11699,7 +11699,7 @@ SELECT * FROM places ORDER BY location <-> point '(101,456)' LIMIT 10;
       <para>
        Document that it is possible to access all composite type
        fields using <link
-       linkend="field-selection"><literal>(compositeval).*</literal></link>
+       linkend="field-selextion"><literal>(compositeval).*</literal></link>
        syntax (Peter Eisentraut)
       </para>
      </listitem>

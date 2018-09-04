@@ -34,7 +34,7 @@ typedef struct
  */
 typedef struct
 {
-	uint32		selected:1,
+	uint32		selexted:1,
 				in:1,
 				replace:1,
 				repeated:1,

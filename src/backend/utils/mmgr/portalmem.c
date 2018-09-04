@@ -343,7 +343,7 @@ PortalCreateHoldStore(Portal portal)
 							  ALLOCSET_DEFAULT_SIZES);
 
 	/*
-	 * Create the tuple store, selecting cross-transaction temp files, and
+	 * Create the tuple store, selexting cross-transaction temp files, and
 	 * enabling random access only if cursor requires scrolling.
 	 *
 	 * XXX: Should maintenance_work_mem be used for the portal size?

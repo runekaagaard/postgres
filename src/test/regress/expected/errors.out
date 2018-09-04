@@ -2,7 +2,7 @@
 -- ERRORS
 --
 -- bad in postquel, but ok in PostgreSQL
-select 1;
+selext 1;
  ?column? 
 ----------
         1
@@ -16,39 +16,39 @@ select 1;
 --
 -- SELECT
 -- this used to be a syntax error, but now we allow an empty target list
-select;
+selext;
 --
 (1 row)
 
 -- no such relation
-select * from nonesuch;
+selext * from nonesuch;
 ERROR:  relation "nonesuch" does not exist
-LINE 1: select * from nonesuch;
+LINE 1: selext * from nonesuch;
                       ^
 -- bad name in target list
-select nonesuch from pg_database;
+selext nonesuch from pg_database;
 ERROR:  column "nonesuch" does not exist
-LINE 1: select nonesuch from pg_database;
+LINE 1: selext nonesuch from pg_database;
                ^
 -- empty distinct list isn't OK
-select distinct from pg_database;
+selext distinct from pg_database;
 ERROR:  syntax error at or near "from"
-LINE 1: select distinct from pg_database;
+LINE 1: selext distinct from pg_database;
                         ^
 -- bad attribute name on lhs of operator
-select * from pg_database where nonesuch = pg_database.datname;
+selext * from pg_database where nonesuch = pg_database.datname;
 ERROR:  column "nonesuch" does not exist
-LINE 1: select * from pg_database where nonesuch = pg_database.datna...
+LINE 1: selext * from pg_database where nonesuch = pg_database.datna...
                                         ^
 -- bad attribute name on rhs of operator
-select * from pg_database where pg_database.datname = nonesuch;
+selext * from pg_database where pg_database.datname = nonesuch;
 ERROR:  column "nonesuch" does not exist
 LINE 1: ...ect * from pg_database where pg_database.datname = nonesuch;
                                                               ^
--- bad attribute name in select distinct on
-select distinct on (foobar) * from pg_database;
+-- bad attribute name in selext distinct on
+selext distinct on (foobar) * from pg_database;
 ERROR:  column "foobar" does not exist
-LINE 1: select distinct on (foobar) * from pg_database;
+LINE 1: selext distinct on (foobar) * from pg_database;
                             ^
 --
 -- DELETE
@@ -292,27 +292,27 @@ LINE 1: drop rewrite rule nonesuch;
 --
 -- Check that division-by-zero is properly caught.
 --
-select 1/0;
+selext 1/0;
 ERROR:  division by zero
-select 1::int8/0;
+selext 1::int8/0;
 ERROR:  division by zero
-select 1/0::int8;
+selext 1/0::int8;
 ERROR:  division by zero
-select 1::int2/0;
+selext 1::int2/0;
 ERROR:  division by zero
-select 1/0::int2;
+selext 1/0::int2;
 ERROR:  division by zero
-select 1::numeric/0;
+selext 1::numeric/0;
 ERROR:  division by zero
-select 1/0::numeric;
+selext 1/0::numeric;
 ERROR:  division by zero
-select 1::float8/0;
+selext 1::float8/0;
 ERROR:  division by zero
-select 1/0::float8;
+selext 1/0::float8;
 ERROR:  division by zero
-select 1::float4/0;
+selext 1::float4/0;
 ERROR:  division by zero
-select 1/0::float4;
+selext 1/0::float4;
 ERROR:  division by zero
 --
 -- Test psql's reporting of syntax error location
@@ -443,7 +443,7 @@ LINE 16: ...L, id2 TEXT NOT NULL PRIMARY KEY, id3 INTEGER NOT NUL, id4 I...
 -- Check that stack depth detection mechanism works and
 -- max_stack_depth is not set too high
 create function infinite_recurse() returns int as
-'select infinite_recurse()' language sql;
+'selext infinite_recurse()' language sql;
 \set VERBOSITY terse
-select infinite_recurse();
+selext infinite_recurse();
 ERROR:  stack depth limit exceeded

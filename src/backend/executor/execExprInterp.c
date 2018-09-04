@@ -1645,7 +1645,7 @@ ExecInterpExpr(ExprState *state, ExprContext *econtext, bool *isnull)
 
 			fcinfo = &pertrans->transfn_fcinfo;
 
-			/* cf. select_current_set() */
+			/* cf. selext_current_set() */
 			aggstate->curaggcontext = op->d.agg_trans.aggcontext;
 			aggstate->current_set = op->d.agg_trans.setno;
 
@@ -1696,7 +1696,7 @@ ExecInterpExpr(ExprState *state, ExprContext *econtext, bool *isnull)
 
 			fcinfo = &pertrans->transfn_fcinfo;
 
-			/* cf. select_current_set() */
+			/* cf. selext_current_set() */
 			aggstate->curaggcontext = op->d.agg_trans.aggcontext;
 			aggstate->current_set = op->d.agg_trans.setno;
 
@@ -2859,7 +2859,7 @@ ExecEvalMinMax(ExprState *state, ExprEvalStep *op)
 void
 ExecEvalFieldSelect(ExprState *state, ExprEvalStep *op, ExprContext *econtext)
 {
-	AttrNumber	fieldnum = op->d.fieldselect.fieldnum;
+	AttrNumber	fieldnum = op->d.fieldselext.fieldnum;
 	Datum		tupDatum;
 	HeapTupleHeader tuple;
 	Oid			tupType;
@@ -2906,13 +2906,13 @@ ExecEvalFieldSelect(ExprState *state, ExprEvalStep *op, ExprContext *econtext)
 
 		/* Check for type mismatch --- possible after ALTER COLUMN TYPE? */
 		/* As in CheckVarSlotCompatibility, we should but can't check typmod */
-		if (op->d.fieldselect.resulttype != attr->atttypid)
+		if (op->d.fieldselext.resulttype != attr->atttypid)
 			ereport(ERROR,
 					(errcode(ERRCODE_DATATYPE_MISMATCH),
 					 errmsg("attribute %d has wrong type", fieldnum),
 					 errdetail("Table has type %s, but query expects %s.",
 							   format_type_be(attr->atttypid),
-							   format_type_be(op->d.fieldselect.resulttype))));
+							   format_type_be(op->d.fieldselext.resulttype))));
 
 		/* extract the field */
 		*op->resvalue = expanded_record_get_field(erh, fieldnum,
@@ -2928,7 +2928,7 @@ ExecEvalFieldSelect(ExprState *state, ExprEvalStep *op, ExprContext *econtext)
 
 		/* Lookup tupdesc if first time through or if type changes */
 		tupDesc = get_cached_rowtype(tupType, tupTypmod,
-									 &op->d.fieldselect.argdesc,
+									 &op->d.fieldselext.argdesc,
 									 econtext);
 
 		/*
@@ -2953,13 +2953,13 @@ ExecEvalFieldSelect(ExprState *state, ExprEvalStep *op, ExprContext *econtext)
 
 		/* Check for type mismatch --- possible after ALTER COLUMN TYPE? */
 		/* As in CheckVarSlotCompatibility, we should but can't check typmod */
-		if (op->d.fieldselect.resulttype != attr->atttypid)
+		if (op->d.fieldselext.resulttype != attr->atttypid)
 			ereport(ERROR,
 					(errcode(ERRCODE_DATATYPE_MISMATCH),
 					 errmsg("attribute %d has wrong type", fieldnum),
 					 errdetail("Table has type %s, but query expects %s.",
 							   format_type_be(attr->atttypid),
-							   format_type_be(op->d.fieldselect.resulttype))));
+							   format_type_be(op->d.fieldselext.resulttype))));
 
 		/* heap_getattr needs a HeapTuple not a bare HeapTupleHeader */
 		tmptup.t_len = HeapTupleHeaderGetDatumLength(tuple);

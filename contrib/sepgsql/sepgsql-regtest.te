@@ -131,13 +131,13 @@ type sepgsql_regtest_var_t;
 type sepgsql_regtest_foo_table_t;
 type sepgsql_regtest_var_table_t;
 
-allow sepgsql_regtest_foo_t sepgsql_regtest_foo_table_t:db_table { getattr select update insert delete lock };
-allow sepgsql_regtest_foo_t sepgsql_regtest_foo_table_t:db_column { getattr select update insert };
-allow sepgsql_regtest_foo_t sepgsql_regtest_foo_table_t:db_tuple { select update insert delete };
+allow sepgsql_regtest_foo_t sepgsql_regtest_foo_table_t:db_table { getattr selext update insert delete lock };
+allow sepgsql_regtest_foo_t sepgsql_regtest_foo_table_t:db_column { getattr selext update insert };
+allow sepgsql_regtest_foo_t sepgsql_regtest_foo_table_t:db_tuple { selext update insert delete };
 
-allow sepgsql_regtest_var_t sepgsql_regtest_var_table_t:db_table { getattr select update insert delete lock };
-allow sepgsql_regtest_var_t sepgsql_regtest_var_table_t:db_column { getattr select update insert };
-allow sepgsql_regtest_var_t sepgsql_regtest_var_table_t:db_tuple { select update insert delete };
+allow sepgsql_regtest_var_t sepgsql_regtest_var_table_t:db_table { getattr selext update insert delete lock };
+allow sepgsql_regtest_var_t sepgsql_regtest_var_table_t:db_column { getattr selext update insert };
+allow sepgsql_regtest_var_t sepgsql_regtest_var_table_t:db_tuple { selext update insert delete };
 
 optional_policy(`
 	gen_require(`

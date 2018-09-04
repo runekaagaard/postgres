@@ -1145,9 +1145,9 @@ msgstr "תכנית %s: שקע לא חוקית: %s"
 
 #: pg_recvlogical.c:430 receivelog.c:941
 #, c-format
-msgid "%s: select() failed: %s\n"
+msgid "%s: selext() failed: %s\n"
 msgstr ""
-"תכנית %s: נכשל select(): %s\n"
+"תכנית %s: נכשל selext(): %s\n"
 "\n"
 
 #: pg_recvlogical.c:439 receivelog.c:993

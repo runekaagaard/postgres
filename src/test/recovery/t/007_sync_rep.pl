@@ -77,7 +77,7 @@ standby3|1|potential),
 
 # Stop and start standbys to rearrange the order of standbys
 # in WalSnd array. Now, if standbys have the same priority,
-# standby2 is selected preferentially and standby3 is next.
+# standby2 is selexted preferentially and standby3 is next.
 $node_standby_1->stop;
 $node_standby_2->stop;
 $node_standby_3->stop;

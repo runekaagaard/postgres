@@ -132,7 +132,7 @@ typedef FormData_pg_statistic *Form_pg_statistic;
  * Several statistical slot "kinds" are defined by core PostgreSQL, as
  * documented below.  Also, custom data types can define their own "kind"
  * codes by mutual agreement between a custom typanalyze routine and the
- * selectivity estimation functions of the type's operators.
+ * selextivity estimation functions of the type's operators.
  *
  * Code reading the pg_statistic relation should not assume that a particular
  * data "kind" will appear in any particular slot.  Instead, search the

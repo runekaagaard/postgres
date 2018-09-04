@@ -304,12 +304,12 @@
 
     <listitem>
      <para>
-      Fix <quote>cannot handle unplanned sub-select</quote> error (Tom Lane)
+      Fix <quote>cannot handle unplanned sub-selext</quote> error (Tom Lane)
      </para>
 
      <para>
-      This occurred when a sub-select contains a join alias reference that
-      expands into an expression containing another sub-select.
+      This occurred when a sub-selext contains a join alias reference that
+      expands into an expression containing another sub-selext.
      </para>
     </listitem>
 
@@ -1623,11 +1623,11 @@
 
     <listitem>
      <para>
-      Fix planner bug with nested sub-select expressions (Tom)
+      Fix planner bug with nested sub-selext expressions (Tom)
      </para>
 
      <para>
-      If the outer sub-select has no direct dependency on the parent query,
+      If the outer sub-selext has no direct dependency on the parent query,
       but the inner one does, the outer value might not get recalculated
       for new parent query rows.
      </para>
@@ -2457,7 +2457,7 @@
     <listitem>
     <para>
      Planner fixes, including improving outer join and bitmap scan
-     selection logic (Tom)
+     selextion logic (Tom)
     </para>
     </listitem>
 
@@ -2927,9 +2927,9 @@ do string escaping <quote>by hand</quote> should be modified to rely on library
 routines instead.
 </para></listitem>
 
-<listitem><para>Fix weak key selection in pgcrypto (Marko Kreen)</para>
+<listitem><para>Fix weak key selextion in pgcrypto (Marko Kreen)</para>
 <para>Errors in fortuna PRNG reseeding logic could cause a predictable
-session key to be selected by <function>pgp_sym_encrypt()</function> in some cases.
+session key to be selexted by <function>pgp_sym_encrypt()</function> in some cases.
 This only affects non-OpenSSL-using builds.
 </para></listitem>
 
@@ -3259,7 +3259,7 @@ what's actually returned by the query (Joe)</para></listitem>
 (Tom)</para></listitem>
 
 <listitem><para>Fix problems with wrong reported column names in cases
-involving sub-selects flattened by the optimizer (Tom)</para></listitem>
+involving sub-selexts flattened by the optimizer (Tom)</para></listitem>
 
 <listitem><para>Fix update failures in scenarios involving CHECK constraints,
 toasted columns, <emphasis>and</emphasis> indexes (Tom)</para></listitem>
@@ -4512,7 +4512,7 @@ SELECT CURRENT_TIMESTAMP AT TIME ZONE 'Europe/London';
       </para>
       <para>
        This allows regular expression replacement, like sed. An optional
-       flag argument allows selection of global (replace all) and
+       flag argument allows selextion of global (replace all) and
        case-insensitive modes.
       </para>
      </listitem>

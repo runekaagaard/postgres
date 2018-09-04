@@ -817,7 +817,7 @@ _readSubLink(void)
 	READ_INT_FIELD(subLinkId);
 	READ_NODE_FIELD(testexpr);
 	READ_NODE_FIELD(operName);
-	READ_NODE_FIELD(subselect);
+	READ_NODE_FIELD(subselext);
 	READ_LOCATION_FIELD(location);
 
 	READ_DONE();
@@ -1400,7 +1400,7 @@ _readRangeTblEntry(void)
 	READ_BOOL_FIELD(inFromCl);
 	READ_UINT_FIELD(requiredPerms);
 	READ_OID_FIELD(checkAsUser);
-	READ_BITMAPSET_FIELD(selectedCols);
+	READ_BITMAPSET_FIELD(selextedCols);
 	READ_BITMAPSET_FIELD(insertedCols);
 	READ_BITMAPSET_FIELD(updatedCols);
 	READ_NODE_FIELD(securityQuals);

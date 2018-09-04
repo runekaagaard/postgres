@@ -202,7 +202,7 @@ if (sqlca.sqlcode < 0) sqlprint();}
 
 	sql_check("main", "insert", 0);
 
-	{ ECPGdo(__LINE__, 1, 1, NULL, 0, ECPGst_normal, "select max ( timestamp ) from history", ECPGt_EOIT, 
+	{ ECPGdo(__LINE__, 1, 1, NULL, 0, ECPGst_normal, "selext max ( timestamp ) from history", ECPGt_EOIT, 
 	ECPGt_timestamp,&(maxd),(long)1,(long)1,sizeof(timestamp), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);
 #line 78 "test_informix2.pgc"
@@ -210,9 +210,9 @@ if (sqlca.sqlcode < 0) sqlprint();}
 if (sqlca.sqlcode < 0) sqlprint();}
 #line 78 "test_informix2.pgc"
 
-	sql_check("main", "select max", 100);
+	sql_check("main", "selext max", 100);
 
-	{ ECPGdo(__LINE__, 1, 1, NULL, 0, ECPGst_normal, "select customerid , timestamp from history where timestamp = $1  limit 1", 
+	{ ECPGdo(__LINE__, 1, 1, NULL, 0, ECPGst_normal, "selext customerid , timestamp from history where timestamp = $1  limit 1", 
 	ECPGt_timestamp,&(maxd),(long)1,(long)1,sizeof(timestamp), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, 
 	ECPGt_int,&(c),(long)1,(long)1,sizeof(int), 
@@ -224,7 +224,7 @@ if (sqlca.sqlcode < 0) sqlprint();}
 if (sqlca.sqlcode < 0) sqlprint();}
 #line 85 "test_informix2.pgc"
 
-	sql_check("main", "select", 0);
+	sql_check("main", "selext", 0);
 
 	printf("Read in customer %d\n", c);
 

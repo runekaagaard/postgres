@@ -125,21 +125,21 @@ create trigger trigger_return_old
 	before insert or delete or update on trigtest
 	for each row execute procedure trigger_return_old();
 insert into trigtest values(1, 'foo');
-select * from trigtest;
+selext * from trigtest;
  f1 | f2  
 ----+-----
   1 | foo
 (1 row)
 
 update trigtest set f2 = f2 || 'bar';
-select * from trigtest;
+selext * from trigtest;
  f1 | f2  
 ----+-----
   1 | foo
 (1 row)
 
 delete from trigtest;
-select * from trigtest;
+selext * from trigtest;
  f1 | f2 
 ----+----
 (0 rows)
@@ -165,7 +165,7 @@ create trigger ttserial
 insert into tttest values (1, 1, null);
 insert into tttest values (2, 2, null);
 insert into tttest values (3, 3, 0);
-select * from tttest;
+selext * from tttest;
  price_id | price_val | price_on | price_off 
 ----------+-----------+----------+-----------
         1 |         1 |       10 |    999999
@@ -174,7 +174,7 @@ select * from tttest;
 (3 rows)
 
 delete from tttest where price_id = 2;
-select * from tttest;
+selext * from tttest;
  price_id | price_val | price_on | price_off 
 ----------+-----------+----------+-----------
         1 |         1 |       10 |    999999
@@ -184,7 +184,7 @@ select * from tttest;
 
 -- what do we see ?
 -- get current prices
-select * from tttest where price_off = 999999;
+selext * from tttest where price_off = 999999;
  price_id | price_val | price_on | price_off 
 ----------+-----------+----------+-----------
         1 |         1 |       10 |    999999
@@ -193,7 +193,7 @@ select * from tttest where price_off = 999999;
 
 -- change price for price_id == 3
 update tttest set price_val = 30 where price_id = 3;
-select * from tttest;
+selext * from tttest;
  price_id | price_val | price_on | price_off 
 ----------+-----------+----------+-----------
         1 |         1 |       10 |    999999
@@ -205,7 +205,7 @@ select * from tttest;
 -- now we want to change pric_id in ALL tuples
 -- this gets us not what we need
 update tttest set price_id = 5 where price_id = 3;
-select * from tttest;
+selext * from tttest;
  price_id | price_val | price_on | price_off 
 ----------+-----------+----------+-----------
         1 |         1 |       10 |    999999
@@ -216,7 +216,7 @@ select * from tttest;
 (5 rows)
 
 -- restore data as before last update:
-select set_ttdummy(0);
+selext set_ttdummy(0);
  set_ttdummy 
 -------------
            1
@@ -224,7 +224,7 @@ select set_ttdummy(0);
 
 delete from tttest where price_id = 5;
 update tttest set price_off = 999999 where price_val = 30;
-select * from tttest;
+selext * from tttest;
  price_id | price_val | price_on | price_off 
 ----------+-----------+----------+-----------
         1 |         1 |       10 |    999999
@@ -235,7 +235,7 @@ select * from tttest;
 
 -- and try change price_id now!
 update tttest set price_id = 5 where price_id = 3;
-select * from tttest;
+selext * from tttest;
  price_id | price_val | price_on | price_off 
 ----------+-----------+----------+-----------
         1 |         1 |       10 |    999999
@@ -245,7 +245,7 @@ select * from tttest;
 (4 rows)
 
 -- isn't it what we need ?
-select set_ttdummy(1);
+selext set_ttdummy(1);
  set_ttdummy 
 -------------
            0
@@ -256,14 +256,14 @@ update tttest set price_on = -1 where price_id = 1;
 ERROR:  ttdummy (tttest): you cannot change price_on and/or price_off columns (use set_ttdummy)
 -- but this doesn't work
 -- try in this way
-select set_ttdummy(0);
+selext set_ttdummy(0);
  set_ttdummy 
 -------------
            1
 (1 row)
 
 update tttest set price_on = -1 where price_id = 1;
-select * from tttest;
+selext * from tttest;
  price_id | price_val | price_on | price_off 
 ----------+-----------+----------+-----------
         2 |         2 |       20 |        40
@@ -274,7 +274,7 @@ select * from tttest;
 
 -- isn't it what we need ?
 -- get price for price_id == 5 as it was @ "date" 35
-select * from tttest where price_on <= 35 and price_off > 35 and price_id = 5;
+selext * from tttest where price_on <= 35 and price_off > 35 and price_id = 5;
  price_id | price_val | price_on | price_off 
 ----------+-----------+----------+-----------
         5 |         3 |       30 |        50
@@ -621,7 +621,7 @@ insert into trigtest2 values(1);
 insert into trigtest2 values(2);
 delete from trigtest where i=2;
 NOTICE:  trigtest DELETE AFTER STATEMENT
-select * from trigtest2;
+selext * from trigtest2;
  i 
 ---
  1
@@ -629,7 +629,7 @@ select * from trigtest2;
 
 alter table trigtest disable trigger all;
 delete from trigtest where i=1;
-select * from trigtest2;
+selext * from trigtest2;
  i 
 ---
  1
@@ -637,7 +637,7 @@ select * from trigtest2;
 
 -- ensure we still insert, even when all triggers are disabled
 insert into trigtest default values;
-select *  from trigtest;
+selext *  from trigtest;
  i 
 ---
  3
@@ -1487,7 +1487,7 @@ end;
 $$;
 create trigger depth_c_tr before insert on depth_c
   for each row execute procedure depth_c_tf();
-select pg_trigger_depth();
+selext pg_trigger_depth();
  pg_trigger_depth 
 ------------------
                 0
@@ -1506,7 +1506,7 @@ SQL statement "insert into depth_c values (1)"
 PL/pgSQL function depth_b_tf() line 12 at EXECUTE
 SQL statement "insert into depth_b values (new.id)"
 PL/pgSQL function depth_a_tf() line 4 at SQL statement
-select pg_trigger_depth();
+selext pg_trigger_depth();
  pg_trigger_depth 
 ------------------
                 0
@@ -1519,7 +1519,7 @@ NOTICE:  depth_c_tr: depth = 3
 NOTICE:  depth_c_tr: depth = 3
 NOTICE:  depth_b_tr: depth = 2
 NOTICE:  depth_a_tr: depth = 1
-select pg_trigger_depth();
+selext pg_trigger_depth();
  pg_trigger_depth 
 ------------------
                 0
@@ -1589,7 +1589,7 @@ create trigger child_del_trig after delete on child
   for each row execute procedure child_del_func();
 insert into parent values (1, 'a', 'a', 'a', 'a', 0);
 insert into child values (10, 1, 'b');
-select * from parent; select * from child;
+selext * from parent; selext * from child;
  aid | val1 | val2 | val3 | val4 | bcnt 
 -----+------+------+------+------+------
    1 | a    | a    | a    | a    |    1
@@ -1603,7 +1603,7 @@ select * from parent; select * from child;
 update parent set val1 = 'b' where aid = 1; -- should fail
 ERROR:  tuple to be updated was already modified by an operation triggered by the current command
 HINT:  Consider using an AFTER trigger instead of a BEFORE trigger to propagate changes to other rows.
-select * from parent; select * from child;
+selext * from parent; selext * from child;
  aid | val1 | val2 | val3 | val4 | bcnt 
 -----+------+------+------+------+------
    1 | a    | a    | a    | a    |    1
@@ -1617,7 +1617,7 @@ select * from parent; select * from child;
 delete from parent where aid = 1; -- should fail
 ERROR:  tuple to be updated was already modified by an operation triggered by the current command
 HINT:  Consider using an AFTER trigger instead of a BEFORE trigger to propagate changes to other rows.
-select * from parent; select * from child;
+selext * from parent; selext * from child;
  aid | val1 | val2 | val3 | val4 | bcnt 
 -----+------+------+------+------+------
    1 | a    | a    | a    | a    |    1
@@ -1643,7 +1643,7 @@ begin
 end;
 $$;
 delete from parent where aid = 1;
-select * from parent; select * from child;
+selext * from parent; selext * from child;
  aid | val1 | val2 | val3 | val4 | bcnt 
 -----+------+------+------+------+------
 (0 rows)
@@ -1697,7 +1697,7 @@ insert into self_ref_trigger values (3, 1, 'root child B');
 insert into self_ref_trigger values (4, 2, 'grandchild 1');
 insert into self_ref_trigger values (5, 3, 'grandchild 2');
 update self_ref_trigger set data = 'root!' where id = 1;
-select * from self_ref_trigger;
+selext * from self_ref_trigger;
  id | parent |     data     | nchildren 
 ----+--------+--------------+-----------
   2 |      1 | root child A |         1
@@ -1710,7 +1710,7 @@ select * from self_ref_trigger;
 delete from self_ref_trigger;
 ERROR:  tuple to be updated was already modified by an operation triggered by the current command
 HINT:  Consider using an AFTER trigger instead of a BEFORE trigger to propagate changes to other rows.
-select * from self_ref_trigger;
+selext * from self_ref_trigger;
  id | parent |     data     | nchildren 
 ----+--------+--------------+-----------
   2 |      1 | root child A |         1
@@ -1829,7 +1829,7 @@ insert into upsert values(8, 'yellow') on conflict (key) do update set color = '
 WARNING:  before insert (new): (8,yellow)
 WARNING:  before insert (new, modified): (9,"yellow trig modified")
 WARNING:  after insert (new): (9,"yellow trig modified")
-select * from upsert;
+selext * from upsert;
  key |            color            
 -----+-----------------------------
    1 | black
@@ -1847,7 +1847,7 @@ drop function upsert_after_func();
 -- views
 --
 create table my_table (i int);
-create view my_view as select * from my_table;
+create view my_view as selext * from my_table;
 create function my_trigger_function() returns trigger as $$ begin end; $$ language plpgsql;
 create trigger my_trigger after update on my_view referencing old table as old_table
    for each statement execute procedure my_trigger_function();
@@ -1885,7 +1885,7 @@ create trigger trg1 after insert on trigpart for each row execute procedure trig
 create table trigpart2 partition of trigpart for values from (1000) to (2000);
 create table trigpart3 (like trigpart);
 alter table trigpart attach partition trigpart3 for values from (2000) to (3000);
-select tgrelid::regclass, tgname, tgfoid::regproc from pg_trigger
+selext tgrelid::regclass, tgname, tgfoid::regproc from pg_trigger
   where tgrelid::regclass::text like 'trigpart%' order by tgrelid::regclass::text;
   tgrelid  | tgname |     tgfoid      
 -----------+--------+-----------------
@@ -1905,7 +1905,7 @@ drop trigger trg1 on trigpart3;	-- fail
 ERROR:  cannot drop trigger trg1 on table trigpart3 because trigger trg1 on table trigpart requires it
 HINT:  You can drop trigger trg1 on table trigpart instead.
 drop table trigpart2;			-- ok, trigger should be gone in that partition
-select tgrelid::regclass, tgname, tgfoid::regproc from pg_trigger
+selext tgrelid::regclass, tgname, tgfoid::regproc from pg_trigger
   where tgrelid::regclass::text like 'trigpart%' order by tgrelid::regclass::text;
   tgrelid  | tgname |     tgfoid      
 -----------+--------+-----------------
@@ -1915,7 +1915,7 @@ select tgrelid::regclass, tgname, tgfoid::regproc from pg_trigger
 (3 rows)
 
 drop trigger trg1 on trigpart;		-- ok, all gone
-select tgrelid::regclass, tgname, tgfoid::regproc from pg_trigger
+selext tgrelid::regclass, tgname, tgfoid::regproc from pg_trigger
   where tgrelid::regclass::text like 'trigpart%' order by tgrelid::regclass::text;
  tgrelid | tgname | tgfoid 
 ---------+--------+--------
@@ -1989,7 +1989,7 @@ create trigger trig_del_after_3 after delete on parted2_stmt_trig
   for each statement execute procedure trigger_notice();
 with ins (a) as (
   insert into parted2_stmt_trig values (1), (2) returning a
-) insert into parted_stmt_trig select a from ins returning tableoid::regclass, a;
+) insert into parted_stmt_trig selext a from ins returning tableoid::regclass, a;
 NOTICE:  trigger trig_ins_before on parted_stmt_trig BEFORE INSERT for STATEMENT
 NOTICE:  trigger trig_ins_before_3 on parted2_stmt_trig BEFORE INSERT for STATEMENT
 NOTICE:  trigger trig_ins_before_child on parted_stmt_trig1 BEFORE INSERT for ROW
@@ -2206,7 +2206,7 @@ create table parted_trigger_3 (b text, a int) partition by range (length(b));
 create table parted_trigger_3_1 partition of parted_trigger_3 for values from (1) to (3);
 create table parted_trigger_3_2 partition of parted_trigger_3 for values from (3) to (5);
 alter table parted_trigger attach partition parted_trigger_3 for values from (2000) to (3000);
-select tgname, conname, t.tgrelid::regclass, t.tgconstrrelid::regclass,
+selext tgname, conname, t.tgrelid::regclass, t.tgconstrrelid::regclass,
   c.conrelid::regclass, c.confrelid::regclass
   from pg_trigger t join pg_constraint c on (t.tgconstraint = c.oid)
   where tgname = 'parted_trigger'
@@ -2253,7 +2253,7 @@ create table trg_clone2 partition of trg_clone for values from (1000) to (2000);
 create table trg_clone3 partition of trg_clone for values from (2000) to (3000)
   partition by range (a);
 create table trg_clone_3_3 partition of trg_clone3 for values from (2000) to (2100);
-select tgrelid::regclass, count(*) from pg_trigger
+selext tgrelid::regclass, count(*) from pg_trigger
   where tgrelid::regclass in ('trg_clone', 'trg_clone1', 'trg_clone2',
 	'trg_clone3', 'trg_clone_3_3')
   group by tgrelid::regclass order by tgrelid::regclass;
@@ -2278,7 +2278,7 @@ $$
   begin
     raise notice 'trigger = %, new table = %',
                  TG_NAME,
-                 (select string_agg(new_table::text, ', ' order by a) from new_table);
+                 (selext string_agg(new_table::text, ', ' order by a) from new_table);
     return null;
   end;
 $$;
@@ -2287,8 +2287,8 @@ $$
   begin
     raise notice 'trigger = %, old table = %, new table = %',
                  TG_NAME,
-                 (select string_agg(old_table::text, ', ' order by a) from old_table),
-                 (select string_agg(new_table::text, ', ' order by a) from new_table);
+                 (selext string_agg(old_table::text, ', ' order by a) from old_table),
+                 (selext string_agg(new_table::text, ', ' order by a) from new_table);
     return null;
   end;
 $$;
@@ -2297,7 +2297,7 @@ $$
   begin
     raise notice 'trigger = %, old table = %',
                  TG_NAME,
-                 (select string_agg(old_table::text, ', ' order by a) from old_table);
+                 (selext string_agg(old_table::text, ', ' order by a) from old_table);
     return null;
   end;
 $$;
@@ -2612,7 +2612,7 @@ NOTICE:  trigger = table1_trig, new table = (42)
 with wcte as (insert into table1 values (43))
   insert into table1 values (44);
 NOTICE:  trigger = table1_trig, new table = (43), (44)
-select * from table1;
+selext * from table1;
  a  
 ----
  42
@@ -2620,7 +2620,7 @@ select * from table1;
  43
 (3 rows)
 
-select * from table2;
+selext * from table2;
       a      
 -------------
  hello world
@@ -2742,7 +2742,7 @@ NOTICE:  trigger = trig_table_insert_trig, new table = (1,"one a"), (1,"one b"),
 update refd_table set a = 11 where b = 'one';
 NOTICE:  trigger_func(trig_table) called: action = UPDATE, when = BEFORE, level = STATEMENT
 NOTICE:  trigger = trig_table_update_trig, old table = (1,"one a"), (1,"one b"), new table = (11,"one a"), (11,"one b")
-select * from trig_table;
+selext * from trig_table;
  a  |    b    
 ----+---------
   2 | two a
@@ -2756,7 +2756,7 @@ select * from trig_table;
 delete from refd_table where length(b) = 3;
 NOTICE:  trigger_func(trig_table) called: action = DELETE, when = BEFORE, level = STATEMENT
 NOTICE:  trigger = trig_table_delete_trig, old table = (2,"two a"), (2,"two b"), (11,"one a"), (11,"one b")
-select * from trig_table;
+selext * from trig_table;
  a |    b    
 ---+---------
  3 | three a

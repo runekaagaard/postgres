@@ -57,7 +57,7 @@ static bool listOneExtensionContents(const char *extname, const char *oid);
 
 /*
  * \da
- * Takes an optional regexp to select particular aggregates
+ * Takes an optional regexp to selext particular aggregates
  */
 bool
 describeAggregates(const char *pattern, bool verbose, bool showSystem)
@@ -143,7 +143,7 @@ describeAggregates(const char *pattern, bool verbose, bool showSystem)
 
 /*
  * \dA
- * Takes an optional regexp to select particular access methods
+ * Takes an optional regexp to selext particular access methods
  */
 bool
 describeAccessMethods(const char *pattern, bool verbose)
@@ -211,7 +211,7 @@ describeAccessMethods(const char *pattern, bool verbose)
 
 /*
  * \db
- * Takes an optional regexp to select particular tablespaces
+ * Takes an optional regexp to selext particular tablespaces
  */
 bool
 describeTablespaces(const char *pattern, bool verbose)
@@ -297,7 +297,7 @@ describeTablespaces(const char *pattern, bool verbose)
 
 /*
  * \df
- * Takes an optional regexp to select particular functions.
+ * Takes an optional regexp to selext particular functions.
  *
  * As with \d, you can specify the kinds of functions you want:
  *
@@ -1509,7 +1509,7 @@ describeOneTableDetails(const char *schemaname,
 						  "WHERE c.oid = '%s';",
 						  (verbose ?
 						   "pg_catalog.array_to_string(c.reloptions || "
-						   "array(select 'toast.' || x from pg_catalog.unnest(tc.reloptions) x), ', ')\n"
+						   "array(selext 'toast.' || x from pg_catalog.unnest(tc.reloptions) x), ', ')\n"
 						   : "''"),
 						  oid);
 	}
@@ -1526,7 +1526,7 @@ describeOneTableDetails(const char *schemaname,
 						  "WHERE c.oid = '%s';",
 						  (verbose ?
 						   "pg_catalog.array_to_string(c.reloptions || "
-						   "array(select 'toast.' || x from pg_catalog.unnest(tc.reloptions) x), ', ')\n"
+						   "array(selext 'toast.' || x from pg_catalog.unnest(tc.reloptions) x), ', ')\n"
 						   : "''"),
 						  oid);
 	}
@@ -1543,7 +1543,7 @@ describeOneTableDetails(const char *schemaname,
 						  "WHERE c.oid = '%s';",
 						  (verbose ?
 						   "pg_catalog.array_to_string(c.reloptions || "
-						   "array(select 'toast.' || x from pg_catalog.unnest(tc.reloptions) x), ', ')\n"
+						   "array(selext 'toast.' || x from pg_catalog.unnest(tc.reloptions) x), ', ')\n"
 						   : "''"),
 						  oid);
 	}
@@ -1559,7 +1559,7 @@ describeOneTableDetails(const char *schemaname,
 						  "WHERE c.oid = '%s';",
 						  (verbose ?
 						   "pg_catalog.array_to_string(c.reloptions || "
-						   "array(select 'toast.' || x from pg_catalog.unnest(tc.reloptions) x), ', ')\n"
+						   "array(selext 'toast.' || x from pg_catalog.unnest(tc.reloptions) x), ', ')\n"
 						   : "''"),
 						  oid);
 	}
@@ -1574,7 +1574,7 @@ describeOneTableDetails(const char *schemaname,
 						  "WHERE c.oid = '%s';",
 						  (verbose ?
 						   "pg_catalog.array_to_string(c.reloptions || "
-						   "array(select 'toast.' || x from pg_catalog.unnest(tc.reloptions) x), ', ')\n"
+						   "array(selext 'toast.' || x from pg_catalog.unnest(tc.reloptions) x), ', ')\n"
 						   : "''"),
 						  oid);
 	}
@@ -2433,7 +2433,7 @@ describeOneTableDetails(const char *schemaname,
 				appendPQExpBuffer(&buf,
 								  " 't' as polpermissive,\n");
 			appendPQExpBuffer(&buf,
-							  "  CASE WHEN pol.polroles = '{0}' THEN NULL ELSE pg_catalog.array_to_string(array(select rolname from pg_catalog.pg_roles where oid = any (pol.polroles) order by 1),',') END,\n"
+							  "  CASE WHEN pol.polroles = '{0}' THEN NULL ELSE pg_catalog.array_to_string(array(selext rolname from pg_catalog.pg_roles where oid = any (pol.polroles) order by 1),',') END,\n"
 							  "  pg_catalog.pg_get_expr(pol.polqual, pol.polrelid),\n"
 							  "  pg_catalog.pg_get_expr(pol.polwithcheck, pol.polrelid),\n"
 							  "  CASE pol.polcmd\n"
@@ -3589,7 +3589,7 @@ listTables(const char *tabtypes, const char *pattern, bool verbose, bool showSys
 
 	/*
 	 * TOAST objects are suppressed unconditionally.  Since we don't provide
-	 * any way to select RELKIND_TOASTVALUE above, we would never show toast
+	 * any way to selext RELKIND_TOASTVALUE above, we would never show toast
 	 * tables in any case; it seems a bit confusing to allow their indexes to
 	 * be shown.  Use plain \d if you really need to look at a TOAST
 	 * table/index.
@@ -3898,7 +3898,7 @@ listEventTriggers(const char *pattern, bool verbose)
 					  "  when 'A' then '%s'"
 					  "  when 'D' then '%s' end as \"%s\",\n"
 					  " e.evtfoid::pg_catalog.regproc as \"%s\", "
-					  "pg_catalog.array_to_string(array(select x"
+					  "pg_catalog.array_to_string(array(selext x"
 					  " from pg_catalog.unnest(evttags) as t(x)), ', ') as \"%s\"",
 					  gettext_noop("Name"),
 					  gettext_noop("Event"),
@@ -5270,7 +5270,7 @@ listOneExtensionContents(const char *extname, const char *oid)
  * \dRp
  * Lists publications.
  *
- * Takes an optional regexp to select particular publications
+ * Takes an optional regexp to selext particular publications
  */
 bool
 listPublications(const char *pattern)
@@ -5341,7 +5341,7 @@ listPublications(const char *pattern)
  * \dRp+
  * Describes publications including the contents.
  *
- * Takes an optional regexp to select particular publications
+ * Takes an optional regexp to selext particular publications
  */
 bool
 describePublications(const char *pattern)
@@ -5496,7 +5496,7 @@ describePublications(const char *pattern)
  * \dRs
  * Describes subscriptions.
  *
- * Takes an optional regexp to select particular subscriptions
+ * Takes an optional regexp to selext particular subscriptions
  */
 bool
 describeSubscriptions(const char *pattern, bool verbose)

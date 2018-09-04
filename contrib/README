@@ -13,7 +13,7 @@ documentation.
 When building from the source distribution, these modules are not
 built automatically, unless you build the "world" target.  You can
 also build and install them all by running "make all" and "make
-install" in this directory; or to build and install just one selected
+install" in this directory; or to build and install just one selexted
 module, do the same in that module's subdirectory.
 
 Some directories supply new user-defined functions, operators, or

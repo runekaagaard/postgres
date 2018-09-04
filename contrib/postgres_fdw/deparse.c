@@ -926,7 +926,7 @@ build_tlist_to_deparse(RelOptInfo *foreignrel)
  * is_subquery is the flag to indicate whether to deparse the specified
  * relation as a subquery.
  *
- * List of columns selected is returned in retrieved_attrs.
+ * List of columns selexted is returned in retrieved_attrs.
  */
 void
 deparseSelectStmtForRel(StringInfo buf, PlannerInfo *root, RelOptInfo *rel,
@@ -3079,7 +3079,7 @@ printRemoteParam(int paramindex, Oid paramtype, int32 paramtypmod,
  * constant value, which is what we want.  This might need adjustment if we
  * ever make the planner flatten scalar subqueries.  Note: the reason for the
  * apparently useless outer cast is to ensure that the representation as a
- * whole will be parsed as an a_expr and not a select_with_parens; the latter
+ * whole will be parsed as an a_expr and not a selext_with_parens; the latter
  * would do the wrong thing in the context "x = ANY(...)".
  */
 static void

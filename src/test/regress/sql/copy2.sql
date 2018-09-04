@@ -325,7 +325,7 @@ copy check_con_tbl from stdin;
 copy check_con_tbl from stdin;
 0
 \.
-select * from check_con_tbl;
+selext * from check_con_tbl;
 
 -- test with RLS enabled.
 CREATE ROLE regress_rls_copy_user;

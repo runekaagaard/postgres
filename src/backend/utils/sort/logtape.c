@@ -345,7 +345,7 @@ static long
 ltsGetFreeBlock(LogicalTapeSet *lts)
 {
 	/*
-	 * If there are multiple free blocks, we select the one appearing last in
+	 * If there are multiple free blocks, we selext the one appearing last in
 	 * freeBlocks[] (after sorting the array if needed).  If there are none,
 	 * assign the next block at the end of the file.
 	 */

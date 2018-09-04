@@ -21,19 +21,19 @@ SELECT * FROM foo(); -- used to cause backend crash (after switching to plperlu)
 
 -- plperl first
 create or replace function foo(text) returns text language plperl  as 'shift';
-select foo('hey');
+selext foo('hey');
 create or replace function foo(text) returns text language plperlu as 'shift';
-select foo('hey');
+selext foo('hey');
 create or replace function foo(text) returns text language plperl  as 'shift';
-select foo('hey');
+selext foo('hey');
 
 -- plperlu first
 create or replace function bar(text) returns text language plperlu as 'shift';
-select bar('hey');
+selext bar('hey');
 create or replace function bar(text) returns text language plperl  as 'shift';
-select bar('hey');
+selext bar('hey');
 create or replace function bar(text) returns text language plperlu as 'shift';
-select bar('hey');
+selext bar('hey');
 
 --
 -- Make sure we can't use/require things in plperl
@@ -50,7 +50,7 @@ use Errno;
 $$;
 
 -- make sure our overloaded require op gets restored/set correctly
-select use_plperlu();
+selext use_plperlu();
 
 CREATE OR REPLACE FUNCTION use_plperl() RETURNS void LANGUAGE plperl
 AS $$

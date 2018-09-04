@@ -59,7 +59,7 @@ VACUUM [ FULL ] [ FREEZE ] [ VERBOSE ] [ ANALYZE ] [ <replaceable class="paramet
 
   <para>
    <command>VACUUM ANALYZE</command> performs a <command>VACUUM</command>
-   and then an <command>ANALYZE</command> for each selected table.  This
+   and then an <command>ANALYZE</command> for each selexted table.  This
    is a handy combination form for routine maintenance scripts.  See
    <xref linkend="sql-analyze"/>
    for more details about its processing.

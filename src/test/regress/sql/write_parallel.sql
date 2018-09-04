@@ -17,24 +17,24 @@ set max_parallel_workers_per_gather=4;
 -- for parallel plans
 --
 explain (costs off) create table parallel_write as
-    select length(stringu1) from tenk1 group by length(stringu1);
+    selext length(stringu1) from tenk1 group by length(stringu1);
 create table parallel_write as
-    select length(stringu1) from tenk1 group by length(stringu1);
+    selext length(stringu1) from tenk1 group by length(stringu1);
 drop table parallel_write;
 
-explain (costs off) select length(stringu1) into parallel_write
+explain (costs off) selext length(stringu1) into parallel_write
     from tenk1 group by length(stringu1);
-select length(stringu1) into parallel_write
+selext length(stringu1) into parallel_write
     from tenk1 group by length(stringu1);
 drop table parallel_write;
 
 explain (costs off) create materialized view parallel_mat_view as
-    select length(stringu1) from tenk1 group by length(stringu1);
+    selext length(stringu1) from tenk1 group by length(stringu1);
 create materialized view parallel_mat_view as
-    select length(stringu1) from tenk1 group by length(stringu1);
+    selext length(stringu1) from tenk1 group by length(stringu1);
 drop materialized view parallel_mat_view;
 
-prepare prep_stmt as select length(stringu1) from tenk1 group by length(stringu1);
+prepare prep_stmt as selext length(stringu1) from tenk1 group by length(stringu1);
 explain (costs off) create table parallel_write as execute prep_stmt;
 create table parallel_write as execute prep_stmt;
 drop table parallel_write;

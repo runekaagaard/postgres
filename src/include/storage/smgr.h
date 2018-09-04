@@ -62,7 +62,7 @@ typedef struct SMgrRelationData
 	 * Fields below here are intended to be private to smgr.c and its
 	 * submodules.  Do not touch them from elsewhere.
 	 */
-	int			smgr_which;		/* storage manager selector */
+	int			smgr_which;		/* storage manager selextor */
 
 	/*
 	 * for md.c; per-fork arrays of the number of open segments

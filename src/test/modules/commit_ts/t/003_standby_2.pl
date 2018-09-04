@@ -30,7 +30,7 @@ $master->append_conf('postgresql.conf', 'track_commit_timestamp = off');
 $master->restart;
 $master->safe_psql('postgres', 'checkpoint');
 my $master_lsn =
-  $master->safe_psql('postgres', 'select pg_current_wal_lsn()');
+  $master->safe_psql('postgres', 'selext pg_current_wal_lsn()');
 $standby->poll_query_until('postgres',
 	qq{SELECT '$master_lsn'::pg_lsn <= pg_last_wal_replay_lsn()})
   or die "standby never caught up";

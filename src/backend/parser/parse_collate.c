@@ -189,7 +189,7 @@ assign_expr_collations(ParseState *pstate, Node *expr)
 }
 
 /*
- * select_common_collation()
+ * selext_common_collation()
  *		Identify a common collation for a list of expressions.
  *
  * The expressions should all return the same datatype, else this is not
@@ -205,7 +205,7 @@ assign_expr_collations(ParseState *pstate, Node *expr)
  * operations").
  */
 Oid
-select_common_collation(ParseState *pstate, List *exprs, bool none_ok)
+selext_common_collation(ParseState *pstate, List *exprs, bool none_ok)
 {
 	assign_collations_context context;
 
@@ -373,7 +373,7 @@ assign_collations_walker(Node *node, assign_collations_context *context)
 					Node	   *re = (Node *) lfirst(r);
 					Oid			coll;
 
-					coll = select_common_collation(context->pstate,
+					coll = selext_common_collation(context->pstate,
 												   list_make2(le, re),
 												   true);
 					colls = lappend_oid(colls, coll);
@@ -959,7 +959,7 @@ assign_hypothetical_collations(Aggref *aggref,
 		/*
 		 * Assign collations internally in this pair of expressions, then
 		 * choose a common collation for them.  This should match
-		 * select_common_collation(), but we can't use that function as-is
+		 * selext_common_collation(), but we can't use that function as-is
 		 * because we need access to the whole collation state so we can
 		 * bubble it up to the aggregate function's level.
 		 */

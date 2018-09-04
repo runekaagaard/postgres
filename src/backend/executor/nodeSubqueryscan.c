@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------
  *
  * nodeSubqueryscan.c
- *	  Support routines for scanning subqueries (subselects in rangetable).
+ *	  Support routines for scanning subqueries (subselexts in rangetable).
  *
  * This is just enough different from sublinks (nodeSubplan.c) to mean that
  * we need two sets of code.  Ought to look at trying to unify the cases.

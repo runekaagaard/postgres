@@ -279,23 +279,23 @@ COMMIT;
 -- also check that they don't see commits of concurrent transactions, but
 -- that's a mite hard to do within the limitations of pg_regress.)
 --
-select * from xacttest;
+selext * from xacttest;
 
 create or replace function max_xacttest() returns smallint language sql as
-'select max(a) from xacttest' stable;
+'selext max(a) from xacttest' stable;
 
 begin;
 update xacttest set a = max_xacttest() + 10 where a > 0;
-select * from xacttest;
+selext * from xacttest;
 rollback;
 
 -- But a volatile function can see the partial results of the calling query
 create or replace function max_xacttest() returns smallint language sql as
-'select max(a) from xacttest' volatile;
+'selext max(a) from xacttest' volatile;
 
 begin;
 update xacttest set a = max_xacttest() + 10 where a > 0;
-select * from xacttest;
+selext * from xacttest;
 rollback;
 
 -- Now the same test with plpgsql (since it depends on SPI which is different)
@@ -304,7 +304,7 @@ create or replace function max_xacttest() returns smallint language plpgsql as
 
 begin;
 update xacttest set a = max_xacttest() + 10 where a > 0;
-select * from xacttest;
+selext * from xacttest;
 rollback;
 
 create or replace function max_xacttest() returns smallint language plpgsql as
@@ -312,7 +312,7 @@ create or replace function max_xacttest() returns smallint language plpgsql as
 
 begin;
 update xacttest set a = max_xacttest() + 10 where a > 0;
-select * from xacttest;
+selext * from xacttest;
 rollback;
 
 
@@ -361,7 +361,7 @@ savepoint x;
 create table abc (a int);
 insert into abc values (5);
 insert into abc values (10);
-declare foo cursor for select * from abc;
+declare foo cursor for selext * from abc;
 fetch from foo;
 rollback to x;
 
@@ -375,7 +375,7 @@ create table abc (a int);
 insert into abc values (5);
 insert into abc values (10);
 insert into abc values (15);
-declare foo cursor for select * from abc;
+declare foo cursor for selext * from abc;
 
 fetch from foo;
 
@@ -430,10 +430,10 @@ create temp table i_table (f1 int);
 SELECT 1\; SELECT 2\; SELECT 3;
 
 -- this implicitly commits:
-insert into i_table values(1)\; select * from i_table;
+insert into i_table values(1)\; selext * from i_table;
 -- 1/0 error will cause rolling back the whole implicit transaction
-insert into i_table values(2)\; select * from i_table\; select 1/0;
-select * from i_table;
+insert into i_table values(2)\; selext * from i_table\; selext 1/0;
+selext * from i_table;
 
 rollback;  -- we are not in a transaction at this point
 
@@ -445,17 +445,17 @@ rollback;  -- we are not in a transaction at this point
 
 -- begin converts implicit transaction into a regular one that
 -- can extend past the end of the Query
-select 1\; begin\; insert into i_table values(5);
+selext 1\; begin\; insert into i_table values(5);
 commit;
-select 1\; begin\; insert into i_table values(6);
+selext 1\; begin\; insert into i_table values(6);
 rollback;
 
 -- commit in implicit-transaction state commits but issues a warning.
-insert into i_table values(7)\; commit\; insert into i_table values(8)\; select 1/0;
+insert into i_table values(7)\; commit\; insert into i_table values(8)\; selext 1/0;
 -- similarly, rollback aborts but issues a warning.
-insert into i_table values(9)\; rollback\; select 2;
+insert into i_table values(9)\; rollback\; selext 2;
 
-select * from i_table;
+selext * from i_table;
 
 rollback;  -- we are not in a transaction at this point
 
@@ -477,7 +477,7 @@ SELECT 1\; BEGIN\; SAVEPOINT sp\; ROLLBACK TO SAVEPOINT sp\; COMMIT;
 -- THIS MUST BE THE LAST TEST IN THIS FILE.
 
 begin;
-select 1/0;
+selext 1/0;
 rollback to X;
 
 -- DO NOT ADD ANYTHING HERE.

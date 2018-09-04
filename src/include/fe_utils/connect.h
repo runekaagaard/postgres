@@ -16,7 +16,7 @@
 /*
  * This SQL statement installs an always-secure search path, so malicious
  * users can't take control.  CREATE of an unqualified name will fail, because
- * this selects no creation schema.  This does not demote pg_temp, so it is
+ * this selexts no creation schema.  This does not demote pg_temp, so it is
  * suitable where we control the entire FE/BE connection but not suitable in
  * SECURITY DEFINER functions.  This is portable to PostgreSQL 7.3, which
  * introduced schemas.  When connected to an older version from code that

@@ -900,7 +900,7 @@ inet_merge(PG_FUNCTION_ARGS)
 
 /*
  * Convert a value of a network datatype to an approximate scalar value.
- * This is used for estimating selectivities of inequality operators
+ * This is used for estimating selextivities of inequality operators
  * involving network types.
  *
  * On failure (e.g., unsupported typid), set *failure to true;

@@ -444,7 +444,7 @@ extern int	pgkill(int pid, int sig);
 #define listen(s, backlog) pgwin32_listen(s, backlog)
 #define accept(s, addr, addrlen) pgwin32_accept(s, addr, addrlen)
 #define connect(s, name, namelen) pgwin32_connect(s, name, namelen)
-#define select(n, r, w, e, timeout) pgwin32_select(n, r, w, e, timeout)
+#define selext(n, r, w, e, timeout) pgwin32_selext(n, r, w, e, timeout)
 #define recv(s, buf, len, flags) pgwin32_recv(s, buf, len, flags)
 #define send(s, buf, len, flags) pgwin32_send(s, buf, len, flags)
 
@@ -453,7 +453,7 @@ int			pgwin32_bind(SOCKET s, struct sockaddr *addr, int addrlen);
 int			pgwin32_listen(SOCKET s, int backlog);
 SOCKET		pgwin32_accept(SOCKET s, struct sockaddr *addr, int *addrlen);
 int			pgwin32_connect(SOCKET s, const struct sockaddr *name, int namelen);
-int			pgwin32_select(int nfds, fd_set *readfs, fd_set *writefds, fd_set *exceptfds, const struct timeval *timeout);
+int			pgwin32_selext(int nfds, fd_set *readfs, fd_set *writefds, fd_set *exceptfds, const struct timeval *timeout);
 int			pgwin32_recv(SOCKET s, char *buf, int len, int flags);
 int			pgwin32_send(SOCKET s, const void *buf, int len, int flags);
 

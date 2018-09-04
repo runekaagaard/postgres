@@ -188,7 +188,7 @@ typedef struct spgxlogPickSplit
 	 * data follows:
 	 *		array of deleted tuple numbers, length nDelete
 	 *		array of inserted tuple numbers, length nInsert
-	 *		array of page selector bytes for inserted tuples, length nInsert
+	 *		array of page selextor bytes for inserted tuples, length nInsert
 	 *		new inner tuple (unaligned!)
 	 *		list of leaf tuples, length nInsert (unaligned!)
 	 *----------

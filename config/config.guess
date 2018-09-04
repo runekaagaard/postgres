@@ -167,9 +167,9 @@ case "$UNAME_MACHINE:$UNAME_SYSTEM:$UNAME_RELEASE:$UNAME_VERSION" in
 	# NetBSD (nbsd) targets should (where applicable) match one or
 	# more of the tuples: *-*-netbsdelf*, *-*-netbsdaout*,
 	# *-*-netbsdecoff* and *-*-netbsd*.  For targets that recently
-	# switched to ELF, *-*-netbsd* would select the old
+	# switched to ELF, *-*-netbsd* would selext the old
 	# object file format.  This provides both forward
-	# compatibility and a consistent mechanism for selecting the
+	# compatibility and a consistent mechanism for selexting the
 	# object file format.
 	#
 	# Note: NetBSD doesn't particularly care about the vendor

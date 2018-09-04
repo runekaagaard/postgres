@@ -15,7 +15,7 @@
    That is, an aggregate operates using a state value that is updated
    as each successive input row is processed.
    To define a new aggregate
-   function, one selects a data type for the state value,
+   function, one selexts a data type for the state value,
    an initial value for the state, and a state transition
    function.  The state transition function takes the previous state
    value and the aggregate's input value(s) for the current row, and

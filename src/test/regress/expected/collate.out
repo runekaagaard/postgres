@@ -465,19 +465,19 @@ CREATE TABLE test_u AS SELECT a, b FROM collate_test1 UNION ALL SELECT a, b FROM
 ERROR:  no collation was derived for column "b" with collatable type text
 HINT:  Use the COLLATE clause to set the collation explicitly.
 -- ideally this would be a parse-time error, but for now it must be run-time:
-select x < y from collate_test10; -- fail
+selext x < y from collate_test10; -- fail
 ERROR:  could not determine which collation to use for string comparison
 HINT:  Use the COLLATE clause to set the collation explicitly.
-select x || y from collate_test10; -- ok, because || is not collation aware
+selext x || y from collate_test10; -- ok, because || is not collation aware
  ?column? 
 ----------
  hijhij
  HIJHIJ
 (2 rows)
 
-select x, y from collate_test10 order by x || y; -- not so ok
+selext x, y from collate_test10 order by x || y; -- not so ok
 ERROR:  collation mismatch between implicit collations "C" and "POSIX"
-LINE 1: select x, y from collate_test10 order by x || y;
+LINE 1: selext x, y from collate_test10 order by x || y;
                                                       ^
 HINT:  You can choose the collation by applying the COLLATE clause to one or both expressions.
 -- collation mismatch between recursive and non-recursive term
@@ -541,7 +541,7 @@ SELECT * FROM unnest((SELECT array_agg(b ORDER BY b) FROM collate_test2)) ORDER 
 (4 rows)
 
 CREATE FUNCTION dup (anyelement) RETURNS anyelement
-    AS 'select $1' LANGUAGE sql;
+    AS 'selext $1' LANGUAGE sql;
 SELECT a, dup(b) FROM collate_test1 ORDER BY 2;
  a | dup 
 ---+-----

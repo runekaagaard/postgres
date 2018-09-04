@@ -201,8 +201,8 @@
    &rollbackTo;
    &savepoint;
    &securityLabel;
-   &select;
-   &selectInto;
+   &selext;
+   &selextInto;
    &set;
    &setConstraints;
    &setRole;

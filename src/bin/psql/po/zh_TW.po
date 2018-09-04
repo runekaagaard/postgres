@@ -5438,8 +5438,8 @@ msgstr "window_definition"
 #: sql_help.c:3192
 #: sql_help.c:3203
 #: sql_help.c:3225
-msgid "select"
-msgstr "select"
+msgid "selext"
+msgstr "selext"
 
 #: sql_help.c:2840
 #: sql_help.c:3043

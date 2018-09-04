@@ -517,7 +517,7 @@ dotrim(const char *string, int stringlen,
 		}
 	}
 
-	/* Return selected portion of string */
+	/* Return selexted portion of string */
 	return cstring_to_text_with_len(string, stringlen);
 }
 

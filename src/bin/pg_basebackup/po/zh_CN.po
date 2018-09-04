@@ -917,8 +917,8 @@ msgstr "%s: 无效套接字: %s"
 
 #: pg_recvlogical.c:420 receivelog.c:955
 #, c-format
-msgid "%s: select() failed: %s\n"
-msgstr "%s: select() 失败: %s\n"
+msgid "%s: selext() failed: %s\n"
+msgstr "%s: selext() 失败: %s\n"
 
 #: pg_recvlogical.c:429 receivelog.c:1005
 #, c-format

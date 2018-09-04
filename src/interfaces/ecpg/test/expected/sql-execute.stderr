@@ -22,17 +22,17 @@
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: ecpg_process_output on line 32: OK: INSERT 0 1
 [NO_PID]: sqlca: code: 0, state: 00000
-[NO_PID]: ecpg_execute on line 35: query: insert into test (name, amount, letter) select name, amount+10, letter from test; with 0 parameter(s) on connection main
+[NO_PID]: ecpg_execute on line 35: query: insert into test (name, amount, letter) selext name, amount+10, letter from test; with 0 parameter(s) on connection main
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: ecpg_execute on line 35: using PQexec
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: ecpg_process_output on line 35: OK: INSERT 0 2
 [NO_PID]: sqlca: code: 0, state: 00000
-[NO_PID]: prepare_common on line 40: name i; query: "insert into test (name, amount, letter) select name, amount+$1, letter from test"
+[NO_PID]: prepare_common on line 40: name i; query: "insert into test (name, amount, letter) selext name, amount+$1, letter from test"
 [NO_PID]: sqlca: code: 0, state: 00000
-[NO_PID]: ecpg_execute on line 41: query: insert into test (name, amount, letter) select name, amount+$1, letter from test; with 1 parameter(s) on connection main
+[NO_PID]: ecpg_execute on line 41: query: insert into test (name, amount, letter) selext name, amount+$1, letter from test; with 1 parameter(s) on connection main
 [NO_PID]: sqlca: code: 0, state: 00000
-[NO_PID]: ecpg_execute on line 41: using PQexecPrepared for "insert into test (name, amount, letter) select name, amount+$1, letter from test"
+[NO_PID]: ecpg_execute on line 41: using PQexecPrepared for "insert into test (name, amount, letter) selext name, amount+$1, letter from test"
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: ecpg_free_params on line 41: parameter 1 = 100
 [NO_PID]: sqlca: code: 0, state: 00000
@@ -40,9 +40,9 @@
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: ECPGtrans on line 45: action "commit"; connection "main"
 [NO_PID]: sqlca: code: 0, state: 00000
-[NO_PID]: prepare_common on line 49: name f; query: "select * from test"
+[NO_PID]: prepare_common on line 49: name f; query: "selext * from test"
 [NO_PID]: sqlca: code: 0, state: 00000
-[NO_PID]: ecpg_execute on line 52: query: declare CUR cursor for select * from test; with 0 parameter(s) on connection main
+[NO_PID]: ecpg_execute on line 52: query: declare CUR cursor for selext * from test; with 0 parameter(s) on connection main
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: ecpg_execute on line 52: using PQexec
 [NO_PID]: sqlca: code: 0, state: 00000
@@ -110,9 +110,9 @@
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: deallocate_one on line 67: name f
 [NO_PID]: sqlca: code: 0, state: 00000
-[NO_PID]: prepare_common on line 71: name f; query: "select * from test where amount = $1"
+[NO_PID]: prepare_common on line 71: name f; query: "selext * from test where amount = $1"
 [NO_PID]: sqlca: code: 0, state: 00000
-[NO_PID]: ecpg_execute on line 74: query: declare CUR2 cursor for select * from test where amount = $1; with 1 parameter(s) on connection main
+[NO_PID]: ecpg_execute on line 74: query: declare CUR2 cursor for selext * from test where amount = $1; with 1 parameter(s) on connection main
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: ecpg_execute on line 74: using PQexecParams
 [NO_PID]: sqlca: code: 0, state: 00000
@@ -140,11 +140,11 @@
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: deallocate_one on line 89: name f
 [NO_PID]: sqlca: code: 0, state: 00000
-[NO_PID]: prepare_common on line 93: name f; query: "select * from test where amount = $1"
+[NO_PID]: prepare_common on line 93: name f; query: "selext * from test where amount = $1"
 [NO_PID]: sqlca: code: 0, state: 00000
-[NO_PID]: ecpg_execute on line 94: query: select * from test where amount = $1; with 1 parameter(s) on connection main
+[NO_PID]: ecpg_execute on line 94: query: selext * from test where amount = $1; with 1 parameter(s) on connection main
 [NO_PID]: sqlca: code: 0, state: 00000
-[NO_PID]: ecpg_execute on line 94: using PQexecPrepared for "select * from test where amount = $1"
+[NO_PID]: ecpg_execute on line 94: using PQexecPrepared for "selext * from test where amount = $1"
 [NO_PID]: sqlca: code: 0, state: 00000
 [NO_PID]: ecpg_free_params on line 94: parameter 1 = 2
 [NO_PID]: sqlca: code: 0, state: 00000

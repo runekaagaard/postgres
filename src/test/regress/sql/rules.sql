@@ -11,7 +11,7 @@ create table rtest_t1 (a int4, b int4);
 create table rtest_t2 (a int4, b int4);
 create table rtest_t3 (a int4, b int4);
 
-create view rtest_v1 as select * from rtest_t1;
+create view rtest_v1 as selext * from rtest_t1;
 create rule rtest_v1_ins as on insert to rtest_v1 do instead
 	insert into rtest_t1 values (new.a, new.b);
 create rule rtest_v1_upd as on update to rtest_v1 do instead
@@ -150,7 +150,7 @@ create rule rtest_nothn_r4 as on insert to rtest_nothn2
 	do instead nothing;
 
 --
--- Tests on a view that is select * of a table
+-- Tests on a view that is selext * of a table
 -- and has insert/update/delete instead rules to
 -- behave close like the real table.
 --
@@ -171,67 +171,67 @@ insert into rtest_t3 values (5, 35);
 -- insert values
 insert into rtest_v1 values (1, 11);
 insert into rtest_v1 values (2, 12);
-select * from rtest_v1;
+selext * from rtest_v1;
 
 -- delete with constant expression
 delete from rtest_v1 where a = 1;
-select * from rtest_v1;
+selext * from rtest_v1;
 insert into rtest_v1 values (1, 11);
 delete from rtest_v1 where b = 12;
-select * from rtest_v1;
+selext * from rtest_v1;
 insert into rtest_v1 values (2, 12);
 insert into rtest_v1 values (2, 13);
-select * from rtest_v1;
+selext * from rtest_v1;
 ** Remember the delete rule on rtest_v1: It says
 ** DO INSTEAD DELETE FROM rtest_t1 WHERE a = old.a
 ** So this time both rows with a = 2 must get deleted
 \p
 \r
 delete from rtest_v1 where b = 12;
-select * from rtest_v1;
+selext * from rtest_v1;
 delete from rtest_v1;
 
--- insert select
-insert into rtest_v1 select * from rtest_t2;
-select * from rtest_v1;
+-- insert selext
+insert into rtest_v1 selext * from rtest_t2;
+selext * from rtest_v1;
 delete from rtest_v1;
 
 -- same with swapped targetlist
-insert into rtest_v1 (b, a) select b, a from rtest_t2;
-select * from rtest_v1;
+insert into rtest_v1 (b, a) selext b, a from rtest_t2;
+selext * from rtest_v1;
 
 -- now with only one target attribute
-insert into rtest_v1 (a) select a from rtest_t3;
-select * from rtest_v1;
-select * from rtest_v1 where b isnull;
+insert into rtest_v1 (a) selext a from rtest_t3;
+selext * from rtest_v1;
+selext * from rtest_v1 where b isnull;
 
 -- let attribute a differ (must be done on rtest_t1 - see above)
 update rtest_t1 set a = a + 10 where b isnull;
 delete from rtest_v1 where b isnull;
-select * from rtest_v1;
+selext * from rtest_v1;
 
 -- now updates with constant expression
 update rtest_v1 set b = 42 where a = 2;
-select * from rtest_v1;
+selext * from rtest_v1;
 update rtest_v1 set b = 99 where b = 42;
-select * from rtest_v1;
+selext * from rtest_v1;
 update rtest_v1 set b = 88 where b < 50;
-select * from rtest_v1;
+selext * from rtest_v1;
 delete from rtest_v1;
-insert into rtest_v1 select rtest_t2.a, rtest_t3.b
+insert into rtest_v1 selext rtest_t2.a, rtest_t3.b
     from rtest_t2, rtest_t3
     where rtest_t2.a = rtest_t3.a;
-select * from rtest_v1;
+selext * from rtest_v1;
 
 -- updates in a mergejoin
 update rtest_v1 set b = rtest_t2.b from rtest_t2 where rtest_v1.a = rtest_t2.a;
-select * from rtest_v1;
-insert into rtest_v1 select * from rtest_t3;
-select * from rtest_v1;
+selext * from rtest_v1;
+insert into rtest_v1 selext * from rtest_t3;
+selext * from rtest_v1;
 update rtest_t1 set a = a + 10 where b > 30;
-select * from rtest_v1;
+selext * from rtest_v1;
 update rtest_v1 set a = rtest_t3.a + 20 from rtest_t3 where rtest_v1.b = rtest_t3.b;
-select * from rtest_v1;
+selext * from rtest_v1;
 
 --
 -- Test for constraint updates/deletes
@@ -254,8 +254,8 @@ insert into rtest_admin values ('bm', 'neptun');
 
 update rtest_system set sysname = 'pluto' where sysname = 'neptun';
 
-select * from rtest_interface;
-select * from rtest_admin;
+selext * from rtest_interface;
+selext * from rtest_admin;
 
 update rtest_person set pname = 'jwieck' where pdesc = 'Jan Wieck';
 
@@ -263,12 +263,12 @@ update rtest_person set pname = 'jwieck' where pdesc = 'Jan Wieck';
 -- The above UPDATE affects two rows with equal keys, so they could be
 -- updated in either order depending on the whim of the local qsort().
 
-select * from rtest_admin order by pname, sysname;
+selext * from rtest_admin order by pname, sysname;
 
 delete from rtest_system where sysname = 'orion';
 
-select * from rtest_interface;
-select * from rtest_admin;
+selext * from rtest_interface;
+selext * from rtest_admin;
 
 --
 -- Rule qualification test
@@ -280,17 +280,17 @@ update rtest_emp set ename = 'wieck', salary = '6000.00' where ename = 'wiecx';
 update rtest_emp set salary = '7000.00' where ename = 'wieck';
 delete from rtest_emp where ename = 'gates';
 
-select ename, who = current_user as "matches user", action, newsal, oldsal from rtest_emplog order by ename, action, newsal;
+selext ename, who = current_user as "matches user", action, newsal, oldsal from rtest_emplog order by ename, action, newsal;
 insert into rtest_empmass values ('meyer', '4000.00');
 insert into rtest_empmass values ('maier', '5000.00');
 insert into rtest_empmass values ('mayr', '6000.00');
-insert into rtest_emp select * from rtest_empmass;
-select ename, who = current_user as "matches user", action, newsal, oldsal from rtest_emplog order by ename, action, newsal;
+insert into rtest_emp selext * from rtest_empmass;
+selext ename, who = current_user as "matches user", action, newsal, oldsal from rtest_emplog order by ename, action, newsal;
 update rtest_empmass set salary = salary + '1000.00';
 update rtest_emp set salary = rtest_empmass.salary from rtest_empmass where rtest_emp.ename = rtest_empmass.ename;
-select ename, who = current_user as "matches user", action, newsal, oldsal from rtest_emplog order by ename, action, newsal;
+selext ename, who = current_user as "matches user", action, newsal, oldsal from rtest_emplog order by ename, action, newsal;
 delete from rtest_emp using rtest_empmass where rtest_emp.ename = rtest_empmass.ename;
-select ename, who = current_user as "matches user", action, newsal, oldsal from rtest_emplog order by ename, action, newsal;
+selext ename, who = current_user as "matches user", action, newsal, oldsal from rtest_emplog order by ename, action, newsal;
 
 --
 -- Multiple cascaded qualified instead rule test
@@ -306,11 +306,11 @@ insert into rtest_t4 values (28, 'Record should go to rtest_t4 and t8');
 insert into rtest_t4 values (30, 'Record should go to rtest_t4');
 insert into rtest_t4 values (40, 'Record should go to rtest_t4');
 
-select * from rtest_t4;
-select * from rtest_t5;
-select * from rtest_t6;
-select * from rtest_t7;
-select * from rtest_t8;
+selext * from rtest_t4;
+selext * from rtest_t5;
+selext * from rtest_t6;
+selext * from rtest_t7;
+selext * from rtest_t8;
 
 delete from rtest_t4;
 delete from rtest_t5;
@@ -329,35 +329,35 @@ insert into rtest_t9 values (28, 'Record should go to rtest_t4 and t8');
 insert into rtest_t9 values (30, 'Record should go to rtest_t4');
 insert into rtest_t9 values (40, 'Record should go to rtest_t4');
 
-insert into rtest_t4 select * from rtest_t9 where a < 20;
+insert into rtest_t4 selext * from rtest_t9 where a < 20;
 
-select * from rtest_t4;
-select * from rtest_t5;
-select * from rtest_t6;
-select * from rtest_t7;
-select * from rtest_t8;
+selext * from rtest_t4;
+selext * from rtest_t5;
+selext * from rtest_t6;
+selext * from rtest_t7;
+selext * from rtest_t8;
 
-insert into rtest_t4 select * from rtest_t9 where b ~ 'and t8';
+insert into rtest_t4 selext * from rtest_t9 where b ~ 'and t8';
 
-select * from rtest_t4;
-select * from rtest_t5;
-select * from rtest_t6;
-select * from rtest_t7;
-select * from rtest_t8;
+selext * from rtest_t4;
+selext * from rtest_t5;
+selext * from rtest_t6;
+selext * from rtest_t7;
+selext * from rtest_t8;
 
-insert into rtest_t4 select a + 1, b from rtest_t9 where a in (20, 30, 40);
+insert into rtest_t4 selext a + 1, b from rtest_t9 where a in (20, 30, 40);
 
-select * from rtest_t4;
-select * from rtest_t5;
-select * from rtest_t6;
-select * from rtest_t7;
-select * from rtest_t8;
+selext * from rtest_t4;
+selext * from rtest_t5;
+selext * from rtest_t6;
+selext * from rtest_t7;
+selext * from rtest_t8;
 
 --
 -- Check that the ordering of rules fired is correct
 --
 insert into rtest_order1 values (1);
-select * from rtest_order2;
+selext * from rtest_order2;
 
 --
 -- Check if instead nothing w/without qualification works
@@ -374,15 +374,15 @@ insert into rtest_nothn1 values (40, 'want this');
 insert into rtest_nothn1 values (50, 'want this');
 insert into rtest_nothn1 values (60, 'want this');
 
-select * from rtest_nothn1;
+selext * from rtest_nothn1;
 
 insert into rtest_nothn2 values (10, 'too small');
 insert into rtest_nothn2 values (50, 'too small');
 insert into rtest_nothn2 values (100, 'OK');
 insert into rtest_nothn2 values (200, 'OK');
 
-select * from rtest_nothn2;
-select * from rtest_nothn3;
+selext * from rtest_nothn2;
+selext * from rtest_nothn3;
 
 delete from rtest_nothn1;
 delete from rtest_nothn2;
@@ -400,9 +400,9 @@ insert into rtest_nothn4 values (40, 'want this');
 insert into rtest_nothn4 values (50, 'want this');
 insert into rtest_nothn4 values (60, 'want this');
 
-insert into rtest_nothn1 select * from rtest_nothn4;
+insert into rtest_nothn1 selext * from rtest_nothn4;
 
-select * from rtest_nothn1;
+selext * from rtest_nothn1;
 
 delete from rtest_nothn4;
 
@@ -411,28 +411,28 @@ insert into rtest_nothn4 values (50, 'too small');
 insert into rtest_nothn4 values (100, 'OK');
 insert into rtest_nothn4 values (200, 'OK');
 
-insert into rtest_nothn2 select * from rtest_nothn4;
+insert into rtest_nothn2 selext * from rtest_nothn4;
 
-select * from rtest_nothn2;
-select * from rtest_nothn3;
+selext * from rtest_nothn2;
+selext * from rtest_nothn3;
 
 create table rtest_view1 (a int4, b text, v bool);
 create table rtest_view2 (a int4);
 create table rtest_view3 (a int4, b text);
 create table rtest_view4 (a int4, b text, c int4);
-create view rtest_vview1 as select a, b from rtest_view1 X
-	where 0 < (select count(*) from rtest_view2 Y where Y.a = X.a);
-create view rtest_vview2 as select a, b from rtest_view1 where v;
-create view rtest_vview3 as select a, b from rtest_vview2 X
-	where 0 < (select count(*) from rtest_view2 Y where Y.a = X.a);
-create view rtest_vview4 as select X.a, X.b, count(Y.a) as refcount
+create view rtest_vview1 as selext a, b from rtest_view1 X
+	where 0 < (selext count(*) from rtest_view2 Y where Y.a = X.a);
+create view rtest_vview2 as selext a, b from rtest_view1 where v;
+create view rtest_vview3 as selext a, b from rtest_vview2 X
+	where 0 < (selext count(*) from rtest_view2 Y where Y.a = X.a);
+create view rtest_vview4 as selext X.a, X.b, count(Y.a) as refcount
 	from rtest_view1 X, rtest_view2 Y
 	where X.a = Y.a
 	group by X.a, X.b;
 create function rtest_viewfunc1(int4) returns int4 as
-	'select count(*)::int4 from rtest_view2 where a = $1'
+	'selext count(*)::int4 from rtest_view2 where a = $1'
 	language sql;
-create view rtest_vview5 as select a, b, rtest_viewfunc1(a) as refcount
+create view rtest_vview5 as selext a, b, rtest_viewfunc1(a) as refcount
 	from rtest_view1;
 
 insert into rtest_view1 values (1, 'item 1', 't');
@@ -453,30 +453,30 @@ insert into rtest_view2 values (7);
 insert into rtest_view2 values (7);
 insert into rtest_view2 values (7);
 
-select * from rtest_vview1;
-select * from rtest_vview2;
-select * from rtest_vview3;
-select * from rtest_vview4 order by a, b;
-select * from rtest_vview5;
+selext * from rtest_vview1;
+selext * from rtest_vview2;
+selext * from rtest_vview3;
+selext * from rtest_vview4 order by a, b;
+selext * from rtest_vview5;
 
-insert into rtest_view3 select * from rtest_vview1 where a < 7;
-select * from rtest_view3;
+insert into rtest_view3 selext * from rtest_vview1 where a < 7;
+selext * from rtest_view3;
 delete from rtest_view3;
 
-insert into rtest_view3 select * from rtest_vview2 where a != 5 and b !~ '2';
-select * from rtest_view3;
+insert into rtest_view3 selext * from rtest_vview2 where a != 5 and b !~ '2';
+selext * from rtest_view3;
 delete from rtest_view3;
 
-insert into rtest_view3 select * from rtest_vview3;
-select * from rtest_view3;
+insert into rtest_view3 selext * from rtest_vview3;
+selext * from rtest_view3;
 delete from rtest_view3;
 
-insert into rtest_view4 select * from rtest_vview4 where 3 > refcount;
-select * from rtest_view4 order by a, b;
+insert into rtest_view4 selext * from rtest_vview4 where 3 > refcount;
+selext * from rtest_view4 order by a, b;
 delete from rtest_view4;
 
-insert into rtest_view4 select * from rtest_vview5 where a > 2 and refcount = 0;
-select * from rtest_view4;
+insert into rtest_view4 selext * from rtest_vview5 where a > 2 and refcount = 0;
+selext * from rtest_view4;
 delete from rtest_view4;
 --
 -- Test for computations in views
@@ -494,7 +494,7 @@ create table rtest_unitfact (
 );
 
 create view rtest_vcomp as
-	select X.part, (X.size * Y.factor) as size_in_cm
+	selext X.part, (X.size * Y.factor) as size_in_cm
 			from rtest_comp X, rtest_unitfact Y
 			where X.unit = Y.unit;
 
@@ -510,9 +510,9 @@ insert into rtest_comp values ('p4', 'cm', 15.0);
 insert into rtest_comp values ('p5', 'inch', 7.0);
 insert into rtest_comp values ('p6', 'inch', 4.4);
 
-select * from rtest_vcomp order by part;
+selext * from rtest_vcomp order by part;
 
-select * from rtest_vcomp where size_in_cm > 10.0 order by size_in_cm using >;
+selext * from rtest_vcomp where size_in_cm > 10.0 order by size_in_cm using >;
 
 --
 -- In addition run the (slightly modified) queries from the
@@ -665,7 +665,7 @@ INSERT INTO shoelace_arrive VALUES ('sl8', 20);
 
 SELECT * FROM shoelace ORDER BY sl_name;
 
-insert into shoelace_ok select * from shoelace_arrive;
+insert into shoelace_ok selext * from shoelace_arrive;
 
 SELECT * FROM shoelace ORDER BY sl_name;
 
@@ -708,7 +708,7 @@ do instead nothing;
 
 insert into rules_foo values(1);
 insert into rules_foo values(1001);
-select * from rules_foo;
+selext * from rules_foo;
 
 drop rule rules_foorule on rules_foo;
 
@@ -722,8 +722,8 @@ do instead insert into rules_foo2 values (new.f1);
 insert into rules_foo values(2);
 insert into rules_foo values(100);
 
-select * from rules_foo;
-select * from rules_foo2;
+selext * from rules_foo;
+selext * from rules_foo2;
 
 drop rule rules_foorule on rules_foo;
 drop table rules_foo;
@@ -742,25 +742,25 @@ create table cchild (pid int, descrip text);
 insert into cchild values (1,'descrip1');
 
 create view vview as
-  select pparent.pid, txt, descrip from
+  selext pparent.pid, txt, descrip from
     pparent left join cchild using (pid);
 
 create rule rrule as
   on update to vview do instead
 (
   insert into cchild (pid, descrip)
-    select old.pid, new.descrip where old.descrip isnull;
+    selext old.pid, new.descrip where old.descrip isnull;
   update cchild set descrip = new.descrip where cchild.pid = old.pid;
 );
 
-select * from vview;
+selext * from vview;
 update vview set descrip='test1' where pid=1;
-select * from vview;
+selext * from vview;
 update vview set descrip='test2' where pid=2;
-select * from vview;
+selext * from vview;
 update vview set descrip='test3' where pid=3;
-select * from vview;
-select * from cchild;
+selext * from vview;
+selext * from cchild;
 
 drop rule rrule on vview;
 drop view vview;
@@ -860,7 +860,7 @@ insert into shoelace values ('sl9', 0, 'pink', 35.0, 'inch', 0.0)
   set sl_avail = excluded.sl_avail;
 
 create rule rule_and_refint_t3_ins as on insert to rule_and_refint_t3
-	where (exists (select 1 from rule_and_refint_t3
+	where (exists (selext 1 from rule_and_refint_t3
 			where (((rule_and_refint_t3.id3a = new.id3a)
 			and (rule_and_refint_t3.id3b = new.id3b))
 			and (rule_and_refint_t3.id3c = new.id3c))))
@@ -876,7 +876,7 @@ insert into rule_and_refint_t3 values (1, 13, 11, 'row8');
 -- disallow dropping a view's rule (bug #5072)
 --
 
-create view rules_fooview as select 'rules_foo'::text;
+create view rules_fooview as selext 'rules_foo'::text;
 drop rule "_RETURN" on rules_fooview;
 drop view rules_fooview;
 
@@ -885,28 +885,28 @@ drop view rules_fooview;
 --
 
 create table rules_fooview (x int, y text);
-select xmin, * from rules_fooview;
+selext xmin, * from rules_fooview;
 
-create rule "_RETURN" as on select to rules_fooview do instead
-  select 1 as x, 'aaa'::text as y;
+create rule "_RETURN" as on selext to rules_fooview do instead
+  selext 1 as x, 'aaa'::text as y;
 
-select * from rules_fooview;
-select xmin, * from rules_fooview;  -- fail, views don't have such a column
+selext * from rules_fooview;
+selext xmin, * from rules_fooview;  -- fail, views don't have such a column
 
-select reltoastrelid, relkind, relfrozenxid
+selext reltoastrelid, relkind, relfrozenxid
   from pg_class where oid = 'rules_fooview'::regclass;
 
 drop view rules_fooview;
 
 -- trying to convert a partitioned table to view is not allowed
 create table rules_fooview (x int, y text) partition by list (x);
-create rule "_RETURN" as on select to rules_fooview do instead
-  select 1 as x, 'aaa'::text as y;
+create rule "_RETURN" as on selext to rules_fooview do instead
+  selext 1 as x, 'aaa'::text as y;
 
 -- nor can one convert a partition to view
 create table rules_fooview_part partition of rules_fooview for values in (1);
-create rule "_RETURN" as on select to rules_fooview_part do instead
-  select 1 as x, 'aaa'::text as y;
+create rule "_RETURN" as on selext to rules_fooview_part do instead
+  selext 1 as x, 'aaa'::text as y;
 
 --
 -- check for planner problems with complex inherited UPDATES
@@ -925,16 +925,16 @@ insert into test_2 (name) values ('Test 4');
 insert into test_3 (name) values ('Test 5');
 insert into test_3 (name) values ('Test 6');
 
-create view id_ordered as select * from id order by id;
+create view id_ordered as selext * from id order by id;
 
 create rule update_id_ordered as on update to id_ordered
 	do instead update id set name = new.name where id = old.id;
 
-select * from id_ordered;
+selext * from id_ordered;
 update id_ordered set name = 'update 2' where id = 2;
 update id_ordered set name = 'update 4' where id = 4;
 update id_ordered set name = 'update 5' where id = 5;
-select * from id_ordered;
+selext * from id_ordered;
 
 \set VERBOSITY terse \\ -- suppress cascade details
 drop table id cascade;
@@ -970,20 +970,20 @@ create rule t1_upd_2 as on update to t1
 
 set constraint_exclusion = on;
 
-insert into t1 select * from generate_series(5,19,1) g;
+insert into t1 selext * from generate_series(5,19,1) g;
 update t1 set a = 4 where a = 5;
 
-select * from only t1;
-select * from only t1_1;
-select * from only t1_2;
+selext * from only t1;
+selext * from only t1_1;
+selext * from only t1_2;
 
 reset constraint_exclusion;
 
 -- test various flavors of pg_get_viewdef()
 
-select pg_get_viewdef('shoe'::regclass) as unpretty;
-select pg_get_viewdef('shoe'::regclass,true) as pretty;
-select pg_get_viewdef('shoe'::regclass,0) as prettier;
+selext pg_get_viewdef('shoe'::regclass) as unpretty;
+selext pg_get_viewdef('shoe'::regclass,true) as pretty;
+selext pg_get_viewdef('shoe'::regclass,0) as prettier;
 
 --
 -- check multi-row VALUES in rules
@@ -996,13 +996,13 @@ create rule r1 as on update to rules_src do also
   insert into rules_log values(old.*, 'old'), (new.*, 'new');
 update rules_src set f2 = f2 + 1;
 update rules_src set f2 = f2 * 10;
-select * from rules_src;
-select * from rules_log;
+selext * from rules_src;
+selext * from rules_log;
 create rule r2 as on update to rules_src do also
   values(old.*, 'old'), (new.*, 'new');
 update rules_src set f2 = f2 / 10;
-select * from rules_src;
-select * from rules_log;
+selext * from rules_src;
+selext * from rules_log;
 create rule r3 as on delete to rules_src do notify rules_src_deletion;
 \d+ rules_src
 
@@ -1050,10 +1050,10 @@ drop view rule_v1;
 create view rule_v1(x) as values(1,2);
 \d+ rule_v1
 drop view rule_v1;
-create view rule_v1(x) as select * from (values(1,2)) v;
+create view rule_v1(x) as selext * from (values(1,2)) v;
 \d+ rule_v1
 drop view rule_v1;
-create view rule_v1(x) as select * from (values(1,2)) v(q,w);
+create view rule_v1(x) as selext * from (values(1,2)) v(q,w);
 \d+ rule_v1
 drop view rule_v1;
 
@@ -1158,7 +1158,7 @@ drop table hat_data;
 -- test for pg_get_functiondef properly regurgitating SET parameters
 -- Note that the function is kept around to stress pg_dump.
 CREATE FUNCTION func_with_set_params() RETURNS integer
-    AS 'select 1;'
+    AS 'selext 1;'
     LANGUAGE SQL
     SET search_path TO PG_CATALOG
     SET extra_float_digits TO 2

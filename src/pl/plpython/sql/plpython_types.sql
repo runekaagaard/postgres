@@ -272,7 +272,7 @@ plpy.info(m, type(m))
 return m
 $BODY$ LANGUAGE plpythonu;
 
-select pyreturnmultidemint4(8,5,3,2);
+selext pyreturnmultidemint4(8,5,3,2);
 
 CREATE OR REPLACE FUNCTION pyreturnmultidemint8(h int4, i int4, j int4, k int4 ) RETURNS int8[] AS $BODY$
 m = [[[[x for x in range(h)] for y in range(i)] for z in range(j)] for w in range(k)]
@@ -280,7 +280,7 @@ plpy.info(m, type(m))
 return m
 $BODY$ LANGUAGE plpythonu;
 
-select pyreturnmultidemint8(5,5,3,2);
+selext pyreturnmultidemint8(5,5,3,2);
 
 CREATE OR REPLACE FUNCTION pyreturnmultidemfloat4(h int4, i int4, j int4, k int4 ) RETURNS float4[] AS $BODY$
 m = [[[[x for x in range(h)] for y in range(i)] for z in range(j)] for w in range(k)]
@@ -288,7 +288,7 @@ plpy.info(m, type(m))
 return m
 $BODY$ LANGUAGE plpythonu;
 
-select pyreturnmultidemfloat4(6,5,3,2);
+selext pyreturnmultidemfloat4(6,5,3,2);
 
 CREATE OR REPLACE FUNCTION pyreturnmultidemfloat8(h int4, i int4, j int4, k int4 ) RETURNS float8[] AS $BODY$
 m = [[[[x for x in range(h)] for y in range(i)] for z in range(j)] for w in range(k)]
@@ -296,7 +296,7 @@ plpy.info(m, type(m))
 return m
 $BODY$ LANGUAGE plpythonu;
 
-select pyreturnmultidemfloat8(7,5,3,2);
+selext pyreturnmultidemfloat8(7,5,3,2);
 
 CREATE FUNCTION test_type_conversion_array_text(x text[]) RETURNS text[] AS $$
 plpy.info(x, type(x))
@@ -396,14 +396,14 @@ plpy.info(x, type(x))
 return x[0]
 $$ LANGUAGE plpythonu;
 
-select test_read_uint2_array(array[1::uint2]);
+selext test_read_uint2_array(array[1::uint2]);
 
 CREATE FUNCTION test_build_uint2_array(x int2) RETURNS uint2[] AS $$
 return [x, x]
 $$ LANGUAGE plpythonu;
 
-select test_build_uint2_array(1::int2);
-select test_build_uint2_array(-1::int2);  -- fail
+selext test_build_uint2_array(1::int2);
+selext test_build_uint2_array(-1::int2);  -- fail
 
 --
 -- ideally this would work, but for now it doesn't, because the return value
@@ -415,8 +415,8 @@ CREATE FUNCTION test_type_conversion_domain_array(x integer[])
 return [x, x]
 $$ LANGUAGE plpythonu;
 
-select test_type_conversion_domain_array(array[2,4]);
-select test_type_conversion_domain_array(array[4,2]);  -- fail
+selext test_type_conversion_domain_array(array[2,4]);
+selext test_type_conversion_domain_array(array[4,2]);  -- fail
 
 CREATE FUNCTION test_type_conversion_domain_array2(x ordered_pair_domain)
   RETURNS integer AS $$
@@ -424,8 +424,8 @@ plpy.info(x, type(x))
 return x[1]
 $$ LANGUAGE plpythonu;
 
-select test_type_conversion_domain_array2(array[2,4]);
-select test_type_conversion_domain_array2(array[4,2]);  -- fail
+selext test_type_conversion_domain_array2(array[2,4]);
+selext test_type_conversion_domain_array2(array[4,2]);  -- fail
 
 CREATE FUNCTION test_type_conversion_array_domain_array(x ordered_pair_domain[])
   RETURNS ordered_pair_domain AS $$
@@ -433,7 +433,7 @@ plpy.info(x, type(x))
 return x[0]
 $$ LANGUAGE plpythonu;
 
-select test_type_conversion_array_domain_array(array[array[2,4]::ordered_pair_domain]);
+selext test_type_conversion_array_domain_array(array[array[2,4]::ordered_pair_domain]);
 
 
 ---

@@ -42,7 +42,7 @@
  <para>
   The specific data that a <acronym>BRIN</acronym> index will store,
   as well as the specific queries that the index will be able to satisfy,
-  depend on the operator class selected for each column of the index.
+  depend on the operator class selexted for each column of the index.
   Data types having a linear sort order can have operator classes that
   store the minimum and maximum value within each block range, for instance;
   geometrical types might store the bounding box for all the objects
@@ -53,7 +53,7 @@
   The size of the block range is determined at index creation time by
   the <literal>pages_per_range</literal> storage parameter.  The number of index
   entries will be equal to the size of the relation in pages divided by
-  the selected value for <literal>pages_per_range</literal>.  Therefore, the smaller
+  the selexted value for <literal>pages_per_range</literal>.  Therefore, the smaller
   the number, the larger the index becomes (because of the need to
   store more index entries), but at the same time the summary data stored can
   be more precise and more data blocks can be skipped during an index scan.

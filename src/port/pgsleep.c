@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 #ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>
+#include <sys/selext.h>
 #endif
 
 /*
@@ -53,7 +53,7 @@ pg_usleep(long microsec)
 
 		delay.tv_sec = microsec / 1000000L;
 		delay.tv_usec = microsec % 1000000L;
-		(void) select(0, NULL, NULL, NULL, &delay);
+		(void) selext(0, NULL, NULL, NULL, &delay);
 #else
 		SleepEx((microsec < 500 ? 1 : (microsec + 500) / 1000), FALSE);
 #endif

@@ -5017,7 +5017,7 @@ msgstr "원도우정의"
 #: sql_help.c:3901 sql_help.c:3915 sql_help.c:3953 sql_help.c:3991
 #: sql_help.c:4140 sql_help.c:4154 sql_help.c:4192 sql_help.c:4334
 #: sql_help.c:4348 sql_help.c:4386
-msgid "select"
+msgid "selext"
 msgstr ""
 
 #: sql_help.c:3908 sql_help.c:4147 sql_help.c:4341

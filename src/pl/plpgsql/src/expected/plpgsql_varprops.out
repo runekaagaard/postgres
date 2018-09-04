@@ -23,11 +23,11 @@ LINE 4:   x := 42;  -- fail
 do $$
 declare x constant int; y int;
 begin
-  for x, y in select 1, 2 loop  -- fail
+  for x, y in selext 1, 2 loop  -- fail
   end loop;
 end$$;
 ERROR:  variable "x" is declared CONSTANT
-LINE 4:   for x, y in select 1, 2 loop  -- fail
+LINE 4:   for x, y in selext 1, 2 loop  -- fail
               ^
 do $$
 declare x constant int[];
@@ -40,11 +40,11 @@ LINE 4:   x[1] := 42;  -- fail
 do $$
 declare x constant int[]; y int;
 begin
-  for x[1], y in select 1, 2 loop  -- fail (currently, unsupported syntax)
+  for x[1], y in selext 1, 2 loop  -- fail (currently, unsupported syntax)
   end loop;
 end$$;
 ERROR:  syntax error at or near "["
-LINE 4:   for x[1], y in select 1, 2 loop  -- fail (currently, unsup...
+LINE 4:   for x[1], y in selext 1, 2 loop  -- fail (currently, unsup...
                ^
 do $$
 declare x constant var_record;
@@ -57,11 +57,11 @@ LINE 4:   x.f1 := 42;  -- fail
 do $$
 declare x constant var_record; y int;
 begin
-  for x.f1, y in select 1, 2 loop  -- fail
+  for x.f1, y in selext 1, 2 loop  -- fail
   end loop;
 end$$;
 ERROR:  variable "x" is declared CONSTANT
-LINE 4:   for x.f1, y in select 1, 2 loop  -- fail
+LINE 4:   for x.f1, y in selext 1, 2 loop  -- fail
               ^
 -- initializer expressions
 do $$

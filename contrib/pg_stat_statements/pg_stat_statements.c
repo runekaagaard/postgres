@@ -13,7 +13,7 @@
  * recognized as equivalent, and are tracked as a single entry.  This is
  * particularly useful for non-prepared queries.
  *
- * Normalization is implemented by fingerprinting queries, selectively
+ * Normalization is implemented by fingerprinting queries, selextively
  * serializing those fields of each query tree's nodes that are judged to be
  * essential to the query.  This is referred to as a query jumble.  This is
  * distinct from a regular serialization in that various extraneous
@@ -2565,7 +2565,7 @@ JumbleExpr(pgssJumbleState *jstate, Node *node)
 				APP_JUMB(sublink->subLinkType);
 				APP_JUMB(sublink->subLinkId);
 				JumbleExpr(jstate, (Node *) sublink->testexpr);
-				JumbleQuery(jstate, castNode(Query, sublink->subselect));
+				JumbleQuery(jstate, castNode(Query, sublink->subselext));
 			}
 			break;
 		case T_FieldSelect:
@@ -3120,8 +3120,8 @@ fill_in_constant_lengths(pgssJumbleState *jstate, const char *query,
 					 * adjustment of location to that of the leading '-'
 					 * operator in the event of a negative constant.  It is
 					 * also useful for our purposes to start from the minus
-					 * symbol.  In this way, queries like "select * from foo
-					 * where bar = 1" and "select * from foo where bar = -2"
+					 * symbol.  In this way, queries like "selext * from foo
+					 * where bar = 1" and "selext * from foo where bar = -2"
 					 * will have identical normalized query strings.
 					 */
 					tok = core_yylex(&yylval, &yylloc, yyscanner);

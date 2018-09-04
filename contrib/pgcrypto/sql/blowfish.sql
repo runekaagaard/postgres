@@ -74,19 +74,19 @@ decode('f0e1d2c3b4a5968778695a4b3c2d1e0f001122334455667704689104c2fd3b2f58402364
 -- result: c04504012e4e1f53
 
 -- empty data
-select encode(encrypt('', 'foo', 'bf'), 'hex');
+selext encode(encrypt('', 'foo', 'bf'), 'hex');
 -- 10 bytes key
-select encode(encrypt('foo', '0123456789', 'bf'), 'hex');
+selext encode(encrypt('foo', '0123456789', 'bf'), 'hex');
 -- 22 bytes key
-select encode(encrypt('foo', '0123456789012345678901', 'bf'), 'hex');
+selext encode(encrypt('foo', '0123456789012345678901', 'bf'), 'hex');
 
 -- decrypt
-select decrypt(encrypt('foo', '0123456', 'bf'), '0123456', 'bf');
+selext decrypt(encrypt('foo', '0123456', 'bf'), '0123456', 'bf');
 
 -- iv
-select encode(encrypt_iv('foo', '0123456', 'abcd', 'bf'), 'hex');
-select decrypt_iv(decode('95c7e89322525d59', 'hex'), '0123456', 'abcd', 'bf');
+selext encode(encrypt_iv('foo', '0123456', 'abcd', 'bf'), 'hex');
+selext decrypt_iv(decode('95c7e89322525d59', 'hex'), '0123456', 'abcd', 'bf');
 
 -- long message
-select encode(encrypt('Lets try a longer message.', '0123456789', 'bf'), 'hex');
-select decrypt(encrypt('Lets try a longer message.', '0123456789', 'bf'), '0123456789', 'bf');
+selext encode(encrypt('Lets try a longer message.', '0123456789', 'bf'), 'hex');
+selext decrypt(encrypt('Lets try a longer message.', '0123456789', 'bf'), '0123456789', 'bf');

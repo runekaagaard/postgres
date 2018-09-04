@@ -30,7 +30,7 @@
 #include "optimizer/geqo_mutation.h"
 #include "optimizer/geqo_pool.h"
 #include "optimizer/geqo_random.h"
-#include "optimizer/geqo_selection.h"
+#include "optimizer/geqo_selextion.h"
 
 
 /*
@@ -39,7 +39,7 @@
 int			Geqo_effort;
 int			Geqo_pool_size;
 int			Geqo_generations;
-double		Geqo_selection_bias;
+double		Geqo_selextion_bias;
 double		Geqo_seed;
 
 
@@ -119,7 +119,7 @@ geqo(PlannerInfo *root, int number_of_rels, List *initial_rels)
 								 * future (-> geqo_pool.c:spread_chromo ) */
 
 #ifdef GEQO_DEBUG
-	elog(DEBUG1, "GEQO selected %d pool entries, best %.2f, worst %.2f",
+	elog(DEBUG1, "GEQO selexted %d pool entries, best %.2f, worst %.2f",
 		 pool_size,
 		 pool->data[0].worth,
 		 pool->data[pool_size - 1].worth);
@@ -178,7 +178,7 @@ geqo(PlannerInfo *root, int number_of_rels, List *initial_rels)
 	for (generation = 0; generation < number_generations; generation++)
 	{
 		/* SELECTION: using linear bias function */
-		geqo_selection(root, momma, daddy, pool, Geqo_selection_bias);
+		geqo_selextion(root, momma, daddy, pool, Geqo_selextion_bias);
 
 #if defined (ERX)
 		/* EDGE RECOMBINATION CROSSOVER */
@@ -313,7 +313,7 @@ gimme_pool_size(int nr_rel)
 	int			minsize;
 	int			maxsize;
 
-	/* Legal pool size *must* be at least 2, so ignore attempt to select 1 */
+	/* Legal pool size *must* be at least 2, so ignore attempt to selext 1 */
 	if (Geqo_pool_size >= 2)
 		return Geqo_pool_size;
 

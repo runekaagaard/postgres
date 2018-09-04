@@ -1036,7 +1036,7 @@ InitPostgres(const char *in_dbname, Oid dboid, const char *username,
 
 	/*
 	 * Initialize various default states that can't be set up until we've
-	 * selected the active user and gotten the right GUC settings.
+	 * selexted the active user and gotten the right GUC settings.
 	 */
 
 	/* set default namespace search path */

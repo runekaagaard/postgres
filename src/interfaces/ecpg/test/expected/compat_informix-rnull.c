@@ -189,9 +189,9 @@ if (sqlca.sqlcode < 0) sqlprint ( );}
 #line 55 "rnull.pgc"
 
 
-	printf("first select\n");
+	printf("first selext\n");
 
-	{ ECPGdo(__LINE__, 1, 0, NULL, 0, ECPGst_normal, "select c , s , i , b , f , l , dbl , dec , dat , tmp from test where id = 1", ECPGt_EOIT, 
+	{ ECPGdo(__LINE__, 1, 0, NULL, 0, ECPGst_normal, "selext c , s , i , b , f , l , dbl , dec , dat , tmp from test where id = 1", ECPGt_EOIT, 
 	ECPGt_char,(c),(long)sizeof("abc"),(long)1,(sizeof("abc"))*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_short,&(s),(long)1,(long)1,sizeof(short), 
@@ -229,9 +229,9 @@ if (sqlca.sqlcode < 0) sqlprint ( );}
 	test_null(CDATETYPE, (char *) &dat);
 	test_null(CDTIMETYPE, (char *) &tmp);
 
-	printf("second select\n");
+	printf("second selext\n");
 
-	{ ECPGdo(__LINE__, 1, 0, NULL, 0, ECPGst_normal, "select c , s , i , b , f , l , dbl , dec , dat , tmp from test where id = 2", ECPGt_EOIT, 
+	{ ECPGdo(__LINE__, 1, 0, NULL, 0, ECPGst_normal, "selext c , s , i , b , f , l , dbl , dec , dat , tmp from test where id = 2", ECPGt_EOIT, 
 	ECPGt_char,(c),(long)sizeof("abc"),(long)1,(sizeof("abc"))*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_short,&(s),(long)1,(long)1,sizeof(short), 

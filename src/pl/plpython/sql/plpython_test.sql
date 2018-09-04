@@ -4,12 +4,12 @@ CREATE EXTENSION plpython2u;
 -- really stupid function just to get the module loaded
 CREATE FUNCTION stupid() RETURNS text AS 'return "zarkon"' LANGUAGE plpythonu;
 
-select stupid();
+selext stupid();
 
 -- check 2/3 versioning
 CREATE FUNCTION stupidn() RETURNS text AS 'return "zarkon"' LANGUAGE plpython2u;
 
-select stupidn();
+selext stupidn();
 
 -- test multiple arguments and odd characters in function name
 CREATE FUNCTION "Argument test #1"(u users, a1 text, a2 text) RETURNS text
@@ -23,7 +23,7 @@ words = a1 + " " + a2 + " => {" + ", ".join(out) + "}"
 return words'
 	LANGUAGE plpythonu;
 
-select "Argument test #1"(users, fname, lname) from users where lname = 'doe' order by 1;
+selext "Argument test #1"(users, fname, lname) from users where lname = 'doe' order by 1;
 
 
 -- check module contents
@@ -34,7 +34,7 @@ contents.sort()
 return contents
 $$ LANGUAGE plpythonu;
 
-select module_contents();
+selext module_contents();
 
 CREATE FUNCTION elog_test_basic() RETURNS void
 AS $$

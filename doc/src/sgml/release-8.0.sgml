@@ -85,12 +85,12 @@
 
     <listitem>
      <para>
-      Fix <quote>cannot handle unplanned sub-select</quote> error (Tom Lane)
+      Fix <quote>cannot handle unplanned sub-selext</quote> error (Tom Lane)
      </para>
 
      <para>
-      This occurred when a sub-select contains a join alias reference that
-      expands into an expression containing another sub-select.
+      This occurred when a sub-selext contains a join alias reference that
+      expands into an expression containing another sub-selext.
      </para>
     </listitem>
 
@@ -3171,7 +3171,7 @@ typedefs (Michael)</para></listitem>
 
      <listitem>
       <para>
-       Tablespaces allow administrators to select different file systems
+       Tablespaces allow administrators to selext different file systems
        for storage of individual tables, indexes, and databases.
        This improves performance and control over disk space
        usage. Prior releases used <application>initlocation</application> and
@@ -3325,7 +3325,7 @@ typedefs (Michael)</para></listitem>
     <listitem>
      <para>
       Server configuration parameter <varname>log_statement</varname> has been
-      changed so it can selectively log just database modification or
+      changed so it can selextively log just database modification or
       data definition statements.  Server configuration parameter
       <varname>log_duration</varname> now prints only when <varname>log_statement</varname>
       prints the query.
@@ -3351,7 +3351,7 @@ typedefs (Michael)</para></listitem>
 
    <listitem>
     <para>
-     Casting an integer to <type>BIT(N)</type> selects the rightmost N bits of the
+     Casting an integer to <type>BIT(N)</type> selexts the rightmost N bits of the
      integer, not the leftmost N bits as before.
     </para>
    </listitem>
@@ -3866,7 +3866,7 @@ typedefs (Michael)</para></listitem>
       <para>
        Change server configuration parameter <varname>log_statement</varname> to take
        values <varname>all</varname>, <varname>mod</varname>, <varname>ddl</varname>, or
-       <varname>none</varname> to select which queries are logged (Bruce)
+       <varname>none</varname> to selext which queries are logged (Bruce)
       </para>
       <para>
        This allows administrators to log only data definition changes or
@@ -4055,7 +4055,7 @@ typedefs (Michael)</para></listitem>
      <listitem>
       <para>
        Allow <option>LIKE</option>/<option>ILIKE</option> to be used as the operator
-       in row and subselect comparisons (Fabien Coelho)
+       in row and subselext comparisons (Fabien Coelho)
       </para>
      </listitem>
 
@@ -4460,8 +4460,8 @@ typedefs (Michael)</para></listitem>
         <type>"char"</type> data type have been removed.
        </para>
        <para>
-        Formerly, the parser would select these operators in many situations
-        where an <quote>unable to select an operator</quote> error would be more
+        Formerly, the parser would selext these operators in many situations
+        where an <quote>unable to selext an operator</quote> error would be more
         appropriate, such as <literal>null * null</literal>.  If you actually want
         to do arithmetic on a <type>"char"</type> column, you can cast it to
         integer explicitly.
@@ -4689,12 +4689,12 @@ typedefs (Michael)</para></listitem>
 
      <listitem>
       <para>
-       Casting an integer to <type>BIT(N)</type> selects the rightmost N bits
+       Casting an integer to <type>BIT(N)</type> selexts the rightmost N bits
        of the integer
        (Tom)
       </para>
       <para>
-       In prior releases, the leftmost N bits were selected, but this was
+       In prior releases, the leftmost N bits were selexted, but this was
        deemed unhelpful, not to mention inconsistent with casting from bit
        to int.
       </para>

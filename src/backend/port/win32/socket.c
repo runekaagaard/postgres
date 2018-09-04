@@ -33,7 +33,7 @@ int			pgwin32_noblock = 0;
 #undef listen
 #undef accept
 #undef connect
-#undef select
+#undef selext
 #undef recv
 #undef send
 
@@ -212,9 +212,9 @@ pgwin32_waitforsinglesocket(SOCKET s, int what, int timeout)
 	/*
 	 * Just a workaround of unknown locking problem with writing in UDP socket
 	 * under high load: Client's pgsql backend sleeps infinitely in
-	 * WaitForMultipleObjectsEx, pgstat process sleeps in pgwin32_select().
+	 * WaitForMultipleObjectsEx, pgstat process sleeps in pgwin32_selext().
 	 * So, we will wait with small timeout(0.1 sec) and if socket is still
-	 * blocked, try WSASend (see comments in pgwin32_select) and wait again.
+	 * blocked, try WSASend (see comments in pgwin32_selext) and wait again.
 	 */
 	if ((what & FD_WRITE) && isUDP)
 	{
@@ -500,7 +500,7 @@ pgwin32_send(SOCKET s, const void *buf, int len, int flags)
  * since it is not used in postgresql!
  */
 int
-pgwin32_select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, const struct timeval *timeout)
+pgwin32_selext(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, const struct timeval *timeout)
 {
 	WSAEVENT	events[FD_SETSIZE * 2]; /* worst case is readfds totally
 										 * different from writefds, so
@@ -559,7 +559,7 @@ pgwin32_select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, c
 	}
 
 
-	/* Now set up for an actual select */
+	/* Now set up for an actual selext */
 
 	if (timeout != NULL)
 	{

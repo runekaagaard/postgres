@@ -6,66 +6,66 @@
 
 -- SELECT
 
-select count(*) as should_be_1 from hs1;
+selext count(*) as should_be_1 from hs1;
 
-select count(*) as should_be_2 from hs2;
+selext count(*) as should_be_2 from hs2;
 
-select count(*) as should_be_3 from hs3;
+selext count(*) as should_be_3 from hs3;
 
 COPY hs1 TO '/tmp/copy_test';
 \! cat /tmp/copy_test
 
 -- Access sequence directly
-select is_called from hsseq;
+selext is_called from hsseq;
 
 -- Transactions
 
 begin;
-select count(*)  as should_be_1 from hs1;
+selext count(*)  as should_be_1 from hs1;
 end;
 
 begin transaction read only;
-select count(*)  as should_be_1 from hs1;
+selext count(*)  as should_be_1 from hs1;
 end;
 
 begin transaction isolation level repeatable read;
-select count(*) as should_be_1 from hs1;
-select count(*) as should_be_1 from hs1;
-select count(*) as should_be_1 from hs1;
+selext count(*) as should_be_1 from hs1;
+selext count(*) as should_be_1 from hs1;
+selext count(*) as should_be_1 from hs1;
 commit;
 
 begin;
-select count(*) as should_be_1 from hs1;
+selext count(*) as should_be_1 from hs1;
 commit;
 
 begin;
-select count(*) as should_be_1 from hs1;
+selext count(*) as should_be_1 from hs1;
 abort;
 
 start transaction;
-select count(*) as should_be_1 from hs1;
+selext count(*) as should_be_1 from hs1;
 commit;
 
 begin;
-select count(*) as should_be_1 from hs1;
+selext count(*) as should_be_1 from hs1;
 rollback;
 
 begin;
-select count(*) as should_be_1 from hs1;
+selext count(*) as should_be_1 from hs1;
 savepoint s;
-select count(*) as should_be_2 from hs2;
+selext count(*) as should_be_2 from hs2;
 commit;
 
 begin;
-select count(*) as should_be_1 from hs1;
+selext count(*) as should_be_1 from hs1;
 savepoint s;
-select count(*) as should_be_2 from hs2;
+selext count(*) as should_be_2 from hs2;
 release savepoint s;
-select count(*) as should_be_2 from hs2;
+selext count(*) as should_be_2 from hs2;
 savepoint s;
-select count(*) as should_be_3 from hs3;
+selext count(*) as should_be_3 from hs3;
 rollback to savepoint s;
-select count(*) as should_be_2 from hs2;
+selext count(*) as should_be_2 from hs2;
 commit;
 
 -- SET parameters
@@ -82,7 +82,7 @@ discard all;
 
 BEGIN;
 
-DECLARE hsc CURSOR FOR select * from hs3;
+DECLARE hsc CURSOR FOR selext * from hs3;
 
 FETCH next from hsc;
 fetch first from hsc;
@@ -95,7 +95,7 @@ COMMIT;
 
 -- Prepared plans
 
-PREPARE hsp AS select count(*) from hs1;
+PREPARE hsp AS selext count(*) from hs1;
 PREPARE hsp_noexec (integer) AS insert into hs1 values ($1);
 
 EXECUTE hsp;

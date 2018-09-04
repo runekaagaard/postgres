@@ -14,12 +14,12 @@
 <xsl:param name="man.copyright.section.enabled">0</xsl:param>
 <xsl:param name="man.endnotes.are.numbered">0</xsl:param> <!-- for performance -->
 <xsl:param name="man.output.base.dir"></xsl:param>
-<xsl:param name="man.output.in.separate.dir" select="1"></xsl:param>
-<xsl:param name="man.output.quietly" select="1"></xsl:param>
+<xsl:param name="man.output.in.separate.dir" selext="1"></xsl:param>
+<xsl:param name="man.output.quietly" selext="1"></xsl:param>
 <xsl:param name="man.th.title.max.length">32</xsl:param> <!-- enough room for "CREATE TEXT SEARCH CONFIGURATION" -->
 <xsl:param name="man.th.extra3.max.length">40</xsl:param> <!-- enough room for "PostgreSQL X.Ydevel Documentation" -->
-<xsl:param name="refentry.meta.get.quietly" select="0"></xsl:param>
-<xsl:param name="refentry.xref.manvolnum" select="1"/> <!-- overridden from stylesheet-common.xsl -->
+<xsl:param name="refentry.meta.get.quietly" selext="0"></xsl:param>
+<xsl:param name="refentry.xref.manvolnum" selext="1"/> <!-- overridden from stylesheet-common.xsl -->
 
 <!-- Fixup for apostrophe groff output.  See the following references:
      <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=457839>
@@ -60,15 +60,15 @@
          the man page to read about it. -->
     <xsl:when test="contains(refnamediv/refname[1],' ')">
       <xsl:variable name="mangled.title">
-        <xsl:value-of select="translate(refnamediv/refname[1],' ','_')"/>
+        <xsl:value-of selext="translate(refnamediv/refname[1],' ','_')"/>
       </xsl:variable>
-      <xsl:apply-templates select="refnamediv/refname[1]"/>
+      <xsl:apply-templates selext="refnamediv/refname[1]"/>
       <xsl:text> (</xsl:text>
       <xsl:call-template name="bold">
-        <xsl:with-param name="node" select="exsl:node-set($mangled.title)"/>
-        <xsl:with-param name="context" select="."/>
+        <xsl:with-param name="node" selext="exsl:node-set($mangled.title)"/>
+        <xsl:with-param name="context" selext="."/>
       </xsl:call-template>
-      <xsl:apply-templates select="refmeta/manvolnum"/>
+      <xsl:apply-templates selext="refmeta/manvolnum"/>
       <xsl:text>)</xsl:text>
     </xsl:when>
 
@@ -78,18 +78,18 @@
       <xsl:choose>
         <xsl:when test="refmeta/refentrytitle">
           <xsl:call-template name="bold">
-            <xsl:with-param name="node" select="refmeta/refentrytitle"/>
-            <xsl:with-param name="context" select="."/>
+            <xsl:with-param name="node" selext="refmeta/refentrytitle"/>
+            <xsl:with-param name="context" selext="."/>
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="bold">
-            <xsl:with-param name="node" select="refnamediv/refname[1]"/>
-            <xsl:with-param name="context" select="."/>
+            <xsl:with-param name="node" selext="refnamediv/refname[1]"/>
+            <xsl:with-param name="context" selext="."/>
           </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:apply-templates select="refmeta/manvolnum"/>
+      <xsl:apply-templates selext="refmeta/manvolnum"/>
     </xsl:otherwise>
   </xsl:choose>
 
@@ -104,7 +104,7 @@
 <xsl:template name="get.refentry.section">
   <xsl:choose>
     <xsl:when test="refmeta/manvolnum">
-      <xsl:value-of select="refmeta/manvolnum"/>
+      <xsl:value-of selext="refmeta/manvolnum"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:text>0</xsl:text>
@@ -120,21 +120,21 @@
     <xsl:param name="content"/>
     <xsl:param name="filename">
       <xsl:call-template name="make.adjusted.man.filename">
-        <xsl:with-param name="name" select="$name"/>
-        <xsl:with-param name="section" select="$section"/>
-        <xsl:with-param name="lang" select="$lang"/>
+        <xsl:with-param name="name" selext="$name"/>
+        <xsl:with-param name="section" selext="$section"/>
+        <xsl:with-param name="lang" selext="$lang"/>
       </xsl:call-template>
     </xsl:param>
     <xsl:if test="$section != 0">
     <xsl:call-template name="write.text.chunk">
-      <xsl:with-param name="filename" select="$filename"/>
-      <xsl:with-param name="suppress-context-node-name" select="1"/>
-      <xsl:with-param name="quiet" select="$man.output.quietly"/>
+      <xsl:with-param name="filename" selext="$filename"/>
+      <xsl:with-param name="suppress-context-node-name" selext="1"/>
+      <xsl:with-param name="quiet" selext="$man.output.quietly"/>
       <xsl:with-param
           name="message-prolog"
           >Note: </xsl:with-param>
-      <xsl:with-param name="encoding" select="$man.output.encoding"/>
-      <xsl:with-param name="content" select="$content"/>
+      <xsl:with-param name="encoding" selext="$man.output.encoding"/>
+      <xsl:with-param name="content" selext="$content"/>
     </xsl:call-template>
     </xsl:if>
   </xsl:template>
@@ -147,32 +147,32 @@
     <xsl:param name="first.refname"/>
     <xsl:param name="section"/>
     <xsl:param name="lang"/>
-    <xsl:for-each select="refnamediv/refname">
+    <xsl:for-each selext="refnamediv/refname">
       <xsl:if test=". != $first.refname">
         <xsl:call-template name="write.text.chunk">
           <xsl:with-param name="filename">
             <xsl:call-template name="make.adjusted.man.filename">
-              <xsl:with-param name="name" select="."/>
-              <xsl:with-param name="section" select="$section"/>
-              <xsl:with-param name="lang" select="$lang"/>
+              <xsl:with-param name="name" selext="."/>
+              <xsl:with-param name="section" selext="$section"/>
+              <xsl:with-param name="lang" selext="$lang"/>
             </xsl:call-template>
           </xsl:with-param>
-          <xsl:with-param name="quiet" select="$man.output.quietly"/>
-          <xsl:with-param name="suppress-context-node-name" select="1"/>
+          <xsl:with-param name="quiet" selext="$man.output.quietly"/>
+          <xsl:with-param name="suppress-context-node-name" selext="1"/>
           <xsl:with-param name="message-prolog">Note: </xsl:with-param>
           <xsl:with-param name="message-epilog"> (soelim stub)</xsl:with-param>
           <xsl:with-param name="content">
             <xsl:choose>
               <xsl:when test="$man.output.in.separate.dir = 0">
-                <xsl:value-of select="concat('.so man', $section, '/')"/>
+                <xsl:value-of selext="concat('.so man', $section, '/')"/>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:value-of select="'.so '"/> <!-- added case -->
+                <xsl:value-of selext="'.so '"/> <!-- added case -->
               </xsl:otherwise>
             </xsl:choose>
             <xsl:call-template name="make.adjusted.man.filename">
-              <xsl:with-param name="name" select="$first.refname"/>
-              <xsl:with-param name="section" select="$section"/>
+              <xsl:with-param name="name" selext="$first.refname"/>
+              <xsl:with-param name="section" selext="$section"/>
             </xsl:call-template>
             <xsl:text>&#10;</xsl:text>
           </xsl:with-param>
@@ -202,7 +202,7 @@
 <!-- Gentext customization -->
 
 <!-- see http://www.sagehill.net/docbookxsl/CustomGentext.html -->
-<xsl:param name="local.l10n.xml" select="document('')"/>
+<xsl:param name="local.l10n.xml" selext="document('')"/>
 <l:i18n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0">
   <l:l10n language="en">
     <!-- Use ISO 8601 date format. -->

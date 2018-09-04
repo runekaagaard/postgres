@@ -882,8 +882,8 @@ msgstr "%s: não pôde abrir arquivo de log \"%s\": %s\n"
 
 #: pg_recvlogical.c:412 receivelog.c:980
 #, c-format
-msgid "%s: select() failed: %s\n"
-msgstr "%s: select() falhou: %s\n"
+msgid "%s: selext() failed: %s\n"
+msgstr "%s: selext() falhou: %s\n"
 
 #: pg_recvlogical.c:421 receivelog.c:1030
 #, c-format

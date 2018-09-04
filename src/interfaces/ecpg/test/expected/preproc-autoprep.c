@@ -114,7 +114,7 @@ if (sqlca.sqlcode < 0) sqlprint();}
 #line 28 "autoprep.pgc"
 
 
-  { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_prepnormal, "select Item2 from T order by Item2 nulls last", ECPGt_EOIT, 
+  { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_prepnormal, "selext Item2 from T order by Item2 nulls last", ECPGt_EOIT, 
 	ECPGt_int,(item),(long)1,(long)4,sizeof(int), 
 	ECPGt_int,(ind),(long)1,(long)4,sizeof(int), ECPGt_EORT);
 #line 30 "autoprep.pgc"
@@ -129,11 +129,11 @@ if (sqlca.sqlcode < 0) sqlprint();}
   for (i=0; i<4; i++)
 	printf("item[%d] = %d\n", i, ind[i] ? -1 : item[i]);
 
-  /* declare C cursor for select Item1 from T */
+  /* declare C cursor for selext Item1 from T */
 #line 35 "autoprep.pgc"
 
 
-  { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare C cursor for select Item1 from T", ECPGt_EOIT, ECPGt_EORT);
+  { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare C cursor for selext Item1 from T", ECPGt_EOIT, ECPGt_EORT);
 #line 37 "autoprep.pgc"
 
 if (sqlca.sqlwarn[0] == 'W') sqlprint();

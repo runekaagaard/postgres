@@ -848,7 +848,7 @@ processSQLNamePattern(PGconn *conn, PQExpBuffer buf, const char *pattern,
 
 	if (pattern == NULL)
 	{
-		/* Default: select all visible objects */
+		/* Default: selext all visible objects */
 		if (visibilityrule)
 		{
 			WHEREAND();
@@ -1004,7 +1004,7 @@ processSQLNamePattern(PGconn *conn, PQExpBuffer buf, const char *pattern,
 	}
 	else
 	{
-		/* No schema pattern given, so select only visible objects */
+		/* No schema pattern given, so selext only visible objects */
 		if (visibilityrule)
 		{
 			WHEREAND();

@@ -1386,7 +1386,7 @@ _outSubLink(StringInfo str, const SubLink *node)
 	WRITE_INT_FIELD(subLinkId);
 	WRITE_NODE_FIELD(testexpr);
 	WRITE_NODE_FIELD(operName);
-	WRITE_NODE_FIELD(subselect);
+	WRITE_NODE_FIELD(subselext);
 	WRITE_LOCATION_FIELD(location);
 }
 
@@ -1848,7 +1848,7 @@ _outIndexPath(StringInfo str, const IndexPath *node)
 	WRITE_NODE_FIELD(indexorderbycols);
 	WRITE_ENUM_FIELD(indexscandir, ScanDirection);
 	WRITE_FLOAT_FIELD(indextotalcost, "%.2f");
-	WRITE_FLOAT_FIELD(indexselectivity, "%.4f");
+	WRITE_FLOAT_FIELD(indexselextivity, "%.4f");
 }
 
 static void
@@ -1869,7 +1869,7 @@ _outBitmapAndPath(StringInfo str, const BitmapAndPath *node)
 	_outPathInfo(str, (const Path *) node);
 
 	WRITE_NODE_FIELD(bitmapquals);
-	WRITE_FLOAT_FIELD(bitmapselectivity, "%.4f");
+	WRITE_FLOAT_FIELD(bitmapselextivity, "%.4f");
 }
 
 static void
@@ -1880,7 +1880,7 @@ _outBitmapOrPath(StringInfo str, const BitmapOrPath *node)
 	_outPathInfo(str, (const Path *) node);
 
 	WRITE_NODE_FIELD(bitmapquals);
-	WRITE_FLOAT_FIELD(bitmapselectivity, "%.4f");
+	WRITE_FLOAT_FIELD(bitmapselextivity, "%.4f");
 }
 
 static void
@@ -3176,7 +3176,7 @@ _outRangeTblEntry(StringInfo str, const RangeTblEntry *node)
 	WRITE_BOOL_FIELD(inFromCl);
 	WRITE_UINT_FIELD(requiredPerms);
 	WRITE_OID_FIELD(checkAsUser);
-	WRITE_BITMAPSET_FIELD(selectedCols);
+	WRITE_BITMAPSET_FIELD(selextedCols);
 	WRITE_BITMAPSET_FIELD(insertedCols);
 	WRITE_BITMAPSET_FIELD(updatedCols);
 	WRITE_NODE_FIELD(securityQuals);
@@ -3440,7 +3440,7 @@ _outWindowDef(StringInfo str, const WindowDef *node)
 }
 
 static void
-_outRangeSubselect(StringInfo str, const RangeSubselect *node)
+_outRangeSubselext(StringInfo str, const RangeSubselext *node)
 {
 	WRITE_NODE_TYPE("RANGESUBSELECT");
 
@@ -4279,8 +4279,8 @@ outNode(StringInfo str, const void *obj)
 			case T_WindowDef:
 				_outWindowDef(str, obj);
 				break;
-			case T_RangeSubselect:
-				_outRangeSubselect(str, obj);
+			case T_RangeSubselext:
+				_outRangeSubselext(str, obj);
 				break;
 			case T_RangeFunction:
 				_outRangeFunction(str, obj);

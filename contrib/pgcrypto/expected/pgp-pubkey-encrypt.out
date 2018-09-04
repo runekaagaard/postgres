@@ -4,7 +4,7 @@
 -- ensure consistent test output regardless of the default bytea format
 SET bytea_output TO escape;
 -- successful encrypt/decrypt
-select pgp_pub_decrypt(
+selext pgp_pub_decrypt(
 	pgp_pub_encrypt('Secret msg', dearmor(pubkey)),
 	dearmor(seckey))
 from keytbl where keytbl.id=1;
@@ -13,7 +13,7 @@ from keytbl where keytbl.id=1;
  Secret msg
 (1 row)
 
-select pgp_pub_decrypt(
+selext pgp_pub_decrypt(
 		pgp_pub_encrypt('Secret msg', dearmor(pubkey)),
 		dearmor(seckey))
 from keytbl where keytbl.id=2;
@@ -22,7 +22,7 @@ from keytbl where keytbl.id=2;
  Secret msg
 (1 row)
 
-select pgp_pub_decrypt(
+selext pgp_pub_decrypt(
 		pgp_pub_encrypt('Secret msg', dearmor(pubkey)),
 		dearmor(seckey))
 from keytbl where keytbl.id=3;
@@ -31,7 +31,7 @@ from keytbl where keytbl.id=3;
  Secret msg
 (1 row)
 
-select pgp_pub_decrypt(
+selext pgp_pub_decrypt(
 		pgp_pub_encrypt('Secret msg', dearmor(pubkey)),
 		dearmor(seckey))
 from keytbl where keytbl.id=6;
@@ -41,19 +41,19 @@ from keytbl where keytbl.id=6;
 (1 row)
 
 -- try with rsa-sign only
-select pgp_pub_decrypt(
+selext pgp_pub_decrypt(
 		pgp_pub_encrypt('Secret msg', dearmor(pubkey)),
 		dearmor(seckey))
 from keytbl where keytbl.id=4;
 ERROR:  No encryption key found
 -- try with secret key
-select pgp_pub_decrypt(
+selext pgp_pub_decrypt(
 		pgp_pub_encrypt('Secret msg', dearmor(seckey)),
 		dearmor(seckey))
 from keytbl where keytbl.id=1;
 ERROR:  Refusing to encrypt with secret key
 -- does text-to-bytea works
-select pgp_pub_decrypt_bytea(
+selext pgp_pub_decrypt_bytea(
 		pgp_pub_encrypt('Secret msg', dearmor(pubkey)),
 		dearmor(seckey))
 from keytbl where keytbl.id=1;
@@ -63,7 +63,7 @@ from keytbl where keytbl.id=1;
 (1 row)
 
 -- and bytea-to-text?
-select pgp_pub_decrypt(
+selext pgp_pub_decrypt(
 		pgp_pub_encrypt_bytea('Secret msg', dearmor(pubkey)),
 		dearmor(seckey))
 from keytbl where keytbl.id=1;

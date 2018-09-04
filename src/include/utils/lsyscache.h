@@ -26,7 +26,7 @@ typedef struct OpBtreeInterpretation
 	Oid			oprighttype;	/* declared right input datatype */
 } OpBtreeInterpretation;
 
-/* I/O function selector for get_type_io_data */
+/* I/O function selextor for get_type_io_data */
 typedef enum IOFuncSelector
 {
 	IOFunc_input,

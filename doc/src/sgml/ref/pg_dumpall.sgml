@@ -427,7 +427,7 @@ PostgreSQL documentation
       <term><option>--no-tablespaces</option></term>
       <listitem>
        <para>
-        Do not output commands to create tablespaces nor select tablespaces
+        Do not output commands to create tablespaces nor selext tablespaces
         for objects.
         With this option, all objects will be created in whichever
         tablespace is the default during restore.

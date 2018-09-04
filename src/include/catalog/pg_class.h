@@ -109,7 +109,7 @@ typedef FormData_pg_class *Form_pg_class;
 #define		  RELPERSISTENCE_UNLOGGED	'u' /* unlogged permanent table */
 #define		  RELPERSISTENCE_TEMP		't' /* temporary table */
 
-/* default selection for replica identity (primary key or nothing) */
+/* default selextion for replica identity (primary key or nothing) */
 #define		  REPLICA_IDENTITY_DEFAULT	'd'
 /* no replica identity is logged for this relation */
 #define		  REPLICA_IDENTITY_NOTHING	'n'

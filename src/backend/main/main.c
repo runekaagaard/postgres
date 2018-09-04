@@ -190,7 +190,7 @@ main(int argc, char *argv[])
 	}
 
 	/*
-	 * Make sure we are not running as root, unless it's safe for the selected
+	 * Make sure we are not running as root, unless it's safe for the selexted
 	 * option.
 	 */
 	if (do_check_root)
@@ -361,7 +361,7 @@ help(const char *progname)
 	printf(_("  -W NUM             wait NUM seconds to allow attach from a debugger\n"));
 
 	printf(_("\nOptions for single-user mode:\n"));
-	printf(_("  --single           selects single-user mode (must be first argument)\n"));
+	printf(_("  --single           selexts single-user mode (must be first argument)\n"));
 	printf(_("  DBNAME             database name (defaults to user name)\n"));
 	printf(_("  -d 0-5             override debugging level\n"));
 	printf(_("  -E                 echo statement before execution\n"));
@@ -369,7 +369,7 @@ help(const char *progname)
 	printf(_("  -r FILENAME        send stdout and stderr to given file\n"));
 
 	printf(_("\nOptions for bootstrapping mode:\n"));
-	printf(_("  --boot             selects bootstrapping mode (must be first argument)\n"));
+	printf(_("  --boot             selexts bootstrapping mode (must be first argument)\n"));
 	printf(_("  DBNAME             database name (mandatory argument in bootstrapping mode)\n"));
 	printf(_("  -r FILENAME        send stdout and stderr to given file\n"));
 	printf(_("  -x NUM             internal use\n"));

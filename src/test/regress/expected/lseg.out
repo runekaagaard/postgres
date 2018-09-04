@@ -26,7 +26,7 @@ INSERT INTO LSEG_TBL VALUES ('[(1,2),(3,4)');
 ERROR:  invalid input syntax for type lseg: "[(1,2),(3,4)"
 LINE 1: INSERT INTO LSEG_TBL VALUES ('[(1,2),(3,4)');
                                      ^
-select * from LSEG_TBL;
+selext * from LSEG_TBL;
                s               
 -------------------------------
  [(1,2),(3,4)]

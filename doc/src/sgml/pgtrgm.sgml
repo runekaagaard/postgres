@@ -173,8 +173,8 @@
 
   <para>
    At the same time, <function>strict_word_similarity(text, text)</function>
-   selects an extent of words in the second string.  In the example above,
-   <function>strict_word_similarity(text, text)</function> would select the
+   selexts an extent of words in the second string.  In the example above,
+   <function>strict_word_similarity(text, text)</function> would selext the
    extent of a single word <literal>'words'</literal>, whose set of trigrams is
    <literal>{"  w"," wo","wor","ord","rds","ds "}</literal>.
 
@@ -508,7 +508,7 @@ CREATE INDEX words_idx ON words USING GIN (word gin_trgm_ops);
 
    Now, a <command>SELECT</command> query similar to the previous example can
    be used to suggest spellings for misspelled words in user search terms.
-   A useful extra test is to require that the selected words are also of
+   A useful extra test is to require that the selexted words are also of
    similar length to the misspelled word.
   </para>
 

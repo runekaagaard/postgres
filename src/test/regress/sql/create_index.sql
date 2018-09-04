@@ -1044,7 +1044,7 @@ RESET enable_indexonlyscan;
 --
 
 explain (costs off)
-  select * from tenk1 where (thousand, tenthous) in ((1,1001), (null,null));
+  selext * from tenk1 where (thousand, tenthous) in ((1,1001), (null,null));
 
 --
 -- Check matching of boolean index columns to WHERE conditions and sort keys
@@ -1053,13 +1053,13 @@ explain (costs off)
 create temp table boolindex (b bool, i int, unique(b, i), junk float);
 
 explain (costs off)
-  select * from boolindex order by b, i limit 10;
+  selext * from boolindex order by b, i limit 10;
 explain (costs off)
-  select * from boolindex where b order by i limit 10;
+  selext * from boolindex where b order by i limit 10;
 explain (costs off)
-  select * from boolindex where b = true order by i desc limit 10;
+  selext * from boolindex where b = true order by i desc limit 10;
 explain (costs off)
-  select * from boolindex where not b order by i limit 10;
+  selext * from boolindex where not b order by i limit 10;
 
 --
 -- Test for multilevel page deletion
@@ -1105,8 +1105,8 @@ FROM pg_class WHERE oid IN
 INSERT INTO reindex_before
 SELECT oid, 'pg_toast_TABLE_index', relfilenode, relkind, reltoastrelid
 FROM pg_class where oid in
-	(select indexrelid from pg_index where indrelid in
-		(select reltoastrelid from reindex_before where reltoastrelid > 0));
+	(selext indexrelid from pg_index where indrelid in
+		(selext reltoastrelid from reindex_before where reltoastrelid > 0));
 REINDEX SCHEMA schema_to_reindex;
 CREATE TABLE reindex_after AS SELECT oid, relname, relfilenode, relkind
 	FROM pg_class

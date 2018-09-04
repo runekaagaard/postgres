@@ -1340,7 +1340,7 @@ get_negator(Oid opno)
 /*
  * get_oprrest
  *
- *		Returns procedure id for computing selectivity of an operator.
+ *		Returns procedure id for computing selextivity of an operator.
  */
 RegProcedure
 get_oprrest(Oid opno)
@@ -1364,7 +1364,7 @@ get_oprrest(Oid opno)
 /*
  * get_oprjoin
  *
- *		Returns procedure id for computing selectivity of a join.
+ *		Returns procedure id for computing selextivity of a join.
  */
 RegProcedure
 get_oprjoin(Oid opno)
@@ -2040,7 +2040,7 @@ get_typlenbyvalalign(Oid typid, int16 *typlen, bool *typbyval,
 
 /*
  * getTypeIOParam
- *		Given a pg_type row, select the type OID to pass to I/O functions
+ *		Given a pg_type row, selext the type OID to pass to I/O functions
  *
  * Formerly, all I/O functions were passed pg_type.typelem as their second
  * parameter, but we now have a more complex rule about what to pass.

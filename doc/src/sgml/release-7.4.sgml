@@ -85,12 +85,12 @@
 
     <listitem>
      <para>
-      Fix <quote>cannot handle unplanned sub-select</quote> error (Tom Lane)
+      Fix <quote>cannot handle unplanned sub-selext</quote> error (Tom Lane)
      </para>
 
      <para>
-      This occurred when a sub-select contains a join alias reference that
-      expands into an expression containing another sub-select.
+      This occurred when a sub-selext contains a join alias reference that
+      expands into an expression containing another sub-selext.
      </para>
     </listitem>
 
@@ -2483,13 +2483,13 @@ large tables, unsigned oids, stability, temp tables, and debug mode
 <listitem><para>Fix problem with reading tar-format dumps on NetBSD and BSD/OS (Bruce)</para></listitem>
 <listitem><para>Several JDBC fixes</para></listitem>
 <listitem><para>Fix ALTER SEQUENCE RESTART where last_value equals the restart value (Tom)</para></listitem>
-<listitem><para>Repair failure to recalculate nested sub-selects (Tom)</para></listitem>
+<listitem><para>Repair failure to recalculate nested sub-selexts (Tom)</para></listitem>
 <listitem><para>Fix problems with non-constant expressions in LIMIT/OFFSET</para></listitem>
 <listitem><para>Support FULL JOIN with no join clause, such as X FULL JOIN Y ON TRUE (Tom)</para></listitem>
 <listitem><para>Fix another zero-column table bug (Tom)</para></listitem>
-<listitem><para>Improve handling of non-qualified identifiers in GROUP BY clauses in sub-selects (Tom)</para>
+<listitem><para>Improve handling of non-qualified identifiers in GROUP BY clauses in sub-selexts (Tom)</para>
 <para>
-Select-list aliases within the sub-select will now take precedence over
+Select-list aliases within the sub-selext will now take precedence over
 names from outer query levels.
 </para></listitem>
 <listitem><para>Do not generate <quote>NATURAL CROSS JOIN</quote> when decompiling rules (Tom)</para></listitem>
@@ -3602,7 +3602,7 @@ DROP SCHEMA information_schema CASCADE;
     <para>
      Prior versions defaulted to 64 shared buffers so <productname>PostgreSQL</productname>
      would start on even very old systems. This release tests the
-     amount of shared memory allowed by the platform and selects more
+     amount of shared memory allowed by the platform and selexts more
      reasonable default values if possible.  Of course, users are
      still encouraged to evaluate their resource load and size
      <varname>shared_buffers</varname> accordingly.
@@ -3678,7 +3678,7 @@ DROP SCHEMA information_schema CASCADE;
      added to the <literal>FROM</literal> clause if they are not already
      there.  This is compatible with historic
      <productname>POSTGRES</productname> behavior but is contrary to
-     the SQL standard.  This option allows selecting
+     the SQL standard.  This option allows selexting
      standard-compatible behavior.
     </para>
    </listitem>

@@ -801,8 +801,8 @@ msgstr "socket non valido\n"
 
 #: fe-misc.c:1079
 #, c-format
-msgid "select() failed: %s\n"
-msgstr "select() fallita: %s\n"
+msgid "selext() failed: %s\n"
+msgstr "selext() fallita: %s\n"
 
 #: fe-protocol2.c:91
 #, c-format

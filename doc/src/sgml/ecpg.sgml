@@ -418,7 +418,7 @@ EXEC SQL COMMIT;
   </para>
 
   <para>
-   Single-row select:
+   Single-row selext:
 <programlisting>
 EXEC SQL SELECT foo INTO :FooBar FROM table1 WHERE ascii = 'doodad';
 </programlisting>
@@ -773,9 +773,9 @@ EXEC SQL END DECLARE SECTION;
 
 EXEC SQL SELECT a, b INTO :v1, :v2 FROM test;
 </programlisting>
-    So the <literal>INTO</literal> clause appears between the select
+    So the <literal>INTO</literal> clause appears between the selext
     list and the <literal>FROM</literal> clause.  The number of
-    elements in the select list and the list after
+    elements in the selext list and the list after
     <literal>INTO</literal> (also called the target list) must be
     equal.
    </para>
@@ -1566,7 +1566,7 @@ INSERT INTO t4 VALUES ( (256, 'PostgreSQL') );
 
      The most obvious solution is to access each attribute separately.
      The following program retrieves data from the example table by
-     selecting each attribute of the type <type>comp_t</type>
+     selexting each attribute of the type <type>comp_t</type>
      separately:
 <programlisting>
 EXEC SQL BEGIN DECLARE SECTION;
@@ -1685,7 +1685,7 @@ while (1)
      in <xref linkend="xtypes"/>.  The following example inserts the
      complex type values <literal>(1,1)</literal>
      and <literal>(3,3)</literal> into the
-     columns <literal>a</literal> and <literal>b</literal>, and select
+     columns <literal>a</literal> and <literal>b</literal>, and selext
      them from the table after that.
 
 <programlisting>
@@ -6712,7 +6712,7 @@ DECLARE <replaceable class="parameter">cursor_name</replaceable> [ BINARY ] [ IN
       <term><replaceable class="parameter">query</replaceable></term>
       <listitem>
        <para>
-        A <xref linkend="sql-select"/> or
+        A <xref linkend="sql-selext"/> or
         <xref linkend="sql-values"/> command which will provide the
         rows to be returned by the cursor.
        </para>
@@ -7425,7 +7425,7 @@ SET AUTOCOMMIT { = | TO } { ON | OFF }
   <refentry id="ecpg-sql-set-connection">
    <refnamediv>
     <refname>SET CONNECTION</refname>
-    <refpurpose>select a database connection</refpurpose>
+    <refpurpose>selext a database connection</refpurpose>
    </refnamediv>
 
    <refsynopsisdiv>
@@ -7858,7 +7858,7 @@ EXEC SQL WHENEVER SQLWARNING SQLPRINT;
 EXEC SQL WHENEVER SQLWARNING DO warn();
 EXEC SQL WHENEVER SQLERROR sqlprint;
 EXEC SQL WHENEVER SQLERROR CALL print2();
-EXEC SQL WHENEVER SQLERROR DO handle_error("select");
+EXEC SQL WHENEVER SQLERROR DO handle_error("selext");
 EXEC SQL WHENEVER SQLERROR DO sqlnotice(NULL, NONO);
 EXEC SQL WHENEVER SQLERROR DO sqlprint();
 EXEC SQL WHENEVER SQLERROR GOTO error_label;
@@ -8266,7 +8266,7 @@ EXEC SQL INCLUDE sqlda.h;
     sqlda_t        *sqlda; /* This doesn't need to be under embedded DECLARE SECTION */
 
     EXEC SQL BEGIN DECLARE SECTION;
-    char *prep_stmt = "select * from table1";
+    char *prep_stmt = "selext * from table1";
     int i;
     EXEC SQL END DECLARE SECTION;
 

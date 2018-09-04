@@ -191,7 +191,7 @@ SELECT * FROM clustertest;
 create temp table clstr_temp (col1 int primary key, col2 text);
 insert into clstr_temp values (2, 'two'), (1, 'one');
 cluster clstr_temp using clstr_temp_pkey;
-select * from clstr_temp;
+selext * from clstr_temp;
 drop table clstr_temp;
 
 RESET SESSION AUTHORIZATION;
@@ -205,7 +205,7 @@ DROP TABLE clstrpart;
 
 -- Test CLUSTER with external tuplesorting
 
-create table clstr_4 as select * from tenk1;
+create table clstr_4 as selext * from tenk1;
 create index cluster_sort on clstr_4 (hundred, thousand, tenthous);
 -- ensure we don't use the index in CLUSTER nor the checking SELECTs
 set enable_indexscan = off;
@@ -213,8 +213,8 @@ set enable_indexscan = off;
 -- Use external sort:
 set maintenance_work_mem = '1MB';
 cluster clstr_4 using cluster_sort;
-select * from
-(select hundred, lag(hundred) over () as lhundred,
+selext * from
+(selext hundred, lag(hundred) over () as lhundred,
         thousand, lag(thousand) over () as lthousand,
         tenthous, lag(tenthous) over () as ltenthous from clstr_4) ss
 where row(hundred, thousand, tenthous) <= row(lhundred, lthousand, ltenthous);

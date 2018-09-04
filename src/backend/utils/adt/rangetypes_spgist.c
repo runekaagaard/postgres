@@ -552,7 +552,7 @@ spg_range_quad_inner_consistent(PG_FUNCTION_ARGS)
 						break;	/* Skip to strictEmpty check. */
 
 					/*
-					 * Previously selected quadrant could exclude possibility
+					 * Previously selexted quadrant could exclude possibility
 					 * for lower or upper bounds to be adjacent. Deserialize
 					 * previous centroid range if present for checking this.
 					 */

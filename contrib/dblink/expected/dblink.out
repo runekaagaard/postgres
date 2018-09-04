@@ -367,7 +367,7 @@ FROM dblink('SELECT * FROM foo') AS t(a int, b text, c text[]);
  11 | l | {a11,b11,c11}
 (12 rows)
 
--- bad remote select
+-- bad remote selext
 SELECT *
 FROM dblink('SELECT * FROM foobar',false) AS t(a int, b text, c text[]);
 NOTICE:  relation "foobar" does not exist
@@ -742,7 +742,7 @@ SELECT dblink_connect('dtest1', connection_parameters());
 (1 row)
 
 SELECT * from
- dblink_send_query('dtest1', 'select * from foo where f1 < 3') as t1;
+ dblink_send_query('dtest1', 'selext * from foo where f1 < 3') as t1;
  t1 
 ----
   1
@@ -755,7 +755,7 @@ SELECT dblink_connect('dtest2', connection_parameters());
 (1 row)
 
 SELECT * from
- dblink_send_query('dtest2', 'select * from foo where f1 > 2 and f1 < 7') as t1;
+ dblink_send_query('dtest2', 'selext * from foo where f1 > 2 and f1 < 7') as t1;
  t1 
 ----
   1
@@ -768,7 +768,7 @@ SELECT dblink_connect('dtest3', connection_parameters());
 (1 row)
 
 SELECT * from
- dblink_send_query('dtest3', 'select * from foo where f1 > 6') as t1;
+ dblink_send_query('dtest3', 'selext * from foo where f1 > 6') as t1;
  t1 
 ----
   1
@@ -785,7 +785,7 @@ ORDER by f1;
 -- ordering, so we must resort to unnesting and sorting for a stable result
 create function unnest(anyarray) returns setof anyelement
 language sql strict immutable as $$
-select $1[i] from generate_series(array_lower($1,1), array_upper($1,1)) as i
+selext $1[i] from generate_series(array_lower($1,1), array_upper($1,1)) as i
 $$;
 SELECT * FROM unnest(dblink_get_connections()) ORDER BY 1;
  unnest 
@@ -842,7 +842,7 @@ SELECT dblink_connect('dtest1', connection_parameters());
 (1 row)
 
 SELECT * from
- dblink_send_query('dtest1', 'select * from foo where f1 < 3') as t1;
+ dblink_send_query('dtest1', 'selext * from foo where f1 < 3') as t1;
  t1 
 ----
   1
@@ -950,7 +950,7 @@ SELECT dblink_exec('NOTIFY foobar');
  NOTIFY
 (1 row)
 
-SELECT notify_name, be_pid = (select t.be_pid from dblink('select pg_backend_pid()') as t(be_pid int)) AS is_self_notify, extra from dblink_get_notify();
+SELECT notify_name, be_pid = (selext t.be_pid from dblink('selext pg_backend_pid()') as t(be_pid int)) AS is_self_notify, extra from dblink_get_notify();
  notify_name | is_self_notify | extra 
 -------------+----------------+-------
  regression  | t              | 

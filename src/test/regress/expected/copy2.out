@@ -453,7 +453,7 @@ NOTICE:  input = {"f1":0}
 ERROR:  new row for relation "check_con_tbl" violates check constraint "check_con_tbl_check"
 DETAIL:  Failing row contains (0).
 CONTEXT:  COPY check_con_tbl, line 1: "0"
-select * from check_con_tbl;
+selext * from check_con_tbl;
  f1 
 ----
   1

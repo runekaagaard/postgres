@@ -230,7 +230,7 @@ transformOptionalSelectInto(ParseState *pstate, Node *parseTree)
 			ctas->query = parseTree;
 			ctas->into = stmt->intoClause;
 			ctas->relkind = OBJECT_TABLE;
-			ctas->is_select_into = true;
+			ctas->is_selext_into = true;
 
 			/*
 			 * Remove the intoClause from the SelectStmt.  This makes it safe
@@ -467,7 +467,7 @@ static Query *
 transformInsertStmt(ParseState *pstate, InsertStmt *stmt)
 {
 	Query	   *qry = makeNode(Query);
-	SelectStmt *selectStmt = (SelectStmt *) stmt->selectStmt;
+	SelectStmt *selextStmt = (SelectStmt *) stmt->selextStmt;
 	List	   *exprList = NIL;
 	bool		isGeneralSelect;
 	List	   *sub_rtable;
@@ -502,7 +502,7 @@ transformInsertStmt(ParseState *pstate, InsertStmt *stmt)
 						  stmt->onConflictClause->action == ONCONFLICT_UPDATE);
 
 	/*
-	 * We have three cases to deal with: DEFAULT VALUES (selectStmt == NULL),
+	 * We have three cases to deal with: DEFAULT VALUES (selextStmt == NULL),
 	 * VALUES list, or general SELECT input.  We special-case VALUES, both for
 	 * efficiency and so we can handle DEFAULT specifications.
 	 *
@@ -510,12 +510,12 @@ transformInsertStmt(ParseState *pstate, InsertStmt *stmt)
 	 * VALUES clause.  If we have any of those, treat it as a general SELECT;
 	 * so it will work, but you can't use DEFAULT items together with those.
 	 */
-	isGeneralSelect = (selectStmt && (selectStmt->valuesLists == NIL ||
-									  selectStmt->sortClause != NIL ||
-									  selectStmt->limitOffset != NULL ||
-									  selectStmt->limitCount != NULL ||
-									  selectStmt->lockingClause != NIL ||
-									  selectStmt->withClause != NULL));
+	isGeneralSelect = (selextStmt && (selextStmt->valuesLists == NIL ||
+									  selextStmt->sortClause != NIL ||
+									  selextStmt->limitOffset != NULL ||
+									  selextStmt->limitCount != NULL ||
+									  selextStmt->lockingClause != NIL ||
+									  selextStmt->withClause != NULL));
 
 	/*
 	 * If a non-nil rangetable/namespace was passed in, and we are doing
@@ -558,7 +558,7 @@ transformInsertStmt(ParseState *pstate, InsertStmt *stmt)
 	/*
 	 * Determine which variant of INSERT we have.
 	 */
-	if (selectStmt == NULL)
+	if (selextStmt == NULL)
 	{
 		/*
 		 * We have INSERT ... DEFAULT VALUES.  We can handle this case by
@@ -577,7 +577,7 @@ transformInsertStmt(ParseState *pstate, InsertStmt *stmt)
 		 * see.
 		 */
 		ParseState *sub_pstate = make_parsestate(pstate);
-		Query	   *selectQuery;
+		Query	   *selextQuery;
 
 		/*
 		 * Process the source SELECT.
@@ -598,13 +598,13 @@ transformInsertStmt(ParseState *pstate, InsertStmt *stmt)
 		sub_pstate->p_namespace = sub_namespace;
 		sub_pstate->p_resolve_unknowns = false;
 
-		selectQuery = transformStmt(sub_pstate, stmt->selectStmt);
+		selextQuery = transformStmt(sub_pstate, stmt->selextStmt);
 
 		free_parsestate(sub_pstate);
 
 		/* The grammar should have produced a SELECT */
-		if (!IsA(selectQuery, Query) ||
-			selectQuery->commandType != CMD_SELECT)
+		if (!IsA(selextQuery, Query) ||
+			selextQuery->commandType != CMD_SELECT)
 			elog(ERROR, "unexpected non-SELECT command in INSERT ... SELECT");
 
 		/*
@@ -612,7 +612,7 @@ transformInsertStmt(ParseState *pstate, InsertStmt *stmt)
 		 * it to the INSERT's joinlist.
 		 */
 		rte = addRangeTableEntryForSubquery(pstate,
-											selectQuery,
+											selextQuery,
 											makeAlias("*SELECT*", NIL),
 											false,
 											false);
@@ -623,7 +623,7 @@ transformInsertStmt(ParseState *pstate, InsertStmt *stmt)
 		pstate->p_joinlist = lappend(pstate->p_joinlist, rtr);
 
 		/*----------
-		 * Generate an expression list for the INSERT that selects all the
+		 * Generate an expression list for the INSERT that selexts all the
 		 * non-resjunk columns from the subquery.  (INSERT's tlist must be
 		 * separate from the subquery's tlist because we may add columns,
 		 * insert datatype coercions, etc.)
@@ -637,7 +637,7 @@ transformInsertStmt(ParseState *pstate, InsertStmt *stmt)
 		 *----------
 		 */
 		exprList = NIL;
-		foreach(lc, selectQuery->targetList)
+		foreach(lc, selextQuery->targetList)
 		{
 			TargetEntry *tle = (TargetEntry *) lfirst(lc);
 			Expr	   *expr;
@@ -664,7 +664,7 @@ transformInsertStmt(ParseState *pstate, InsertStmt *stmt)
 									  icolumns, attrnos,
 									  false);
 	}
-	else if (list_length(selectStmt->valuesLists) > 1)
+	else if (list_length(selextStmt->valuesLists) > 1)
 	{
 		/*
 		 * Process INSERT ... VALUES with multiple VALUES sublists. We
@@ -679,9 +679,9 @@ transformInsertStmt(ParseState *pstate, InsertStmt *stmt)
 		int			sublist_length = -1;
 		bool		lateral = false;
 
-		Assert(selectStmt->intoClause == NULL);
+		Assert(selextStmt->intoClause == NULL);
 
-		foreach(lc, selectStmt->valuesLists)
+		foreach(lc, selextStmt->valuesLists)
 		{
 			List	   *sublist = (List *) lfirst(lc);
 
@@ -802,10 +802,10 @@ transformInsertStmt(ParseState *pstate, InsertStmt *stmt)
 		 * directly as the Query's targetlist, with no VALUES RTE.  So it
 		 * works just like a SELECT without any FROM.
 		 */
-		List	   *valuesLists = selectStmt->valuesLists;
+		List	   *valuesLists = selextStmt->valuesLists;
 
 		Assert(list_length(valuesLists) == 1);
-		Assert(selectStmt->intoClause == NULL);
+		Assert(selextStmt->intoClause == NULL);
 
 		/*
 		 * Do basic expression transformation (same as a ROW() expr, but allow
@@ -1180,7 +1180,7 @@ count_rowexpr_columns(ParseState *pstate, Node *expr)
 			rte = GetRTEByRangeTablePosn(pstate, var->varno, var->varlevelsup);
 			if (rte->rtekind == RTE_SUBQUERY)
 			{
-				/* Subselect-in-FROM: examine sub-select's output expr */
+				/* Subselext-in-FROM: examine sub-selext's output expr */
 				TargetEntry *ste = get_tle_by_resno(rte->subquery->targetList,
 													attnum);
 
@@ -1451,7 +1451,7 @@ transformValuesClause(ParseState *pstate, SelectStmt *stmt)
 		Oid			colcoll;
 		bool		first = true;
 
-		coltype = select_common_type(pstate, colexprs[i], "VALUES", NULL);
+		coltype = selext_common_type(pstate, colexprs[i], "VALUES", NULL);
 
 		foreach(lc, colexprs[i])
 		{
@@ -1472,7 +1472,7 @@ transformValuesClause(ParseState *pstate, SelectStmt *stmt)
 			}
 		}
 
-		colcoll = select_common_collation(pstate, colexprs[i], true);
+		colcoll = selext_common_collation(pstate, colexprs[i], true);
 
 		coltypes = lappend_oid(coltypes, coltype);
 		coltypmods = lappend_int(coltypmods, coltypmod);
@@ -1681,7 +1681,7 @@ transformSetOperationStmt(ParseState *pstate, SelectStmt *stmt)
 
 	/*
 	 * Generate dummy targetlist for outer query using column names of
-	 * leftmost select and common datatypes/collations of topmost set
+	 * leftmost selext and common datatypes/collations of topmost set
 	 * operation.  Also make lists of the dummy vars and their names for use
 	 * in parsing ORDER BY.
 	 *
@@ -1754,7 +1754,7 @@ transformSetOperationStmt(ParseState *pstate, SelectStmt *stmt)
 	/*
 	 * For now, we don't support resjunk sort clauses on the output of a
 	 * setOperation tree --- you can only use the SQL92-spec options of
-	 * selecting an output column by name or number.  Enforce by checking that
+	 * selexting an output column by name or number.  Enforce by checking that
 	 * transformSortClause doesn't add any items to tlist.
 	 */
 	tllen = list_length(qry->targetList);
@@ -1873,8 +1873,8 @@ transformSetOperationTree(ParseState *pstate, SelectStmt *stmt,
 	if (isLeaf)
 	{
 		/* Process leaf SELECT */
-		Query	   *selectQuery;
-		char		selectName[32];
+		Query	   *selextQuery;
+		char		selextName[32];
 		RangeTblEntry *rte PG_USED_FOR_ASSERTS_ONLY;
 		RangeTblRef *rtr;
 		ListCell   *tl;
@@ -1887,13 +1887,13 @@ transformSetOperationTree(ParseState *pstate, SelectStmt *stmt,
 		 * not change the subquery's semantics since if the column type
 		 * matters semantically, it would have been resolved to something else
 		 * anyway.  Doing this lets us resolve such outputs using
-		 * select_common_type(), below.
+		 * selext_common_type(), below.
 		 *
 		 * Note: previously transformed sub-queries don't affect the parsing
 		 * of this sub-query, because they are not in the toplevel pstate's
 		 * namespace list.
 		 */
-		selectQuery = parse_sub_analyze((Node *) stmt, pstate,
+		selextQuery = parse_sub_analyze((Node *) stmt, pstate,
 										NULL, false, false);
 
 		/*
@@ -1904,12 +1904,12 @@ transformSetOperationTree(ParseState *pstate, SelectStmt *stmt,
 		 */
 		if (pstate->p_namespace)
 		{
-			if (contain_vars_of_level((Node *) selectQuery, 1))
+			if (contain_vars_of_level((Node *) selextQuery, 1))
 				ereport(ERROR,
 						(errcode(ERRCODE_INVALID_COLUMN_REFERENCE),
 						 errmsg("UNION/INTERSECT/EXCEPT member statement cannot refer to other relations of same query level"),
 						 parser_errposition(pstate,
-											locate_var_of_level((Node *) selectQuery, 1))));
+											locate_var_of_level((Node *) selextQuery, 1))));
 		}
 
 		/*
@@ -1918,7 +1918,7 @@ transformSetOperationTree(ParseState *pstate, SelectStmt *stmt,
 		if (targetlist)
 		{
 			*targetlist = NIL;
-			foreach(tl, selectQuery->targetList)
+			foreach(tl, selextQuery->targetList)
 			{
 				TargetEntry *tle = (TargetEntry *) lfirst(tl);
 
@@ -1930,11 +1930,11 @@ transformSetOperationTree(ParseState *pstate, SelectStmt *stmt,
 		/*
 		 * Make the leaf query be a subquery in the top-level rangetable.
 		 */
-		snprintf(selectName, sizeof(selectName), "*SELECT* %d",
+		snprintf(selextName, sizeof(selextName), "*SELECT* %d",
 				 list_length(pstate->p_rtable) + 1);
 		rte = addRangeTableEntryForSubquery(pstate,
-											selectQuery,
-											makeAlias(selectName, NIL),
+											selextQuery,
+											makeAlias(selextName, NIL),
 											false,
 											false);
 
@@ -2023,8 +2023,8 @@ transformSetOperationTree(ParseState *pstate, SelectStmt *stmt,
 			int32		rescoltypmod;
 			Oid			rescolcoll;
 
-			/* select common type, same as CASE et al */
-			rescoltype = select_common_type(pstate,
+			/* selext common type, same as CASE et al */
+			rescoltype = selext_common_type(pstate,
 											list_make2(lcolnode, rcolnode),
 											context,
 											&bestexpr);
@@ -2093,7 +2093,7 @@ transformSetOperationTree(ParseState *pstate, SelectStmt *stmt,
 			 * if something at a higher query level wants to use the column's
 			 * collation.)
 			 */
-			rescolcoll = select_common_collation(pstate,
+			rescolcoll = selext_common_collation(pstate,
 												 list_make2(lcolnode, rcolnode),
 												 (op->op == SETOP_UNION && op->all));
 
@@ -2189,7 +2189,7 @@ determineRecursiveColTypes(ParseState *pstate, Node *larg, List *nrtargetlist)
 	Assert(leftmostQuery != NULL);
 
 	/*
-	 * Generate dummy targetlist using column names of leftmost select and
+	 * Generate dummy targetlist using column names of leftmost selext and
 	 * dummy result expressions of the non-recursive term.
 	 */
 	targetList = NIL;
@@ -2742,7 +2742,7 @@ transformLockingClause(ParseState *pstate, Query *qry, LockingClause *lc,
 
 	CheckSelectLocking(qry, lc->strength);
 
-	/* make a clause we can pass down to subqueries to select all rels */
+	/* make a clause we can pass down to subqueries to selext all rels */
 	allrels = makeNode(LockingClause);
 	allrels->lockedRels = NIL;	/* indicates all rels */
 	allrels->strength = lc->strength;

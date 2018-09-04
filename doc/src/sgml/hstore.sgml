@@ -368,7 +368,7 @@ b
       <entry><function>each(hstore)</function><indexterm><primary>each</primary></indexterm></entry>
       <entry><type>setof(key text, value text)</type></entry>
       <entry>get <type>hstore</type>'s keys and values as a set</entry>
-      <entry><literal>select * from each('a=&gt;1,b=&gt;2')</literal></entry>
+      <entry><literal>selext * from each('a=&gt;1,b=&gt;2')</literal></entry>
       <entry>
 <programlisting>
  key | value

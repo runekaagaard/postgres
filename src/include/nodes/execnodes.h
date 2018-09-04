@@ -706,7 +706,7 @@ typedef tuplehash_iterator TupleHashIterator;
  * to each node in a planned expression tree.  That's no longer the case; for
  * common expression node types, all the execution info is embedded into
  * step(s) in a single ExprState node.  But we still have a few executor state
- * node types for selected expression node types, mostly those in which info
+ * node types for selexted expression node types, mostly those in which info
  * has to be shared with other parts of the execution state tree.
  * ----------------------------------------------------------------
  */
@@ -819,17 +819,17 @@ typedef struct SubPlanState
 {
 	NodeTag		type;
 	SubPlan    *subplan;		/* expression plan node */
-	struct PlanState *planstate;	/* subselect plan's state tree */
+	struct PlanState *planstate;	/* subselext plan's state tree */
 	struct PlanState *parent;	/* parent plan node's state tree */
 	ExprState  *testexpr;		/* state of combining expression */
 	List	   *args;			/* states of argument expression(s) */
 	HeapTuple	curTuple;		/* copy of most recent tuple from subplan */
 	Datum		curArray;		/* most recent array from ARRAY() subplan */
-	/* these are used when hashing the subselect's output: */
-	TupleDesc	descRight;		/* subselect desc after projection */
+	/* these are used when hashing the subselext's output: */
+	TupleDesc	descRight;		/* subselext desc after projection */
 	ProjectionInfo *projLeft;	/* for projecting lefthand exprs */
-	ProjectionInfo *projRight;	/* for projecting subselect output */
-	TupleHashTable hashtable;	/* hash table for no-nulls subselect rows */
+	ProjectionInfo *projRight;	/* for projecting subselext output */
+	TupleHashTable hashtable;	/* hash table for no-nulls subselext rows */
 	TupleHashTable hashnulls;	/* hash table for rows with null(s) */
 	bool		havehashrows;	/* true if hashtable is not empty */
 	bool		havenullrows;	/* true if hashnulls is not empty */
@@ -933,7 +933,7 @@ typedef struct PlanState
 	struct PlanState *righttree;
 
 	List	   *initPlan;		/* Init SubPlanState nodes (un-correlated expr
-								 * subselects) */
+								 * subselexts) */
 	List	   *subPlan;		/* SubPlanState nodes in my expressions */
 
 	/*
@@ -2196,7 +2196,7 @@ typedef struct LockRowsState
  *	 LimitState information
  *
  *		Limit nodes are used to enforce LIMIT/OFFSET clauses.
- *		They just select the desired subrange of their subplan's output.
+ *		They just selext the desired subrange of their subplan's output.
  *
  * offset is the number of initial tuples to skip (0 does nothing).
  * count is the number of tuples to return after skipping the offset tuples.

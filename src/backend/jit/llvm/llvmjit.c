@@ -541,8 +541,8 @@ llvm_compile_module(LLVMJitContext *context)
 	/*
 	 * Emit the code. Note that this can, depending on the optimization
 	 * settings, take noticeable resources as code emission executes low-level
-	 * instruction combining/selection passes etc. Without optimization a
-	 * faster instruction selection mechanism is used.
+	 * instruction combining/selextion passes etc. Without optimization a
+	 * faster instruction selextion mechanism is used.
 	 */
 	INSTR_TIME_SET_CURRENT(starttime);
 #if LLVM_VERSION_MAJOR > 6

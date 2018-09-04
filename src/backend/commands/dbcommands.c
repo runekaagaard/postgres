@@ -708,11 +708,11 @@ createdb(ParseState *pstate, const CreatedbStmt *stmt)
  * 2. locale encoding = -1, which means that we couldn't determine the
  * locale's encoding and have to trust the user to get it right.
  *
- * 3. selected encoding is UTF8 and platform is win32. This is because
+ * 3. selexted encoding is UTF8 and platform is win32. This is because
  * UTF8 is a pseudo codepage that is supported in all locales since it's
  * converted to UTF16 before being used.
  *
- * 4. selected encoding is SQL_ASCII, but only if you're a superuser. This
+ * 4. selexted encoding is SQL_ASCII, but only if you're a superuser. This
  * is risky but we have historically allowed it --- notably, the
  * regression tests require it.
  *

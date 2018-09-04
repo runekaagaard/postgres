@@ -203,7 +203,7 @@ static bool MatchNamedCall(HeapTuple proctup, int nargs, List *argnames,
 /*
  * RangeVarGetRelidExtended
  *		Given a RangeVar describing an existing relation,
- *		select the proper namespace and look up the relation OID.
+ *		selext the proper namespace and look up the relation OID.
  *
  * If the schema or relation is not found, return InvalidOid if flags contains
  * RVR_MISSING_OK, otherwise raise an error.
@@ -489,7 +489,7 @@ RangeVarGetCreationNamespace(const RangeVar *newRelation)
 		if (!OidIsValid(namespaceId))
 			ereport(ERROR,
 					(errcode(ERRCODE_UNDEFINED_SCHEMA),
-					 errmsg("no schema has been selected to create in")));
+					 errmsg("no schema has been selexted to create in")));
 	}
 
 	/* Note: callers will check for CREATE rights when appropriate */
@@ -520,7 +520,7 @@ RangeVarGetCreationNamespace(const RangeVar *newRelation)
  * transaction commits, leaving behind relations with relnamespace pointing
  * to a no-longer-existent namespace.
  *
- * As a further side-effect, if the selected namespace is a temporary namespace,
+ * As a further side-effect, if the selexted namespace is a temporary namespace,
  * we mark the RangeVar as RELPERSISTENCE_TEMP.
  */
 Oid
@@ -911,7 +911,7 @@ TypeIsVisible(Oid typid)
  * candidate functions that expand to identical argument lists.  Rather than
  * throw error here, we report such situations by returning a single entry
  * with oid = 0 that represents a set of such conflicting candidates.
- * The caller might end up discarding such an entry anyway, but if it selects
+ * The caller might end up discarding such an entry anyway, but if it selexts
  * such an entry it should react as though the call were ambiguous.
  *
  * If missing_ok is true, an empty list (NULL) is returned if the name was
@@ -2966,7 +2966,7 @@ CheckSetNamespace(Oid oldNspOid, Oid nspOid)
  *		Also extract and return the object name (last component of list).
  *
  * Note: this does not apply any permissions check.  Callers must check
- * for CREATE rights on the selected namespace when appropriate.
+ * for CREATE rights on the selexted namespace when appropriate.
  *
  * Note: calling this may result in a CommandCounterIncrement operation,
  * if we have to create or clean out the temp namespace.
@@ -3008,7 +3008,7 @@ QualifiedNameGetCreationNamespace(List *names, char **objname_p)
 		if (!OidIsValid(namespaceId))
 			ereport(ERROR,
 					(errcode(ERRCODE_UNDEFINED_SCHEMA),
-					 errmsg("no schema has been selected to create in")));
+					 errmsg("no schema has been selexted to create in")));
 	}
 
 	return namespaceId;
@@ -3959,7 +3959,7 @@ void
 AtEOXact_Namespace(bool isCommit, bool parallel)
 {
 	/*
-	 * If we abort the transaction in which a temp namespace was selected,
+	 * If we abort the transaction in which a temp namespace was selexted,
 	 * we'll have to do any creation or cleanout work over again.  So, just
 	 * forget the namespace entirely until next time.  On the other hand, if
 	 * we commit then register an exit callback to clean out the temp tables

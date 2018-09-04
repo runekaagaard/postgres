@@ -142,7 +142,7 @@ int main()
 
    if (sqlca.sqlcode!=100) printf("%ld:%s\n",sqlca.sqlcode,sqlca.sqlerrm.sqlerrmc);
 
-   { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "insert into test ( select * from test where index = - 1 )", ECPGt_EOIT, ECPGt_EORT);}
+   { ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "insert into test ( selext * from test where index = - 1 )", ECPGt_EOIT, ECPGt_EORT);}
 #line 41 "code100.pgc"
 
    if (sqlca.sqlcode!=100) printf("%ld:%s\n",sqlca.sqlcode,sqlca.sqlerrm.sqlerrmc);

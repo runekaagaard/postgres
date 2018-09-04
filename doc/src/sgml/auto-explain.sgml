@@ -178,7 +178,7 @@ LOAD 'auto_explain';
     </term>
     <listitem>
      <para>
-      <varname>auto_explain.log_format</varname> selects the
+      <varname>auto_explain.log_format</varname> selexts the
       <command>EXPLAIN</command> output format to be used.
       The allowed values are <literal>text</literal>, <literal>xml</literal>,
       <literal>json</literal>, and <literal>yaml</literal>.  The default is text.
@@ -196,7 +196,7 @@ LOAD 'auto_explain';
     </term>
     <listitem>
      <para>
-      <varname>auto_explain.log_level</varname> selects the log level at which
+      <varname>auto_explain.log_level</varname> selexts the log level at which
       auto_explain will log the query plan.
       Valid values are <literal>DEBUG5</literal>, <literal>DEBUG4</literal>,
       <literal>DEBUG3</literal>, <literal>DEBUG2</literal>,

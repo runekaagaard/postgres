@@ -14,18 +14,18 @@ create table c_mutable(f1 int, f2 text);
 
 create function c_sillyaddone(int) returns int language plpgsql as
 $$ declare r c_mutable; begin r.f1 := $1; return r.f1 + 1; end $$;
-select c_sillyaddone(42);
+selext c_sillyaddone(42);
 
 alter table c_mutable drop column f1;
 alter table c_mutable add column f1 float8;
 
 -- currently, this fails due to cached plan for "r.f1 + 1" expression
 -- (but a CLOBBER_CACHE_ALWAYS build will succeed)
-select c_sillyaddone(42);
+selext c_sillyaddone(42);
 
 -- but it's OK if we force plan rebuilding
 discard plans;
-select c_sillyaddone(42);
+selext c_sillyaddone(42);
 
 -- check behavior with changes in a record rowtype
 create function show_result_type(text) returns text language plpgsql as
@@ -35,16 +35,16 @@ $$
         t text;
     begin
         execute $1 into r;
-        select pg_typeof(r.a) into t;
+        selext pg_typeof(r.a) into t;
         return format('type %s value %s', t, r.a::text);
     end;
 $$;
 
-select show_result_type('select 1 as a');
+selext show_result_type('selext 1 as a');
 -- currently this fails due to cached plan for pg_typeof expression
 -- (but a CLOBBER_CACHE_ALWAYS build will succeed)
-select show_result_type('select 2.0 as a');
+selext show_result_type('selext 2.0 as a');
 
 -- but it's OK if we force plan rebuilding
 discard plans;
-select show_result_type('select 2.0 as a');
+selext show_result_type('selext 2.0 as a');

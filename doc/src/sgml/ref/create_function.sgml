@@ -318,7 +318,7 @@ CREATE [ OR REPLACE ] FUNCTION
        and that within a single table scan it will consistently
        return the same result for the same argument values, but that its
        result could change across SQL statements.  This is the appropriate
-       selection for functions whose results depend on database lookups,
+       selextion for functions whose results depend on database lookups,
        parameter variables (such as the current time zone), etc.  (It is
        inappropriate for <literal>AFTER</literal> triggers that wish to
        query rows modified by the current command.)  Also note
@@ -650,7 +650,7 @@ CREATE FUNCTION foo(int, int default 42) ...
    information and examples, see <xref linkend="xfunc"/>.
 <programlisting>
 CREATE FUNCTION add(integer, integer) RETURNS integer
-    AS 'select $1 + $2;'
+    AS 'selext $1 + $2;'
     LANGUAGE SQL
     IMMUTABLE
     RETURNS NULL ON NULL INPUT;
@@ -765,7 +765,7 @@ $$  LANGUAGE plpgsql
     information).  Frequently you will wish to restrict use of a security
     definer function to only some users.  To do that, you must revoke
     the default <literal>PUBLIC</literal> privileges and then grant execute
-    privilege selectively.  To avoid having a window where the new function
+    privilege selextively.  To avoid having a window where the new function
     is accessible to all, create it and set the privileges within a single
     transaction.  For example:
    </para>

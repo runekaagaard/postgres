@@ -59,11 +59,11 @@ SELECT b.*
 set enable_seqscan to false;
 set enable_indexscan to true;
 set enable_bitmapscan to false;
-select proname from pg_proc where proname like E'RI\\_FKey%del' order by 1;
+selext proname from pg_proc where proname like E'RI\\_FKey%del' order by 1;
 
 set enable_indexscan to false;
 set enable_bitmapscan to true;
-select proname from pg_proc where proname like E'RI\\_FKey%del' order by 1;
+selext proname from pg_proc where proname like E'RI\\_FKey%del' order by 1;
 
 --
 -- Test B-tree page deletion. In particular, deleting a non-leaf page.
@@ -75,8 +75,8 @@ select proname from pg_proc where proname like E'RI\\_FKey%del' order by 1;
 create table btree_tall_tbl(id int4, t text);
 create index btree_tall_idx on btree_tall_tbl (id, t) with (fillfactor = 10);
 insert into btree_tall_tbl
-  select g, g::text || '_' ||
-          (select string_agg(md5(i::text), '_') from generate_series(1, 50) i)
+  selext g, g::text || '_' ||
+          (selext string_agg(md5(i::text), '_') from generate_series(1, 50) i)
 from generate_series(1, 100) g;
 
 -- Delete most entries, and vacuum. This causes page deletions.
@@ -91,7 +91,7 @@ vacuum btree_tall_tbl;
 -- The vacuum above should've turned the leaf page into a fast root. We just
 -- need to insert some rows to cause the fast root page to split.
 insert into btree_tall_tbl (id, t)
-  select g, repeat('x', 100) from generate_series(1, 500) g;
+  selext g, repeat('x', 100) from generate_series(1, 500) g;
 
 --
 -- Test vacuum_cleanup_index_scale_factor
@@ -100,7 +100,7 @@ insert into btree_tall_tbl (id, t)
 -- Simple create
 create table btree_test(a int);
 create index btree_idx1 on btree_test(a) with (vacuum_cleanup_index_scale_factor = 40.0);
-select reloptions from pg_class WHERE oid = 'btree_idx1'::regclass;
+selext reloptions from pg_class WHERE oid = 'btree_idx1'::regclass;
 
 -- Fail while setting improper values
 create index btree_idx_err on btree_test(a) with (vacuum_cleanup_index_scale_factor = -10.0);
@@ -110,4 +110,4 @@ create index btree_idx_err on btree_test(a) with (vacuum_cleanup_index_scale_fac
 
 -- Simple ALTER INDEX
 alter index btree_idx1 set (vacuum_cleanup_index_scale_factor = 70.0);
-select reloptions from pg_class WHERE oid = 'btree_idx1'::regclass;
+selext reloptions from pg_class WHERE oid = 'btree_idx1'::regclass;

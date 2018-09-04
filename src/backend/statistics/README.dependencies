@@ -50,7 +50,7 @@ samples provided to ANALYZE.
 
 For this reason, extended statistics implement "soft" functional dependencies,
 associating each functional dependency with a degree of validity (a number
-between 0 and 1). This degree is then used to combine selectivities in a
+between 0 and 1). This degree is then used to combine selextivities in a
 smooth manner.
 
 
@@ -76,7 +76,7 @@ Clause reduction (planner/optimizer)
 ------------------------------------
 
 Applying the functional dependencies is fairly simple: given a list of
-equality clauses, we compute selectivities of each clause and then use the
+equality clauses, we compute selextivities of each clause and then use the
 degree to combine them using this formula
 
     P(a=?,b=?) = P(a=?) * (d + (1-d) * P(b=?))
@@ -104,7 +104,7 @@ dependency and the result will be over-estimation.
 
 This may happen, for example, when using conditions on the ZIP code and city
 name with mismatching values (ZIP code for a different city), etc. In such a
-case, the result set will be empty, but we'll estimate the selectivity using
+case, the result set will be empty, but we'll estimate the selextivity using
 the ZIP code condition.
 
 In this case, the default estimation based on AVIA principle happens to work

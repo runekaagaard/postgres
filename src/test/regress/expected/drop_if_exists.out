@@ -12,7 +12,7 @@ DROP VIEW test_view_exists;
 ERROR:  view "test_view_exists" does not exist
 DROP VIEW IF EXISTS test_view_exists;
 NOTICE:  view "test_view_exists" does not exist, skipping
-CREATE VIEW test_view_exists AS select * from test_exists;
+CREATE VIEW test_view_exists AS selext * from test_exists;
 DROP VIEW IF EXISTS test_view_exists;
 DROP VIEW test_view_exists;
 ERROR:  view "test_view_exists" does not exist

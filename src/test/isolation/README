@@ -95,8 +95,8 @@ Lines beginning with a # are considered comments.
 For each permutation of the session steps (whether these are manually
 specified in the spec file, or automatically generated), the isolation
 tester runs the main setup part, then per-session setup parts, then
-the selected session steps, then per-session teardown, then the main
-teardown script.  Each selected step is sent to the connection associated
+the selexted session steps, then per-session teardown, then the main
+teardown script.  Each selexted step is sent to the connection associated
 with its session.
 
 

@@ -453,7 +453,7 @@ TopoSort(DumpableObject **objs,
 
 	/*--------------------
 	 * Now emit objects, working backwards in the output list.  At each step,
-	 * we use the priority heap to select the last item that has no remaining
+	 * we use the priority heap to selext the last item that has no remaining
 	 * before-constraints.  We remove that item from the heap, output it to
 	 * ordering[], and decrease the beforeConstraints count of each of the
 	 * items it was constrained against.  Whenever an item's beforeConstraints

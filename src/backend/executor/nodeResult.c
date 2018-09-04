@@ -8,7 +8,7 @@
  *		Result nodes are used in queries where no relations are scanned.
  *		Examples of such queries are:
  *
- *				select 1 * 2
+ *				selext 1 * 2
  *
  *				insert into emp values ('mike', 15000)
  *
@@ -19,7 +19,7 @@
  *		qualifications (ie, quals that do not depend on the scanned data),
  *		such as:
  *
- *				select * from emp where 2 > 1
+ *				selext * from emp where 2 > 1
  *
  *		In this case, the plan generated is
  *

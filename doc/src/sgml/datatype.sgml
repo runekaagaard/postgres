@@ -183,7 +183,7 @@
          <replaceable>s</replaceable>) ]</type></entry>
        <entry><type>decimal [ (<replaceable>p</replaceable>,
          <replaceable>s</replaceable>) ]</type></entry>
-       <entry>exact numeric of selectable precision</entry>
+       <entry>exact numeric of selextable precision</entry>
       </row>
 
       <row>
@@ -335,7 +335,7 @@
 
    <para>
     Numeric types consist of two-, four-, and eight-byte integers,
-    four- and eight-byte floating-point numbers, and selectable-precision
+    four- and eight-byte floating-point numbers, and selextable-precision
     decimals.  <xref linkend="datatype-numeric-table"/> lists the
     available types.
    </para>
@@ -537,7 +537,7 @@ NUMERIC(<replaceable>precision</replaceable>, <replaceable>scale</replaceable>)
 <programlisting>
 NUMERIC(<replaceable>precision</replaceable>)
 </programlisting>
-     selects a scale of 0.  Specifying:
+     selexts a scale of 0.  Specifying:
 <programlisting>
 NUMERIC
 </programlisting>
@@ -777,9 +777,9 @@ FROM generate_series(-3.5, 3.5, 1) as x;
      inexact numeric types.  Here, <replaceable>p</replaceable> specifies
      the minimum acceptable precision in <emphasis>binary</emphasis> digits.
      <productname>PostgreSQL</productname> accepts
-     <type>float(1)</type> to <type>float(24)</type> as selecting the
+     <type>float(1)</type> to <type>float(24)</type> as selexting the
      <type>real</type> type, while
-     <type>float(25)</type> to <type>float(53)</type> select
+     <type>float(25)</type> to <type>float(53)</type> selext
      <type>double precision</type>.  Values of <replaceable>p</replaceable>
      outside the allowed range draw an error.
      <type>float</type> with no precision specified is taken to mean
@@ -1299,7 +1299,7 @@ SELECT b, char_length(b) FROM test2;
     octets (usually, octets outside the range 32 to 126).
     Character strings disallow zero octets, and also disallow any
     other octet values and sequences of octet values that are invalid
-    according to the database's selected character set encoding.
+    according to the database's selexted character set encoding.
     Second, operations on binary strings process the actual bytes,
     whereas the processing of character strings depends on locale settings.
     In short, binary strings are appropriate for storing data that the
@@ -1716,9 +1716,9 @@ MINUTE TO SECOND
      For some formats, ordering of day, month, and year in date input is
      ambiguous and there is support for specifying the expected
      ordering of these fields.  Set the <xref linkend="guc-datestyle"/> parameter
-     to <literal>MDY</literal> to select month-day-year interpretation,
-     <literal>DMY</literal> to select day-month-year interpretation, or
-     <literal>YMD</literal> to select year-month-day interpretation.
+     to <literal>MDY</literal> to selext month-day-year interpretation,
+     <literal>DMY</literal> to selext day-month-year interpretation, or
+     <literal>YMD</literal> to selext year-month-day interpretation.
     </para>
 
     <para>
@@ -2310,7 +2310,7 @@ January 8 04:05:06 1999 PST
      </table>
 
     <para>
-     The date/time style can be selected by the user using the
+     The date/time style can be selexted by the user using the
      <command>SET datestyle</command> command, the <xref
      linkend="guc-datestyle"/> parameter in the
      <filename>postgresql.conf</filename> configuration file, or the
@@ -4537,8 +4537,8 @@ SELECT * FROM pg_attribute
   WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'mytable');
 </programlisting>
     While that doesn't look all that bad by itself, it's still oversimplified.
-    A far more complicated sub-select would be needed to
-    select the right OID if there are multiple tables named
+    A far more complicated sub-selext would be needed to
+    selext the right OID if there are multiple tables named
     <literal>mytable</literal> in different schemas.
     The <type>regclass</type> input converter handles the table lookup according
     to the schema path setting, and so it does the <quote>right thing</quote>

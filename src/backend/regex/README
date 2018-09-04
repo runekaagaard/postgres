@@ -206,7 +206,7 @@ First we process "0", which is currently WHITE, so we create a new color
 (2), update "0"'s color map entry to 2, and create an arc labeled 2
 between the second and third states of the NFA.  We also mark color WHITE
 as having the subcolor 2, which means that future relabelings of WHITE
-characters should also select 2 as the new color.  Thus, when we process
+characters should also selext 2 as the new color.  Thus, when we process
 "1", we won't create a new color but re-use 2.  We update "1"'s color map
 entry to 2, and then find that we don't need a new arc because there is
 already one labeled 2 between the second and third states of the NFA.

@@ -118,7 +118,7 @@ WHERE enumtypid = 'insenum'::regtype
 ORDER BY enumsortorder;
 
 --
--- Basic table creation, row selection
+-- Basic table creation, row selextion
 --
 CREATE TABLE enumtest (col rainbow);
 INSERT INTO enumtest values ('red'), ('orange'), ('yellow'), ('green');

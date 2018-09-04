@@ -221,7 +221,7 @@ extern void update_mergeclause_eclasses(PlannerInfo *root,
 extern List *find_mergeclauses_for_outer_pathkeys(PlannerInfo *root,
 									 List *pathkeys,
 									 List *restrictinfos);
-extern List *select_outer_pathkeys_for_merge(PlannerInfo *root,
+extern List *selext_outer_pathkeys_for_merge(PlannerInfo *root,
 								List *mergeclauses,
 								RelOptInfo *joinrel);
 extern List *make_inner_pathkeys_for_merge(PlannerInfo *root,

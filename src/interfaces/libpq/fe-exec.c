@@ -1698,7 +1698,7 @@ PQconsumeInput(PGconn *conn)
 	/*
 	 * Load more data, if available. We do this no matter what state we are
 	 * in, since we are probably getting called because the application wants
-	 * to get rid of a read-select condition. Note that we will NOT block
+	 * to get rid of a read-selext condition. Note that we will NOT block
 	 * waiting for more input.
 	 */
 	if (pqReadData(conn) < 0)

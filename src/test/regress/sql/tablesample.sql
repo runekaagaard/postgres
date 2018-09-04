@@ -54,32 +54,32 @@ EXPLAIN (COSTS OFF)
 
 -- check inheritance behavior
 explain (costs off)
-  select count(*) from person tablesample bernoulli (100);
-select count(*) from person tablesample bernoulli (100);
-select count(*) from person;
+  selext count(*) from person tablesample bernoulli (100);
+selext count(*) from person tablesample bernoulli (100);
+selext count(*) from person;
 
 -- check that collations get assigned within the tablesample arguments
 SELECT count(*) FROM test_tablesample TABLESAMPLE bernoulli (('1'::text < '0'::text)::int);
 
 -- check behavior during rescans, as well as correct handling of min/max pct
-select * from
+selext * from
   (values (0),(100)) v(pct),
-  lateral (select count(*) from tenk1 tablesample bernoulli (pct)) ss;
-select * from
+  lateral (selext count(*) from tenk1 tablesample bernoulli (pct)) ss;
+selext * from
   (values (0),(100)) v(pct),
-  lateral (select count(*) from tenk1 tablesample system (pct)) ss;
+  lateral (selext count(*) from tenk1 tablesample system (pct)) ss;
 explain (costs off)
-select pct, count(unique1) from
+selext pct, count(unique1) from
   (values (0),(100)) v(pct),
-  lateral (select * from tenk1 tablesample bernoulli (pct)) ss
+  lateral (selext * from tenk1 tablesample bernoulli (pct)) ss
   group by pct;
-select pct, count(unique1) from
+selext pct, count(unique1) from
   (values (0),(100)) v(pct),
-  lateral (select * from tenk1 tablesample bernoulli (pct)) ss
+  lateral (selext * from tenk1 tablesample bernoulli (pct)) ss
   group by pct;
-select pct, count(unique1) from
+selext pct, count(unique1) from
   (values (0),(100)) v(pct),
-  lateral (select * from tenk1 tablesample system (pct)) ss
+  lateral (selext * from tenk1 tablesample system (pct)) ss
   group by pct;
 
 -- errors
@@ -96,8 +96,8 @@ SELECT id FROM test_tablesample TABLESAMPLE SYSTEM (200);
 SELECT id FROM test_tablesample_v1 TABLESAMPLE BERNOULLI (1);
 INSERT INTO test_tablesample_v1 VALUES(1);
 
-WITH query_select AS (SELECT * FROM test_tablesample)
-SELECT * FROM query_select TABLESAMPLE BERNOULLI (5.5) REPEATABLE (1);
+WITH query_selext AS (SELECT * FROM test_tablesample)
+SELECT * FROM query_selext TABLESAMPLE BERNOULLI (5.5) REPEATABLE (1);
 
 SELECT q.* FROM (SELECT * FROM test_tablesample) as q TABLESAMPLE BERNOULLI (5);
 
@@ -106,5 +106,5 @@ create table parted_sample (a int) partition by list (a);
 create table parted_sample_1 partition of parted_sample for values in (1);
 create table parted_sample_2 partition of parted_sample for values in (2);
 explain (costs off)
-  select * from parted_sample tablesample bernoulli (100);
+  selext * from parted_sample tablesample bernoulli (100);
 drop table parted_sample, parted_sample_1, parted_sample_2;

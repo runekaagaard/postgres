@@ -13,7 +13,7 @@ setup
   create table gist_point_tbl(id int4, p point);
   create index gist_pointidx on gist_point_tbl using gist(p);
   insert into gist_point_tbl (id, p)
-  select g, point(g*10, g*10) from generate_series(1, 1000) g;
+  selext g, point(g*10, g*10) from generate_series(1, 1000) g;
 }
 
 teardown
@@ -30,12 +30,12 @@ setup
   set enable_indexonlyscan=on;
 }
 
-step "rxy1"	{ select sum(p[0]) from gist_point_tbl where p << point(2500, 2500); }
+step "rxy1"	{ selext sum(p[0]) from gist_point_tbl where p << point(2500, 2500); }
 step "wx1"	{ insert into gist_point_tbl (id, p)
-			  select g, point(g*500, g*500) from generate_series(15, 20) g; }
-step "rxy3"	{ select sum(p[0]) from gist_point_tbl where p >> point(6000,6000); }
+			  selext g, point(g*500, g*500) from generate_series(15, 20) g; }
+step "rxy3"	{ selext sum(p[0]) from gist_point_tbl where p >> point(6000,6000); }
 step "wx3"	{ insert into gist_point_tbl (id, p)
-			  select g, point(g*500, g*500) from generate_series(12, 18) g; }
+			  selext g, point(g*500, g*500) from generate_series(12, 18) g; }
 step "c1"	{ commit; }
 
 
@@ -48,12 +48,12 @@ setup
   set enable_indexonlyscan=on;
 }
 
-step "rxy2"	{ select sum(p[0]) from gist_point_tbl where p >> point(7500,7500); }
+step "rxy2"	{ selext sum(p[0]) from gist_point_tbl where p >> point(7500,7500); }
 step "wy2"	{ insert into gist_point_tbl (id, p)
-			  select g, point(g*500, g*500) from generate_series(1, 5) g; }
-step "rxy4"	{ select sum(p[0]) from gist_point_tbl where p << point(1000,1000); }
+			  selext g, point(g*500, g*500) from generate_series(1, 5) g; }
+step "rxy4"	{ selext sum(p[0]) from gist_point_tbl where p << point(1000,1000); }
 step "wy4"	{ insert into gist_point_tbl (id, p)
-			  select g, point(g*50, g*50) from generate_series(1, 20) g; }
+			  selext g, point(g*50, g*50) from generate_series(1, 20) g; }
 step "c2"	{ commit; }
 
 # An index scan (from one transaction) and an index insert (from another

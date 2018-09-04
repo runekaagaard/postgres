@@ -43,7 +43,7 @@
  *		and student-emp inherits from student and employee, the
  *		query:
  *
- *				select name from person
+ *				selext name from person
  *
  *		generates the plan:
  *
@@ -69,9 +69,9 @@ struct ParallelAppendState
 	int			pa_next_plan;	/* next plan to choose by any worker */
 
 	/*
-	 * pa_finished[i] should be true if no more workers should select subplan
+	 * pa_finished[i] should be true if no more workers should selext subplan
 	 * i.  for a non-partial plan, this should be set to true as soon as a
-	 * worker selects the plan; for a partial plan, it remains false until
+	 * worker selexts the plan; for a partial plan, it remains false until
 	 * some worker executes the plan to completion.
 	 */
 	bool		pa_finished[FLEXIBLE_ARRAY_MEMBER];
@@ -350,7 +350,7 @@ ExecReScanAppend(AppendState *node)
 
 	/*
 	 * If any PARAM_EXEC Params used in pruning expressions have changed, then
-	 * we'd better unset the valid subplans so that they are reselected for
+	 * we'd better unset the valid subplans so that they are reselexted for
 	 * the new parameter values.
 	 */
 	if (node->as_prune_state &&
@@ -550,7 +550,7 @@ choose_next_subplan_for_leader(AppendState *node)
 
 			/*
 			 * Mark each invalid plan as finished to allow the loop below to
-			 * select the first valid subplan.
+			 * selext the first valid subplan.
 			 */
 			mark_invalid_subplans_as_finished(node);
 		}

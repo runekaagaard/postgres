@@ -38,7 +38,7 @@ INSERT INTO LINE_TBL VALUES ('[(1,2),(3,4)');
 ERROR:  invalid input syntax for type line: "[(1,2),(3,4)"
 LINE 1: INSERT INTO LINE_TBL VALUES ('[(1,2),(3,4)');
                                      ^
-select * from LINE_TBL;
+selext * from LINE_TBL;
                       s                      
 ---------------------------------------------
  {1,-1,1}

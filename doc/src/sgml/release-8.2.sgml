@@ -1156,12 +1156,12 @@
 
     <listitem>
      <para>
-      Fix <quote>cannot handle unplanned sub-select</quote> error (Tom Lane)
+      Fix <quote>cannot handle unplanned sub-selext</quote> error (Tom Lane)
      </para>
 
      <para>
-      This occurred when a sub-select contains a join alias reference that
-      expands into an expression containing another sub-select.
+      This occurred when a sub-selext contains a join alias reference that
+      expands into an expression containing another sub-selext.
      </para>
     </listitem>
 
@@ -1463,7 +1463,7 @@
     <listitem>
      <para>
       Fix <application>psql</application>'s <literal>\copy</literal> to not add spaces around
-      a dot within <literal>\copy (select ...)</literal> (Tom)
+      a dot within <literal>\copy (selext ...)</literal> (Tom)
      </para>
 
      <para>
@@ -1970,7 +1970,7 @@
 
      <para>
       An error exit from the inner function could result in crashes due to
-      failure to re-select the correct Perl interpreter for the outer function.
+      failure to re-selext the correct Perl interpreter for the outer function.
      </para>
     </listitem>
 
@@ -2536,7 +2536,7 @@
 
     <listitem>
      <para>
-      Fix planner misestimation of selectivity when transitive equality
+      Fix planner misestimation of selextivity when transitive equality
       is applied to an outer-join clause (Tom)
      </para>
 
@@ -2964,11 +2964,11 @@
 
     <listitem>
      <para>
-      Fix planner bug with nested sub-select expressions (Tom)
+      Fix planner bug with nested sub-selext expressions (Tom)
      </para>
 
      <para>
-      If the outer sub-select has no direct dependency on the parent query,
+      If the outer sub-selext has no direct dependency on the parent query,
       but the inner one does, the outer value might not get recalculated
       for new parent query rows.
      </para>
@@ -3497,7 +3497,7 @@
     <listitem>
      <para>
       Fix <quote>unexpected PARAM_SUBLINK ID</quote> planner error when
-      constant-folding simplifies a sub-select (Tom)
+      constant-folding simplifies a sub-selext (Tom)
      </para>
     </listitem>
 
@@ -4151,7 +4151,7 @@
     <listitem>
      <para>
       Planner fixes, including improving outer join and bitmap scan
-      selection logic (Tom)
+      selextion logic (Tom)
      </para>
     </listitem>
 
@@ -5073,7 +5073,7 @@
 
      <listitem>
       <para>
-       Improve the optimizer's selectivity estimates for <link
+       Improve the optimizer's selextivity estimates for <link
        linkend="functions-like"><literal>LIKE</literal></link>, <link
        linkend="functions-like"><literal>ILIKE</literal></link>, and
        <link linkend="functions-posix-regexp">regular expression</link>
@@ -6466,7 +6466,7 @@
 
      <listitem>
       <para>
-       Allow complex selection of objects to be included or excluded
+       Allow complex selextion of objects to be included or excluded
        by <application>pg_dump</application> (Greg Sabino Mullane)
       </para>
 

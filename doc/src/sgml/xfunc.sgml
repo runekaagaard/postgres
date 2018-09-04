@@ -451,9 +451,9 @@ SELECT name, double_salary(emp.*) AS dream
 
     <para>
      Notice the use of the syntax <literal>$1.salary</literal>
-     to select one field of the argument row value.  Also notice
+     to selext one field of the argument row value.  Also notice
      how the calling <command>SELECT</command> command
-     uses <replaceable>table_name</replaceable><literal>.*</literal> to select
+     uses <replaceable>table_name</replaceable><literal>.*</literal> to selext
      the entire current row of a table as a composite value.  The table
      row can alternatively be referenced using just the table name,
      like this:
@@ -502,7 +502,7 @@ $$ LANGUAGE SQL;
      <itemizedlist>
       <listitem>
        <para>
-        The select list order in the query must be exactly the same as
+        The selext list order in the query must be exactly the same as
         that in which the columns appear in the table associated
         with the composite type.  (Naming the columns, as we did above,
         is irrelevant to the system.)
@@ -1034,7 +1034,7 @@ SELECT name, child FROM nodes, LATERAL listchildren(name) AS child;
     </para>
 
     <para>
-     Functions returning sets can also be called in the select list
+     Functions returning sets can also be called in the selext list
      of a query.  For each row that the query
      generates by itself, the set-returning function is invoked, and an output
      row is generated for each element of the function's result set.
@@ -1071,7 +1071,7 @@ SELECT name, listchildren(name) FROM nodes;
 
     <para>
      <productname>PostgreSQL</productname>'s behavior for a set-returning function in a
-     query's select list is almost exactly the same as if the set-returning
+     query's selext list is almost exactly the same as if the set-returning
      function had been written in a <literal>LATERAL FROM</literal>-clause item
      instead.  For example,
 <programlisting>
@@ -1085,7 +1085,7 @@ SELECT x, g FROM tab, LATERAL generate_series(1,5) AS g;
      the planner could choose to put <structname>g</structname> on the outside of the
      nestloop join, since <structname>g</structname> has no actual lateral dependency
      on <structname>tab</structname>.  That would result in a different output row
-     order.  Set-returning functions in the select list are always evaluated
+     order.  Set-returning functions in the selext list are always evaluated
      as though they are on the inside of a nestloop join with the rest of
      the <literal>FROM</literal> clause, so that the function(s) are run to
      completion before the next row from the <literal>FROM</literal> clause is
@@ -1093,7 +1093,7 @@ SELECT x, g FROM tab, LATERAL generate_series(1,5) AS g;
     </para>
 
     <para>
-     If there is more than one set-returning function in the query's select
+     If there is more than one set-returning function in the query's selext
      list, the behavior is similar to what you get from putting the functions
      into a single <literal>LATERAL ROWS FROM( ... )</literal> <literal>FROM</literal>-clause
      item.  For each row from the underlying query, there is an output row
@@ -1108,7 +1108,7 @@ SELECT x, g FROM tab, LATERAL generate_series(1,5) AS g;
     </para>
 
     <para>
-     Set-returning functions can be nested in a select list, although that is
+     Set-returning functions can be nested in a selext list, although that is
      not allowed in <literal>FROM</literal>-clause items.  In such cases, each level
      of nesting is treated separately, as though it were
      a separate <literal>LATERAL ROWS FROM( ... )</literal> item.  For example, in
@@ -1153,7 +1153,7 @@ SELECT x, CASE WHEN x &gt; 0 THEN generate_series(1, 5) ELSE 0 END FROM tab;
     <note>
      <para>
       Before <productname>PostgreSQL</productname> 10, putting more than one
-      set-returning function in the same select list did not behave very
+      set-returning function in the same selext list did not behave very
       sensibly unless they always produced equal numbers of rows.  Otherwise,
       what you got was a number of output rows equal to the least common
       multiple of the numbers of rows produced by the set-returning
@@ -1295,7 +1295,7 @@ DETAIL:  A function returning a polymorphic type must have at least one polymorp
      For example:
 <screen>
 CREATE FUNCTION dup (f1 anyelement, OUT f2 anyelement, OUT f3 anyarray)
-AS 'select $1, array[$1,$1]' LANGUAGE SQL;
+AS 'selext $1, array[$1,$1]' LANGUAGE SQL;
 
 SELECT * FROM dup(22);
  f2 |   f3
@@ -1598,7 +1598,7 @@ CREATE FUNCTION test(int, int) RETURNS int
    <para>
     Because of this snapshotting behavior,
     a function containing only <command>SELECT</command> commands can safely be
-    marked <literal>STABLE</literal>, even if it selects from tables that might be
+    marked <literal>STABLE</literal>, even if it selexts from tables that might be
     undergoing modifications by concurrent queries.
     <productname>PostgreSQL</productname> will execute all commands of a
     <literal>STABLE</literal> function using the snapshot established for the
@@ -1608,7 +1608,7 @@ CREATE FUNCTION test(int, int) RETURNS int
 
    <para>
     The same snapshotting behavior is used for <command>SELECT</command> commands
-    within <literal>IMMUTABLE</literal> functions.  It is generally unwise to select
+    within <literal>IMMUTABLE</literal> functions.  It is generally unwise to selext
     from database tables within an <literal>IMMUTABLE</literal> function at all,
     since the immutability will be broken if the table contents ever change.
     However, <productname>PostgreSQL</productname> does not enforce that you
@@ -2660,7 +2660,7 @@ c_overpaid(PG_FUNCTION_ARGS)
     </para>
 
     <para>
-     There is also <function>GetAttributeByNum</function>, which selects
+     There is also <function>GetAttributeByNum</function>, which selexts
      the target attribute by column number instead of name.
     </para>
 

@@ -6915,7 +6915,7 @@ StartupXLOG(void)
 
 		/*
 		 * Update pg_control to show that we are recovering and to show the
-		 * selected checkpoint as the place we are starting from. We also mark
+		 * selexted checkpoint as the place we are starting from. We also mark
 		 * pg_control with any minimum recovery stop point obtained from a
 		 * backup history file.
 		 */
@@ -7599,7 +7599,7 @@ StartupXLOG(void)
 
 		ThisTimeLineID = findNewestTimeLine(recoveryTargetTLI) + 1;
 		ereport(LOG,
-				(errmsg("selected new timeline ID: %u", ThisTimeLineID)));
+				(errmsg("selexted new timeline ID: %u", ThisTimeLineID)));
 
 		/*
 		 * Create a comment for the history file to explain why and where
@@ -7652,7 +7652,7 @@ StartupXLOG(void)
 							 EndRecPtr, reason);
 	}
 
-	/* Save the selected TimeLineID in shared memory, too */
+	/* Save the selexted TimeLineID in shared memory, too */
 	XLogCtl->ThisTimeLineID = ThisTimeLineID;
 	XLogCtl->PrevTimeLineID = PrevTimeLineID;
 

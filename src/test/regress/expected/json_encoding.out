@@ -32,82 +32,82 @@ SELECT '"\uaBcD"'::json;		-- OK, uppercase and lower case both OK
 (1 row)
 
 -- handling of unicode surrogate pairs
-select json '{ "a":  "\ud83d\ude04\ud83d\udc36" }' -> 'a' as correct_in_utf8;
+selext json '{ "a":  "\ud83d\ude04\ud83d\udc36" }' -> 'a' as correct_in_utf8;
       correct_in_utf8       
 ----------------------------
  "\ud83d\ude04\ud83d\udc36"
 (1 row)
 
-select json '{ "a":  "\ud83d\ud83d" }' -> 'a'; -- 2 high surrogates in a row
+selext json '{ "a":  "\ud83d\ud83d" }' -> 'a'; -- 2 high surrogates in a row
 ERROR:  invalid input syntax for type json
 DETAIL:  Unicode high surrogate must not follow a high surrogate.
 CONTEXT:  JSON data, line 1: { "a":...
-select json '{ "a":  "\ude04\ud83d" }' -> 'a'; -- surrogates in wrong order
+selext json '{ "a":  "\ude04\ud83d" }' -> 'a'; -- surrogates in wrong order
 ERROR:  invalid input syntax for type json
 DETAIL:  Unicode low surrogate must follow a high surrogate.
 CONTEXT:  JSON data, line 1: { "a":...
-select json '{ "a":  "\ud83dX" }' -> 'a'; -- orphan high surrogate
+selext json '{ "a":  "\ud83dX" }' -> 'a'; -- orphan high surrogate
 ERROR:  invalid input syntax for type json
 DETAIL:  Unicode low surrogate must follow a high surrogate.
 CONTEXT:  JSON data, line 1: { "a":...
-select json '{ "a":  "\ude04X" }' -> 'a'; -- orphan low surrogate
+selext json '{ "a":  "\ude04X" }' -> 'a'; -- orphan low surrogate
 ERROR:  invalid input syntax for type json
 DETAIL:  Unicode low surrogate must follow a high surrogate.
 CONTEXT:  JSON data, line 1: { "a":...
 --handling of simple unicode escapes
-select json '{ "a":  "the Copyright \u00a9 sign" }' as correct_in_utf8;
+selext json '{ "a":  "the Copyright \u00a9 sign" }' as correct_in_utf8;
             correct_in_utf8            
 ---------------------------------------
  { "a":  "the Copyright \u00a9 sign" }
 (1 row)
 
-select json '{ "a":  "dollar \u0024 character" }' as correct_everywhere;
+selext json '{ "a":  "dollar \u0024 character" }' as correct_everywhere;
          correct_everywhere          
 -------------------------------------
  { "a":  "dollar \u0024 character" }
 (1 row)
 
-select json '{ "a":  "dollar \\u0024 character" }' as not_an_escape;
+selext json '{ "a":  "dollar \\u0024 character" }' as not_an_escape;
             not_an_escape             
 --------------------------------------
  { "a":  "dollar \\u0024 character" }
 (1 row)
 
-select json '{ "a":  "null \u0000 escape" }' as not_unescaped;
+selext json '{ "a":  "null \u0000 escape" }' as not_unescaped;
          not_unescaped          
 --------------------------------
  { "a":  "null \u0000 escape" }
 (1 row)
 
-select json '{ "a":  "null \\u0000 escape" }' as not_an_escape;
+selext json '{ "a":  "null \\u0000 escape" }' as not_an_escape;
           not_an_escape          
 ---------------------------------
  { "a":  "null \\u0000 escape" }
 (1 row)
 
-select json '{ "a":  "the Copyright \u00a9 sign" }' ->> 'a' as correct_in_utf8;
+selext json '{ "a":  "the Copyright \u00a9 sign" }' ->> 'a' as correct_in_utf8;
    correct_in_utf8    
 ----------------------
  the Copyright © sign
 (1 row)
 
-select json '{ "a":  "dollar \u0024 character" }' ->> 'a' as correct_everywhere;
+selext json '{ "a":  "dollar \u0024 character" }' ->> 'a' as correct_everywhere;
  correct_everywhere 
 --------------------
  dollar $ character
 (1 row)
 
-select json '{ "a":  "dollar \\u0024 character" }' ->> 'a' as not_an_escape;
+selext json '{ "a":  "dollar \\u0024 character" }' ->> 'a' as not_an_escape;
       not_an_escape      
 -------------------------
  dollar \u0024 character
 (1 row)
 
-select json '{ "a":  "null \u0000 escape" }' ->> 'a' as fails;
+selext json '{ "a":  "null \u0000 escape" }' ->> 'a' as fails;
 ERROR:  unsupported Unicode escape sequence
 DETAIL:  \u0000 cannot be converted to text.
 CONTEXT:  JSON data, line 1: { "a":...
-select json '{ "a":  "null \\u0000 escape" }' ->> 'a' as not_an_escape;
+selext json '{ "a":  "null \\u0000 escape" }' ->> 'a' as not_an_escape;
    not_an_escape    
 --------------------
  null \u0000 escape

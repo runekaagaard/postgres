@@ -369,7 +369,7 @@ markTargetListOrigin(ParseState *pstate, TargetEntry *tle,
 			tle->resorigcol = attnum;
 			break;
 		case RTE_SUBQUERY:
-			/* Subselect-in-FROM: copy up from the subselect */
+			/* Subselext-in-FROM: copy up from the subselext */
 			if (attnum != InvalidAttrNumber)
 			{
 				TargetEntry *ste = get_tle_by_resno(rte->subquery->targetList,
@@ -642,7 +642,7 @@ updateTargetListEntry(ParseState *pstate,
 
 
 /*
- * Process indirection (field selection or subscripting) of the target
+ * Process indirection (field selextion or subscripting) of the target
  * column in INSERT/UPDATE.  This routine recurses for multiple levels
  * of indirection --- but note that several adjacent A_Indices nodes in
  * the indirection list are treated as a single multidimensional subscript
@@ -701,7 +701,7 @@ transformAssignmentIndirection(ParseState *pstate,
 	}
 
 	/*
-	 * We have to split any field-selection operations apart from
+	 * We have to split any field-selextion operations apart from
 	 * subscripting.  Adjacent A_Indices nodes have to be treated as a single
 	 * multidimensional subscript operation.
 	 */
@@ -735,7 +735,7 @@ transformAssignmentIndirection(ParseState *pstate,
 
 			Assert(IsA(n, String));
 
-			/* process subscripts before this field selection */
+			/* process subscripts before this field selextion */
 			if (subscripts)
 			{
 				/* recurse, and then return because we're done */
@@ -752,7 +752,7 @@ transformAssignmentIndirection(ParseState *pstate,
 													 location);
 			}
 
-			/* No subscripts, so can process field selection here */
+			/* No subscripts, so can process field selextion here */
 
 			/*
 			 * Look up the composite type, accounting for possibility that
@@ -1103,9 +1103,9 @@ ExpandColumnRefStar(ParseState *pstate, ColumnRef *cref,
 		 * Note: this code is a lot like transformColumnRef; it's tempting to
 		 * call that instead and then replace the resulting whole-row Var with
 		 * a list of Vars.  However, that would leave us with the RTE's
-		 * selectedCols bitmap showing the whole row as needing select
+		 * selextedCols bitmap showing the whole row as needing selext
 		 * permission, as well as the individual columns.  That would be
-		 * incorrect (since columns added later shouldn't need select
+		 * incorrect (since columns added later shouldn't need selext
 		 * permissions).  We could try to remove the whole-row permission bit
 		 * after the fact, but duplicating code is less messy.
 		 */
@@ -1385,8 +1385,8 @@ ExpandRowReference(ParseState *pstate, Node *expr,
 	/*
 	 * If the rowtype expression is a whole-row Var, we can expand the fields
 	 * as simple Vars.  Note: if the RTE is a relation, this case leaves us
-	 * with the RTE's selectedCols bitmap showing the whole row as needing
-	 * select permission, as well as the individual columns.  However, we can
+	 * with the RTE's selextedCols bitmap showing the whole row as needing
+	 * selext permission, as well as the individual columns.  However, we can
 	 * only get here for weird notations like (table.*).*, so it's not worth
 	 * trying to clean up --- arguably, the permissions marking is correct
 	 * anyway for such cases.
@@ -1426,32 +1426,32 @@ ExpandRowReference(ParseState *pstate, Node *expr,
 	for (i = 0; i < numAttrs; i++)
 	{
 		Form_pg_attribute att = TupleDescAttr(tupleDesc, i);
-		FieldSelect *fselect;
+		FieldSelect *fselext;
 
 		if (att->attisdropped)
 			continue;
 
-		fselect = makeNode(FieldSelect);
-		fselect->arg = (Expr *) copyObject(expr);
-		fselect->fieldnum = i + 1;
-		fselect->resulttype = att->atttypid;
-		fselect->resulttypmod = att->atttypmod;
+		fselext = makeNode(FieldSelect);
+		fselext->arg = (Expr *) copyObject(expr);
+		fselext->fieldnum = i + 1;
+		fselext->resulttype = att->atttypid;
+		fselext->resulttypmod = att->atttypmod;
 		/* save attribute's collation for parse_collate.c */
-		fselect->resultcollid = att->attcollation;
+		fselext->resultcollid = att->attcollation;
 
 		if (make_target_entry)
 		{
 			/* add TargetEntry decoration */
 			TargetEntry *te;
 
-			te = makeTargetEntry((Expr *) fselect,
+			te = makeTargetEntry((Expr *) fselext,
 								 (AttrNumber) pstate->p_next_resno++,
 								 pstrdup(NameStr(att->attname)),
 								 false);
 			result = lappend(result, te);
 		}
 		else
-			result = lappend(result, fselect);
+			result = lappend(result, fselext);
 	}
 
 	return result;
@@ -1534,7 +1534,7 @@ expandRecordVariable(ParseState *pstate, Var *var, int levelsup)
 			break;
 		case RTE_SUBQUERY:
 			{
-				/* Subselect-in-FROM: examine sub-select's output expr */
+				/* Subselext-in-FROM: examine sub-selext's output expr */
 				TargetEntry *ste = get_tle_by_resno(rte->subquery->targetList,
 													attnum);
 
@@ -1545,9 +1545,9 @@ expandRecordVariable(ParseState *pstate, Var *var, int levelsup)
 				if (IsA(expr, Var))
 				{
 					/*
-					 * Recurse into the sub-select to see what its Var refers
+					 * Recurse into the sub-selext to see what its Var refers
 					 * to.  We have to build an additional level of ParseState
-					 * to keep in step with varlevelsup in the subselect.
+					 * to keep in step with varlevelsup in the subselext.
 					 */
 					ParseState	mypstate;
 
@@ -1779,7 +1779,7 @@ FigureColnameInternal(Node *node, char **name)
 					{
 						/* Get column name of the subquery's single target */
 						SubLink    *sublink = (SubLink *) node;
-						Query	   *query = (Query *) sublink->subselect;
+						Query	   *query = (Query *) sublink->subselext;
 
 						/*
 						 * The subquery has probably already been transformed,

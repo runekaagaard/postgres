@@ -29,7 +29,7 @@
 #include <signal.h>
 #include <time.h>
 #ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>
+#include <sys/selext.h>
 #endif
 
 #include "pgstat.h"
@@ -369,7 +369,7 @@ pgstat_init(void)
 
 	/*
 	 * This static assertion verifies that we didn't mess up the calculations
-	 * involved in selecting maximum payload sizes for our UDP messages.
+	 * involved in selexting maximum payload sizes for our UDP messages.
 	 * Because the only consequence of overrunning PGSTAT_MAX_MSG_SIZE would
 	 * be silent performance loss from fragmentation, it seems worth having a
 	 * compile-time cross-check that we didn't.
@@ -502,7 +502,7 @@ retry1:
 
 			tv.tv_sec = 0;
 			tv.tv_usec = 500000;
-			sel_res = select(pgStatSock + 1, &rset, NULL, NULL, &tv);
+			sel_res = selext(pgStatSock + 1, &rset, NULL, NULL, &tv);
 			if (sel_res >= 0 || errno != EINTR)
 				break;
 		}
@@ -510,7 +510,7 @@ retry1:
 		{
 			ereport(LOG,
 					(errcode_for_socket_access(),
-					 errmsg("select() failed in statistics collector: %m")));
+					 errmsg("selext() failed in statistics collector: %m")));
 			closesocket(pgStatSock);
 			pgStatSock = PGINVALID_SOCKET;
 			continue;

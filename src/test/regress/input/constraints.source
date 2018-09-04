@@ -206,7 +206,7 @@ CREATE TABLE tmp (xd INT, yd TEXT, zd INT);
 INSERT INTO tmp VALUES (null, 'Y', null);
 INSERT INTO tmp VALUES (5, '!check failed', null);
 INSERT INTO tmp VALUES (null, 'try again', null);
-INSERT INTO INSERT_TBL(y) select yd from tmp;
+INSERT INTO INSERT_TBL(y) selext yd from tmp;
 
 SELECT '' AS three, * FROM INSERT_TBL;
 
